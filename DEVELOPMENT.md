@@ -1,4 +1,9 @@
-# Developing Hekili Forever
+# Developing Encore
+
+> **Encore note.** This guide is Hekili Forever's, kept as written so it stays easy to compare with upstream. In
+> Encore every `Hekili` name is `Encore` (`src/Hekili` is `src/Encore`, `Hekili_<Class>` is `Encore_<Class>`, the
+> `Hekili` object is `Encore`, `/hekili` is `/encore`). How Encore takes upstream updates:
+> [tools/encore/README.md](tools/encore/README.md).
 
 This guide takes you from a fresh clone to a merged change. It is written for two readers: a developer who has never
 seen Hekili's implementation, and a priority author who wants to add or change a priority pack. It is the front door.

@@ -1,6 +1,6 @@
 -- tests/Forever/publication_spec.lua (publication plan, docs/superpowers/plans/2026-10-18-publication.md):
 -- the offline publication rules: the GPLv3 LICENSE ships, no user-facing link to the old project survives,
--- the TOCs carry the fork's name/author/credit, .pkgmeta packs the seven src/ folders, and CHANGELOG.md exists.
+-- the TOCs carry the fork's name/author/credit (Encore: Chad's fork of Hekili Forever), .pkgmeta packs the seven src/ folders, and CHANGELOG.md exists.
 
 local function read(path)
     local f = assert(io.open(path, "rb"), path)
@@ -162,15 +162,15 @@ end)
 describe("tocs", function()
     it("name the fork, its author and the original in every TOC", function()
         for _, toc in ipairs(TOCS) do
-            assert.are.equal("defzach", field(toc, "Author"), toc)
+            assert.are.equal("Chad (edase), from Hekili Forever by defzach", field(toc, "Author"), toc)
             assert.truthy(field(toc, "Title"):find("^Encore"), toc)
             assert.truthy(field(toc, "Notes"):lower():find("based on the original work by hekili", 1, true), toc)
-            assert.are.equal("https://github.com/zmsl/hekili", field(toc, "X-Website"), toc)
+            assert.are.equal("https://github.com/edase/encore", field(toc, "X-Website"), toc)
             assert.are.equal("Interface\\AddOns\\Encore\\Textures\\Encore", field(toc, "IconTexture"), toc)
         end
         assert.are.equal("Encore", field(TOCS[1], "Title"))
         assert.are.equal("Encore - Shared", field(TOCS[2], "Title"))
-        assert.are.equal("1753387", field(TOCS[1], "X-Curse-Project-ID"))
+        assert.is_nil(field(TOCS[1], "X-Curse-Project-ID")) -- Hekili Forever's CurseForge project, not Encore's
         assert.truthy(io.open("src/Encore/Textures/Encore.tga"))
     end)
 

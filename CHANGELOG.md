@@ -1,8 +1,13 @@
-# Hekili Forever changelog
+# Encore changelog
 
 ## Unreleased
 
 ### New
+
+- Encore: a personal fork of Hekili Forever v0.10.0 by defzach (https://github.com/zmsl/hekili), renamed. Encore
+  installs as its own addon (folders `Encore` and `Encore_*`, saved settings `EncoreDB`, `/encore` and `/enc`), so it
+  can sit beside Hekili Forever; its settings start fresh. The releases from v0.10.0 down are Hekili Forever's own,
+  kept as its history.
 
 ### Changed
 

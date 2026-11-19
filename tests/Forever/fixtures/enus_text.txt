@@ -18255,11 +18255,9 @@ options.errors.errName	name	Warning Identifier
 options.errors.errorInfo	name	Warning Information
 options.general	desc	Welcome to Encore; includes general information and essential links.
 options.general	name	General
-options.general.curse	desc	Find Hekili Forever updates on CurseForge.
-options.general.curse	name	CurseForge
 options.general.enabled	desc	Enables or disables the addon.
 options.general.enabled	name	Enabled
-options.general.forkNotice	name	|cFF00CCFFHekili Forever|r is a fork of the original |cFFFFD100Hekili|r project, made with the explicit permission of its original author. It is based on the original work by Hekili and its maintainers, modified for WoW Forever by defzach from October 2026, and it is |cffff0000not|r the original project: please report problems on the Hekili Forever GitHub page below, never to the original Hekili authors.\n\nHekili Forever is free software under the GNU General Public License version 3 or (at your option) any later version; the full text is in the LICENSE file in the addon folder.\n\nSee the |cFFFFD100Snapshots (Troubleshooting)|r section for how to report a bug.\n\n
+options.general.forkNotice	name	|cFF00CCFFEncore|r is Chad's personal fork of |cFF00CCFFHekili Forever|r by defzach (github.com/zmsl/hekili), which is a fork of the original |cFFFFD100Hekili|r project, made with the explicit permission of its original author. Encore is based on the original work by Hekili and its maintainers, modified for WoW Forever by defzach from October 2026 and modified again by Chad (edase) from November 2026. Its default priorities are translated from wowsims/forever (MIT).\n\nEncore is |cffff0000not|r either original project: please report Encore problems on the Encore GitHub page below, never to defzach or the original Hekili authors.\n\nEncore is free software under the GNU General Public License version 3 or (at your option) any later version; the full text is in the LICENSE file in the addon folder.\n\nSee the |cFFFFD100Snapshots (Troubleshooting)|r section for how to report a bug.\n\n
 options.general.github	desc	Find Encore updates on GitHub.
 options.general.github	name	GitHub
 options.general.link	name	Report Issue
@@ -18269,6 +18267,8 @@ options.general.monitorPerformance	desc	If checked, the addon will track process
 options.general.monitorPerformance	name	|cFF00B4FFMonitor Performance|r
 options.general.simulationcraft	name	APL Reference
 options.general.updaterSpace	name	\032
+options.general.upstream	desc	Hekili Forever by defzach, the addon Encore is built on.
+options.general.upstream	name	Hekili Forever
 options.gettingStarted	desc	This section serves as a quick tutorial and explanation of the addon.
 options.gettingStarted	name	Getting Started
 options.gettingStarted.gettingStarted_displays	name	Setting up your displays
@@ -29311,8 +29311,8 @@ options.toggles.troubleshooting.snapshot.key	name	Snapshot
 ~message	/encore unlock	UI unlocked for movement.
 ~message	build warning	|cFFFF0000WARNING|r: This version of Encore is for a newer WoW Forever client; you should reinstall for 1.60.1.
 ~message	cast warnings	DRUID does not have any Encore modules loaded (yet).\nWatch for updates.
-~message	cast warnings	HUNTER does not have any Encore modules loaded (yet).\nWatch for updates.
 ~message	cast warnings	Encore is designed for level 60 content.\nIt may not work as expected below level 60.
+~message	cast warnings	HUNTER does not have any Encore modules loaded (yet).\nWatch for updates.
 ~message	cast warnings	MAGE does not have any Encore modules loaded (yet).\nWatch for updates.
 ~message	cast warnings	PALADIN does not have any Encore modules loaded (yet).\nWatch for updates.
 ~message	cast warnings	PRIEST does not have any Encore modules loaded (yet).\nWatch for updates.

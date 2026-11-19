@@ -7688,11 +7688,14 @@ do
 
                     forkNotice = {
                         type = "description",
-                        name = L["|cFF00CCFFHekili Forever|r is a fork of the original |cFFFFD100Hekili|r project, made with the "
-                            .. "explicit permission of its original author. It is based on the original work by Hekili and its "
-                            .. "maintainers, modified for WoW Forever by defzach from October 2026, and it is |cffff0000not|r "
-                            .. "the original project: please report problems on the Hekili Forever GitHub page below, never "
-                            .. "to the original Hekili authors.\n\n"
+                        name = L["|cFF00CCFFEncore|r is Chad's personal fork of |cFF00CCFFHekili Forever|r by defzach "
+                            .. "(github.com/zmsl/hekili), which is a fork of the original |cFFFFD100Hekili|r project, made "
+                            .. "with the explicit permission of its original author. Encore is based on the original work by "
+                            .. "Hekili and its maintainers, modified for WoW Forever by defzach from October 2026 and modified "
+                            .. "again by Chad (edase) from November 2026. Its default priorities are translated from "
+                            .. "wowsims/forever (MIT).\n\n"
+                            .. "Encore is |cffff0000not|r either original project: please report Encore problems on the Encore "
+                            .. "GitHub page below, never to defzach or the original Hekili authors.\n\n"
                             .. "Encore is free software under the GNU General Public License version 3 or (at your "
                             .. "option) any later version; the full text is in the LICENSE file in the addon folder.\n\n"
                             .. "See the |cFFFFD100Snapshots (Troubleshooting)|r section for how to report a bug.\n\n"],
@@ -7711,12 +7714,12 @@ do
                         width = "full",
                         dialogControl = "SFX-Info-URL",
                     },
-                    curse = {
+                    upstream = {
                         type = "input",
-                        name = "CurseForge", -- l10n: verbatim
-                        desc = L["Find Hekili Forever updates on CurseForge."],
+                        name = "Hekili Forever", -- l10n: verbatim
+                        desc = L["Hekili Forever by defzach, the addon Encore is built on."],
                         order = 11,
-                        get = function () return "https://www.curseforge.com/wow/addons/hekili-forever" end,
+                        get = function () return "https://github.com/zmsl/hekili" end,
                         set = function () end,
                         width = "full",
                         dialogControl = "SFX-Info-URL",

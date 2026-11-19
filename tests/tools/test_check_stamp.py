@@ -326,6 +326,7 @@ NOT_INPUTS = {
     "ARM": "tests/Forever/windows_cpu_bench.lua: a dev-only CPU bench, not check",
     "PAIRS": "tests/Forever/windows_cpu_bench.lua: a dev-only CPU bench, not check",
     "UPDATES": "tests/Forever/windows_cpu_bench.lua: a dev-only CPU bench, not check",
+    "ENCORE_UPSTREAM": "tools/encore/sync_upstream.sh: the upstream to merge, not check",
 }
 # Files that read an environment variable by a computed name, with the names they read (all in ENV_VARS).
 DYNAMIC_READS = {"tools/wowsims/export.lua": "env(name): WOWSIMS, WOWSIMS_CLI, WOWDB"}

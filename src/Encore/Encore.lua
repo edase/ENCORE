@@ -6,6 +6,8 @@
 -- version (see LICENSE).
 -- Modified for WoW Forever by defzach, from October 2026 (https://github.com/zmsl/hekili); this is a fork,
 -- not the original project, made with the explicit permission of the original author.
+-- Modified again as Encore by Chad (edase), from November 2026 (https://github.com/edase/encore): renamed from
+-- Hekili Forever by tools/encore/rename.py and reshaped into a spell highway. A personal fork, not Hekili Forever.
 
 local addon, ns = ...
 local Facade = ns.Facade

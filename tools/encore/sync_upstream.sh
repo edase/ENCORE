@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# Takes zmsl/hekili's latest into Encore. A fresh upstream checkout is renamed with tools/encore/rename.py, committed on
+# the vendor branch upstream-renamed, and merged into the current branch, so git sees only what upstream changed, in
+# Encore's names. Run from a full (not shallow) clone with a clean tree: tools/encore/sync_upstream.sh [upstream ref]
+# Conflicts are expected where Encore cut or reshaped a file: keep Encore's side for a file Encore deleted.
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+
+ref=${1:-forever}
+url=${ENCORE_UPSTREAM:-https://github.com/zmsl/hekili} # a local path works too (for a rehearsal)
+[ -z "$(git status --porcelain)" ] || {
+    echo "sync: commit or stash your changes first"
+    exit 1
+}
+git rev-parse --verify -q upstream-renamed >/dev/null || {
+    echo "sync: no upstream-renamed branch (it starts at the commit 'Encore: rename Hekili Forever to Encore')"
+    exit 1
+}
+here=$(git branch --show-current)
+
+git fetch "$url" "$ref"
+up=$(git rev-parse FETCH_HEAD)
+work=$(mktemp -d)
+cleanup() {
+    git worktree remove --force "$work/up" 2>/dev/null || true
+    git worktree remove --force "$work/vendor" 2>/dev/null || true
+    rm -rf "$work"
+}
+trap cleanup EXIT
+
+git worktree add -q --detach "$work/up" "$up"
+python3 tools/encore/rename.py "$work/up"
+git worktree add -q "$work/vendor" upstream-renamed
+# the vendor tree becomes exactly the renamed upstream: clear it, then copy every file upstream tracks
+find "$work/vendor" -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+(cd "$work/up" && git ls-files -z | tar --null -T - -cf -) | tar -C "$work/vendor" -xf -
+git -C "$work/vendor" add -A
+if git -C "$work/vendor" diff --cached --quiet; then
+    echo "sync: zmsl/hekili $ref at ${up:0:12} holds nothing new"
+    exit 0
+fi
+git -C "$work/vendor" commit -q -m "upstream: zmsl/hekili $ref at ${up:0:12}, renamed by tools/encore/rename.py"
+git merge --no-ff upstream-renamed -m "Merge zmsl/hekili ${up:0:12} (renamed) into $here"

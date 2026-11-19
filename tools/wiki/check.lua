@@ -217,7 +217,8 @@ function M.commands(pages, words)
     for name, s in pairs(pages) do
         local text = s:gsub("<!%-%- GENERATED:.-<!%-%- /GENERATED %-%->", "")
         for code in text:gmatch("`([^`\n]+)`") do
-            local word = code:match("^/hek%a* ([%w_]+)")
+            -- Encore: the pages keep Hekili Forever's `/hekili`; Encore's own text says `/encore` or `/enc`
+            local word = code:match("^/hek%a* ([%w_]+)") or code:match("^/enc%a* ([%w_]+)")
             if word and not words[word:lower()] then
                 out[#out + 1] = ("%s: `%s` is not a published command"):format(name, code)
             end
