@@ -14,6 +14,10 @@
 - Encore ships Paladin and Warrior only, in English: the zip holds four folders (`Encore`, `Encore_Shared`,
   `Encore_Paladin`, `Encore_Warrior`). Hekili Forever's other class packs are no longer part of the addon, and the
   Italian and Chinese translations are gone.
+- The extras stay in but are opt-in: the minimap button now starts hidden (untick "Hide Minimap Icon" to show it; the
+  addon compartment and `/encore` still open the options). The Cooldowns, Interrupts and Defensives displays stay off
+  until their toggle is set to show separately, and the WeakAuras, Masque, ConsolePort and ElvUI support only wakes
+  when that addon is installed.
 
 ### Fixed
 

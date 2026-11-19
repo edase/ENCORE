@@ -300,7 +300,7 @@ do
 
             profile = {
                 enabled = true,
-                minimapIcon = false,
+                minimapIcon = true, -- Encore: the minimap button starts hidden; the addon compartment and /encore still open the options
                 screenshot = true,
 
                 -- the action bar glow (UI/BarGlow.lua): one global setting, off until the player turns it on
@@ -553,7 +553,7 @@ do
                 castRemainingThreshold = 0.25,
 
                 iconStore = {
-                    hide = false,
+                    hide = true, -- Encore: hidden until the player unticks "Hide Minimap Icon"
                 },
             },
         }

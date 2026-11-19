@@ -109,6 +109,15 @@ describe("Engine.Configure (headless Arms boot)", function()
         assert.is_not_nil(button)
         assert.are.equal(p.iconStore, button.db)
     end)
+
+    -- Encore: the extras are opt-in, so a fresh profile starts with the minimap button hidden (the option and its db agree).
+    it("starts a fresh profile with the minimap button hidden", function()
+        local H = headless.new({ character = ww.character(), pack = ww.PACK })
+        assert.are.same({}, H.loadErrors)
+        local p = H.Encore.DB.profile
+        assert.is_true(p.minimapIcon)
+        assert.is_true(p.iconStore.hide)
+    end)
 end)
 
 -- Engine.SettingDefault: a setting registered with `option.sim` fills an unset profile value with that value under the
