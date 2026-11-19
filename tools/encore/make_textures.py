@@ -5,6 +5,8 @@ Every texture is white with an anti-aliased alpha, so the style tints it with Se
   HighwayRing1..3  the hit ring, thin, medium and thick (128 x 128)
   HighwayHalo      a soft round glow for the halo glow and the ring's flash (128 x 128)
   HighwayDot       a small disc for the tracked spell's half circle (32 x 32)
+  HighwayPin       a map pin: a disc with a tail pointing down (128 x 128; the disc's centre at (64, 50), radius 44,
+                   the tail's tip at (64, 124))
 
 Deterministic: the same bytes on every run. Needs Pillow.
 """
@@ -73,6 +75,24 @@ def dot():
     return white(coverage(32, lambda x, y: math.hypot(x, y) <= 1 - 1 / 32))
 
 
+def pin():
+    """A teardrop: the disc, and the cone from the tail's tip tangent to it, below the tangent chord."""
+    cx, cy, r, tip = 64.0, 50.0, 44.0, 124.0
+    d = tip - cy
+    a = math.asin(r / d)  # the cone's half-angle at the tip
+    chord = cy + r * math.sin(a)  # the tangent points' height
+
+    def inside(x, y):
+        px, py = (x + 1) * 64, (y + 1) * 64  # back to pixels
+        if math.hypot(px - cx, py - cy) <= r:
+            return True
+        if chord <= py <= tip:
+            return abs(px - cx) <= (tip - py) * math.tan(a)
+        return False
+
+    return white(coverage(128, inside))
+
+
 def main():
     if not os.path.isdir(OUT):
         sys.exit("run from the repo root: %s not found" % OUT)
@@ -82,6 +102,7 @@ def main():
         "HighwayRing3": ring(0.22),
         "HighwayHalo": halo(),
         "HighwayDot": dot(),
+        "HighwayPin": pin(),
     }
     for name, img in art.items():
         path = os.path.join(OUT, name + ".tga")

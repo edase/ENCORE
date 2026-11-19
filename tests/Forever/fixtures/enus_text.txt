@@ -13067,7 +13067,7 @@ options.displays.AOE.highway.gamepad.pos.size	desc	The size of the controller bu
 options.displays.AOE.highway.gamepad.pos.size	name	Size
 options.displays.AOE.highway.gamepad.pos.x	name	X Offset
 options.displays.AOE.highway.gamepad.pos.y	name	Y Offset
-options.displays.AOE.highway.glow	desc	How the icon at the ring and proccing icons glow.
+options.displays.AOE.highway.glow	desc	How the pin at the ring and proccing pins glow.
 options.displays.AOE.highway.glow	name	Glow
 options.displays.AOE.highway.glow.color	desc	The glow's color.
 options.displays.AOE.highway.glow.color	name	Color
@@ -13076,13 +13076,13 @@ options.displays.AOE.highway.glow.lib	name	Custom Glow
 options.displays.AOE.highway.glow.lib	values.autocast	AutoCast Shine
 options.displays.AOE.highway.glow.lib	values.button	Action Button Glow
 options.displays.AOE.highway.glow.lib	values.pixel	Pixel Glow
-options.displays.AOE.highway.glow.mode	desc	How the icon at the ring shows that it is due: None, a gentle Pulse, a soft Halo, or a Custom glow (LibCustomGlow).
+options.displays.AOE.highway.glow.mode	desc	How the pin at the ring shows that it is due: None, a gentle Pulse, a soft Halo, or a Custom glow (LibCustomGlow).
 options.displays.AOE.highway.glow.mode	name	Glow
 options.displays.AOE.highway.glow.mode	values.custom	Custom
 options.displays.AOE.highway.glow.mode	values.halo	Halo
 options.displays.AOE.highway.glow.mode	values.none	None
 options.displays.AOE.highway.glow.mode	values.pulse	Pulse
-options.displays.AOE.highway.glow.procs	desc	Also glow any icon on the line whose spell is lit up by a proc.
+options.displays.AOE.highway.glow.procs	desc	Also glow any pin on the rail whose spell is lit up by a proc.
 options.displays.AOE.highway.glow.procs	name	Glow on Procs
 options.displays.AOE.highway.keybindings	desc	Options for keybinding text on displayed icons.
 options.displays.AOE.highway.keybindings	name	Keybinds
@@ -13101,7 +13101,7 @@ options.displays.AOE.highway.keybindings.pos.anchor	values.TOPLEFT	Top Left
 options.displays.AOE.highway.keybindings.pos.anchor	values.TOPRIGHT	Top Right
 options.displays.AOE.highway.keybindings.pos.x	name	X Offset
 options.displays.AOE.highway.keybindings.pos.y	name	Y Offset
-options.displays.AOE.highway.keybindings.queued	desc	Show keybinds on the icons behind the first one too.
+options.displays.AOE.highway.keybindings.queued	desc	Show keybinds on the pins behind the first one too.
 options.displays.AOE.highway.keybindings.queued	name	Enabled for Queued Icons
 options.displays.AOE.highway.keybindings.textStyle	name	Font and Style
 options.displays.AOE.highway.keybindings.textStyle.break01	name	\032
@@ -13137,94 +13137,114 @@ options.displays.AOE.highway.range.type	name	Range Checking
 options.displays.AOE.highway.range.type	values.ability	Per Ability
 options.displays.AOE.highway.range.type	values.melee	Melee Range
 options.displays.AOE.highway.range.type	values.xclude	Exclude Out-of-Range
-options.displays.AOE.highway.tab_highway	desc	The line, the hit ring and the icons.
+options.displays.AOE.highway.tab_highway	desc	The rail, the target ring and the pins.
 options.displays.AOE.highway.tab_highway	name	Highway
-options.displays.AOE.highway.tab_highway.iconBorder	name	Icon Border
-options.displays.AOE.highway.tab_highway.iconBorder.color	desc	The border's color.
-options.displays.AOE.highway.tab_highway.iconBorder.color	name	Color
-options.displays.AOE.highway.tab_highway.iconBorder.enabled	desc	Show a border around each icon.
-options.displays.AOE.highway.tab_highway.iconBorder.enabled	name	Show Border
-options.displays.AOE.highway.tab_highway.iconBorder.thickness	desc	The border's thickness in pixels.
-options.displays.AOE.highway.tab_highway.iconBorder.thickness	name	Thickness
-options.displays.AOE.highway.tab_highway.line	name	Line
-options.displays.AOE.highway.tab_highway.line.color	desc	The line's color.
-options.displays.AOE.highway.tab_highway.line.color	name	Color
-options.displays.AOE.highway.tab_highway.line.enabled	desc	Show the line the icons ride.
-options.displays.AOE.highway.tab_highway.line.enabled	name	Show Line
-options.displays.AOE.highway.tab_highway.line.thickness	desc	The line's thickness in pixels.
-options.displays.AOE.highway.tab_highway.line.thickness	name	Thickness
-options.displays.AOE.highway.tab_highway.ring	name	Hit Ring
-options.displays.AOE.highway.tab_highway.ring.color	desc	The ring's color.
+options.displays.AOE.highway.tab_highway.iconBorder	name	Round and Square Icons
+options.displays.AOE.highway.tab_highway.iconBorder.thickness	desc	The colored rim around a round or square icon (the Countdown colors).
+options.displays.AOE.highway.tab_highway.iconBorder.thickness	name	Rim Thickness
+options.displays.AOE.highway.tab_highway.rail	name	Rail
+options.displays.AOE.highway.tab_highway.rail.color	desc	The rail's color.
+options.displays.AOE.highway.tab_highway.rail.color	name	Color
+options.displays.AOE.highway.tab_highway.rail.edge	desc	The rail's outline.
+options.displays.AOE.highway.tab_highway.rail.edge	name	Edge Color
+options.displays.AOE.highway.tab_highway.rail.enabled	desc	Show the rail the pins ride.
+options.displays.AOE.highway.tab_highway.rail.enabled	name	Show Rail
+options.displays.AOE.highway.tab_highway.rail.thickness	desc	The rail's thickness in pixels.
+options.displays.AOE.highway.tab_highway.rail.thickness	name	Thickness
+options.displays.AOE.highway.tab_highway.rail.tickColor	desc	The color of the second marks.
+options.displays.AOE.highway.tab_highway.rail.tickColor	name	Tick Color
+options.displays.AOE.highway.tab_highway.rail.ticks	desc	A mark on the rail every second.
+options.displays.AOE.highway.tab_highway.rail.ticks	name	Second Ticks
+options.displays.AOE.highway.tab_highway.ring	name	Target Ring
+options.displays.AOE.highway.tab_highway.ring.color	desc	The target ring's color.
 options.displays.AOE.highway.tab_highway.ring.color	name	Color
-options.displays.AOE.highway.tab_highway.ring.enabled	desc	Show the ring the icons travel to.
+options.displays.AOE.highway.tab_highway.ring.crosshair	desc	A thin upright line through the ring.
+options.displays.AOE.highway.tab_highway.ring.crosshair	name	Crosshair
+options.displays.AOE.highway.tab_highway.ring.enabled	desc	Show the target the pins travel to.
 options.displays.AOE.highway.tab_highway.ring.enabled	name	Show Ring
-options.displays.AOE.highway.tab_highway.ring.flash	desc	Flash the ring when an icon goes through it.
+options.displays.AOE.highway.tab_highway.ring.flash	desc	Flash the ring when a pin goes through it.
 options.displays.AOE.highway.tab_highway.ring.flash	name	Flash on Cast
-options.displays.AOE.highway.tab_highway.ring.idleAlpha	desc	The ring's brightness while nothing is due; it goes full when an icon is due.
+options.displays.AOE.highway.tab_highway.ring.idleAlpha	desc	The ring's brightness while nothing is due; it goes full when a pin is due.
 options.displays.AOE.highway.tab_highway.ring.idleAlpha	name	Resting Brightness
-options.displays.AOE.highway.tab_highway.ring.pad	desc	The space between an icon at the ring and the ring.
-options.displays.AOE.highway.tab_highway.ring.pad	name	Gap
-options.displays.AOE.highway.tab_highway.ring.style	desc	The ring's thickness.
-options.displays.AOE.highway.tab_highway.ring.style	name	Thickness
-options.displays.AOE.highway.tab_highway.ring.style	values.medium	Medium
-options.displays.AOE.highway.tab_highway.ring.style	values.thick	Thick
-options.displays.AOE.highway.tab_highway.ring.style	values.thin	Thin
+options.displays.AOE.highway.tab_highway.ring.size	desc	The target ring's size.
+options.displays.AOE.highway.tab_highway.ring.size	name	Size
 options.displays.AOE.highway.tab_highway.sec_layout	name	Layout
 options.displays.AOE.highway.tab_highway.sec_layout.demo	desc	Out of combat, run a moving sample on the highway while the options are open, so each change shows at once.
 options.displays.AOE.highway.tab_highway.sec_layout.demo	name	Demo While Options Are Open
-options.displays.AOE.highway.tab_highway.sec_layout.direction	desc	Which way the icons travel; the hit ring sits at the end they travel to.
+options.displays.AOE.highway.tab_highway.sec_layout.direction	desc	Which way the pins travel; the target ring sits at the end they travel to.
 options.displays.AOE.highway.tab_highway.sec_layout.direction	name	Direction
 options.displays.AOE.highway.tab_highway.sec_layout.direction	values.LEFT	Right to Left
 options.displays.AOE.highway.tab_highway.sec_layout.direction	values.RIGHT	Left to Right
-options.displays.AOE.highway.tab_highway.sec_layout.farScale	desc	An icon's size at the far end of the line, a fraction of its size at the ring.
+options.displays.AOE.highway.tab_highway.sec_layout.farScale	desc	A pin's size at the far end of the rail, a fraction of its size at the ring (1: the same size all the way).
 options.displays.AOE.highway.tab_highway.sec_layout.farScale	name	Far Size
-options.displays.AOE.highway.tab_highway.sec_layout.glide	desc	Seconds an icon takes to settle on a new predicted time (0: jump).
+options.displays.AOE.highway.tab_highway.sec_layout.ghosts	desc	How many dark pins show the spells after them.
+options.displays.AOE.highway.tab_highway.sec_layout.ghosts	name	Ghost Pins
+options.displays.AOE.highway.tab_highway.sec_layout.glide	desc	Seconds a pin takes to settle on a new predicted time (0: jump).
 options.displays.AOE.highway.tab_highway.sec_layout.glide	name	Glide
-options.displays.AOE.highway.tab_highway.sec_layout.horizon	desc	How many seconds ahead the line reaches; a later icon waits at the far end.
+options.displays.AOE.highway.tab_highway.sec_layout.horizon	desc	How many seconds ahead the rail reaches; a later pin waits at the far end.
 options.displays.AOE.highway.tab_highway.sec_layout.horizon	name	Seconds Shown
-options.displays.AOE.highway.tab_highway.sec_layout.length	desc	The line's length in pixels, from the ring to the far end.
+options.displays.AOE.highway.tab_highway.sec_layout.lanes	desc	Spells off the global cooldown and cooldowns ride below the rail, the rest above it.
+options.displays.AOE.highway.tab_highway.sec_layout.lanes	name	Off-GCD Below
+options.displays.AOE.highway.tab_highway.sec_layout.length	desc	The rail's length in pixels, from the ring to the far end.
 options.displays.AOE.highway.tab_highway.sec_layout.length	name	Length
-options.displays.AOE.highway.tab_highway.sec_layout.maxIcons	desc	How many icons ride the line at once.
-options.displays.AOE.highway.tab_highway.sec_layout.maxIcons	name	Icons
-options.displays.AOE.highway.tab_highway.sec_layout.offGCDScale	desc	The size of a spell that does not trigger the global cooldown, a fraction of a normal icon's.
+options.displays.AOE.highway.tab_highway.sec_layout.maxIcons	desc	How many pins ride the rail in color.
+options.displays.AOE.highway.tab_highway.sec_layout.maxIcons	name	Pins
+options.displays.AOE.highway.tab_highway.sec_layout.offGCDScale	desc	The size of a spell that does not trigger the global cooldown, a fraction of a normal pin's.
 options.displays.AOE.highway.tab_highway.sec_layout.offGCDScale	name	Off-GCD Size
-options.displays.AOE.highway.tab_highway.sec_layout.shape	desc	Round or square icons.
+options.displays.AOE.highway.tab_highway.sec_layout.shape	desc	Map pins pointing at the rail, or round or square icons riding on it.
 options.displays.AOE.highway.tab_highway.sec_layout.shape	name	Shape
+options.displays.AOE.highway.tab_highway.sec_layout.shape	values.pin	Pin
 options.displays.AOE.highway.tab_highway.sec_layout.shape	values.round	Round
 options.displays.AOE.highway.tab_highway.sec_layout.shape	values.square	Square
-options.displays.AOE.highway.tab_highway.sec_layout.size	desc	An icon's size when it reaches the ring.
-options.displays.AOE.highway.tab_highway.sec_layout.size	name	Icon Size
-options.displays.AOE.highway.tab_highway.waiting	name	Waiting on Resources
-options.displays.AOE.highway.tab_highway.waiting.alpha	desc	The opacity of an icon still short of its rage or mana.
-options.displays.AOE.highway.tab_highway.waiting.alpha	name	Opacity
-options.displays.AOE.highway.tab_highway.waiting.desaturate	desc	Also take the color out of an icon short of its rage or mana.
-options.displays.AOE.highway.tab_highway.waiting.desaturate	name	Grey Out
-options.displays.AOE.highway.tab_text	desc	Seconds on the icons.
-options.displays.AOE.highway.tab_text	name	Countdown
-options.displays.AOE.highway.tab_text.countdown	name	Countdown
-options.displays.AOE.highway.tab_text.countdown.color	name	Color
-options.displays.AOE.highway.tab_text.countdown.enabled	desc	Show the seconds until each icon is due, on the icon.
-options.displays.AOE.highway.tab_text.countdown.enabled	name	Show Countdown
-options.displays.AOE.highway.tab_text.countdown.font	name	Font
-options.displays.AOE.highway.tab_text.countdown.font	values.2002	Fonts\\2002.TTF
-options.displays.AOE.highway.tab_text.countdown.font	values.2002 Bold	Fonts\\2002B.TTF
-options.displays.AOE.highway.tab_text.countdown.font	values.AR CrystalzcuheiGBK Demibold	Fonts\\ARHei.TTF
-options.displays.AOE.highway.tab_text.countdown.font	values.AR ZhongkaiGBK Medium	Fonts\\ARKai_T.TTF
-options.displays.AOE.highway.tab_text.countdown.font	values.AR ZhongkaiGBK Medium (Combat)	Fonts\\ARKai_C.TTF
-options.displays.AOE.highway.tab_text.countdown.font	values.Arial Narrow	Fonts\\ARIALN.TTF
-options.displays.AOE.highway.tab_text.countdown.font	values.Friz Quadrata TT	Fonts\\FRIZQT__.TTF
-options.displays.AOE.highway.tab_text.countdown.font	values.MoK	Fonts\\K_Pagetext.TTF
-options.displays.AOE.highway.tab_text.countdown.font	values.Morpheus	Fonts\\MORPHEUS_CYR.TTF
-options.displays.AOE.highway.tab_text.countdown.font	values.Nimrod MT	Fonts\\NIM_____.ttf
-options.displays.AOE.highway.tab_text.countdown.font	values.Skurri	Fonts\\SKURRI_CYR.TTF
-options.displays.AOE.highway.tab_text.countdown.size	name	Size
-options.displays.AOE.highway.tab_text.countdown.style	name	Style
-options.displays.AOE.highway.tab_text.countdown.style	values.MONOCHROME	Monochrome
-options.displays.AOE.highway.tab_text.countdown.style	values.MONOCHROME,OUTLINE	Monochrome, Outline
-options.displays.AOE.highway.tab_text.countdown.style	values.MONOCHROME,THICKOUTLINE	Monochrome, Thick Outline
-options.displays.AOE.highway.tab_text.countdown.style	values.NONE	None
-options.displays.AOE.highway.tab_text.countdown.style	values.OUTLINE	Outline
-options.displays.AOE.highway.tab_text.countdown.style	values.THICKOUTLINE	Thick Outline
+options.displays.AOE.highway.tab_highway.sec_layout.size	desc	The size of a pin's icon disc.
+options.displays.AOE.highway.tab_highway.sec_layout.size	name	Pin Size
+options.displays.AOE.highway.tab_look	desc	The pins' countdown colors and seconds, the ghost pins and the waiting look.
+options.displays.AOE.highway.tab_look	name	Countdown
+options.displays.AOE.highway.tab_look.countdown	name	Countdown
+options.displays.AOE.highway.tab_look.countdown.dueColor	desc	A pin due now: press it (green by default).
+options.displays.AOE.highway.tab_look.countdown.dueColor	name	Due Color
+options.displays.AOE.highway.tab_look.countdown.enabled	desc	Show the seconds beside a pin as it comes in.
+options.displays.AOE.highway.tab_look.countdown.enabled	name	Show Seconds
+options.displays.AOE.highway.tab_look.countdown.farColor	desc	A pin on its way (red by default).
+options.displays.AOE.highway.tab_look.countdown.farColor	name	Coming Color
+options.displays.AOE.highway.tab_look.countdown.font	name	Font
+options.displays.AOE.highway.tab_look.countdown.font	values.2002	Fonts\\2002.TTF
+options.displays.AOE.highway.tab_look.countdown.font	values.2002 Bold	Fonts\\2002B.TTF
+options.displays.AOE.highway.tab_look.countdown.font	values.AR CrystalzcuheiGBK Demibold	Fonts\\ARHei.TTF
+options.displays.AOE.highway.tab_look.countdown.font	values.AR ZhongkaiGBK Medium	Fonts\\ARKai_T.TTF
+options.displays.AOE.highway.tab_look.countdown.font	values.AR ZhongkaiGBK Medium (Combat)	Fonts\\ARKai_C.TTF
+options.displays.AOE.highway.tab_look.countdown.font	values.Arial Narrow	Fonts\\ARIALN.TTF
+options.displays.AOE.highway.tab_look.countdown.font	values.Friz Quadrata TT	Fonts\\FRIZQT__.TTF
+options.displays.AOE.highway.tab_look.countdown.font	values.MoK	Fonts\\K_Pagetext.TTF
+options.displays.AOE.highway.tab_look.countdown.font	values.Morpheus	Fonts\\MORPHEUS_CYR.TTF
+options.displays.AOE.highway.tab_look.countdown.font	values.Nimrod MT	Fonts\\NIM_____.ttf
+options.displays.AOE.highway.tab_look.countdown.font	values.Skurri	Fonts\\SKURRI_CYR.TTF
+options.displays.AOE.highway.tab_look.countdown.nearAt	desc	A pin turns from red to yellow this many seconds before it is due; green once it is due.
+options.displays.AOE.highway.tab_look.countdown.nearAt	name	Yellow From
+options.displays.AOE.highway.tab_look.countdown.nearColor	desc	A pin about to be due (yellow by default).
+options.displays.AOE.highway.tab_look.countdown.nearColor	name	Close Color
+options.displays.AOE.highway.tab_look.countdown.size	name	Size
+options.displays.AOE.highway.tab_look.countdown.style	name	Style
+options.displays.AOE.highway.tab_look.countdown.style	values.MONOCHROME	Monochrome
+options.displays.AOE.highway.tab_look.countdown.style	values.MONOCHROME,OUTLINE	Monochrome, Outline
+options.displays.AOE.highway.tab_look.countdown.style	values.MONOCHROME,THICKOUTLINE	Monochrome, Thick Outline
+options.displays.AOE.highway.tab_look.countdown.style	values.NONE	None
+options.displays.AOE.highway.tab_look.countdown.style	values.OUTLINE	Outline
+options.displays.AOE.highway.tab_look.countdown.style	values.THICKOUTLINE	Thick Outline
+options.displays.AOE.highway.tab_look.countdown.window	desc	The seconds show once a pin is this close.
+options.displays.AOE.highway.tab_look.countdown.window	name	Show From
+options.displays.AOE.highway.tab_look.ghost	name	Ghost Pins
+options.displays.AOE.highway.tab_look.ghost.alpha	desc	The opacity of a ghost pin's icon.
+options.displays.AOE.highway.tab_look.ghost.alpha	name	Icon Opacity
+options.displays.AOE.highway.tab_look.ghost.color	desc	The color of a ghost pin.
+options.displays.AOE.highway.tab_look.ghost.color	name	Color
+options.displays.AOE.highway.tab_look.waiting	name	Waiting on Resources
+options.displays.AOE.highway.tab_look.waiting.alpha	desc	The opacity of a pin still short of its rage or mana.
+options.displays.AOE.highway.tab_look.waiting.alpha	name	Opacity
+options.displays.AOE.highway.tab_look.waiting.desaturate	desc	Also take the color out of its icon.
+options.displays.AOE.highway.tab_look.waiting.desaturate	name	Grey Out
+options.displays.AOE.highway.tab_look.waiting.enabled	desc	Fade a pin whose spell you cannot afford yet (rage or mana).
+options.displays.AOE.highway.tab_look.waiting.enabled	name	Fade When Short
 options.displays.AOE.highway.tracked	desc	One spell shown as a half circle behind the ring that fills as its cooldown recovers.
 options.displays.AOE.highway.tracked	name	Tracked Spell
 options.displays.AOE.highway.tracked.dot	desc	The size of each dot of the half circle.
@@ -14362,7 +14382,7 @@ options.displays.Cooldowns.highway.gamepad.pos.size	desc	The size of the control
 options.displays.Cooldowns.highway.gamepad.pos.size	name	Size
 options.displays.Cooldowns.highway.gamepad.pos.x	name	X Offset
 options.displays.Cooldowns.highway.gamepad.pos.y	name	Y Offset
-options.displays.Cooldowns.highway.glow	desc	How the icon at the ring and proccing icons glow.
+options.displays.Cooldowns.highway.glow	desc	How the pin at the ring and proccing pins glow.
 options.displays.Cooldowns.highway.glow	name	Glow
 options.displays.Cooldowns.highway.glow.color	desc	The glow's color.
 options.displays.Cooldowns.highway.glow.color	name	Color
@@ -14371,13 +14391,13 @@ options.displays.Cooldowns.highway.glow.lib	name	Custom Glow
 options.displays.Cooldowns.highway.glow.lib	values.autocast	AutoCast Shine
 options.displays.Cooldowns.highway.glow.lib	values.button	Action Button Glow
 options.displays.Cooldowns.highway.glow.lib	values.pixel	Pixel Glow
-options.displays.Cooldowns.highway.glow.mode	desc	How the icon at the ring shows that it is due: None, a gentle Pulse, a soft Halo, or a Custom glow (LibCustomGlow).
+options.displays.Cooldowns.highway.glow.mode	desc	How the pin at the ring shows that it is due: None, a gentle Pulse, a soft Halo, or a Custom glow (LibCustomGlow).
 options.displays.Cooldowns.highway.glow.mode	name	Glow
 options.displays.Cooldowns.highway.glow.mode	values.custom	Custom
 options.displays.Cooldowns.highway.glow.mode	values.halo	Halo
 options.displays.Cooldowns.highway.glow.mode	values.none	None
 options.displays.Cooldowns.highway.glow.mode	values.pulse	Pulse
-options.displays.Cooldowns.highway.glow.procs	desc	Also glow any icon on the line whose spell is lit up by a proc.
+options.displays.Cooldowns.highway.glow.procs	desc	Also glow any pin on the rail whose spell is lit up by a proc.
 options.displays.Cooldowns.highway.glow.procs	name	Glow on Procs
 options.displays.Cooldowns.highway.keybindings	desc	Options for keybinding text on displayed icons.
 options.displays.Cooldowns.highway.keybindings	name	Keybinds
@@ -14396,7 +14416,7 @@ options.displays.Cooldowns.highway.keybindings.pos.anchor	values.TOPLEFT	Top Lef
 options.displays.Cooldowns.highway.keybindings.pos.anchor	values.TOPRIGHT	Top Right
 options.displays.Cooldowns.highway.keybindings.pos.x	name	X Offset
 options.displays.Cooldowns.highway.keybindings.pos.y	name	Y Offset
-options.displays.Cooldowns.highway.keybindings.queued	desc	Show keybinds on the icons behind the first one too.
+options.displays.Cooldowns.highway.keybindings.queued	desc	Show keybinds on the pins behind the first one too.
 options.displays.Cooldowns.highway.keybindings.queued	name	Enabled for Queued Icons
 options.displays.Cooldowns.highway.keybindings.textStyle	name	Font and Style
 options.displays.Cooldowns.highway.keybindings.textStyle.break01	name	\032
@@ -14432,94 +14452,114 @@ options.displays.Cooldowns.highway.range.type	name	Range Checking
 options.displays.Cooldowns.highway.range.type	values.ability	Per Ability
 options.displays.Cooldowns.highway.range.type	values.melee	Melee Range
 options.displays.Cooldowns.highway.range.type	values.xclude	Exclude Out-of-Range
-options.displays.Cooldowns.highway.tab_highway	desc	The line, the hit ring and the icons.
+options.displays.Cooldowns.highway.tab_highway	desc	The rail, the target ring and the pins.
 options.displays.Cooldowns.highway.tab_highway	name	Highway
-options.displays.Cooldowns.highway.tab_highway.iconBorder	name	Icon Border
-options.displays.Cooldowns.highway.tab_highway.iconBorder.color	desc	The border's color.
-options.displays.Cooldowns.highway.tab_highway.iconBorder.color	name	Color
-options.displays.Cooldowns.highway.tab_highway.iconBorder.enabled	desc	Show a border around each icon.
-options.displays.Cooldowns.highway.tab_highway.iconBorder.enabled	name	Show Border
-options.displays.Cooldowns.highway.tab_highway.iconBorder.thickness	desc	The border's thickness in pixels.
-options.displays.Cooldowns.highway.tab_highway.iconBorder.thickness	name	Thickness
-options.displays.Cooldowns.highway.tab_highway.line	name	Line
-options.displays.Cooldowns.highway.tab_highway.line.color	desc	The line's color.
-options.displays.Cooldowns.highway.tab_highway.line.color	name	Color
-options.displays.Cooldowns.highway.tab_highway.line.enabled	desc	Show the line the icons ride.
-options.displays.Cooldowns.highway.tab_highway.line.enabled	name	Show Line
-options.displays.Cooldowns.highway.tab_highway.line.thickness	desc	The line's thickness in pixels.
-options.displays.Cooldowns.highway.tab_highway.line.thickness	name	Thickness
-options.displays.Cooldowns.highway.tab_highway.ring	name	Hit Ring
-options.displays.Cooldowns.highway.tab_highway.ring.color	desc	The ring's color.
+options.displays.Cooldowns.highway.tab_highway.iconBorder	name	Round and Square Icons
+options.displays.Cooldowns.highway.tab_highway.iconBorder.thickness	desc	The colored rim around a round or square icon (the Countdown colors).
+options.displays.Cooldowns.highway.tab_highway.iconBorder.thickness	name	Rim Thickness
+options.displays.Cooldowns.highway.tab_highway.rail	name	Rail
+options.displays.Cooldowns.highway.tab_highway.rail.color	desc	The rail's color.
+options.displays.Cooldowns.highway.tab_highway.rail.color	name	Color
+options.displays.Cooldowns.highway.tab_highway.rail.edge	desc	The rail's outline.
+options.displays.Cooldowns.highway.tab_highway.rail.edge	name	Edge Color
+options.displays.Cooldowns.highway.tab_highway.rail.enabled	desc	Show the rail the pins ride.
+options.displays.Cooldowns.highway.tab_highway.rail.enabled	name	Show Rail
+options.displays.Cooldowns.highway.tab_highway.rail.thickness	desc	The rail's thickness in pixels.
+options.displays.Cooldowns.highway.tab_highway.rail.thickness	name	Thickness
+options.displays.Cooldowns.highway.tab_highway.rail.tickColor	desc	The color of the second marks.
+options.displays.Cooldowns.highway.tab_highway.rail.tickColor	name	Tick Color
+options.displays.Cooldowns.highway.tab_highway.rail.ticks	desc	A mark on the rail every second.
+options.displays.Cooldowns.highway.tab_highway.rail.ticks	name	Second Ticks
+options.displays.Cooldowns.highway.tab_highway.ring	name	Target Ring
+options.displays.Cooldowns.highway.tab_highway.ring.color	desc	The target ring's color.
 options.displays.Cooldowns.highway.tab_highway.ring.color	name	Color
-options.displays.Cooldowns.highway.tab_highway.ring.enabled	desc	Show the ring the icons travel to.
+options.displays.Cooldowns.highway.tab_highway.ring.crosshair	desc	A thin upright line through the ring.
+options.displays.Cooldowns.highway.tab_highway.ring.crosshair	name	Crosshair
+options.displays.Cooldowns.highway.tab_highway.ring.enabled	desc	Show the target the pins travel to.
 options.displays.Cooldowns.highway.tab_highway.ring.enabled	name	Show Ring
-options.displays.Cooldowns.highway.tab_highway.ring.flash	desc	Flash the ring when an icon goes through it.
+options.displays.Cooldowns.highway.tab_highway.ring.flash	desc	Flash the ring when a pin goes through it.
 options.displays.Cooldowns.highway.tab_highway.ring.flash	name	Flash on Cast
-options.displays.Cooldowns.highway.tab_highway.ring.idleAlpha	desc	The ring's brightness while nothing is due; it goes full when an icon is due.
+options.displays.Cooldowns.highway.tab_highway.ring.idleAlpha	desc	The ring's brightness while nothing is due; it goes full when a pin is due.
 options.displays.Cooldowns.highway.tab_highway.ring.idleAlpha	name	Resting Brightness
-options.displays.Cooldowns.highway.tab_highway.ring.pad	desc	The space between an icon at the ring and the ring.
-options.displays.Cooldowns.highway.tab_highway.ring.pad	name	Gap
-options.displays.Cooldowns.highway.tab_highway.ring.style	desc	The ring's thickness.
-options.displays.Cooldowns.highway.tab_highway.ring.style	name	Thickness
-options.displays.Cooldowns.highway.tab_highway.ring.style	values.medium	Medium
-options.displays.Cooldowns.highway.tab_highway.ring.style	values.thick	Thick
-options.displays.Cooldowns.highway.tab_highway.ring.style	values.thin	Thin
+options.displays.Cooldowns.highway.tab_highway.ring.size	desc	The target ring's size.
+options.displays.Cooldowns.highway.tab_highway.ring.size	name	Size
 options.displays.Cooldowns.highway.tab_highway.sec_layout	name	Layout
 options.displays.Cooldowns.highway.tab_highway.sec_layout.demo	desc	Out of combat, run a moving sample on the highway while the options are open, so each change shows at once.
 options.displays.Cooldowns.highway.tab_highway.sec_layout.demo	name	Demo While Options Are Open
-options.displays.Cooldowns.highway.tab_highway.sec_layout.direction	desc	Which way the icons travel; the hit ring sits at the end they travel to.
+options.displays.Cooldowns.highway.tab_highway.sec_layout.direction	desc	Which way the pins travel; the target ring sits at the end they travel to.
 options.displays.Cooldowns.highway.tab_highway.sec_layout.direction	name	Direction
 options.displays.Cooldowns.highway.tab_highway.sec_layout.direction	values.LEFT	Right to Left
 options.displays.Cooldowns.highway.tab_highway.sec_layout.direction	values.RIGHT	Left to Right
-options.displays.Cooldowns.highway.tab_highway.sec_layout.farScale	desc	An icon's size at the far end of the line, a fraction of its size at the ring.
+options.displays.Cooldowns.highway.tab_highway.sec_layout.farScale	desc	A pin's size at the far end of the rail, a fraction of its size at the ring (1: the same size all the way).
 options.displays.Cooldowns.highway.tab_highway.sec_layout.farScale	name	Far Size
-options.displays.Cooldowns.highway.tab_highway.sec_layout.glide	desc	Seconds an icon takes to settle on a new predicted time (0: jump).
+options.displays.Cooldowns.highway.tab_highway.sec_layout.ghosts	desc	How many dark pins show the spells after them.
+options.displays.Cooldowns.highway.tab_highway.sec_layout.ghosts	name	Ghost Pins
+options.displays.Cooldowns.highway.tab_highway.sec_layout.glide	desc	Seconds a pin takes to settle on a new predicted time (0: jump).
 options.displays.Cooldowns.highway.tab_highway.sec_layout.glide	name	Glide
-options.displays.Cooldowns.highway.tab_highway.sec_layout.horizon	desc	How many seconds ahead the line reaches; a later icon waits at the far end.
+options.displays.Cooldowns.highway.tab_highway.sec_layout.horizon	desc	How many seconds ahead the rail reaches; a later pin waits at the far end.
 options.displays.Cooldowns.highway.tab_highway.sec_layout.horizon	name	Seconds Shown
-options.displays.Cooldowns.highway.tab_highway.sec_layout.length	desc	The line's length in pixels, from the ring to the far end.
+options.displays.Cooldowns.highway.tab_highway.sec_layout.lanes	desc	Spells off the global cooldown and cooldowns ride below the rail, the rest above it.
+options.displays.Cooldowns.highway.tab_highway.sec_layout.lanes	name	Off-GCD Below
+options.displays.Cooldowns.highway.tab_highway.sec_layout.length	desc	The rail's length in pixels, from the ring to the far end.
 options.displays.Cooldowns.highway.tab_highway.sec_layout.length	name	Length
-options.displays.Cooldowns.highway.tab_highway.sec_layout.maxIcons	desc	How many icons ride the line at once.
-options.displays.Cooldowns.highway.tab_highway.sec_layout.maxIcons	name	Icons
-options.displays.Cooldowns.highway.tab_highway.sec_layout.offGCDScale	desc	The size of a spell that does not trigger the global cooldown, a fraction of a normal icon's.
+options.displays.Cooldowns.highway.tab_highway.sec_layout.maxIcons	desc	How many pins ride the rail in color.
+options.displays.Cooldowns.highway.tab_highway.sec_layout.maxIcons	name	Pins
+options.displays.Cooldowns.highway.tab_highway.sec_layout.offGCDScale	desc	The size of a spell that does not trigger the global cooldown, a fraction of a normal pin's.
 options.displays.Cooldowns.highway.tab_highway.sec_layout.offGCDScale	name	Off-GCD Size
-options.displays.Cooldowns.highway.tab_highway.sec_layout.shape	desc	Round or square icons.
+options.displays.Cooldowns.highway.tab_highway.sec_layout.shape	desc	Map pins pointing at the rail, or round or square icons riding on it.
 options.displays.Cooldowns.highway.tab_highway.sec_layout.shape	name	Shape
+options.displays.Cooldowns.highway.tab_highway.sec_layout.shape	values.pin	Pin
 options.displays.Cooldowns.highway.tab_highway.sec_layout.shape	values.round	Round
 options.displays.Cooldowns.highway.tab_highway.sec_layout.shape	values.square	Square
-options.displays.Cooldowns.highway.tab_highway.sec_layout.size	desc	An icon's size when it reaches the ring.
-options.displays.Cooldowns.highway.tab_highway.sec_layout.size	name	Icon Size
-options.displays.Cooldowns.highway.tab_highway.waiting	name	Waiting on Resources
-options.displays.Cooldowns.highway.tab_highway.waiting.alpha	desc	The opacity of an icon still short of its rage or mana.
-options.displays.Cooldowns.highway.tab_highway.waiting.alpha	name	Opacity
-options.displays.Cooldowns.highway.tab_highway.waiting.desaturate	desc	Also take the color out of an icon short of its rage or mana.
-options.displays.Cooldowns.highway.tab_highway.waiting.desaturate	name	Grey Out
-options.displays.Cooldowns.highway.tab_text	desc	Seconds on the icons.
-options.displays.Cooldowns.highway.tab_text	name	Countdown
-options.displays.Cooldowns.highway.tab_text.countdown	name	Countdown
-options.displays.Cooldowns.highway.tab_text.countdown.color	name	Color
-options.displays.Cooldowns.highway.tab_text.countdown.enabled	desc	Show the seconds until each icon is due, on the icon.
-options.displays.Cooldowns.highway.tab_text.countdown.enabled	name	Show Countdown
-options.displays.Cooldowns.highway.tab_text.countdown.font	name	Font
-options.displays.Cooldowns.highway.tab_text.countdown.font	values.2002	Fonts\\2002.TTF
-options.displays.Cooldowns.highway.tab_text.countdown.font	values.2002 Bold	Fonts\\2002B.TTF
-options.displays.Cooldowns.highway.tab_text.countdown.font	values.AR CrystalzcuheiGBK Demibold	Fonts\\ARHei.TTF
-options.displays.Cooldowns.highway.tab_text.countdown.font	values.AR ZhongkaiGBK Medium	Fonts\\ARKai_T.TTF
-options.displays.Cooldowns.highway.tab_text.countdown.font	values.AR ZhongkaiGBK Medium (Combat)	Fonts\\ARKai_C.TTF
-options.displays.Cooldowns.highway.tab_text.countdown.font	values.Arial Narrow	Fonts\\ARIALN.TTF
-options.displays.Cooldowns.highway.tab_text.countdown.font	values.Friz Quadrata TT	Fonts\\FRIZQT__.TTF
-options.displays.Cooldowns.highway.tab_text.countdown.font	values.MoK	Fonts\\K_Pagetext.TTF
-options.displays.Cooldowns.highway.tab_text.countdown.font	values.Morpheus	Fonts\\MORPHEUS_CYR.TTF
-options.displays.Cooldowns.highway.tab_text.countdown.font	values.Nimrod MT	Fonts\\NIM_____.ttf
-options.displays.Cooldowns.highway.tab_text.countdown.font	values.Skurri	Fonts\\SKURRI_CYR.TTF
-options.displays.Cooldowns.highway.tab_text.countdown.size	name	Size
-options.displays.Cooldowns.highway.tab_text.countdown.style	name	Style
-options.displays.Cooldowns.highway.tab_text.countdown.style	values.MONOCHROME	Monochrome
-options.displays.Cooldowns.highway.tab_text.countdown.style	values.MONOCHROME,OUTLINE	Monochrome, Outline
-options.displays.Cooldowns.highway.tab_text.countdown.style	values.MONOCHROME,THICKOUTLINE	Monochrome, Thick Outline
-options.displays.Cooldowns.highway.tab_text.countdown.style	values.NONE	None
-options.displays.Cooldowns.highway.tab_text.countdown.style	values.OUTLINE	Outline
-options.displays.Cooldowns.highway.tab_text.countdown.style	values.THICKOUTLINE	Thick Outline
+options.displays.Cooldowns.highway.tab_highway.sec_layout.size	desc	The size of a pin's icon disc.
+options.displays.Cooldowns.highway.tab_highway.sec_layout.size	name	Pin Size
+options.displays.Cooldowns.highway.tab_look	desc	The pins' countdown colors and seconds, the ghost pins and the waiting look.
+options.displays.Cooldowns.highway.tab_look	name	Countdown
+options.displays.Cooldowns.highway.tab_look.countdown	name	Countdown
+options.displays.Cooldowns.highway.tab_look.countdown.dueColor	desc	A pin due now: press it (green by default).
+options.displays.Cooldowns.highway.tab_look.countdown.dueColor	name	Due Color
+options.displays.Cooldowns.highway.tab_look.countdown.enabled	desc	Show the seconds beside a pin as it comes in.
+options.displays.Cooldowns.highway.tab_look.countdown.enabled	name	Show Seconds
+options.displays.Cooldowns.highway.tab_look.countdown.farColor	desc	A pin on its way (red by default).
+options.displays.Cooldowns.highway.tab_look.countdown.farColor	name	Coming Color
+options.displays.Cooldowns.highway.tab_look.countdown.font	name	Font
+options.displays.Cooldowns.highway.tab_look.countdown.font	values.2002	Fonts\\2002.TTF
+options.displays.Cooldowns.highway.tab_look.countdown.font	values.2002 Bold	Fonts\\2002B.TTF
+options.displays.Cooldowns.highway.tab_look.countdown.font	values.AR CrystalzcuheiGBK Demibold	Fonts\\ARHei.TTF
+options.displays.Cooldowns.highway.tab_look.countdown.font	values.AR ZhongkaiGBK Medium	Fonts\\ARKai_T.TTF
+options.displays.Cooldowns.highway.tab_look.countdown.font	values.AR ZhongkaiGBK Medium (Combat)	Fonts\\ARKai_C.TTF
+options.displays.Cooldowns.highway.tab_look.countdown.font	values.Arial Narrow	Fonts\\ARIALN.TTF
+options.displays.Cooldowns.highway.tab_look.countdown.font	values.Friz Quadrata TT	Fonts\\FRIZQT__.TTF
+options.displays.Cooldowns.highway.tab_look.countdown.font	values.MoK	Fonts\\K_Pagetext.TTF
+options.displays.Cooldowns.highway.tab_look.countdown.font	values.Morpheus	Fonts\\MORPHEUS_CYR.TTF
+options.displays.Cooldowns.highway.tab_look.countdown.font	values.Nimrod MT	Fonts\\NIM_____.ttf
+options.displays.Cooldowns.highway.tab_look.countdown.font	values.Skurri	Fonts\\SKURRI_CYR.TTF
+options.displays.Cooldowns.highway.tab_look.countdown.nearAt	desc	A pin turns from red to yellow this many seconds before it is due; green once it is due.
+options.displays.Cooldowns.highway.tab_look.countdown.nearAt	name	Yellow From
+options.displays.Cooldowns.highway.tab_look.countdown.nearColor	desc	A pin about to be due (yellow by default).
+options.displays.Cooldowns.highway.tab_look.countdown.nearColor	name	Close Color
+options.displays.Cooldowns.highway.tab_look.countdown.size	name	Size
+options.displays.Cooldowns.highway.tab_look.countdown.style	name	Style
+options.displays.Cooldowns.highway.tab_look.countdown.style	values.MONOCHROME	Monochrome
+options.displays.Cooldowns.highway.tab_look.countdown.style	values.MONOCHROME,OUTLINE	Monochrome, Outline
+options.displays.Cooldowns.highway.tab_look.countdown.style	values.MONOCHROME,THICKOUTLINE	Monochrome, Thick Outline
+options.displays.Cooldowns.highway.tab_look.countdown.style	values.NONE	None
+options.displays.Cooldowns.highway.tab_look.countdown.style	values.OUTLINE	Outline
+options.displays.Cooldowns.highway.tab_look.countdown.style	values.THICKOUTLINE	Thick Outline
+options.displays.Cooldowns.highway.tab_look.countdown.window	desc	The seconds show once a pin is this close.
+options.displays.Cooldowns.highway.tab_look.countdown.window	name	Show From
+options.displays.Cooldowns.highway.tab_look.ghost	name	Ghost Pins
+options.displays.Cooldowns.highway.tab_look.ghost.alpha	desc	The opacity of a ghost pin's icon.
+options.displays.Cooldowns.highway.tab_look.ghost.alpha	name	Icon Opacity
+options.displays.Cooldowns.highway.tab_look.ghost.color	desc	The color of a ghost pin.
+options.displays.Cooldowns.highway.tab_look.ghost.color	name	Color
+options.displays.Cooldowns.highway.tab_look.waiting	name	Waiting on Resources
+options.displays.Cooldowns.highway.tab_look.waiting.alpha	desc	The opacity of a pin still short of its rage or mana.
+options.displays.Cooldowns.highway.tab_look.waiting.alpha	name	Opacity
+options.displays.Cooldowns.highway.tab_look.waiting.desaturate	desc	Also take the color out of its icon.
+options.displays.Cooldowns.highway.tab_look.waiting.desaturate	name	Grey Out
+options.displays.Cooldowns.highway.tab_look.waiting.enabled	desc	Fade a pin whose spell you cannot afford yet (rage or mana).
+options.displays.Cooldowns.highway.tab_look.waiting.enabled	name	Fade When Short
 options.displays.Cooldowns.highway.tracked	desc	One spell shown as a half circle behind the ring that fills as its cooldown recovers.
 options.displays.Cooldowns.highway.tracked	name	Tracked Spell
 options.displays.Cooldowns.highway.tracked.dot	desc	The size of each dot of the half circle.
@@ -15655,7 +15695,7 @@ options.displays.Defensives.highway.gamepad.pos.size	desc	The size of the contro
 options.displays.Defensives.highway.gamepad.pos.size	name	Size
 options.displays.Defensives.highway.gamepad.pos.x	name	X Offset
 options.displays.Defensives.highway.gamepad.pos.y	name	Y Offset
-options.displays.Defensives.highway.glow	desc	How the icon at the ring and proccing icons glow.
+options.displays.Defensives.highway.glow	desc	How the pin at the ring and proccing pins glow.
 options.displays.Defensives.highway.glow	name	Glow
 options.displays.Defensives.highway.glow.color	desc	The glow's color.
 options.displays.Defensives.highway.glow.color	name	Color
@@ -15664,13 +15704,13 @@ options.displays.Defensives.highway.glow.lib	name	Custom Glow
 options.displays.Defensives.highway.glow.lib	values.autocast	AutoCast Shine
 options.displays.Defensives.highway.glow.lib	values.button	Action Button Glow
 options.displays.Defensives.highway.glow.lib	values.pixel	Pixel Glow
-options.displays.Defensives.highway.glow.mode	desc	How the icon at the ring shows that it is due: None, a gentle Pulse, a soft Halo, or a Custom glow (LibCustomGlow).
+options.displays.Defensives.highway.glow.mode	desc	How the pin at the ring shows that it is due: None, a gentle Pulse, a soft Halo, or a Custom glow (LibCustomGlow).
 options.displays.Defensives.highway.glow.mode	name	Glow
 options.displays.Defensives.highway.glow.mode	values.custom	Custom
 options.displays.Defensives.highway.glow.mode	values.halo	Halo
 options.displays.Defensives.highway.glow.mode	values.none	None
 options.displays.Defensives.highway.glow.mode	values.pulse	Pulse
-options.displays.Defensives.highway.glow.procs	desc	Also glow any icon on the line whose spell is lit up by a proc.
+options.displays.Defensives.highway.glow.procs	desc	Also glow any pin on the rail whose spell is lit up by a proc.
 options.displays.Defensives.highway.glow.procs	name	Glow on Procs
 options.displays.Defensives.highway.keybindings	desc	Options for keybinding text on displayed icons.
 options.displays.Defensives.highway.keybindings	name	Keybinds
@@ -15689,7 +15729,7 @@ options.displays.Defensives.highway.keybindings.pos.anchor	values.TOPLEFT	Top Le
 options.displays.Defensives.highway.keybindings.pos.anchor	values.TOPRIGHT	Top Right
 options.displays.Defensives.highway.keybindings.pos.x	name	X Offset
 options.displays.Defensives.highway.keybindings.pos.y	name	Y Offset
-options.displays.Defensives.highway.keybindings.queued	desc	Show keybinds on the icons behind the first one too.
+options.displays.Defensives.highway.keybindings.queued	desc	Show keybinds on the pins behind the first one too.
 options.displays.Defensives.highway.keybindings.queued	name	Enabled for Queued Icons
 options.displays.Defensives.highway.keybindings.textStyle	name	Font and Style
 options.displays.Defensives.highway.keybindings.textStyle.break01	name	\032
@@ -15725,94 +15765,114 @@ options.displays.Defensives.highway.range.type	name	Range Checking
 options.displays.Defensives.highway.range.type	values.ability	Per Ability
 options.displays.Defensives.highway.range.type	values.melee	Melee Range
 options.displays.Defensives.highway.range.type	values.xclude	Exclude Out-of-Range
-options.displays.Defensives.highway.tab_highway	desc	The line, the hit ring and the icons.
+options.displays.Defensives.highway.tab_highway	desc	The rail, the target ring and the pins.
 options.displays.Defensives.highway.tab_highway	name	Highway
-options.displays.Defensives.highway.tab_highway.iconBorder	name	Icon Border
-options.displays.Defensives.highway.tab_highway.iconBorder.color	desc	The border's color.
-options.displays.Defensives.highway.tab_highway.iconBorder.color	name	Color
-options.displays.Defensives.highway.tab_highway.iconBorder.enabled	desc	Show a border around each icon.
-options.displays.Defensives.highway.tab_highway.iconBorder.enabled	name	Show Border
-options.displays.Defensives.highway.tab_highway.iconBorder.thickness	desc	The border's thickness in pixels.
-options.displays.Defensives.highway.tab_highway.iconBorder.thickness	name	Thickness
-options.displays.Defensives.highway.tab_highway.line	name	Line
-options.displays.Defensives.highway.tab_highway.line.color	desc	The line's color.
-options.displays.Defensives.highway.tab_highway.line.color	name	Color
-options.displays.Defensives.highway.tab_highway.line.enabled	desc	Show the line the icons ride.
-options.displays.Defensives.highway.tab_highway.line.enabled	name	Show Line
-options.displays.Defensives.highway.tab_highway.line.thickness	desc	The line's thickness in pixels.
-options.displays.Defensives.highway.tab_highway.line.thickness	name	Thickness
-options.displays.Defensives.highway.tab_highway.ring	name	Hit Ring
-options.displays.Defensives.highway.tab_highway.ring.color	desc	The ring's color.
+options.displays.Defensives.highway.tab_highway.iconBorder	name	Round and Square Icons
+options.displays.Defensives.highway.tab_highway.iconBorder.thickness	desc	The colored rim around a round or square icon (the Countdown colors).
+options.displays.Defensives.highway.tab_highway.iconBorder.thickness	name	Rim Thickness
+options.displays.Defensives.highway.tab_highway.rail	name	Rail
+options.displays.Defensives.highway.tab_highway.rail.color	desc	The rail's color.
+options.displays.Defensives.highway.tab_highway.rail.color	name	Color
+options.displays.Defensives.highway.tab_highway.rail.edge	desc	The rail's outline.
+options.displays.Defensives.highway.tab_highway.rail.edge	name	Edge Color
+options.displays.Defensives.highway.tab_highway.rail.enabled	desc	Show the rail the pins ride.
+options.displays.Defensives.highway.tab_highway.rail.enabled	name	Show Rail
+options.displays.Defensives.highway.tab_highway.rail.thickness	desc	The rail's thickness in pixels.
+options.displays.Defensives.highway.tab_highway.rail.thickness	name	Thickness
+options.displays.Defensives.highway.tab_highway.rail.tickColor	desc	The color of the second marks.
+options.displays.Defensives.highway.tab_highway.rail.tickColor	name	Tick Color
+options.displays.Defensives.highway.tab_highway.rail.ticks	desc	A mark on the rail every second.
+options.displays.Defensives.highway.tab_highway.rail.ticks	name	Second Ticks
+options.displays.Defensives.highway.tab_highway.ring	name	Target Ring
+options.displays.Defensives.highway.tab_highway.ring.color	desc	The target ring's color.
 options.displays.Defensives.highway.tab_highway.ring.color	name	Color
-options.displays.Defensives.highway.tab_highway.ring.enabled	desc	Show the ring the icons travel to.
+options.displays.Defensives.highway.tab_highway.ring.crosshair	desc	A thin upright line through the ring.
+options.displays.Defensives.highway.tab_highway.ring.crosshair	name	Crosshair
+options.displays.Defensives.highway.tab_highway.ring.enabled	desc	Show the target the pins travel to.
 options.displays.Defensives.highway.tab_highway.ring.enabled	name	Show Ring
-options.displays.Defensives.highway.tab_highway.ring.flash	desc	Flash the ring when an icon goes through it.
+options.displays.Defensives.highway.tab_highway.ring.flash	desc	Flash the ring when a pin goes through it.
 options.displays.Defensives.highway.tab_highway.ring.flash	name	Flash on Cast
-options.displays.Defensives.highway.tab_highway.ring.idleAlpha	desc	The ring's brightness while nothing is due; it goes full when an icon is due.
+options.displays.Defensives.highway.tab_highway.ring.idleAlpha	desc	The ring's brightness while nothing is due; it goes full when a pin is due.
 options.displays.Defensives.highway.tab_highway.ring.idleAlpha	name	Resting Brightness
-options.displays.Defensives.highway.tab_highway.ring.pad	desc	The space between an icon at the ring and the ring.
-options.displays.Defensives.highway.tab_highway.ring.pad	name	Gap
-options.displays.Defensives.highway.tab_highway.ring.style	desc	The ring's thickness.
-options.displays.Defensives.highway.tab_highway.ring.style	name	Thickness
-options.displays.Defensives.highway.tab_highway.ring.style	values.medium	Medium
-options.displays.Defensives.highway.tab_highway.ring.style	values.thick	Thick
-options.displays.Defensives.highway.tab_highway.ring.style	values.thin	Thin
+options.displays.Defensives.highway.tab_highway.ring.size	desc	The target ring's size.
+options.displays.Defensives.highway.tab_highway.ring.size	name	Size
 options.displays.Defensives.highway.tab_highway.sec_layout	name	Layout
 options.displays.Defensives.highway.tab_highway.sec_layout.demo	desc	Out of combat, run a moving sample on the highway while the options are open, so each change shows at once.
 options.displays.Defensives.highway.tab_highway.sec_layout.demo	name	Demo While Options Are Open
-options.displays.Defensives.highway.tab_highway.sec_layout.direction	desc	Which way the icons travel; the hit ring sits at the end they travel to.
+options.displays.Defensives.highway.tab_highway.sec_layout.direction	desc	Which way the pins travel; the target ring sits at the end they travel to.
 options.displays.Defensives.highway.tab_highway.sec_layout.direction	name	Direction
 options.displays.Defensives.highway.tab_highway.sec_layout.direction	values.LEFT	Right to Left
 options.displays.Defensives.highway.tab_highway.sec_layout.direction	values.RIGHT	Left to Right
-options.displays.Defensives.highway.tab_highway.sec_layout.farScale	desc	An icon's size at the far end of the line, a fraction of its size at the ring.
+options.displays.Defensives.highway.tab_highway.sec_layout.farScale	desc	A pin's size at the far end of the rail, a fraction of its size at the ring (1: the same size all the way).
 options.displays.Defensives.highway.tab_highway.sec_layout.farScale	name	Far Size
-options.displays.Defensives.highway.tab_highway.sec_layout.glide	desc	Seconds an icon takes to settle on a new predicted time (0: jump).
+options.displays.Defensives.highway.tab_highway.sec_layout.ghosts	desc	How many dark pins show the spells after them.
+options.displays.Defensives.highway.tab_highway.sec_layout.ghosts	name	Ghost Pins
+options.displays.Defensives.highway.tab_highway.sec_layout.glide	desc	Seconds a pin takes to settle on a new predicted time (0: jump).
 options.displays.Defensives.highway.tab_highway.sec_layout.glide	name	Glide
-options.displays.Defensives.highway.tab_highway.sec_layout.horizon	desc	How many seconds ahead the line reaches; a later icon waits at the far end.
+options.displays.Defensives.highway.tab_highway.sec_layout.horizon	desc	How many seconds ahead the rail reaches; a later pin waits at the far end.
 options.displays.Defensives.highway.tab_highway.sec_layout.horizon	name	Seconds Shown
-options.displays.Defensives.highway.tab_highway.sec_layout.length	desc	The line's length in pixels, from the ring to the far end.
+options.displays.Defensives.highway.tab_highway.sec_layout.lanes	desc	Spells off the global cooldown and cooldowns ride below the rail, the rest above it.
+options.displays.Defensives.highway.tab_highway.sec_layout.lanes	name	Off-GCD Below
+options.displays.Defensives.highway.tab_highway.sec_layout.length	desc	The rail's length in pixels, from the ring to the far end.
 options.displays.Defensives.highway.tab_highway.sec_layout.length	name	Length
-options.displays.Defensives.highway.tab_highway.sec_layout.maxIcons	desc	How many icons ride the line at once.
-options.displays.Defensives.highway.tab_highway.sec_layout.maxIcons	name	Icons
-options.displays.Defensives.highway.tab_highway.sec_layout.offGCDScale	desc	The size of a spell that does not trigger the global cooldown, a fraction of a normal icon's.
+options.displays.Defensives.highway.tab_highway.sec_layout.maxIcons	desc	How many pins ride the rail in color.
+options.displays.Defensives.highway.tab_highway.sec_layout.maxIcons	name	Pins
+options.displays.Defensives.highway.tab_highway.sec_layout.offGCDScale	desc	The size of a spell that does not trigger the global cooldown, a fraction of a normal pin's.
 options.displays.Defensives.highway.tab_highway.sec_layout.offGCDScale	name	Off-GCD Size
-options.displays.Defensives.highway.tab_highway.sec_layout.shape	desc	Round or square icons.
+options.displays.Defensives.highway.tab_highway.sec_layout.shape	desc	Map pins pointing at the rail, or round or square icons riding on it.
 options.displays.Defensives.highway.tab_highway.sec_layout.shape	name	Shape
+options.displays.Defensives.highway.tab_highway.sec_layout.shape	values.pin	Pin
 options.displays.Defensives.highway.tab_highway.sec_layout.shape	values.round	Round
 options.displays.Defensives.highway.tab_highway.sec_layout.shape	values.square	Square
-options.displays.Defensives.highway.tab_highway.sec_layout.size	desc	An icon's size when it reaches the ring.
-options.displays.Defensives.highway.tab_highway.sec_layout.size	name	Icon Size
-options.displays.Defensives.highway.tab_highway.waiting	name	Waiting on Resources
-options.displays.Defensives.highway.tab_highway.waiting.alpha	desc	The opacity of an icon still short of its rage or mana.
-options.displays.Defensives.highway.tab_highway.waiting.alpha	name	Opacity
-options.displays.Defensives.highway.tab_highway.waiting.desaturate	desc	Also take the color out of an icon short of its rage or mana.
-options.displays.Defensives.highway.tab_highway.waiting.desaturate	name	Grey Out
-options.displays.Defensives.highway.tab_text	desc	Seconds on the icons.
-options.displays.Defensives.highway.tab_text	name	Countdown
-options.displays.Defensives.highway.tab_text.countdown	name	Countdown
-options.displays.Defensives.highway.tab_text.countdown.color	name	Color
-options.displays.Defensives.highway.tab_text.countdown.enabled	desc	Show the seconds until each icon is due, on the icon.
-options.displays.Defensives.highway.tab_text.countdown.enabled	name	Show Countdown
-options.displays.Defensives.highway.tab_text.countdown.font	name	Font
-options.displays.Defensives.highway.tab_text.countdown.font	values.2002	Fonts\\2002.TTF
-options.displays.Defensives.highway.tab_text.countdown.font	values.2002 Bold	Fonts\\2002B.TTF
-options.displays.Defensives.highway.tab_text.countdown.font	values.AR CrystalzcuheiGBK Demibold	Fonts\\ARHei.TTF
-options.displays.Defensives.highway.tab_text.countdown.font	values.AR ZhongkaiGBK Medium	Fonts\\ARKai_T.TTF
-options.displays.Defensives.highway.tab_text.countdown.font	values.AR ZhongkaiGBK Medium (Combat)	Fonts\\ARKai_C.TTF
-options.displays.Defensives.highway.tab_text.countdown.font	values.Arial Narrow	Fonts\\ARIALN.TTF
-options.displays.Defensives.highway.tab_text.countdown.font	values.Friz Quadrata TT	Fonts\\FRIZQT__.TTF
-options.displays.Defensives.highway.tab_text.countdown.font	values.MoK	Fonts\\K_Pagetext.TTF
-options.displays.Defensives.highway.tab_text.countdown.font	values.Morpheus	Fonts\\MORPHEUS_CYR.TTF
-options.displays.Defensives.highway.tab_text.countdown.font	values.Nimrod MT	Fonts\\NIM_____.ttf
-options.displays.Defensives.highway.tab_text.countdown.font	values.Skurri	Fonts\\SKURRI_CYR.TTF
-options.displays.Defensives.highway.tab_text.countdown.size	name	Size
-options.displays.Defensives.highway.tab_text.countdown.style	name	Style
-options.displays.Defensives.highway.tab_text.countdown.style	values.MONOCHROME	Monochrome
-options.displays.Defensives.highway.tab_text.countdown.style	values.MONOCHROME,OUTLINE	Monochrome, Outline
-options.displays.Defensives.highway.tab_text.countdown.style	values.MONOCHROME,THICKOUTLINE	Monochrome, Thick Outline
-options.displays.Defensives.highway.tab_text.countdown.style	values.NONE	None
-options.displays.Defensives.highway.tab_text.countdown.style	values.OUTLINE	Outline
-options.displays.Defensives.highway.tab_text.countdown.style	values.THICKOUTLINE	Thick Outline
+options.displays.Defensives.highway.tab_highway.sec_layout.size	desc	The size of a pin's icon disc.
+options.displays.Defensives.highway.tab_highway.sec_layout.size	name	Pin Size
+options.displays.Defensives.highway.tab_look	desc	The pins' countdown colors and seconds, the ghost pins and the waiting look.
+options.displays.Defensives.highway.tab_look	name	Countdown
+options.displays.Defensives.highway.tab_look.countdown	name	Countdown
+options.displays.Defensives.highway.tab_look.countdown.dueColor	desc	A pin due now: press it (green by default).
+options.displays.Defensives.highway.tab_look.countdown.dueColor	name	Due Color
+options.displays.Defensives.highway.tab_look.countdown.enabled	desc	Show the seconds beside a pin as it comes in.
+options.displays.Defensives.highway.tab_look.countdown.enabled	name	Show Seconds
+options.displays.Defensives.highway.tab_look.countdown.farColor	desc	A pin on its way (red by default).
+options.displays.Defensives.highway.tab_look.countdown.farColor	name	Coming Color
+options.displays.Defensives.highway.tab_look.countdown.font	name	Font
+options.displays.Defensives.highway.tab_look.countdown.font	values.2002	Fonts\\2002.TTF
+options.displays.Defensives.highway.tab_look.countdown.font	values.2002 Bold	Fonts\\2002B.TTF
+options.displays.Defensives.highway.tab_look.countdown.font	values.AR CrystalzcuheiGBK Demibold	Fonts\\ARHei.TTF
+options.displays.Defensives.highway.tab_look.countdown.font	values.AR ZhongkaiGBK Medium	Fonts\\ARKai_T.TTF
+options.displays.Defensives.highway.tab_look.countdown.font	values.AR ZhongkaiGBK Medium (Combat)	Fonts\\ARKai_C.TTF
+options.displays.Defensives.highway.tab_look.countdown.font	values.Arial Narrow	Fonts\\ARIALN.TTF
+options.displays.Defensives.highway.tab_look.countdown.font	values.Friz Quadrata TT	Fonts\\FRIZQT__.TTF
+options.displays.Defensives.highway.tab_look.countdown.font	values.MoK	Fonts\\K_Pagetext.TTF
+options.displays.Defensives.highway.tab_look.countdown.font	values.Morpheus	Fonts\\MORPHEUS_CYR.TTF
+options.displays.Defensives.highway.tab_look.countdown.font	values.Nimrod MT	Fonts\\NIM_____.ttf
+options.displays.Defensives.highway.tab_look.countdown.font	values.Skurri	Fonts\\SKURRI_CYR.TTF
+options.displays.Defensives.highway.tab_look.countdown.nearAt	desc	A pin turns from red to yellow this many seconds before it is due; green once it is due.
+options.displays.Defensives.highway.tab_look.countdown.nearAt	name	Yellow From
+options.displays.Defensives.highway.tab_look.countdown.nearColor	desc	A pin about to be due (yellow by default).
+options.displays.Defensives.highway.tab_look.countdown.nearColor	name	Close Color
+options.displays.Defensives.highway.tab_look.countdown.size	name	Size
+options.displays.Defensives.highway.tab_look.countdown.style	name	Style
+options.displays.Defensives.highway.tab_look.countdown.style	values.MONOCHROME	Monochrome
+options.displays.Defensives.highway.tab_look.countdown.style	values.MONOCHROME,OUTLINE	Monochrome, Outline
+options.displays.Defensives.highway.tab_look.countdown.style	values.MONOCHROME,THICKOUTLINE	Monochrome, Thick Outline
+options.displays.Defensives.highway.tab_look.countdown.style	values.NONE	None
+options.displays.Defensives.highway.tab_look.countdown.style	values.OUTLINE	Outline
+options.displays.Defensives.highway.tab_look.countdown.style	values.THICKOUTLINE	Thick Outline
+options.displays.Defensives.highway.tab_look.countdown.window	desc	The seconds show once a pin is this close.
+options.displays.Defensives.highway.tab_look.countdown.window	name	Show From
+options.displays.Defensives.highway.tab_look.ghost	name	Ghost Pins
+options.displays.Defensives.highway.tab_look.ghost.alpha	desc	The opacity of a ghost pin's icon.
+options.displays.Defensives.highway.tab_look.ghost.alpha	name	Icon Opacity
+options.displays.Defensives.highway.tab_look.ghost.color	desc	The color of a ghost pin.
+options.displays.Defensives.highway.tab_look.ghost.color	name	Color
+options.displays.Defensives.highway.tab_look.waiting	name	Waiting on Resources
+options.displays.Defensives.highway.tab_look.waiting.alpha	desc	The opacity of a pin still short of its rage or mana.
+options.displays.Defensives.highway.tab_look.waiting.alpha	name	Opacity
+options.displays.Defensives.highway.tab_look.waiting.desaturate	desc	Also take the color out of its icon.
+options.displays.Defensives.highway.tab_look.waiting.desaturate	name	Grey Out
+options.displays.Defensives.highway.tab_look.waiting.enabled	desc	Fade a pin whose spell you cannot afford yet (rage or mana).
+options.displays.Defensives.highway.tab_look.waiting.enabled	name	Fade When Short
 options.displays.Defensives.highway.tracked	desc	One spell shown as a half circle behind the ring that fills as its cooldown recovers.
 options.displays.Defensives.highway.tracked	name	Tracked Spell
 options.displays.Defensives.highway.tracked.dot	desc	The size of each dot of the half circle.
@@ -16948,7 +17008,7 @@ options.displays.Interrupts.highway.gamepad.pos.size	desc	The size of the contro
 options.displays.Interrupts.highway.gamepad.pos.size	name	Size
 options.displays.Interrupts.highway.gamepad.pos.x	name	X Offset
 options.displays.Interrupts.highway.gamepad.pos.y	name	Y Offset
-options.displays.Interrupts.highway.glow	desc	How the icon at the ring and proccing icons glow.
+options.displays.Interrupts.highway.glow	desc	How the pin at the ring and proccing pins glow.
 options.displays.Interrupts.highway.glow	name	Glow
 options.displays.Interrupts.highway.glow.color	desc	The glow's color.
 options.displays.Interrupts.highway.glow.color	name	Color
@@ -16957,13 +17017,13 @@ options.displays.Interrupts.highway.glow.lib	name	Custom Glow
 options.displays.Interrupts.highway.glow.lib	values.autocast	AutoCast Shine
 options.displays.Interrupts.highway.glow.lib	values.button	Action Button Glow
 options.displays.Interrupts.highway.glow.lib	values.pixel	Pixel Glow
-options.displays.Interrupts.highway.glow.mode	desc	How the icon at the ring shows that it is due: None, a gentle Pulse, a soft Halo, or a Custom glow (LibCustomGlow).
+options.displays.Interrupts.highway.glow.mode	desc	How the pin at the ring shows that it is due: None, a gentle Pulse, a soft Halo, or a Custom glow (LibCustomGlow).
 options.displays.Interrupts.highway.glow.mode	name	Glow
 options.displays.Interrupts.highway.glow.mode	values.custom	Custom
 options.displays.Interrupts.highway.glow.mode	values.halo	Halo
 options.displays.Interrupts.highway.glow.mode	values.none	None
 options.displays.Interrupts.highway.glow.mode	values.pulse	Pulse
-options.displays.Interrupts.highway.glow.procs	desc	Also glow any icon on the line whose spell is lit up by a proc.
+options.displays.Interrupts.highway.glow.procs	desc	Also glow any pin on the rail whose spell is lit up by a proc.
 options.displays.Interrupts.highway.glow.procs	name	Glow on Procs
 options.displays.Interrupts.highway.keybindings	desc	Options for keybinding text on displayed icons.
 options.displays.Interrupts.highway.keybindings	name	Keybinds
@@ -16982,7 +17042,7 @@ options.displays.Interrupts.highway.keybindings.pos.anchor	values.TOPLEFT	Top Le
 options.displays.Interrupts.highway.keybindings.pos.anchor	values.TOPRIGHT	Top Right
 options.displays.Interrupts.highway.keybindings.pos.x	name	X Offset
 options.displays.Interrupts.highway.keybindings.pos.y	name	Y Offset
-options.displays.Interrupts.highway.keybindings.queued	desc	Show keybinds on the icons behind the first one too.
+options.displays.Interrupts.highway.keybindings.queued	desc	Show keybinds on the pins behind the first one too.
 options.displays.Interrupts.highway.keybindings.queued	name	Enabled for Queued Icons
 options.displays.Interrupts.highway.keybindings.textStyle	name	Font and Style
 options.displays.Interrupts.highway.keybindings.textStyle.break01	name	\032
@@ -17018,94 +17078,114 @@ options.displays.Interrupts.highway.range.type	name	Range Checking
 options.displays.Interrupts.highway.range.type	values.ability	Per Ability
 options.displays.Interrupts.highway.range.type	values.melee	Melee Range
 options.displays.Interrupts.highway.range.type	values.xclude	Exclude Out-of-Range
-options.displays.Interrupts.highway.tab_highway	desc	The line, the hit ring and the icons.
+options.displays.Interrupts.highway.tab_highway	desc	The rail, the target ring and the pins.
 options.displays.Interrupts.highway.tab_highway	name	Highway
-options.displays.Interrupts.highway.tab_highway.iconBorder	name	Icon Border
-options.displays.Interrupts.highway.tab_highway.iconBorder.color	desc	The border's color.
-options.displays.Interrupts.highway.tab_highway.iconBorder.color	name	Color
-options.displays.Interrupts.highway.tab_highway.iconBorder.enabled	desc	Show a border around each icon.
-options.displays.Interrupts.highway.tab_highway.iconBorder.enabled	name	Show Border
-options.displays.Interrupts.highway.tab_highway.iconBorder.thickness	desc	The border's thickness in pixels.
-options.displays.Interrupts.highway.tab_highway.iconBorder.thickness	name	Thickness
-options.displays.Interrupts.highway.tab_highway.line	name	Line
-options.displays.Interrupts.highway.tab_highway.line.color	desc	The line's color.
-options.displays.Interrupts.highway.tab_highway.line.color	name	Color
-options.displays.Interrupts.highway.tab_highway.line.enabled	desc	Show the line the icons ride.
-options.displays.Interrupts.highway.tab_highway.line.enabled	name	Show Line
-options.displays.Interrupts.highway.tab_highway.line.thickness	desc	The line's thickness in pixels.
-options.displays.Interrupts.highway.tab_highway.line.thickness	name	Thickness
-options.displays.Interrupts.highway.tab_highway.ring	name	Hit Ring
-options.displays.Interrupts.highway.tab_highway.ring.color	desc	The ring's color.
+options.displays.Interrupts.highway.tab_highway.iconBorder	name	Round and Square Icons
+options.displays.Interrupts.highway.tab_highway.iconBorder.thickness	desc	The colored rim around a round or square icon (the Countdown colors).
+options.displays.Interrupts.highway.tab_highway.iconBorder.thickness	name	Rim Thickness
+options.displays.Interrupts.highway.tab_highway.rail	name	Rail
+options.displays.Interrupts.highway.tab_highway.rail.color	desc	The rail's color.
+options.displays.Interrupts.highway.tab_highway.rail.color	name	Color
+options.displays.Interrupts.highway.tab_highway.rail.edge	desc	The rail's outline.
+options.displays.Interrupts.highway.tab_highway.rail.edge	name	Edge Color
+options.displays.Interrupts.highway.tab_highway.rail.enabled	desc	Show the rail the pins ride.
+options.displays.Interrupts.highway.tab_highway.rail.enabled	name	Show Rail
+options.displays.Interrupts.highway.tab_highway.rail.thickness	desc	The rail's thickness in pixels.
+options.displays.Interrupts.highway.tab_highway.rail.thickness	name	Thickness
+options.displays.Interrupts.highway.tab_highway.rail.tickColor	desc	The color of the second marks.
+options.displays.Interrupts.highway.tab_highway.rail.tickColor	name	Tick Color
+options.displays.Interrupts.highway.tab_highway.rail.ticks	desc	A mark on the rail every second.
+options.displays.Interrupts.highway.tab_highway.rail.ticks	name	Second Ticks
+options.displays.Interrupts.highway.tab_highway.ring	name	Target Ring
+options.displays.Interrupts.highway.tab_highway.ring.color	desc	The target ring's color.
 options.displays.Interrupts.highway.tab_highway.ring.color	name	Color
-options.displays.Interrupts.highway.tab_highway.ring.enabled	desc	Show the ring the icons travel to.
+options.displays.Interrupts.highway.tab_highway.ring.crosshair	desc	A thin upright line through the ring.
+options.displays.Interrupts.highway.tab_highway.ring.crosshair	name	Crosshair
+options.displays.Interrupts.highway.tab_highway.ring.enabled	desc	Show the target the pins travel to.
 options.displays.Interrupts.highway.tab_highway.ring.enabled	name	Show Ring
-options.displays.Interrupts.highway.tab_highway.ring.flash	desc	Flash the ring when an icon goes through it.
+options.displays.Interrupts.highway.tab_highway.ring.flash	desc	Flash the ring when a pin goes through it.
 options.displays.Interrupts.highway.tab_highway.ring.flash	name	Flash on Cast
-options.displays.Interrupts.highway.tab_highway.ring.idleAlpha	desc	The ring's brightness while nothing is due; it goes full when an icon is due.
+options.displays.Interrupts.highway.tab_highway.ring.idleAlpha	desc	The ring's brightness while nothing is due; it goes full when a pin is due.
 options.displays.Interrupts.highway.tab_highway.ring.idleAlpha	name	Resting Brightness
-options.displays.Interrupts.highway.tab_highway.ring.pad	desc	The space between an icon at the ring and the ring.
-options.displays.Interrupts.highway.tab_highway.ring.pad	name	Gap
-options.displays.Interrupts.highway.tab_highway.ring.style	desc	The ring's thickness.
-options.displays.Interrupts.highway.tab_highway.ring.style	name	Thickness
-options.displays.Interrupts.highway.tab_highway.ring.style	values.medium	Medium
-options.displays.Interrupts.highway.tab_highway.ring.style	values.thick	Thick
-options.displays.Interrupts.highway.tab_highway.ring.style	values.thin	Thin
+options.displays.Interrupts.highway.tab_highway.ring.size	desc	The target ring's size.
+options.displays.Interrupts.highway.tab_highway.ring.size	name	Size
 options.displays.Interrupts.highway.tab_highway.sec_layout	name	Layout
 options.displays.Interrupts.highway.tab_highway.sec_layout.demo	desc	Out of combat, run a moving sample on the highway while the options are open, so each change shows at once.
 options.displays.Interrupts.highway.tab_highway.sec_layout.demo	name	Demo While Options Are Open
-options.displays.Interrupts.highway.tab_highway.sec_layout.direction	desc	Which way the icons travel; the hit ring sits at the end they travel to.
+options.displays.Interrupts.highway.tab_highway.sec_layout.direction	desc	Which way the pins travel; the target ring sits at the end they travel to.
 options.displays.Interrupts.highway.tab_highway.sec_layout.direction	name	Direction
 options.displays.Interrupts.highway.tab_highway.sec_layout.direction	values.LEFT	Right to Left
 options.displays.Interrupts.highway.tab_highway.sec_layout.direction	values.RIGHT	Left to Right
-options.displays.Interrupts.highway.tab_highway.sec_layout.farScale	desc	An icon's size at the far end of the line, a fraction of its size at the ring.
+options.displays.Interrupts.highway.tab_highway.sec_layout.farScale	desc	A pin's size at the far end of the rail, a fraction of its size at the ring (1: the same size all the way).
 options.displays.Interrupts.highway.tab_highway.sec_layout.farScale	name	Far Size
-options.displays.Interrupts.highway.tab_highway.sec_layout.glide	desc	Seconds an icon takes to settle on a new predicted time (0: jump).
+options.displays.Interrupts.highway.tab_highway.sec_layout.ghosts	desc	How many dark pins show the spells after them.
+options.displays.Interrupts.highway.tab_highway.sec_layout.ghosts	name	Ghost Pins
+options.displays.Interrupts.highway.tab_highway.sec_layout.glide	desc	Seconds a pin takes to settle on a new predicted time (0: jump).
 options.displays.Interrupts.highway.tab_highway.sec_layout.glide	name	Glide
-options.displays.Interrupts.highway.tab_highway.sec_layout.horizon	desc	How many seconds ahead the line reaches; a later icon waits at the far end.
+options.displays.Interrupts.highway.tab_highway.sec_layout.horizon	desc	How many seconds ahead the rail reaches; a later pin waits at the far end.
 options.displays.Interrupts.highway.tab_highway.sec_layout.horizon	name	Seconds Shown
-options.displays.Interrupts.highway.tab_highway.sec_layout.length	desc	The line's length in pixels, from the ring to the far end.
+options.displays.Interrupts.highway.tab_highway.sec_layout.lanes	desc	Spells off the global cooldown and cooldowns ride below the rail, the rest above it.
+options.displays.Interrupts.highway.tab_highway.sec_layout.lanes	name	Off-GCD Below
+options.displays.Interrupts.highway.tab_highway.sec_layout.length	desc	The rail's length in pixels, from the ring to the far end.
 options.displays.Interrupts.highway.tab_highway.sec_layout.length	name	Length
-options.displays.Interrupts.highway.tab_highway.sec_layout.maxIcons	desc	How many icons ride the line at once.
-options.displays.Interrupts.highway.tab_highway.sec_layout.maxIcons	name	Icons
-options.displays.Interrupts.highway.tab_highway.sec_layout.offGCDScale	desc	The size of a spell that does not trigger the global cooldown, a fraction of a normal icon's.
+options.displays.Interrupts.highway.tab_highway.sec_layout.maxIcons	desc	How many pins ride the rail in color.
+options.displays.Interrupts.highway.tab_highway.sec_layout.maxIcons	name	Pins
+options.displays.Interrupts.highway.tab_highway.sec_layout.offGCDScale	desc	The size of a spell that does not trigger the global cooldown, a fraction of a normal pin's.
 options.displays.Interrupts.highway.tab_highway.sec_layout.offGCDScale	name	Off-GCD Size
-options.displays.Interrupts.highway.tab_highway.sec_layout.shape	desc	Round or square icons.
+options.displays.Interrupts.highway.tab_highway.sec_layout.shape	desc	Map pins pointing at the rail, or round or square icons riding on it.
 options.displays.Interrupts.highway.tab_highway.sec_layout.shape	name	Shape
+options.displays.Interrupts.highway.tab_highway.sec_layout.shape	values.pin	Pin
 options.displays.Interrupts.highway.tab_highway.sec_layout.shape	values.round	Round
 options.displays.Interrupts.highway.tab_highway.sec_layout.shape	values.square	Square
-options.displays.Interrupts.highway.tab_highway.sec_layout.size	desc	An icon's size when it reaches the ring.
-options.displays.Interrupts.highway.tab_highway.sec_layout.size	name	Icon Size
-options.displays.Interrupts.highway.tab_highway.waiting	name	Waiting on Resources
-options.displays.Interrupts.highway.tab_highway.waiting.alpha	desc	The opacity of an icon still short of its rage or mana.
-options.displays.Interrupts.highway.tab_highway.waiting.alpha	name	Opacity
-options.displays.Interrupts.highway.tab_highway.waiting.desaturate	desc	Also take the color out of an icon short of its rage or mana.
-options.displays.Interrupts.highway.tab_highway.waiting.desaturate	name	Grey Out
-options.displays.Interrupts.highway.tab_text	desc	Seconds on the icons.
-options.displays.Interrupts.highway.tab_text	name	Countdown
-options.displays.Interrupts.highway.tab_text.countdown	name	Countdown
-options.displays.Interrupts.highway.tab_text.countdown.color	name	Color
-options.displays.Interrupts.highway.tab_text.countdown.enabled	desc	Show the seconds until each icon is due, on the icon.
-options.displays.Interrupts.highway.tab_text.countdown.enabled	name	Show Countdown
-options.displays.Interrupts.highway.tab_text.countdown.font	name	Font
-options.displays.Interrupts.highway.tab_text.countdown.font	values.2002	Fonts\\2002.TTF
-options.displays.Interrupts.highway.tab_text.countdown.font	values.2002 Bold	Fonts\\2002B.TTF
-options.displays.Interrupts.highway.tab_text.countdown.font	values.AR CrystalzcuheiGBK Demibold	Fonts\\ARHei.TTF
-options.displays.Interrupts.highway.tab_text.countdown.font	values.AR ZhongkaiGBK Medium	Fonts\\ARKai_T.TTF
-options.displays.Interrupts.highway.tab_text.countdown.font	values.AR ZhongkaiGBK Medium (Combat)	Fonts\\ARKai_C.TTF
-options.displays.Interrupts.highway.tab_text.countdown.font	values.Arial Narrow	Fonts\\ARIALN.TTF
-options.displays.Interrupts.highway.tab_text.countdown.font	values.Friz Quadrata TT	Fonts\\FRIZQT__.TTF
-options.displays.Interrupts.highway.tab_text.countdown.font	values.MoK	Fonts\\K_Pagetext.TTF
-options.displays.Interrupts.highway.tab_text.countdown.font	values.Morpheus	Fonts\\MORPHEUS_CYR.TTF
-options.displays.Interrupts.highway.tab_text.countdown.font	values.Nimrod MT	Fonts\\NIM_____.ttf
-options.displays.Interrupts.highway.tab_text.countdown.font	values.Skurri	Fonts\\SKURRI_CYR.TTF
-options.displays.Interrupts.highway.tab_text.countdown.size	name	Size
-options.displays.Interrupts.highway.tab_text.countdown.style	name	Style
-options.displays.Interrupts.highway.tab_text.countdown.style	values.MONOCHROME	Monochrome
-options.displays.Interrupts.highway.tab_text.countdown.style	values.MONOCHROME,OUTLINE	Monochrome, Outline
-options.displays.Interrupts.highway.tab_text.countdown.style	values.MONOCHROME,THICKOUTLINE	Monochrome, Thick Outline
-options.displays.Interrupts.highway.tab_text.countdown.style	values.NONE	None
-options.displays.Interrupts.highway.tab_text.countdown.style	values.OUTLINE	Outline
-options.displays.Interrupts.highway.tab_text.countdown.style	values.THICKOUTLINE	Thick Outline
+options.displays.Interrupts.highway.tab_highway.sec_layout.size	desc	The size of a pin's icon disc.
+options.displays.Interrupts.highway.tab_highway.sec_layout.size	name	Pin Size
+options.displays.Interrupts.highway.tab_look	desc	The pins' countdown colors and seconds, the ghost pins and the waiting look.
+options.displays.Interrupts.highway.tab_look	name	Countdown
+options.displays.Interrupts.highway.tab_look.countdown	name	Countdown
+options.displays.Interrupts.highway.tab_look.countdown.dueColor	desc	A pin due now: press it (green by default).
+options.displays.Interrupts.highway.tab_look.countdown.dueColor	name	Due Color
+options.displays.Interrupts.highway.tab_look.countdown.enabled	desc	Show the seconds beside a pin as it comes in.
+options.displays.Interrupts.highway.tab_look.countdown.enabled	name	Show Seconds
+options.displays.Interrupts.highway.tab_look.countdown.farColor	desc	A pin on its way (red by default).
+options.displays.Interrupts.highway.tab_look.countdown.farColor	name	Coming Color
+options.displays.Interrupts.highway.tab_look.countdown.font	name	Font
+options.displays.Interrupts.highway.tab_look.countdown.font	values.2002	Fonts\\2002.TTF
+options.displays.Interrupts.highway.tab_look.countdown.font	values.2002 Bold	Fonts\\2002B.TTF
+options.displays.Interrupts.highway.tab_look.countdown.font	values.AR CrystalzcuheiGBK Demibold	Fonts\\ARHei.TTF
+options.displays.Interrupts.highway.tab_look.countdown.font	values.AR ZhongkaiGBK Medium	Fonts\\ARKai_T.TTF
+options.displays.Interrupts.highway.tab_look.countdown.font	values.AR ZhongkaiGBK Medium (Combat)	Fonts\\ARKai_C.TTF
+options.displays.Interrupts.highway.tab_look.countdown.font	values.Arial Narrow	Fonts\\ARIALN.TTF
+options.displays.Interrupts.highway.tab_look.countdown.font	values.Friz Quadrata TT	Fonts\\FRIZQT__.TTF
+options.displays.Interrupts.highway.tab_look.countdown.font	values.MoK	Fonts\\K_Pagetext.TTF
+options.displays.Interrupts.highway.tab_look.countdown.font	values.Morpheus	Fonts\\MORPHEUS_CYR.TTF
+options.displays.Interrupts.highway.tab_look.countdown.font	values.Nimrod MT	Fonts\\NIM_____.ttf
+options.displays.Interrupts.highway.tab_look.countdown.font	values.Skurri	Fonts\\SKURRI_CYR.TTF
+options.displays.Interrupts.highway.tab_look.countdown.nearAt	desc	A pin turns from red to yellow this many seconds before it is due; green once it is due.
+options.displays.Interrupts.highway.tab_look.countdown.nearAt	name	Yellow From
+options.displays.Interrupts.highway.tab_look.countdown.nearColor	desc	A pin about to be due (yellow by default).
+options.displays.Interrupts.highway.tab_look.countdown.nearColor	name	Close Color
+options.displays.Interrupts.highway.tab_look.countdown.size	name	Size
+options.displays.Interrupts.highway.tab_look.countdown.style	name	Style
+options.displays.Interrupts.highway.tab_look.countdown.style	values.MONOCHROME	Monochrome
+options.displays.Interrupts.highway.tab_look.countdown.style	values.MONOCHROME,OUTLINE	Monochrome, Outline
+options.displays.Interrupts.highway.tab_look.countdown.style	values.MONOCHROME,THICKOUTLINE	Monochrome, Thick Outline
+options.displays.Interrupts.highway.tab_look.countdown.style	values.NONE	None
+options.displays.Interrupts.highway.tab_look.countdown.style	values.OUTLINE	Outline
+options.displays.Interrupts.highway.tab_look.countdown.style	values.THICKOUTLINE	Thick Outline
+options.displays.Interrupts.highway.tab_look.countdown.window	desc	The seconds show once a pin is this close.
+options.displays.Interrupts.highway.tab_look.countdown.window	name	Show From
+options.displays.Interrupts.highway.tab_look.ghost	name	Ghost Pins
+options.displays.Interrupts.highway.tab_look.ghost.alpha	desc	The opacity of a ghost pin's icon.
+options.displays.Interrupts.highway.tab_look.ghost.alpha	name	Icon Opacity
+options.displays.Interrupts.highway.tab_look.ghost.color	desc	The color of a ghost pin.
+options.displays.Interrupts.highway.tab_look.ghost.color	name	Color
+options.displays.Interrupts.highway.tab_look.waiting	name	Waiting on Resources
+options.displays.Interrupts.highway.tab_look.waiting.alpha	desc	The opacity of a pin still short of its rage or mana.
+options.displays.Interrupts.highway.tab_look.waiting.alpha	name	Opacity
+options.displays.Interrupts.highway.tab_look.waiting.desaturate	desc	Also take the color out of its icon.
+options.displays.Interrupts.highway.tab_look.waiting.desaturate	name	Grey Out
+options.displays.Interrupts.highway.tab_look.waiting.enabled	desc	Fade a pin whose spell you cannot afford yet (rage or mana).
+options.displays.Interrupts.highway.tab_look.waiting.enabled	name	Fade When Short
 options.displays.Interrupts.highway.tracked	desc	One spell shown as a half circle behind the ring that fills as its cooldown recovers.
 options.displays.Interrupts.highway.tracked	name	Tracked Spell
 options.displays.Interrupts.highway.tracked.dot	desc	The size of each dot of the half circle.
@@ -18289,7 +18369,7 @@ options.displays.Multi.highway.gamepad.pos.x	desc	|cFF00B4FFPrimary:|r |cFFFFD10
 options.displays.Multi.highway.gamepad.pos.x	name	X Offset
 options.displays.Multi.highway.gamepad.pos.y	desc	|cFF00B4FFPrimary:|r |cFFFFD100-1|r\n|cFF00B4FFAOE:|r |cFFFFD100-1|r\n|cFF00B4FFCooldowns:|r |cFFFFD100-1|r\n|cFF00B4FFDefensives:|r |cFFFFD100-1|r\n|cFF00B4FFInterrupts:|r |cFFFFD100-1|r
 options.displays.Multi.highway.gamepad.pos.y	name	Y Offset
-options.displays.Multi.highway.glow	desc	How the icon at the ring and proccing icons glow.
+options.displays.Multi.highway.glow	desc	How the pin at the ring and proccing pins glow.
 options.displays.Multi.highway.glow	name	Glow
 options.displays.Multi.highway.glow.color	desc	The glow's color.\n\n|cFF00B4FFPrimary:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:216:76|a |cFFFFD100#ffd84c|r\n|cFF00B4FFAOE:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:216:76|a |cFFFFD100#ffd84c|r\n|cFF00B4FFCooldowns:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:216:76|a |cFFFFD100#ffd84c|r\n|cFF00B4FFDefensives:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:216:76|a |cFFFFD100#ffd84c|r\n|cFF00B4FFInterrupts:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:216:76|a |cFFFFD100#ffd84c|r
 options.displays.Multi.highway.glow.color	name	Color
@@ -18298,13 +18378,13 @@ options.displays.Multi.highway.glow.lib	name	Custom Glow
 options.displays.Multi.highway.glow.lib	values.autocast	AutoCast Shine
 options.displays.Multi.highway.glow.lib	values.button	Action Button Glow
 options.displays.Multi.highway.glow.lib	values.pixel	Pixel Glow
-options.displays.Multi.highway.glow.mode	desc	How the icon at the ring shows that it is due: None, a gentle Pulse, a soft Halo, or a Custom glow (LibCustomGlow).\n\n|cFF00B4FFPrimary:|r |cFFFFD100Pulse|r\n|cFF00B4FFAOE:|r |cFFFFD100Pulse|r\n|cFF00B4FFCooldowns:|r |cFFFFD100Pulse|r\n|cFF00B4FFDefensives:|r |cFFFFD100Pulse|r\n|cFF00B4FFInterrupts:|r |cFFFFD100Pulse|r
+options.displays.Multi.highway.glow.mode	desc	How the pin at the ring shows that it is due: None, a gentle Pulse, a soft Halo, or a Custom glow (LibCustomGlow).\n\n|cFF00B4FFPrimary:|r |cFFFFD100Pulse|r\n|cFF00B4FFAOE:|r |cFFFFD100Pulse|r\n|cFF00B4FFCooldowns:|r |cFFFFD100Pulse|r\n|cFF00B4FFDefensives:|r |cFFFFD100Pulse|r\n|cFF00B4FFInterrupts:|r |cFFFFD100Pulse|r
 options.displays.Multi.highway.glow.mode	name	Glow
 options.displays.Multi.highway.glow.mode	values.custom	Custom
 options.displays.Multi.highway.glow.mode	values.halo	Halo
 options.displays.Multi.highway.glow.mode	values.none	None
 options.displays.Multi.highway.glow.mode	values.pulse	Pulse
-options.displays.Multi.highway.glow.procs	desc	Also glow any icon on the line whose spell is lit up by a proc.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
+options.displays.Multi.highway.glow.procs	desc	Also glow any pin on the rail whose spell is lit up by a proc.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
 options.displays.Multi.highway.glow.procs	name	Glow on Procs
 options.displays.Multi.highway.keybindings	desc	Options for keybinding text on displayed icons.
 options.displays.Multi.highway.keybindings	name	Keybinds
@@ -18326,9 +18406,9 @@ options.displays.Multi.highway.keybindings.pos.anchor	values.TOPLEFT	Top Left
 options.displays.Multi.highway.keybindings.pos.anchor	values.TOPRIGHT	Top Right
 options.displays.Multi.highway.keybindings.pos.x	desc	|cFF00B4FFPrimary:|r |cFFFFD1000|r\n|cFF00B4FFAOE:|r |cFFFFD1000|r\n|cFF00B4FFCooldowns:|r |cFFFFD1000|r\n|cFF00B4FFDefensives:|r |cFFFFD1000|r\n|cFF00B4FFInterrupts:|r |cFFFFD1000|r
 options.displays.Multi.highway.keybindings.pos.x	name	X Offset
-options.displays.Multi.highway.keybindings.pos.y	desc	|cFF00B4FFPrimary:|r |cFFFFD1003|r\n|cFF00B4FFAOE:|r |cFFFFD1003|r\n|cFF00B4FFCooldowns:|r |cFFFFD1003|r\n|cFF00B4FFDefensives:|r |cFFFFD1003|r\n|cFF00B4FFInterrupts:|r |cFFFFD1003|r
+options.displays.Multi.highway.keybindings.pos.y	desc	|cFF00B4FFPrimary:|r |cFFFFD1002|r\n|cFF00B4FFAOE:|r |cFFFFD1002|r\n|cFF00B4FFCooldowns:|r |cFFFFD1002|r\n|cFF00B4FFDefensives:|r |cFFFFD1002|r\n|cFF00B4FFInterrupts:|r |cFFFFD1002|r
 options.displays.Multi.highway.keybindings.pos.y	name	Y Offset
-options.displays.Multi.highway.keybindings.queued	desc	Show keybinds on the icons behind the first one too.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
+options.displays.Multi.highway.keybindings.queued	desc	Show keybinds on the pins behind the first one too.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
 options.displays.Multi.highway.keybindings.queued	name	Enabled for Queued Icons
 options.displays.Multi.highway.keybindings.textStyle	name	Font and Style
 options.displays.Multi.highway.keybindings.textStyle.break01	name	\032
@@ -18347,7 +18427,7 @@ options.displays.Multi.highway.keybindings.textStyle.font	values.MoK	Fonts\\K_Pa
 options.displays.Multi.highway.keybindings.textStyle.font	values.Morpheus	Fonts\\MORPHEUS_CYR.TTF
 options.displays.Multi.highway.keybindings.textStyle.font	values.Nimrod MT	Fonts\\NIM_____.ttf
 options.displays.Multi.highway.keybindings.textStyle.font	values.Skurri	Fonts\\SKURRI_CYR.TTF
-options.displays.Multi.highway.keybindings.textStyle.fontSize	desc	|cFF00B4FFPrimary:|r |cFFFFD10014|r\n|cFF00B4FFAOE:|r |cFFFFD10014|r\n|cFF00B4FFCooldowns:|r |cFFFFD10014|r\n|cFF00B4FFDefensives:|r |cFFFFD10014|r\n|cFF00B4FFInterrupts:|r |cFFFFD10014|r
+options.displays.Multi.highway.keybindings.textStyle.fontSize	desc	|cFF00B4FFPrimary:|r |cFFFFD10012|r\n|cFF00B4FFAOE:|r |cFFFFD10012|r\n|cFF00B4FFCooldowns:|r |cFFFFD10012|r\n|cFF00B4FFDefensives:|r |cFFFFD10012|r\n|cFF00B4FFInterrupts:|r |cFFFFD10012|r
 options.displays.Multi.highway.keybindings.textStyle.fontSize	name	Size
 options.displays.Multi.highway.keybindings.textStyle.fontStyle	desc	|cFF00B4FFPrimary:|r |cFFFFD100Outline|r\n|cFF00B4FFAOE:|r |cFFFFD100Outline|r\n|cFF00B4FFCooldowns:|r |cFFFFD100Outline|r\n|cFF00B4FFDefensives:|r |cFFFFD100Outline|r\n|cFF00B4FFInterrupts:|r |cFFFFD100Outline|r
 options.displays.Multi.highway.keybindings.textStyle.fontStyle	name	Style
@@ -18368,101 +18448,115 @@ options.displays.Multi.highway.range.type	name	Range Checking
 options.displays.Multi.highway.range.type	values.ability	Per Ability
 options.displays.Multi.highway.range.type	values.melee	Melee Range
 options.displays.Multi.highway.range.type	values.xclude	Exclude Out-of-Range
-options.displays.Multi.highway.tab_highway	desc	The line, the hit ring and the icons.
+options.displays.Multi.highway.tab_highway	desc	The rail, the target ring and the pins.
 options.displays.Multi.highway.tab_highway	name	Highway
-options.displays.Multi.highway.tab_highway.iconBorder	name	Icon Border
-options.displays.Multi.highway.tab_highway.iconBorder.color	desc	The border's color.\n\n|cFF00B4FFPrimary:|r |A:WhiteCircle-RaidBlips:16:16:0:0:0:0:0|a |cFFFFD100#000000|r\n|cFF00B4FFAOE:|r |A:WhiteCircle-RaidBlips:16:16:0:0:0:0:0|a |cFFFFD100#000000|r\n|cFF00B4FFCooldowns:|r |A:WhiteCircle-RaidBlips:16:16:0:0:0:0:0|a |cFFFFD100#000000|r\n|cFF00B4FFDefensives:|r |A:WhiteCircle-RaidBlips:16:16:0:0:0:0:0|a |cFFFFD100#000000|r\n|cFF00B4FFInterrupts:|r |A:WhiteCircle-RaidBlips:16:16:0:0:0:0:0|a |cFFFFD100#000000|r
-options.displays.Multi.highway.tab_highway.iconBorder.color	name	Color
-options.displays.Multi.highway.tab_highway.iconBorder.enabled	desc	Show a border around each icon.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
-options.displays.Multi.highway.tab_highway.iconBorder.enabled	name	Show Border
-options.displays.Multi.highway.tab_highway.iconBorder.thickness	desc	The border's thickness in pixels.\n\n|cFF00B4FFPrimary:|r |cFFFFD1002|r\n|cFF00B4FFAOE:|r |cFFFFD1002|r\n|cFF00B4FFCooldowns:|r |cFFFFD1002|r\n|cFF00B4FFDefensives:|r |cFFFFD1002|r\n|cFF00B4FFInterrupts:|r |cFFFFD1002|r
-options.displays.Multi.highway.tab_highway.iconBorder.thickness	name	Thickness
-options.displays.Multi.highway.tab_highway.line	name	Line
-options.displays.Multi.highway.tab_highway.line.color	desc	The line's color.\n\n|cFF00B4FFPrimary:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:255:255|a |cFFFFD100#ffffff|r\n|cFF00B4FFAOE:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:255:255|a |cFFFFD100#ffffff|r\n|cFF00B4FFCooldowns:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:255:255|a |cFFFFD100#ffffff|r\n|cFF00B4FFDefensives:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:255:255|a |cFFFFD100#ffffff|r\n|cFF00B4FFInterrupts:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:255:255|a |cFFFFD100#ffffff|r
-options.displays.Multi.highway.tab_highway.line.color	name	Color
-options.displays.Multi.highway.tab_highway.line.enabled	desc	Show the line the icons ride.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
-options.displays.Multi.highway.tab_highway.line.enabled	name	Show Line
-options.displays.Multi.highway.tab_highway.line.thickness	desc	The line's thickness in pixels.\n\n|cFF00B4FFPrimary:|r |cFFFFD1002|r\n|cFF00B4FFAOE:|r |cFFFFD1002|r\n|cFF00B4FFCooldowns:|r |cFFFFD1002|r\n|cFF00B4FFDefensives:|r |cFFFFD1002|r\n|cFF00B4FFInterrupts:|r |cFFFFD1002|r
-options.displays.Multi.highway.tab_highway.line.thickness	name	Thickness
-options.displays.Multi.highway.tab_highway.ring	name	Hit Ring
-options.displays.Multi.highway.tab_highway.ring.color	desc	The ring's color.\n\n|cFF00B4FFPrimary:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:204:25|a |cFFFFD100#ffcc19|r\n|cFF00B4FFAOE:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:204:25|a |cFFFFD100#ffcc19|r\n|cFF00B4FFCooldowns:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:204:25|a |cFFFFD100#ffcc19|r\n|cFF00B4FFDefensives:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:204:25|a |cFFFFD100#ffcc19|r\n|cFF00B4FFInterrupts:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:204:25|a |cFFFFD100#ffcc19|r
+options.displays.Multi.highway.tab_highway.iconBorder	name	Round and Square Icons
+options.displays.Multi.highway.tab_highway.iconBorder.thickness	desc	The colored rim around a round or square icon (the Countdown colors).\n\n|cFF00B4FFPrimary:|r |cFFFFD1003|r\n|cFF00B4FFAOE:|r |cFFFFD1003|r\n|cFF00B4FFCooldowns:|r |cFFFFD1003|r\n|cFF00B4FFDefensives:|r |cFFFFD1003|r\n|cFF00B4FFInterrupts:|r |cFFFFD1003|r
+options.displays.Multi.highway.tab_highway.iconBorder.thickness	name	Rim Thickness
+options.displays.Multi.highway.tab_highway.rail	name	Rail
+options.displays.Multi.highway.tab_highway.rail.color	desc	The rail's color.\n\n|cFF00B4FFPrimary:|r |A:WhiteCircle-RaidBlips:16:16:0:0:114:73:33|a |cFFFFD100#724921|r\n|cFF00B4FFAOE:|r |A:WhiteCircle-RaidBlips:16:16:0:0:114:73:33|a |cFFFFD100#724921|r\n|cFF00B4FFCooldowns:|r |A:WhiteCircle-RaidBlips:16:16:0:0:114:73:33|a |cFFFFD100#724921|r\n|cFF00B4FFDefensives:|r |A:WhiteCircle-RaidBlips:16:16:0:0:114:73:33|a |cFFFFD100#724921|r\n|cFF00B4FFInterrupts:|r |A:WhiteCircle-RaidBlips:16:16:0:0:114:73:33|a |cFFFFD100#724921|r
+options.displays.Multi.highway.tab_highway.rail.color	name	Color
+options.displays.Multi.highway.tab_highway.rail.edge	name	Edge Color
+options.displays.Multi.highway.tab_highway.rail.enabled	desc	Show the rail the pins ride.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
+options.displays.Multi.highway.tab_highway.rail.enabled	name	Show Rail
+options.displays.Multi.highway.tab_highway.rail.thickness	desc	The rail's thickness in pixels.\n\n|cFF00B4FFPrimary:|r |cFFFFD1008|r\n|cFF00B4FFAOE:|r |cFFFFD1008|r\n|cFF00B4FFCooldowns:|r |cFFFFD1008|r\n|cFF00B4FFDefensives:|r |cFFFFD1008|r\n|cFF00B4FFInterrupts:|r |cFFFFD1008|r
+options.displays.Multi.highway.tab_highway.rail.thickness	name	Thickness
+options.displays.Multi.highway.tab_highway.rail.tickColor	name	Tick Color
+options.displays.Multi.highway.tab_highway.rail.ticks	desc	A mark on the rail every second.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
+options.displays.Multi.highway.tab_highway.rail.ticks	name	Second Ticks
+options.displays.Multi.highway.tab_highway.ring	name	Target Ring
+options.displays.Multi.highway.tab_highway.ring.color	desc	The target ring's color.\n\n|cFF00B4FFPrimary:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:158:45|a |cFFFFD100#ff9e2d|r\n|cFF00B4FFAOE:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:158:45|a |cFFFFD100#ff9e2d|r\n|cFF00B4FFCooldowns:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:158:45|a |cFFFFD100#ff9e2d|r\n|cFF00B4FFDefensives:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:158:45|a |cFFFFD100#ff9e2d|r\n|cFF00B4FFInterrupts:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:158:45|a |cFFFFD100#ff9e2d|r
 options.displays.Multi.highway.tab_highway.ring.color	name	Color
-options.displays.Multi.highway.tab_highway.ring.enabled	desc	Show the ring the icons travel to.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
+options.displays.Multi.highway.tab_highway.ring.crosshair	desc	A thin upright line through the ring.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
+options.displays.Multi.highway.tab_highway.ring.crosshair	name	Crosshair
+options.displays.Multi.highway.tab_highway.ring.enabled	desc	Show the target the pins travel to.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
 options.displays.Multi.highway.tab_highway.ring.enabled	name	Show Ring
-options.displays.Multi.highway.tab_highway.ring.flash	desc	Flash the ring when an icon goes through it.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
+options.displays.Multi.highway.tab_highway.ring.flash	desc	Flash the ring when a pin goes through it.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
 options.displays.Multi.highway.tab_highway.ring.flash	name	Flash on Cast
-options.displays.Multi.highway.tab_highway.ring.idleAlpha	desc	The ring's brightness while nothing is due; it goes full when an icon is due.\n\n|cFF00B4FFPrimary:|r |cFFFFD1000.55|r\n|cFF00B4FFAOE:|r |cFFFFD1000.55|r\n|cFF00B4FFCooldowns:|r |cFFFFD1000.55|r\n|cFF00B4FFDefensives:|r |cFFFFD1000.55|r\n|cFF00B4FFInterrupts:|r |cFFFFD1000.55|r
+options.displays.Multi.highway.tab_highway.ring.idleAlpha	desc	The ring's brightness while nothing is due; it goes full when a pin is due.\n\n|cFF00B4FFPrimary:|r |cFFFFD1000.75|r\n|cFF00B4FFAOE:|r |cFFFFD1000.75|r\n|cFF00B4FFCooldowns:|r |cFFFFD1000.75|r\n|cFF00B4FFDefensives:|r |cFFFFD1000.75|r\n|cFF00B4FFInterrupts:|r |cFFFFD1000.75|r
 options.displays.Multi.highway.tab_highway.ring.idleAlpha	name	Resting Brightness
-options.displays.Multi.highway.tab_highway.ring.pad	desc	The space between an icon at the ring and the ring.\n\n|cFF00B4FFPrimary:|r |cFFFFD1006|r\n|cFF00B4FFAOE:|r |cFFFFD1006|r\n|cFF00B4FFCooldowns:|r |cFFFFD1006|r\n|cFF00B4FFDefensives:|r |cFFFFD1006|r\n|cFF00B4FFInterrupts:|r |cFFFFD1006|r
-options.displays.Multi.highway.tab_highway.ring.pad	name	Gap
-options.displays.Multi.highway.tab_highway.ring.style	desc	The ring's thickness.\n\n|cFF00B4FFPrimary:|r |cFFFFD100Medium|r\n|cFF00B4FFAOE:|r |cFFFFD100Medium|r\n|cFF00B4FFCooldowns:|r |cFFFFD100Medium|r\n|cFF00B4FFDefensives:|r |cFFFFD100Medium|r\n|cFF00B4FFInterrupts:|r |cFFFFD100Medium|r
-options.displays.Multi.highway.tab_highway.ring.style	name	Thickness
-options.displays.Multi.highway.tab_highway.ring.style	values.medium	Medium
-options.displays.Multi.highway.tab_highway.ring.style	values.thick	Thick
-options.displays.Multi.highway.tab_highway.ring.style	values.thin	Thin
+options.displays.Multi.highway.tab_highway.ring.size	desc	The target ring's size.\n\n|cFF00B4FFPrimary:|r |cFFFFD10036|r\n|cFF00B4FFAOE:|r |cFFFFD10036|r\n|cFF00B4FFCooldowns:|r |cFFFFD10036|r\n|cFF00B4FFDefensives:|r |cFFFFD10036|r\n|cFF00B4FFInterrupts:|r |cFFFFD10036|r
+options.displays.Multi.highway.tab_highway.ring.size	name	Size
 options.displays.Multi.highway.tab_highway.sec_layout	name	Layout
 options.displays.Multi.highway.tab_highway.sec_layout.demo	desc	Out of combat, run a moving sample on the highway while the options are open, so each change shows at once.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
 options.displays.Multi.highway.tab_highway.sec_layout.demo	name	Demo While Options Are Open
-options.displays.Multi.highway.tab_highway.sec_layout.direction	desc	Which way the icons travel; the hit ring sits at the end they travel to.\n\n|cFF00B4FFPrimary:|r |cFFFFD100Right to Left|r\n|cFF00B4FFAOE:|r |cFFFFD100Right to Left|r\n|cFF00B4FFCooldowns:|r |cFFFFD100Right to Left|r\n|cFF00B4FFDefensives:|r |cFFFFD100Right to Left|r\n|cFF00B4FFInterrupts:|r |cFFFFD100Right to Left|r
+options.displays.Multi.highway.tab_highway.sec_layout.direction	desc	Which way the pins travel; the target ring sits at the end they travel to.\n\n|cFF00B4FFPrimary:|r |cFFFFD100Right to Left|r\n|cFF00B4FFAOE:|r |cFFFFD100Right to Left|r\n|cFF00B4FFCooldowns:|r |cFFFFD100Right to Left|r\n|cFF00B4FFDefensives:|r |cFFFFD100Right to Left|r\n|cFF00B4FFInterrupts:|r |cFFFFD100Right to Left|r
 options.displays.Multi.highway.tab_highway.sec_layout.direction	name	Direction
 options.displays.Multi.highway.tab_highway.sec_layout.direction	values.LEFT	Right to Left
 options.displays.Multi.highway.tab_highway.sec_layout.direction	values.RIGHT	Left to Right
-options.displays.Multi.highway.tab_highway.sec_layout.farScale	desc	An icon's size at the far end of the line, a fraction of its size at the ring.\n\n|cFF00B4FFPrimary:|r |cFFFFD1000.33|r\n|cFF00B4FFAOE:|r |cFFFFD1000.33|r\n|cFF00B4FFCooldowns:|r |cFFFFD1000.33|r\n|cFF00B4FFDefensives:|r |cFFFFD1000.33|r\n|cFF00B4FFInterrupts:|r |cFFFFD1000.33|r
+options.displays.Multi.highway.tab_highway.sec_layout.farScale	desc	A pin's size at the far end of the rail, a fraction of its size at the ring (1: the same size all the way).\n\n|cFF00B4FFPrimary:|r |cFFFFD1001|r\n|cFF00B4FFAOE:|r |cFFFFD1001|r\n|cFF00B4FFCooldowns:|r |cFFFFD1001|r\n|cFF00B4FFDefensives:|r |cFFFFD1001|r\n|cFF00B4FFInterrupts:|r |cFFFFD1001|r
 options.displays.Multi.highway.tab_highway.sec_layout.farScale	name	Far Size
-options.displays.Multi.highway.tab_highway.sec_layout.glide	desc	Seconds an icon takes to settle on a new predicted time (0: jump).\n\n|cFF00B4FFPrimary:|r |cFFFFD1000.08|r\n|cFF00B4FFAOE:|r |cFFFFD1000.08|r\n|cFF00B4FFCooldowns:|r |cFFFFD1000.08|r\n|cFF00B4FFDefensives:|r |cFFFFD1000.08|r\n|cFF00B4FFInterrupts:|r |cFFFFD1000.08|r
+options.displays.Multi.highway.tab_highway.sec_layout.ghosts	desc	How many dark pins show the spells after them.\n\n|cFF00B4FFPrimary:|r |cFFFFD1002|r\n|cFF00B4FFAOE:|r |cFFFFD1002|r\n|cFF00B4FFCooldowns:|r |cFFFFD1002|r\n|cFF00B4FFDefensives:|r |cFFFFD1002|r\n|cFF00B4FFInterrupts:|r |cFFFFD1002|r
+options.displays.Multi.highway.tab_highway.sec_layout.ghosts	name	Ghost Pins
+options.displays.Multi.highway.tab_highway.sec_layout.glide	desc	Seconds a pin takes to settle on a new predicted time (0: jump).\n\n|cFF00B4FFPrimary:|r |cFFFFD1000.08|r\n|cFF00B4FFAOE:|r |cFFFFD1000.08|r\n|cFF00B4FFCooldowns:|r |cFFFFD1000.08|r\n|cFF00B4FFDefensives:|r |cFFFFD1000.08|r\n|cFF00B4FFInterrupts:|r |cFFFFD1000.08|r
 options.displays.Multi.highway.tab_highway.sec_layout.glide	name	Glide
-options.displays.Multi.highway.tab_highway.sec_layout.horizon	desc	How many seconds ahead the line reaches; a later icon waits at the far end.\n\n|cFF00B4FFPrimary:|r |cFFFFD1003.50|r\n|cFF00B4FFAOE:|r |cFFFFD1003.50|r\n|cFF00B4FFCooldowns:|r |cFFFFD1003.50|r\n|cFF00B4FFDefensives:|r |cFFFFD1003.50|r\n|cFF00B4FFInterrupts:|r |cFFFFD1003.50|r
+options.displays.Multi.highway.tab_highway.sec_layout.horizon	desc	How many seconds ahead the rail reaches; a later pin waits at the far end.\n\n|cFF00B4FFPrimary:|r |cFFFFD1004.50|r\n|cFF00B4FFAOE:|r |cFFFFD1004.50|r\n|cFF00B4FFCooldowns:|r |cFFFFD1004.50|r\n|cFF00B4FFDefensives:|r |cFFFFD1004.50|r\n|cFF00B4FFInterrupts:|r |cFFFFD1004.50|r
 options.displays.Multi.highway.tab_highway.sec_layout.horizon	name	Seconds Shown
-options.displays.Multi.highway.tab_highway.sec_layout.length	desc	The line's length in pixels, from the ring to the far end.\n\n|cFF00B4FFPrimary:|r |cFFFFD100300|r\n|cFF00B4FFAOE:|r |cFFFFD100300|r\n|cFF00B4FFCooldowns:|r |cFFFFD100300|r\n|cFF00B4FFDefensives:|r |cFFFFD100300|r\n|cFF00B4FFInterrupts:|r |cFFFFD100300|r
+options.displays.Multi.highway.tab_highway.sec_layout.lanes	desc	Spells off the global cooldown and cooldowns ride below the rail, the rest above it.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
+options.displays.Multi.highway.tab_highway.sec_layout.lanes	name	Off-GCD Below
+options.displays.Multi.highway.tab_highway.sec_layout.length	desc	The rail's length in pixels, from the ring to the far end.\n\n|cFF00B4FFPrimary:|r |cFFFFD100380|r\n|cFF00B4FFAOE:|r |cFFFFD100380|r\n|cFF00B4FFCooldowns:|r |cFFFFD100380|r\n|cFF00B4FFDefensives:|r |cFFFFD100380|r\n|cFF00B4FFInterrupts:|r |cFFFFD100380|r
 options.displays.Multi.highway.tab_highway.sec_layout.length	name	Length
-options.displays.Multi.highway.tab_highway.sec_layout.maxIcons	desc	How many icons ride the line at once.\n\n|cFF00B4FFPrimary:|r |cFFFFD1003|r\n|cFF00B4FFAOE:|r |cFFFFD1003|r\n|cFF00B4FFCooldowns:|r |cFFFFD1003|r\n|cFF00B4FFDefensives:|r |cFFFFD1003|r\n|cFF00B4FFInterrupts:|r |cFFFFD1003|r
-options.displays.Multi.highway.tab_highway.sec_layout.maxIcons	name	Icons
-options.displays.Multi.highway.tab_highway.sec_layout.offGCDScale	desc	The size of a spell that does not trigger the global cooldown, a fraction of a normal icon's.\n\n|cFF00B4FFPrimary:|r |cFFFFD1000.80|r\n|cFF00B4FFAOE:|r |cFFFFD1000.80|r\n|cFF00B4FFCooldowns:|r |cFFFFD1000.80|r\n|cFF00B4FFDefensives:|r |cFFFFD1000.80|r\n|cFF00B4FFInterrupts:|r |cFFFFD1000.80|r
+options.displays.Multi.highway.tab_highway.sec_layout.maxIcons	desc	How many pins ride the rail in color.\n\n|cFF00B4FFPrimary:|r |cFFFFD1003|r\n|cFF00B4FFAOE:|r |cFFFFD1003|r\n|cFF00B4FFCooldowns:|r |cFFFFD1003|r\n|cFF00B4FFDefensives:|r |cFFFFD1003|r\n|cFF00B4FFInterrupts:|r |cFFFFD1003|r
+options.displays.Multi.highway.tab_highway.sec_layout.maxIcons	name	Pins
+options.displays.Multi.highway.tab_highway.sec_layout.offGCDScale	desc	The size of a spell that does not trigger the global cooldown, a fraction of a normal pin's.\n\n|cFF00B4FFPrimary:|r |cFFFFD1000.90|r\n|cFF00B4FFAOE:|r |cFFFFD1000.90|r\n|cFF00B4FFCooldowns:|r |cFFFFD1000.90|r\n|cFF00B4FFDefensives:|r |cFFFFD1000.90|r\n|cFF00B4FFInterrupts:|r |cFFFFD1000.90|r
 options.displays.Multi.highway.tab_highway.sec_layout.offGCDScale	name	Off-GCD Size
-options.displays.Multi.highway.tab_highway.sec_layout.shape	desc	Round or square icons.\n\n|cFF00B4FFPrimary:|r |cFFFFD100Round|r\n|cFF00B4FFAOE:|r |cFFFFD100Round|r\n|cFF00B4FFCooldowns:|r |cFFFFD100Round|r\n|cFF00B4FFDefensives:|r |cFFFFD100Round|r\n|cFF00B4FFInterrupts:|r |cFFFFD100Round|r
+options.displays.Multi.highway.tab_highway.sec_layout.shape	desc	Map pins pointing at the rail, or round or square icons riding on it.\n\n|cFF00B4FFPrimary:|r |cFFFFD100Pin|r\n|cFF00B4FFAOE:|r |cFFFFD100Pin|r\n|cFF00B4FFCooldowns:|r |cFFFFD100Pin|r\n|cFF00B4FFDefensives:|r |cFFFFD100Pin|r\n|cFF00B4FFInterrupts:|r |cFFFFD100Pin|r
 options.displays.Multi.highway.tab_highway.sec_layout.shape	name	Shape
+options.displays.Multi.highway.tab_highway.sec_layout.shape	values.pin	Pin
 options.displays.Multi.highway.tab_highway.sec_layout.shape	values.round	Round
 options.displays.Multi.highway.tab_highway.sec_layout.shape	values.square	Square
-options.displays.Multi.highway.tab_highway.sec_layout.size	desc	An icon's size when it reaches the ring.\n\n|cFF00B4FFPrimary:|r |cFFFFD10056|r\n|cFF00B4FFAOE:|r |cFFFFD10056|r\n|cFF00B4FFCooldowns:|r |cFFFFD10056|r\n|cFF00B4FFDefensives:|r |cFFFFD10056|r\n|cFF00B4FFInterrupts:|r |cFFFFD10056|r
-options.displays.Multi.highway.tab_highway.sec_layout.size	name	Icon Size
-options.displays.Multi.highway.tab_highway.waiting	name	Waiting on Resources
-options.displays.Multi.highway.tab_highway.waiting.alpha	desc	The opacity of an icon still short of its rage or mana.\n\n|cFF00B4FFPrimary:|r |cFFFFD1000.40|r\n|cFF00B4FFAOE:|r |cFFFFD1000.40|r\n|cFF00B4FFCooldowns:|r |cFFFFD1000.40|r\n|cFF00B4FFDefensives:|r |cFFFFD1000.40|r\n|cFF00B4FFInterrupts:|r |cFFFFD1000.40|r
-options.displays.Multi.highway.tab_highway.waiting.alpha	name	Opacity
-options.displays.Multi.highway.tab_highway.waiting.desaturate	desc	Also take the color out of an icon short of its rage or mana.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
-options.displays.Multi.highway.tab_highway.waiting.desaturate	name	Grey Out
-options.displays.Multi.highway.tab_text	desc	Seconds on the icons.
-options.displays.Multi.highway.tab_text	name	Countdown
-options.displays.Multi.highway.tab_text.countdown	name	Countdown
-options.displays.Multi.highway.tab_text.countdown.color	desc	|cFF00B4FFPrimary:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:255:255|a |cFFFFD100#ffffff|r\n|cFF00B4FFAOE:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:255:255|a |cFFFFD100#ffffff|r\n|cFF00B4FFCooldowns:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:255:255|a |cFFFFD100#ffffff|r\n|cFF00B4FFDefensives:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:255:255|a |cFFFFD100#ffffff|r\n|cFF00B4FFInterrupts:|r |A:WhiteCircle-RaidBlips:16:16:0:0:255:255:255|a |cFFFFD100#ffffff|r
-options.displays.Multi.highway.tab_text.countdown.color	name	Color
-options.displays.Multi.highway.tab_text.countdown.enabled	desc	Show the seconds until each icon is due, on the icon.\n\n|cFF00B4FFPrimary:|r |cFFFF0000Unchecked|r\n|cFF00B4FFAOE:|r |cFFFF0000Unchecked|r\n|cFF00B4FFCooldowns:|r |cFFFF0000Unchecked|r\n|cFF00B4FFDefensives:|r |cFFFF0000Unchecked|r\n|cFF00B4FFInterrupts:|r |cFFFF0000Unchecked|r
-options.displays.Multi.highway.tab_text.countdown.enabled	name	Show Countdown
-options.displays.Multi.highway.tab_text.countdown.font	desc	|cFF00B4FFPrimary:|r |cFFFFD100Friz Quadrata TT|r\n|cFF00B4FFAOE:|r |cFFFFD100Friz Quadrata TT|r\n|cFF00B4FFCooldowns:|r |cFFFFD100Friz Quadrata TT|r\n|cFF00B4FFDefensives:|r |cFFFFD100Friz Quadrata TT|r\n|cFF00B4FFInterrupts:|r |cFFFFD100Friz Quadrata TT|r
-options.displays.Multi.highway.tab_text.countdown.font	name	Font
-options.displays.Multi.highway.tab_text.countdown.font	values.2002	Fonts\\2002.TTF
-options.displays.Multi.highway.tab_text.countdown.font	values.2002 Bold	Fonts\\2002B.TTF
-options.displays.Multi.highway.tab_text.countdown.font	values.AR CrystalzcuheiGBK Demibold	Fonts\\ARHei.TTF
-options.displays.Multi.highway.tab_text.countdown.font	values.AR ZhongkaiGBK Medium	Fonts\\ARKai_T.TTF
-options.displays.Multi.highway.tab_text.countdown.font	values.AR ZhongkaiGBK Medium (Combat)	Fonts\\ARKai_C.TTF
-options.displays.Multi.highway.tab_text.countdown.font	values.Arial Narrow	Fonts\\ARIALN.TTF
-options.displays.Multi.highway.tab_text.countdown.font	values.Friz Quadrata TT	Fonts\\FRIZQT__.TTF
-options.displays.Multi.highway.tab_text.countdown.font	values.MoK	Fonts\\K_Pagetext.TTF
-options.displays.Multi.highway.tab_text.countdown.font	values.Morpheus	Fonts\\MORPHEUS_CYR.TTF
-options.displays.Multi.highway.tab_text.countdown.font	values.Nimrod MT	Fonts\\NIM_____.ttf
-options.displays.Multi.highway.tab_text.countdown.font	values.Skurri	Fonts\\SKURRI_CYR.TTF
-options.displays.Multi.highway.tab_text.countdown.size	desc	|cFF00B4FFPrimary:|r |cFFFFD10014|r\n|cFF00B4FFAOE:|r |cFFFFD10014|r\n|cFF00B4FFCooldowns:|r |cFFFFD10014|r\n|cFF00B4FFDefensives:|r |cFFFFD10014|r\n|cFF00B4FFInterrupts:|r |cFFFFD10014|r
-options.displays.Multi.highway.tab_text.countdown.size	name	Size
-options.displays.Multi.highway.tab_text.countdown.style	desc	|cFF00B4FFPrimary:|r |cFFFFD100Outline|r\n|cFF00B4FFAOE:|r |cFFFFD100Outline|r\n|cFF00B4FFCooldowns:|r |cFFFFD100Outline|r\n|cFF00B4FFDefensives:|r |cFFFFD100Outline|r\n|cFF00B4FFInterrupts:|r |cFFFFD100Outline|r
-options.displays.Multi.highway.tab_text.countdown.style	name	Style
-options.displays.Multi.highway.tab_text.countdown.style	values.MONOCHROME	Monochrome
-options.displays.Multi.highway.tab_text.countdown.style	values.MONOCHROME,OUTLINE	Monochrome, Outline
-options.displays.Multi.highway.tab_text.countdown.style	values.MONOCHROME,THICKOUTLINE	Monochrome, Thick Outline
-options.displays.Multi.highway.tab_text.countdown.style	values.NONE	None
-options.displays.Multi.highway.tab_text.countdown.style	values.OUTLINE	Outline
-options.displays.Multi.highway.tab_text.countdown.style	values.THICKOUTLINE	Thick Outline
+options.displays.Multi.highway.tab_highway.sec_layout.size	desc	The size of a pin's icon disc.\n\n|cFF00B4FFPrimary:|r |cFFFFD10040|r\n|cFF00B4FFAOE:|r |cFFFFD10040|r\n|cFF00B4FFCooldowns:|r |cFFFFD10040|r\n|cFF00B4FFDefensives:|r |cFFFFD10040|r\n|cFF00B4FFInterrupts:|r |cFFFFD10040|r
+options.displays.Multi.highway.tab_highway.sec_layout.size	name	Pin Size
+options.displays.Multi.highway.tab_look	desc	The pins' countdown colors and seconds, the ghost pins and the waiting look.
+options.displays.Multi.highway.tab_look	name	Countdown
+options.displays.Multi.highway.tab_look.countdown	name	Countdown
+options.displays.Multi.highway.tab_look.countdown.dueColor	name	Due Color
+options.displays.Multi.highway.tab_look.countdown.enabled	desc	Show the seconds beside a pin as it comes in.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
+options.displays.Multi.highway.tab_look.countdown.enabled	name	Show Seconds
+options.displays.Multi.highway.tab_look.countdown.farColor	name	Coming Color
+options.displays.Multi.highway.tab_look.countdown.font	desc	|cFF00B4FFPrimary:|r |cFFFFD100Friz Quadrata TT|r\n|cFF00B4FFAOE:|r |cFFFFD100Friz Quadrata TT|r\n|cFF00B4FFCooldowns:|r |cFFFFD100Friz Quadrata TT|r\n|cFF00B4FFDefensives:|r |cFFFFD100Friz Quadrata TT|r\n|cFF00B4FFInterrupts:|r |cFFFFD100Friz Quadrata TT|r
+options.displays.Multi.highway.tab_look.countdown.font	name	Font
+options.displays.Multi.highway.tab_look.countdown.font	values.2002	Fonts\\2002.TTF
+options.displays.Multi.highway.tab_look.countdown.font	values.2002 Bold	Fonts\\2002B.TTF
+options.displays.Multi.highway.tab_look.countdown.font	values.AR CrystalzcuheiGBK Demibold	Fonts\\ARHei.TTF
+options.displays.Multi.highway.tab_look.countdown.font	values.AR ZhongkaiGBK Medium	Fonts\\ARKai_T.TTF
+options.displays.Multi.highway.tab_look.countdown.font	values.AR ZhongkaiGBK Medium (Combat)	Fonts\\ARKai_C.TTF
+options.displays.Multi.highway.tab_look.countdown.font	values.Arial Narrow	Fonts\\ARIALN.TTF
+options.displays.Multi.highway.tab_look.countdown.font	values.Friz Quadrata TT	Fonts\\FRIZQT__.TTF
+options.displays.Multi.highway.tab_look.countdown.font	values.MoK	Fonts\\K_Pagetext.TTF
+options.displays.Multi.highway.tab_look.countdown.font	values.Morpheus	Fonts\\MORPHEUS_CYR.TTF
+options.displays.Multi.highway.tab_look.countdown.font	values.Nimrod MT	Fonts\\NIM_____.ttf
+options.displays.Multi.highway.tab_look.countdown.font	values.Skurri	Fonts\\SKURRI_CYR.TTF
+options.displays.Multi.highway.tab_look.countdown.nearAt	desc	A pin turns from red to yellow this many seconds before it is due; green once it is due.\n\n|cFF00B4FFPrimary:|r |cFFFFD1000.60|r\n|cFF00B4FFAOE:|r |cFFFFD1000.60|r\n|cFF00B4FFCooldowns:|r |cFFFFD1000.60|r\n|cFF00B4FFDefensives:|r |cFFFFD1000.60|r\n|cFF00B4FFInterrupts:|r |cFFFFD1000.60|r
+options.displays.Multi.highway.tab_look.countdown.nearAt	name	Yellow From
+options.displays.Multi.highway.tab_look.countdown.nearColor	name	Close Color
+options.displays.Multi.highway.tab_look.countdown.size	desc	|cFF00B4FFPrimary:|r |cFFFFD10013|r\n|cFF00B4FFAOE:|r |cFFFFD10013|r\n|cFF00B4FFCooldowns:|r |cFFFFD10013|r\n|cFF00B4FFDefensives:|r |cFFFFD10013|r\n|cFF00B4FFInterrupts:|r |cFFFFD10013|r
+options.displays.Multi.highway.tab_look.countdown.size	name	Size
+options.displays.Multi.highway.tab_look.countdown.style	desc	|cFF00B4FFPrimary:|r |cFFFFD100Outline|r\n|cFF00B4FFAOE:|r |cFFFFD100Outline|r\n|cFF00B4FFCooldowns:|r |cFFFFD100Outline|r\n|cFF00B4FFDefensives:|r |cFFFFD100Outline|r\n|cFF00B4FFInterrupts:|r |cFFFFD100Outline|r
+options.displays.Multi.highway.tab_look.countdown.style	name	Style
+options.displays.Multi.highway.tab_look.countdown.style	values.MONOCHROME	Monochrome
+options.displays.Multi.highway.tab_look.countdown.style	values.MONOCHROME,OUTLINE	Monochrome, Outline
+options.displays.Multi.highway.tab_look.countdown.style	values.MONOCHROME,THICKOUTLINE	Monochrome, Thick Outline
+options.displays.Multi.highway.tab_look.countdown.style	values.NONE	None
+options.displays.Multi.highway.tab_look.countdown.style	values.OUTLINE	Outline
+options.displays.Multi.highway.tab_look.countdown.style	values.THICKOUTLINE	Thick Outline
+options.displays.Multi.highway.tab_look.countdown.window	desc	The seconds show once a pin is this close.\n\n|cFF00B4FFPrimary:|r |cFFFFD1001.50|r\n|cFF00B4FFAOE:|r |cFFFFD1001.50|r\n|cFF00B4FFCooldowns:|r |cFFFFD1001.50|r\n|cFF00B4FFDefensives:|r |cFFFFD1001.50|r\n|cFF00B4FFInterrupts:|r |cFFFFD1001.50|r
+options.displays.Multi.highway.tab_look.countdown.window	name	Show From
+options.displays.Multi.highway.tab_look.ghost	name	Ghost Pins
+options.displays.Multi.highway.tab_look.ghost.alpha	desc	The opacity of a ghost pin's icon.\n\n|cFF00B4FFPrimary:|r |cFFFFD1000.55|r\n|cFF00B4FFAOE:|r |cFFFFD1000.55|r\n|cFF00B4FFCooldowns:|r |cFFFFD1000.55|r\n|cFF00B4FFDefensives:|r |cFFFFD1000.55|r\n|cFF00B4FFInterrupts:|r |cFFFFD1000.55|r
+options.displays.Multi.highway.tab_look.ghost.alpha	name	Icon Opacity
+options.displays.Multi.highway.tab_look.ghost.color	desc	The color of a ghost pin.\n\n|cFF00B4FFPrimary:|r |A:WhiteCircle-RaidBlips:16:16:0:0:15:15:17|a |cFFFFD100#0f0f11|r\n|cFF00B4FFAOE:|r |A:WhiteCircle-RaidBlips:16:16:0:0:15:15:17|a |cFFFFD100#0f0f11|r\n|cFF00B4FFCooldowns:|r |A:WhiteCircle-RaidBlips:16:16:0:0:15:15:17|a |cFFFFD100#0f0f11|r\n|cFF00B4FFDefensives:|r |A:WhiteCircle-RaidBlips:16:16:0:0:15:15:17|a |cFFFFD100#0f0f11|r\n|cFF00B4FFInterrupts:|r |A:WhiteCircle-RaidBlips:16:16:0:0:15:15:17|a |cFFFFD100#0f0f11|r
+options.displays.Multi.highway.tab_look.ghost.color	name	Color
+options.displays.Multi.highway.tab_look.waiting	name	Waiting on Resources
+options.displays.Multi.highway.tab_look.waiting.alpha	desc	The opacity of a pin still short of its rage or mana.\n\n|cFF00B4FFPrimary:|r |cFFFFD1000.45|r\n|cFF00B4FFAOE:|r |cFFFFD1000.45|r\n|cFF00B4FFCooldowns:|r |cFFFFD1000.45|r\n|cFF00B4FFDefensives:|r |cFFFFD1000.45|r\n|cFF00B4FFInterrupts:|r |cFFFFD1000.45|r
+options.displays.Multi.highway.tab_look.waiting.alpha	name	Opacity
+options.displays.Multi.highway.tab_look.waiting.desaturate	desc	Also take the color out of its icon.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
+options.displays.Multi.highway.tab_look.waiting.desaturate	name	Grey Out
+options.displays.Multi.highway.tab_look.waiting.enabled	desc	Fade a pin whose spell you cannot afford yet (rage or mana).\n\n|cFF00B4FFPrimary:|r |cFFFF0000Unchecked|r\n|cFF00B4FFAOE:|r |cFFFF0000Unchecked|r\n|cFF00B4FFCooldowns:|r |cFFFF0000Unchecked|r\n|cFF00B4FFDefensives:|r |cFFFF0000Unchecked|r\n|cFF00B4FFInterrupts:|r |cFFFF0000Unchecked|r
+options.displays.Multi.highway.tab_look.waiting.enabled	name	Fade When Short
 options.displays.Multi.highway.tracked	desc	One spell shown as a half circle behind the ring that fills as its cooldown recovers.
 options.displays.Multi.highway.tracked	name	Tracked Spell
-options.displays.Multi.highway.tracked.dot	desc	The size of each dot of the half circle.\n\n|cFF00B4FFPrimary:|r |cFFFFD1006|r\n|cFF00B4FFAOE:|r |cFFFFD1006|r\n|cFF00B4FFCooldowns:|r |cFFFFD1006|r\n|cFF00B4FFDefensives:|r |cFFFFD1006|r\n|cFF00B4FFInterrupts:|r |cFFFFD1006|r
+options.displays.Multi.highway.tracked.dot	desc	The size of each dot of the half circle.\n\n|cFF00B4FFPrimary:|r |cFFFFD1005|r\n|cFF00B4FFAOE:|r |cFFFFD1005|r\n|cFF00B4FFCooldowns:|r |cFFFFD1005|r\n|cFF00B4FFDefensives:|r |cFFFFD1005|r\n|cFF00B4FFInterrupts:|r |cFFFFD1005|r
 options.displays.Multi.highway.tracked.dot	name	Dot Size
 options.displays.Multi.highway.tracked.emptyColor	name	Empty Color
 options.displays.Multi.highway.tracked.fillColor	name	Recovering Color
@@ -19639,7 +19733,7 @@ options.displays.Primary.highway.gamepad.pos.size	desc	The size of the controlle
 options.displays.Primary.highway.gamepad.pos.size	name	Size
 options.displays.Primary.highway.gamepad.pos.x	name	X Offset
 options.displays.Primary.highway.gamepad.pos.y	name	Y Offset
-options.displays.Primary.highway.glow	desc	How the icon at the ring and proccing icons glow.
+options.displays.Primary.highway.glow	desc	How the pin at the ring and proccing pins glow.
 options.displays.Primary.highway.glow	name	Glow
 options.displays.Primary.highway.glow.color	desc	The glow's color.
 options.displays.Primary.highway.glow.color	name	Color
@@ -19648,13 +19742,13 @@ options.displays.Primary.highway.glow.lib	name	Custom Glow
 options.displays.Primary.highway.glow.lib	values.autocast	AutoCast Shine
 options.displays.Primary.highway.glow.lib	values.button	Action Button Glow
 options.displays.Primary.highway.glow.lib	values.pixel	Pixel Glow
-options.displays.Primary.highway.glow.mode	desc	How the icon at the ring shows that it is due: None, a gentle Pulse, a soft Halo, or a Custom glow (LibCustomGlow).
+options.displays.Primary.highway.glow.mode	desc	How the pin at the ring shows that it is due: None, a gentle Pulse, a soft Halo, or a Custom glow (LibCustomGlow).
 options.displays.Primary.highway.glow.mode	name	Glow
 options.displays.Primary.highway.glow.mode	values.custom	Custom
 options.displays.Primary.highway.glow.mode	values.halo	Halo
 options.displays.Primary.highway.glow.mode	values.none	None
 options.displays.Primary.highway.glow.mode	values.pulse	Pulse
-options.displays.Primary.highway.glow.procs	desc	Also glow any icon on the line whose spell is lit up by a proc.
+options.displays.Primary.highway.glow.procs	desc	Also glow any pin on the rail whose spell is lit up by a proc.
 options.displays.Primary.highway.glow.procs	name	Glow on Procs
 options.displays.Primary.highway.keybindings	desc	Options for keybinding text on displayed icons.
 options.displays.Primary.highway.keybindings	name	Keybinds
@@ -19673,7 +19767,7 @@ options.displays.Primary.highway.keybindings.pos.anchor	values.TOPLEFT	Top Left
 options.displays.Primary.highway.keybindings.pos.anchor	values.TOPRIGHT	Top Right
 options.displays.Primary.highway.keybindings.pos.x	name	X Offset
 options.displays.Primary.highway.keybindings.pos.y	name	Y Offset
-options.displays.Primary.highway.keybindings.queued	desc	Show keybinds on the icons behind the first one too.
+options.displays.Primary.highway.keybindings.queued	desc	Show keybinds on the pins behind the first one too.
 options.displays.Primary.highway.keybindings.queued	name	Enabled for Queued Icons
 options.displays.Primary.highway.keybindings.textStyle	name	Font and Style
 options.displays.Primary.highway.keybindings.textStyle.break01	name	\032
@@ -19709,94 +19803,114 @@ options.displays.Primary.highway.range.type	name	Range Checking
 options.displays.Primary.highway.range.type	values.ability	Per Ability
 options.displays.Primary.highway.range.type	values.melee	Melee Range
 options.displays.Primary.highway.range.type	values.xclude	Exclude Out-of-Range
-options.displays.Primary.highway.tab_highway	desc	The line, the hit ring and the icons.
+options.displays.Primary.highway.tab_highway	desc	The rail, the target ring and the pins.
 options.displays.Primary.highway.tab_highway	name	Highway
-options.displays.Primary.highway.tab_highway.iconBorder	name	Icon Border
-options.displays.Primary.highway.tab_highway.iconBorder.color	desc	The border's color.
-options.displays.Primary.highway.tab_highway.iconBorder.color	name	Color
-options.displays.Primary.highway.tab_highway.iconBorder.enabled	desc	Show a border around each icon.
-options.displays.Primary.highway.tab_highway.iconBorder.enabled	name	Show Border
-options.displays.Primary.highway.tab_highway.iconBorder.thickness	desc	The border's thickness in pixels.
-options.displays.Primary.highway.tab_highway.iconBorder.thickness	name	Thickness
-options.displays.Primary.highway.tab_highway.line	name	Line
-options.displays.Primary.highway.tab_highway.line.color	desc	The line's color.
-options.displays.Primary.highway.tab_highway.line.color	name	Color
-options.displays.Primary.highway.tab_highway.line.enabled	desc	Show the line the icons ride.
-options.displays.Primary.highway.tab_highway.line.enabled	name	Show Line
-options.displays.Primary.highway.tab_highway.line.thickness	desc	The line's thickness in pixels.
-options.displays.Primary.highway.tab_highway.line.thickness	name	Thickness
-options.displays.Primary.highway.tab_highway.ring	name	Hit Ring
-options.displays.Primary.highway.tab_highway.ring.color	desc	The ring's color.
+options.displays.Primary.highway.tab_highway.iconBorder	name	Round and Square Icons
+options.displays.Primary.highway.tab_highway.iconBorder.thickness	desc	The colored rim around a round or square icon (the Countdown colors).
+options.displays.Primary.highway.tab_highway.iconBorder.thickness	name	Rim Thickness
+options.displays.Primary.highway.tab_highway.rail	name	Rail
+options.displays.Primary.highway.tab_highway.rail.color	desc	The rail's color.
+options.displays.Primary.highway.tab_highway.rail.color	name	Color
+options.displays.Primary.highway.tab_highway.rail.edge	desc	The rail's outline.
+options.displays.Primary.highway.tab_highway.rail.edge	name	Edge Color
+options.displays.Primary.highway.tab_highway.rail.enabled	desc	Show the rail the pins ride.
+options.displays.Primary.highway.tab_highway.rail.enabled	name	Show Rail
+options.displays.Primary.highway.tab_highway.rail.thickness	desc	The rail's thickness in pixels.
+options.displays.Primary.highway.tab_highway.rail.thickness	name	Thickness
+options.displays.Primary.highway.tab_highway.rail.tickColor	desc	The color of the second marks.
+options.displays.Primary.highway.tab_highway.rail.tickColor	name	Tick Color
+options.displays.Primary.highway.tab_highway.rail.ticks	desc	A mark on the rail every second.
+options.displays.Primary.highway.tab_highway.rail.ticks	name	Second Ticks
+options.displays.Primary.highway.tab_highway.ring	name	Target Ring
+options.displays.Primary.highway.tab_highway.ring.color	desc	The target ring's color.
 options.displays.Primary.highway.tab_highway.ring.color	name	Color
-options.displays.Primary.highway.tab_highway.ring.enabled	desc	Show the ring the icons travel to.
+options.displays.Primary.highway.tab_highway.ring.crosshair	desc	A thin upright line through the ring.
+options.displays.Primary.highway.tab_highway.ring.crosshair	name	Crosshair
+options.displays.Primary.highway.tab_highway.ring.enabled	desc	Show the target the pins travel to.
 options.displays.Primary.highway.tab_highway.ring.enabled	name	Show Ring
-options.displays.Primary.highway.tab_highway.ring.flash	desc	Flash the ring when an icon goes through it.
+options.displays.Primary.highway.tab_highway.ring.flash	desc	Flash the ring when a pin goes through it.
 options.displays.Primary.highway.tab_highway.ring.flash	name	Flash on Cast
-options.displays.Primary.highway.tab_highway.ring.idleAlpha	desc	The ring's brightness while nothing is due; it goes full when an icon is due.
+options.displays.Primary.highway.tab_highway.ring.idleAlpha	desc	The ring's brightness while nothing is due; it goes full when a pin is due.
 options.displays.Primary.highway.tab_highway.ring.idleAlpha	name	Resting Brightness
-options.displays.Primary.highway.tab_highway.ring.pad	desc	The space between an icon at the ring and the ring.
-options.displays.Primary.highway.tab_highway.ring.pad	name	Gap
-options.displays.Primary.highway.tab_highway.ring.style	desc	The ring's thickness.
-options.displays.Primary.highway.tab_highway.ring.style	name	Thickness
-options.displays.Primary.highway.tab_highway.ring.style	values.medium	Medium
-options.displays.Primary.highway.tab_highway.ring.style	values.thick	Thick
-options.displays.Primary.highway.tab_highway.ring.style	values.thin	Thin
+options.displays.Primary.highway.tab_highway.ring.size	desc	The target ring's size.
+options.displays.Primary.highway.tab_highway.ring.size	name	Size
 options.displays.Primary.highway.tab_highway.sec_layout	name	Layout
 options.displays.Primary.highway.tab_highway.sec_layout.demo	desc	Out of combat, run a moving sample on the highway while the options are open, so each change shows at once.
 options.displays.Primary.highway.tab_highway.sec_layout.demo	name	Demo While Options Are Open
-options.displays.Primary.highway.tab_highway.sec_layout.direction	desc	Which way the icons travel; the hit ring sits at the end they travel to.
+options.displays.Primary.highway.tab_highway.sec_layout.direction	desc	Which way the pins travel; the target ring sits at the end they travel to.
 options.displays.Primary.highway.tab_highway.sec_layout.direction	name	Direction
 options.displays.Primary.highway.tab_highway.sec_layout.direction	values.LEFT	Right to Left
 options.displays.Primary.highway.tab_highway.sec_layout.direction	values.RIGHT	Left to Right
-options.displays.Primary.highway.tab_highway.sec_layout.farScale	desc	An icon's size at the far end of the line, a fraction of its size at the ring.
+options.displays.Primary.highway.tab_highway.sec_layout.farScale	desc	A pin's size at the far end of the rail, a fraction of its size at the ring (1: the same size all the way).
 options.displays.Primary.highway.tab_highway.sec_layout.farScale	name	Far Size
-options.displays.Primary.highway.tab_highway.sec_layout.glide	desc	Seconds an icon takes to settle on a new predicted time (0: jump).
+options.displays.Primary.highway.tab_highway.sec_layout.ghosts	desc	How many dark pins show the spells after them.
+options.displays.Primary.highway.tab_highway.sec_layout.ghosts	name	Ghost Pins
+options.displays.Primary.highway.tab_highway.sec_layout.glide	desc	Seconds a pin takes to settle on a new predicted time (0: jump).
 options.displays.Primary.highway.tab_highway.sec_layout.glide	name	Glide
-options.displays.Primary.highway.tab_highway.sec_layout.horizon	desc	How many seconds ahead the line reaches; a later icon waits at the far end.
+options.displays.Primary.highway.tab_highway.sec_layout.horizon	desc	How many seconds ahead the rail reaches; a later pin waits at the far end.
 options.displays.Primary.highway.tab_highway.sec_layout.horizon	name	Seconds Shown
-options.displays.Primary.highway.tab_highway.sec_layout.length	desc	The line's length in pixels, from the ring to the far end.
+options.displays.Primary.highway.tab_highway.sec_layout.lanes	desc	Spells off the global cooldown and cooldowns ride below the rail, the rest above it.
+options.displays.Primary.highway.tab_highway.sec_layout.lanes	name	Off-GCD Below
+options.displays.Primary.highway.tab_highway.sec_layout.length	desc	The rail's length in pixels, from the ring to the far end.
 options.displays.Primary.highway.tab_highway.sec_layout.length	name	Length
-options.displays.Primary.highway.tab_highway.sec_layout.maxIcons	desc	How many icons ride the line at once.
-options.displays.Primary.highway.tab_highway.sec_layout.maxIcons	name	Icons
-options.displays.Primary.highway.tab_highway.sec_layout.offGCDScale	desc	The size of a spell that does not trigger the global cooldown, a fraction of a normal icon's.
+options.displays.Primary.highway.tab_highway.sec_layout.maxIcons	desc	How many pins ride the rail in color.
+options.displays.Primary.highway.tab_highway.sec_layout.maxIcons	name	Pins
+options.displays.Primary.highway.tab_highway.sec_layout.offGCDScale	desc	The size of a spell that does not trigger the global cooldown, a fraction of a normal pin's.
 options.displays.Primary.highway.tab_highway.sec_layout.offGCDScale	name	Off-GCD Size
-options.displays.Primary.highway.tab_highway.sec_layout.shape	desc	Round or square icons.
+options.displays.Primary.highway.tab_highway.sec_layout.shape	desc	Map pins pointing at the rail, or round or square icons riding on it.
 options.displays.Primary.highway.tab_highway.sec_layout.shape	name	Shape
+options.displays.Primary.highway.tab_highway.sec_layout.shape	values.pin	Pin
 options.displays.Primary.highway.tab_highway.sec_layout.shape	values.round	Round
 options.displays.Primary.highway.tab_highway.sec_layout.shape	values.square	Square
-options.displays.Primary.highway.tab_highway.sec_layout.size	desc	An icon's size when it reaches the ring.
-options.displays.Primary.highway.tab_highway.sec_layout.size	name	Icon Size
-options.displays.Primary.highway.tab_highway.waiting	name	Waiting on Resources
-options.displays.Primary.highway.tab_highway.waiting.alpha	desc	The opacity of an icon still short of its rage or mana.
-options.displays.Primary.highway.tab_highway.waiting.alpha	name	Opacity
-options.displays.Primary.highway.tab_highway.waiting.desaturate	desc	Also take the color out of an icon short of its rage or mana.
-options.displays.Primary.highway.tab_highway.waiting.desaturate	name	Grey Out
-options.displays.Primary.highway.tab_text	desc	Seconds on the icons.
-options.displays.Primary.highway.tab_text	name	Countdown
-options.displays.Primary.highway.tab_text.countdown	name	Countdown
-options.displays.Primary.highway.tab_text.countdown.color	name	Color
-options.displays.Primary.highway.tab_text.countdown.enabled	desc	Show the seconds until each icon is due, on the icon.
-options.displays.Primary.highway.tab_text.countdown.enabled	name	Show Countdown
-options.displays.Primary.highway.tab_text.countdown.font	name	Font
-options.displays.Primary.highway.tab_text.countdown.font	values.2002	Fonts\\2002.TTF
-options.displays.Primary.highway.tab_text.countdown.font	values.2002 Bold	Fonts\\2002B.TTF
-options.displays.Primary.highway.tab_text.countdown.font	values.AR CrystalzcuheiGBK Demibold	Fonts\\ARHei.TTF
-options.displays.Primary.highway.tab_text.countdown.font	values.AR ZhongkaiGBK Medium	Fonts\\ARKai_T.TTF
-options.displays.Primary.highway.tab_text.countdown.font	values.AR ZhongkaiGBK Medium (Combat)	Fonts\\ARKai_C.TTF
-options.displays.Primary.highway.tab_text.countdown.font	values.Arial Narrow	Fonts\\ARIALN.TTF
-options.displays.Primary.highway.tab_text.countdown.font	values.Friz Quadrata TT	Fonts\\FRIZQT__.TTF
-options.displays.Primary.highway.tab_text.countdown.font	values.MoK	Fonts\\K_Pagetext.TTF
-options.displays.Primary.highway.tab_text.countdown.font	values.Morpheus	Fonts\\MORPHEUS_CYR.TTF
-options.displays.Primary.highway.tab_text.countdown.font	values.Nimrod MT	Fonts\\NIM_____.ttf
-options.displays.Primary.highway.tab_text.countdown.font	values.Skurri	Fonts\\SKURRI_CYR.TTF
-options.displays.Primary.highway.tab_text.countdown.size	name	Size
-options.displays.Primary.highway.tab_text.countdown.style	name	Style
-options.displays.Primary.highway.tab_text.countdown.style	values.MONOCHROME	Monochrome
-options.displays.Primary.highway.tab_text.countdown.style	values.MONOCHROME,OUTLINE	Monochrome, Outline
-options.displays.Primary.highway.tab_text.countdown.style	values.MONOCHROME,THICKOUTLINE	Monochrome, Thick Outline
-options.displays.Primary.highway.tab_text.countdown.style	values.NONE	None
-options.displays.Primary.highway.tab_text.countdown.style	values.OUTLINE	Outline
-options.displays.Primary.highway.tab_text.countdown.style	values.THICKOUTLINE	Thick Outline
+options.displays.Primary.highway.tab_highway.sec_layout.size	desc	The size of a pin's icon disc.
+options.displays.Primary.highway.tab_highway.sec_layout.size	name	Pin Size
+options.displays.Primary.highway.tab_look	desc	The pins' countdown colors and seconds, the ghost pins and the waiting look.
+options.displays.Primary.highway.tab_look	name	Countdown
+options.displays.Primary.highway.tab_look.countdown	name	Countdown
+options.displays.Primary.highway.tab_look.countdown.dueColor	desc	A pin due now: press it (green by default).
+options.displays.Primary.highway.tab_look.countdown.dueColor	name	Due Color
+options.displays.Primary.highway.tab_look.countdown.enabled	desc	Show the seconds beside a pin as it comes in.
+options.displays.Primary.highway.tab_look.countdown.enabled	name	Show Seconds
+options.displays.Primary.highway.tab_look.countdown.farColor	desc	A pin on its way (red by default).
+options.displays.Primary.highway.tab_look.countdown.farColor	name	Coming Color
+options.displays.Primary.highway.tab_look.countdown.font	name	Font
+options.displays.Primary.highway.tab_look.countdown.font	values.2002	Fonts\\2002.TTF
+options.displays.Primary.highway.tab_look.countdown.font	values.2002 Bold	Fonts\\2002B.TTF
+options.displays.Primary.highway.tab_look.countdown.font	values.AR CrystalzcuheiGBK Demibold	Fonts\\ARHei.TTF
+options.displays.Primary.highway.tab_look.countdown.font	values.AR ZhongkaiGBK Medium	Fonts\\ARKai_T.TTF
+options.displays.Primary.highway.tab_look.countdown.font	values.AR ZhongkaiGBK Medium (Combat)	Fonts\\ARKai_C.TTF
+options.displays.Primary.highway.tab_look.countdown.font	values.Arial Narrow	Fonts\\ARIALN.TTF
+options.displays.Primary.highway.tab_look.countdown.font	values.Friz Quadrata TT	Fonts\\FRIZQT__.TTF
+options.displays.Primary.highway.tab_look.countdown.font	values.MoK	Fonts\\K_Pagetext.TTF
+options.displays.Primary.highway.tab_look.countdown.font	values.Morpheus	Fonts\\MORPHEUS_CYR.TTF
+options.displays.Primary.highway.tab_look.countdown.font	values.Nimrod MT	Fonts\\NIM_____.ttf
+options.displays.Primary.highway.tab_look.countdown.font	values.Skurri	Fonts\\SKURRI_CYR.TTF
+options.displays.Primary.highway.tab_look.countdown.nearAt	desc	A pin turns from red to yellow this many seconds before it is due; green once it is due.
+options.displays.Primary.highway.tab_look.countdown.nearAt	name	Yellow From
+options.displays.Primary.highway.tab_look.countdown.nearColor	desc	A pin about to be due (yellow by default).
+options.displays.Primary.highway.tab_look.countdown.nearColor	name	Close Color
+options.displays.Primary.highway.tab_look.countdown.size	name	Size
+options.displays.Primary.highway.tab_look.countdown.style	name	Style
+options.displays.Primary.highway.tab_look.countdown.style	values.MONOCHROME	Monochrome
+options.displays.Primary.highway.tab_look.countdown.style	values.MONOCHROME,OUTLINE	Monochrome, Outline
+options.displays.Primary.highway.tab_look.countdown.style	values.MONOCHROME,THICKOUTLINE	Monochrome, Thick Outline
+options.displays.Primary.highway.tab_look.countdown.style	values.NONE	None
+options.displays.Primary.highway.tab_look.countdown.style	values.OUTLINE	Outline
+options.displays.Primary.highway.tab_look.countdown.style	values.THICKOUTLINE	Thick Outline
+options.displays.Primary.highway.tab_look.countdown.window	desc	The seconds show once a pin is this close.
+options.displays.Primary.highway.tab_look.countdown.window	name	Show From
+options.displays.Primary.highway.tab_look.ghost	name	Ghost Pins
+options.displays.Primary.highway.tab_look.ghost.alpha	desc	The opacity of a ghost pin's icon.
+options.displays.Primary.highway.tab_look.ghost.alpha	name	Icon Opacity
+options.displays.Primary.highway.tab_look.ghost.color	desc	The color of a ghost pin.
+options.displays.Primary.highway.tab_look.ghost.color	name	Color
+options.displays.Primary.highway.tab_look.waiting	name	Waiting on Resources
+options.displays.Primary.highway.tab_look.waiting.alpha	desc	The opacity of a pin still short of its rage or mana.
+options.displays.Primary.highway.tab_look.waiting.alpha	name	Opacity
+options.displays.Primary.highway.tab_look.waiting.desaturate	desc	Also take the color out of its icon.
+options.displays.Primary.highway.tab_look.waiting.desaturate	name	Grey Out
+options.displays.Primary.highway.tab_look.waiting.enabled	desc	Fade a pin whose spell you cannot afford yet (rage or mana).
+options.displays.Primary.highway.tab_look.waiting.enabled	name	Fade When Short
 options.displays.Primary.highway.tracked	desc	One spell shown as a half circle behind the ring that fills as its cooldown recovers.
 options.displays.Primary.highway.tracked	name	Tracked Spell
 options.displays.Primary.highway.tracked.dot	desc	The size of each dot of the half circle.

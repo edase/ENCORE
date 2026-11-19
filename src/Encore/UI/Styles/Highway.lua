@@ -1,12 +1,13 @@
 local _, ns = ...
 local L = ns.L
--- UI/Styles/Highway.lua: Encore's highway display style, a rhythm-game note highway. Up to three round spell icons
--- ride one thin line toward a gold hit ring, growing as they come (right to left by default); the ring brightens
--- when the first one is due. Each icon is a note that keeps its spell from publish to publish (a cast sends it
--- through the ring, a dropped pick fades where it was), so nothing slides backwards when the queue moves up. A pick
--- short of its resource rides faded, one out of range tinted, an off-GCD pick a little smaller. One tracked spell
--- shows as a half circle of dots behind the ring that fills as its cooldown recovers, all gold once ready. With the
--- options open (out of combat) a demo loop runs so every setting can be seen moving.
+-- UI/Styles/Highway.lua: Encore's highway display style, a rhythm-game note highway. Spell icons ride map pins along a
+-- bronze rail toward a gold target ring (right to left by default): the main rotation above the rail, off-GCD spells
+-- and cooldowns below it. A pin counts down in colour (red while it comes, yellow when close, green on the ring, with
+-- the seconds beside it) and the ring brightens when the first one is due. Each pin is a note that keeps its spell from
+-- publish to publish (a cast goes through the ring, a dropped pick fades where it was), so nothing slides backwards
+-- when the queue moves up; dark ghost pins show the picks after the first few. One tracked spell shows as a half
+-- circle of dots behind the ring that fills as its cooldown recovers, all gold once ready. With the options open (out
+-- of combat) a demo loop runs so every setting can be seen moving.
 -- Built on the timeline style (UI/Styles/Timeline.lua): the keybinding text, glow and range handling and the option
 -- builders follow it and Hekili's classic renderer (UI/Styles/Classic.lua, by Hekili's authors and maintainers).
 -- Written for Encore by Chad (edase). Its config is displays[ id ].highway; its frames live on d.styleFrames.highway.
@@ -28,13 +29,14 @@ local Glower = LibStub( "LibCustomGlow-1.0" )
 local exp, floor, ceil, abs, sin, cos, pi = math.exp, math.floor, math.ceil, math.abs, math.sin, math.cos, math.pi
 local mmax, mmin = math.max, math.min
 
-local NOTES = 6 -- note frames: up to three on the line and three leaving it
-local MAX_ICONS = 3
-local MAX_DOTS = 24
-local READY_EPS = Encore.Engine.READY -- a note due within this is the press: the ring brightens
+local MAX_ICONS, MAX_GHOSTS = 5, 3
+local MAX_ORDER = MAX_ICONS + MAX_GHOSTS -- the notes on the rail, in queue order
+local NOTES = MAX_ORDER + 4 -- and a few leaving it
+local MAX_DOTS, MAX_TICKS = 24, 31
+local READY_EPS = Encore.Engine.READY -- a note due within this is the press: green, and the ring brightens
 local DUE_MATCH = 0.5 -- a due note stays itself only for a record due within this (else it was cast)
 local MATCH = 1.5 -- a record keeps the note of its spell whose time is within this many seconds
-local SPACING = 0.85 -- neighbours may overlap by 15% of their sizes, never more
+local SPACING = 0.9 -- pins in one row keep 90% of their size apart
 local MOVE_EPS, SCALE_EPS, ALPHA_EPS = 0.2, 0.004, 0.01
 local HIT_TIME, DROP_TIME, SPAWN_TIME = 0.2, 0.15, 0.15
 local FLASH_DECAY = 0.25 -- seconds for the ring's flash to fall to 1/e
@@ -42,12 +44,15 @@ local GCD_MAX = 1.6 -- a cooldown this short or shorter is the GCD: the tracked 
 local GAUGE_STEP = 0.1 -- seconds between the tracked spell's reads
 local DEMO_GAP, DEMO_HOLD, DEMO_CYCLE, DEMO_FILL = 1.5, 0.3, 7.5, 6
 local CROP = 0.08
+-- the pin art (tools/encore/make_textures.py): a 128 px square, the disc's centre at (64, 50) with radius 44, the tail's
+-- tip at (64, 124); so per disc diameter D the art is TEX * D wide, its centre OFF * D below the disc's, the tip TIP * D
+local PIN_TEX, PIN_OFF, PIN_TIP = 128 / 88, 14 / 88, 74 / 88
+local ICON_IN = 0.8 -- the icon's share of the pin's disc
 local CIRCLE = "Interface\\CharacterFrame\\TempPortraitAlphaMask"
 local WHITE = "Interface\\Buttons\\WHITE8X8"
 local QUESTION = "Interface\\Icons\\INV_Misc_QuestionMark"
 local ART = "Interface\\AddOns\\Encore\\Textures\\"
-local RINGS = { thin = ART .. "HighwayRing1", medium = ART .. "HighwayRing2", thick = ART .. "HighwayRing3" }
-local HALO, DOT = ART .. "HighwayHalo", ART .. "HighwayDot"
+local RING, RING_IN, HALO, DOT, PIN = ART .. "HighwayRing2", ART .. "HighwayRing1", ART .. "HighwayHalo", ART .. "HighwayDot", ART .. "HighwayPin"
 local GOLD = { 1, 0.8, 0.1 }
 
 -- Countdown labels in 0.1 s steps up to 10 s, built once ("" for none, "10+" past); whole seconds for the gauge.
@@ -79,26 +84,39 @@ local Highway = {
 
 do
     local d = Highway.defaults
-    d.direction = "LEFT" -- the way the icons travel: LEFT (right to left, the ring on the left) or RIGHT
-    d.maxIcons = 3
-    d.size = 56 -- an icon's diameter at the ring
-    d.farScale = 0.33 -- an icon's size at the line's far end, a fraction of size
-    d.length = 300 -- pixels from the ring's centre to the line's far end
-    d.horizon = 3.5 -- seconds the line spans: three GCDs of icons fill it
-    d.offGCDScale = 0.8
-    d.glide = 0.08 -- seconds an icon takes to settle on a new predicted time (0: jump)
-    d.shape = "round"
+    d.direction = "LEFT" -- the way the pins travel: LEFT (right to left, the ring on the left) or RIGHT
+    d.maxIcons = 3 -- pins in colour
+    d.ghosts = 2 -- dark pins for the picks after them
+    d.lanes = true -- off-GCD spells and cooldowns ride below the rail
+    d.size = 40 -- a pin's disc (the icon and its coloured rim)
+    d.farScale = 1 -- a pin's size at the far end, a fraction of size (1: the same size all the way)
+    d.length = 380 -- pixels from the ring's centre to the rail's far end
+    d.horizon = 4.5 -- seconds the rail spans
+    d.offGCDScale = 0.9
+    d.glide = 0.08 -- seconds a pin takes to settle on a new predicted time (0: jump)
+    d.shape = "pin" -- pin, round or square
     d.demo = true -- a moving sample while the options are open, out of combat
-    d.line = { enabled = true, thickness = 2, color = { 1, 1, 1, 0.3 } }
-    d.ring = { enabled = true, style = "medium", color = { GOLD[ 1 ], GOLD[ 2 ], GOLD[ 3 ], 1 }, pad = 6, idleAlpha = 0.55, flash = true }
-    d.iconBorder = { enabled = true, thickness = 2, color = { 0, 0, 0, 0.85 } }
-    d.waiting = { alpha = 0.4, desaturate = true }
-    d.countdown = { enabled = false, font = "Friz Quadrata TT", size = 14, style = "OUTLINE", color = { 1, 1, 1, 1 } }
+    d.rail = { enabled = true, thickness = 8, color = { 0.45, 0.29, 0.13, 1 }, edge = { 0.12, 0.07, 0.03, 1 }, ticks = true, tickColor = { 1, 1, 1, 0.5 } }
+    d.ring = { enabled = true, size = 36, color = { 1, 0.62, 0.18, 1 }, idleAlpha = 0.75, flash = true, crosshair = true }
+    d.iconBorder = { thickness = 3 } -- round and square: the coloured rim's thickness
+    d.countdown = {
+        enabled = true, -- the seconds beside a pin
+        window = 1.5, -- shown once a pin is this close
+        nearAt = 0.6, -- yellow from here, red before
+        farColor = { 0.86, 0.22, 0.2, 1 },
+        nearColor = { 0.98, 0.8, 0.15, 1 },
+        dueColor = { 0.22, 0.72, 0.26, 1 },
+        font = "Friz Quadrata TT",
+        size = 13,
+        style = "OUTLINE",
+    }
+    d.ghost = { color = { 0.06, 0.06, 0.07, 0.85 }, alpha = 0.55 }
+    d.waiting = { enabled = false, alpha = 0.45, desaturate = true }
     d.glow = { mode = "pulse", lib = "autocast", procs = true, color = { 1, 0.85, 0.3, 1 } }
     d.tracked = {
         spell = "",
         gap = 4,
-        dot = 6,
+        dot = 5,
         fillColor = { 0.85, 0.85, 0.85, 1 },
         readyColor = { GOLD[ 1 ], GOLD[ 2 ], GOLD[ 3 ], 1 },
         emptyColor = { 0.25, 0.25, 0.25, 0.6 },
@@ -106,7 +124,7 @@ do
         textSize = 12,
     }
     d.range.color = { 1, 0.25, 0.25, 1 }
-    d.keybindings.anchor, d.keybindings.x, d.keybindings.y, d.keybindings.fontSize = "BOTTOM", 0, 3, 14
+    d.keybindings.anchor, d.keybindings.x, d.keybindings.y, d.keybindings.fontSize = "BOTTOM", 0, 2, 12
 end
 
 local function track( T, region, label )
@@ -132,19 +150,19 @@ local function newNote( d, T, i )
     local L = "N" .. i
     local b = track( T, CreateFrame( "Button", name, T.root ), L )
     b.display, b.index = d.id, i
-    b.Halo = track( T, b:CreateTexture( nil, "BACKGROUND", nil, -2 ), L .. ".Halo" )
+    b.Halo = track( T, b:CreateTexture( nil, "BACKGROUND", nil, -3 ), L .. ".Halo" )
     b.Halo:SetTexture( HALO )
     b.Halo:SetBlendMode( "ADD" )
     b.Halo:SetPoint( "CENTER", b, "CENTER", 0, 0 )
-    b.Border = track( T, b:CreateTexture( nil, "BACKGROUND" ), L .. ".Border" )
+    b.Edge = track( T, b:CreateTexture( nil, "BACKGROUND", nil, -2 ), L .. ".Edge" ) -- the pin's dark outline
+    b.Pin = track( T, b:CreateTexture( nil, "BACKGROUND", nil, -1 ), L .. ".Pin" ) -- the pin, in its countdown colour
+    b.Border = track( T, b:CreateTexture( nil, "BACKGROUND" ), L .. ".Border" ) -- round and square: the coloured rim
     b.Border:SetTexture( WHITE )
     b.Texture = track( T, b:CreateTexture( nil, "ARTWORK" ), L .. ".Texture" )
-    b.Texture:SetAllPoints( b )
     b.Texture:SetTexCoord( CROP, 1 - CROP, CROP, 1 - CROP )
     b.Mask = b:CreateMaskTexture()
     b.Mask:SetTexture( CIRCLE, "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE" )
-    b.Mask:SetAllPoints( b )
-    b.BorderMask = b:CreateMaskTexture() -- anchored to b in dress, with the border's insets
+    b.BorderMask = b:CreateMaskTexture()
     b.BorderMask:SetTexture( CIRCLE, "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE" )
     b.masked = false
     b.Keybinding = track( T, b:CreateFontString( name .. "_KB", "OVERLAY" ), L .. ".Keybinding" )
@@ -153,7 +171,7 @@ local function newNote( d, T, i )
     b.glowing = false
     b.state = false -- false (free), "live", "hit" (cast: through the ring) or "drop" (no longer picked: fades)
     b.recIndex, b.isFocus, b.timersHidden = 0, false, true -- the button contract (UI/Styles.lua): no own timers
-    b.etaK, b.haloA = -1, 0
+    b.etaK, b.haloA, b.tone, b.lane, b.ghost = -1, 0, false, 0, false
     b.x, b.k, b.a = -1, -1, -1
 
     b:SetScript( "OnMouseDown", Button_OnMouseDown )
@@ -169,7 +187,7 @@ local function newNote( d, T, i )
     return b
 end
 
--- Round or square: the icon and its border masked by the circle, or not (Build only).
+-- Round (pins too) or square: the icon and its rim masked by the circle, or not (Build only).
 local function shapeMask( b, round )
     if round == b.masked then return end
     if round then
@@ -213,23 +231,57 @@ local function setHalo( b, a )
     end
 end
 
+-- Note `b`'s row: 1 above the rail, 2 below it (pins point at the rail from either side; the art flips for row 2).
+local function setLane( T, b, lane )
+    if lane == b.lane then return end
+    b.lane = lane
+    local up = lane == 1
+    local size = T.size
+    if T.pin then
+        local tex = PIN_TEX * size
+        for _, t in ipairs( b.pinParts ) do
+            t:ClearAllPoints()
+            t:SetTexCoord( 0, 1, up and 0 or 1, up and 1 or 0 )
+        end
+        b.Pin:SetPoint( "CENTER", b, "CENTER", 0, ( up and -1 or 1 ) * PIN_OFF * size )
+        b.Pin:SetSize( tex, tex )
+        b.Edge:SetPoint( "CENTER", b, "CENTER", 0, ( up and -1 or 1 ) * PIN_OFF * size )
+        b.Edge:SetSize( tex * 1.1, tex * 1.08 )
+    end
+    b.Countdown:ClearAllPoints()
+    if up then b.Countdown:SetPoint( "BOTTOM", b, "TOP", 0, 2 ) else b.Countdown:SetPoint( "TOP", b, "BOTTOM", 0, -2 ) end
+    b.x = -1 -- a new row: a new y
+end
+
 local function dress( T, b, h )
-    local size = h.size
+    local size = T.size
     b:SetSize( size, size )
     b:SetScale( 1 )
-    shapeMask( b, h.shape == "round" )
-    b.round = h.shape == "round"
+    shapeMask( b, h.shape ~= "square" )
+    b.round = h.shape ~= "square"
+    b.pinParts = b.pinParts or { b.Pin, b.Edge }
 
-    local bd = h.iconBorder
-    local th = bd.thickness
+    b.Pin:SetTexture( PIN )
+    b.Edge:SetTexture( PIN )
+    b.Edge:SetVertexColor( 0, 0, 0, 0.85 )
+    b.Pin:SetShown( T.pin )
+    b.Edge:SetShown( T.pin )
+
+    local inner = T.pin and size * ICON_IN or size
+    b.Texture:ClearAllPoints()
+    b.Texture:SetPoint( "CENTER", b, "CENTER", 0, 0 )
+    b.Texture:SetSize( inner, inner )
+    b.Mask:ClearAllPoints()
+    b.Mask:SetPoint( "CENTER", b, "CENTER", 0, 0 )
+    b.Mask:SetSize( inner, inner )
+    local th = h.iconBorder.thickness
     b.Border:ClearAllPoints()
     b.Border:SetPoint( "TOPLEFT", b, "TOPLEFT", -th, th )
     b.Border:SetPoint( "BOTTOMRIGHT", b, "BOTTOMRIGHT", th, -th )
     b.BorderMask:ClearAllPoints()
     b.BorderMask:SetPoint( "TOPLEFT", b, "TOPLEFT", -th, th )
     b.BorderMask:SetPoint( "BOTTOMRIGHT", b, "BOTTOMRIGHT", th, -th )
-    b.Border:SetVertexColor( bd.color[ 1 ], bd.color[ 2 ], bd.color[ 3 ], bd.color[ 4 ] )
-    b.Border:SetShown( bd.enabled )
+    b.Border:SetShown( not T.pin )
 
     local gc = h.glow.color
     b.Halo:SetSize( size * 1.9, size * 1.9 )
@@ -246,17 +298,17 @@ local function dress( T, b, h )
     b.Keybinding:SetText( nil )
 
     local cd = h.countdown
-    setFont( b.Countdown, cd.font, cd.size, cd.style, cd.color )
-    b.Countdown:ClearAllPoints()
-    b.Countdown:SetPoint( "CENTER", b, "CENTER", 0, 0 )
+    setFont( b.Countdown, cd.font, cd.size, cd.style )
     b.Countdown:SetText( "" )
     b.Countdown:SetShown( cd.enabled )
     b.etaK = -1
 
+    b.lane = 0
+    setLane( T, b, 1 )
     glowOff( b )
     b:Hide()
     b:SetAlpha( 1 )
-    b.state, b.claimed = false, false
+    b.state, b.claimed, b.ghost, b.tone = false, false, false, false
     b.Action, b.Recommendation, b.Key, b.Keybind, b.actionID = nil, nil, nil, nil, nil
     b.recIndex, b.isFocus = 0, false
     b.x, b.k, b.a = -1, -1, -1
@@ -269,21 +321,29 @@ local function reveal( T )
     T.cleared = false
 end
 
---- Builds (or reuses) the root, the line, the ring, the tracked spell's dots and the notes on `d`, sizes `d` and
---- returns the note buttons.
+--- Builds (or reuses) the root, the rail and its ticks, the ring, the tracked spell's dots and the notes on `d`, sizes
+--- `d` and returns the note buttons.
 function Highway.Build( d, conf )
     local h = conf.highway
     local T = d.styleFrames.highway
     if not T then
-        T = { widgets = {}, labels = {}, notes = {}, order = {}, dots = {}, fake = {}, fakeRes = {}, demoTex = {}, demoKey = {} }
+        T = { widgets = {}, labels = {}, notes = {}, order = {}, dots = {}, ticks = {}, fake = {}, fakeRes = {}, demoTex = {}, demoKey = {} }
         d.styleFrames.highway = T
         T.d = d
         T.root = track( T, CreateFrame( "Frame", nil, d ), "Root" )
-        T.line = track( T, T.root:CreateTexture( nil, "BACKGROUND" ), "Line" )
-        T.bloom = track( T, T.root:CreateTexture( nil, "BORDER" ), "Bloom" )
+        T.railEdge = track( T, T.root:CreateTexture( nil, "BACKGROUND", nil, -2 ), "Rail.Edge" )
+        T.rail = track( T, T.root:CreateTexture( nil, "BACKGROUND", nil, -1 ), "Rail" )
+        T.railHi = track( T, T.root:CreateTexture( nil, "BACKGROUND" ), "Rail.Light" )
+        for k = 1, MAX_TICKS do
+            T.ticks[ k ] = track( T, T.root:CreateTexture( nil, "BORDER" ), "Tick" .. k )
+        end
+        T.bloom = track( T, T.root:CreateTexture( nil, "BORDER", nil, 1 ), "Bloom" )
         T.bloom:SetTexture( HALO )
         T.bloom:SetBlendMode( "ADD" )
+        T.cross = track( T, T.root:CreateTexture( nil, "ARTWORK", nil, -1 ), "Ring.Cross" )
         T.ring = track( T, T.root:CreateTexture( nil, "ARTWORK" ), "Ring" )
+        T.ringIn = track( T, T.root:CreateTexture( nil, "ARTWORK" ), "Ring.Inner" )
+        T.ringDot = track( T, T.root:CreateTexture( nil, "ARTWORK" ), "Ring.Dot" )
         for k = 1, MAX_DOTS do
             local t = track( T, T.root:CreateTexture( nil, "ARTWORK" ), "Dot" .. k )
             t:SetTexture( DOT )
@@ -291,7 +351,7 @@ function Highway.Build( d, conf )
         end
         T.gaugeText = track( T, T.root:CreateFontString( nil, "OVERLAY" ), "Gauge.Text" )
         for i = 1, NOTES do T.notes[ i ] = newNote( d, T, i ) end
-        for i = 1, MAX_ICONS do
+        for i = 1, MAX_ORDER do
             T.fake[ i ] = { actionName = "", actionID = 1, texture = QUESTION, keybind = "", exact_time = 0, offGCD = false, floors = {}, cost = 0 }
             T.fakeRes[ i ] = { inRange = true, inMelee = true, usable = true, glow = false }
             T.order[ i ] = false
@@ -299,18 +359,30 @@ function Highway.Build( d, conf )
     end
 
     local s = Encore:GetScale()
-    local size, far = h.size, h.size * h.farScale
-    local ringD = size + 2 * h.ring.pad
-    local tr = h.tracked
+    local size = h.size
+    T.size, T.pin = size, h.shape == "pin"
+    local rl, rg, tr = h.rail, h.ring, h.tracked
+    local railH = rl.enabled and rl.thickness or 2
+    local ringS = rg.size
     local ability = tr.spell ~= "" and Registry.Abilities()[ tr.spell ]
     local id = ability and rawget( ability, "id" )
     T.trackedID = type( id ) == "number" and id > 0 and id or nil
-    local gaugeR = ringD / 2 + tr.gap + tr.dot / 2
-    local back = ceil( mmax( ringD * 0.75, T.trackedID and gaugeR + tr.dot / 2 + 2 or 0 ) )
-    local height = ceil( mmax( ringD * 1.5, size * 1.9, T.trackedID and 2 * gaugeR + tr.dot or 0 ) ) + 4
-    local width = back + h.length + ceil( far / 2 ) + 4
+    local gaugeR = ringS / 2 + tr.gap + tr.dot / 2
 
-    local left = h.direction ~= "RIGHT" -- the ring on the left, icons travelling right to left
+    -- the rows: a pin's disc centre above (row 1) or below (row 2) the rail, its tail's tip on the rail's edge; round and
+    -- square icons ride on the rail, row 2 one icon below
+    if T.pin then
+        T.y1 = railH / 2 + PIN_TIP * size
+        T.y2 = -T.y1
+    else
+        T.y1, T.y2 = 0, -( size + 4 )
+    end
+    local reach = mmax( abs( T.y1 ), abs( T.y2 ) ) + size / 2 + h.countdown.size + 6
+    local back = ceil( mmax( ringS * 0.8, size / 2 + 4, T.trackedID and gaugeR + tr.dot / 2 + 2 or 0 ) )
+    local height = ceil( mmax( 2 * reach, ringS * 1.6, T.trackedID and 2 * gaugeR + tr.dot or 0 ) ) + 4
+    local width = back + h.length + ceil( size / 2 ) + 4
+
+    local left = h.direction ~= "RIGHT" -- the ring on the left, pins travelling right to left
     T.pt, T.sx, T.x0 = left and "LEFT" or "RIGHT", left and 1 or -1, back
     d:SetSize( width * s, height * s )
     T.root:ClearAllPoints()
@@ -318,30 +390,67 @@ function Highway.Build( d, conf )
     T.root:SetScale( s )
     T.root:SetFrameLevel( d:GetFrameLevel() + 3 ) -- above config mode's backdrop, so the demo shows over it
 
-    local ln = h.line
-    local start = ringD / 2
-    T.line:SetTexture( WHITE )
-    T.line:SetVertexColor( ln.color[ 1 ], ln.color[ 2 ], ln.color[ 3 ], ln.color[ 4 ] )
-    T.line:SetSize( mmax( 1, h.length - start ), ln.thickness )
-    place( T, T.line, ( start + h.length ) / 2, 0 )
-    T.line:SetShown( ln.enabled )
+    -- the rail: a dark edge, the bronze fill and a light line along its top, from behind the ring to the far end
+    local x1, x2 = -ringS / 2, h.length + size / 2
+    local mid, span = ( x1 + x2 ) / 2, x2 - x1
+    T.railEdge:SetTexture( WHITE )
+    T.railEdge:SetVertexColor( rl.edge[ 1 ], rl.edge[ 2 ], rl.edge[ 3 ], rl.edge[ 4 ] )
+    T.railEdge:SetSize( span + 2, railH + 2 )
+    place( T, T.railEdge, mid, 0 )
+    T.rail:SetTexture( WHITE )
+    T.rail:SetVertexColor( rl.color[ 1 ], rl.color[ 2 ], rl.color[ 3 ], rl.color[ 4 ] )
+    T.rail:SetSize( span, railH )
+    place( T, T.rail, mid, 0 )
+    T.railHi:SetTexture( WHITE )
+    T.railHi:SetVertexColor( 1, 0.85, 0.6, 0.22 * rl.color[ 4 ] )
+    T.railHi:SetSize( span, mmax( 1, floor( railH / 4 ) ) )
+    place( T, T.railHi, mid, railH / 2 - mmax( 1, floor( railH / 4 ) ) / 2 - 0.5 )
+    T.railEdge:SetShown( rl.enabled )
+    T.rail:SetShown( rl.enabled )
+    T.railHi:SetShown( rl.enabled )
+    local tc, secs = rl.tickColor, floor( h.horizon )
+    for k = 1, MAX_TICKS do
+        local t = T.ticks[ k ]
+        if rl.enabled and rl.ticks and k <= secs then
+            t:SetTexture( WHITE )
+            t:SetVertexColor( tc[ 1 ], tc[ 2 ], tc[ 3 ], tc[ 4 ] )
+            t:SetSize( 2, railH )
+            place( T, t, k / h.horizon * h.length, 0 )
+            t:Show()
+        else
+            t:Hide()
+        end
+    end
 
-    local rg = h.ring
-    T.ring:SetTexture( RINGS[ rg.style ] or RINGS.medium )
-    T.ring:SetSize( ringD, ringD )
-    T.ring:SetVertexColor( rg.color[ 1 ], rg.color[ 2 ], rg.color[ 3 ], 1 )
-    place( T, T.ring, 0, 0 )
-    T.ring:SetShown( rg.enabled )
+    -- the target: an outer and an inner ring, a centre dot and a thin upright line through it
+    local c = rg.color
+    for _, t in ipairs( { T.ring, T.ringIn, T.ringDot, T.cross } ) do
+        t:SetVertexColor( c[ 1 ], c[ 2 ], c[ 3 ], 1 )
+        t:SetShown( rg.enabled )
+        place( T, t, 0, 0 )
+    end
+    T.ring:SetTexture( RING )
+    T.ring:SetSize( ringS, ringS )
+    T.ringIn:SetTexture( RING_IN )
+    T.ringIn:SetSize( ringS * 0.55, ringS * 0.55 )
+    T.ringDot:SetTexture( DOT )
+    T.ringDot:SetSize( ringS * 0.16, ringS * 0.16 )
+    T.cross:SetTexture( WHITE )
+    T.cross:SetSize( 1.5, mmin( height - 8, 2 * reach - 2 * h.countdown.size ) )
+    T.cross:SetShown( rg.enabled and rg.crosshair )
     T.ringA = rg.idleAlpha
-    T.ring:SetAlpha( T.ringA * rg.color[ 4 ] )
-    T.bloom:SetSize( ringD * 1.5, ringD * 1.5 )
-    T.bloom:SetVertexColor( rg.color[ 1 ], rg.color[ 2 ], rg.color[ 3 ], 1 )
+    T.ring:SetAlpha( T.ringA * c[ 4 ] )
+    T.ringIn:SetAlpha( T.ringA * c[ 4 ] )
+    T.ringDot:SetAlpha( T.ringA * c[ 4 ] )
+    T.cross:SetAlpha( 0.35 * c[ 4 ] )
+    T.bloom:SetSize( ringS * 2, ringS * 2 )
+    T.bloom:SetVertexColor( c[ 1 ], c[ 2 ], c[ 3 ], 1 )
     place( T, T.bloom, 0, 0 )
     T.bloom:SetAlpha( 0 )
     T.bloom:SetShown( rg.enabled )
     T.flash, T.bloomA = 0, 0
 
-    -- the tracked spell's half circle: dots from the bottom to the top, on the side away from the incoming icons
+    -- the tracked spell's half circle: dots from the bottom to the top, on the side away from the incoming pins
     local n = mmin( MAX_DOTS, mmax( 7, floor( pi * gaugeR / ( tr.dot * 1.6 ) ) ) )
     T.dotCount = T.trackedID and n or 0
     for k = 1, MAX_DOTS do
@@ -355,14 +464,14 @@ function Highway.Build( d, conf )
             t:Hide()
         end
     end
-    setFont( T.gaugeText, h.countdown.font, tr.textSize, "OUTLINE", h.countdown.color )
+    setFont( T.gaugeText, h.countdown.font, tr.textSize, "OUTLINE", tr.readyColor )
     place( T, T.gaugeText, -( gaugeR + tr.dot / 2 + tr.textSize * 0.6 ), 0 )
     T.gaugeText:SetText( "" )
     T.gaugeText:SetShown( T.trackedID ~= nil and tr.text )
     T.lit, T.gaugeReady, T.gaugeTimer, T.gaugeK = -1, nil, 0, -1
 
     for i = 1, NOTES do dress( T, T.notes[ i ], h ) end
-    for i = 1, MAX_ICONS do T.order[ i ] = false end
+    for i = 1, MAX_ORDER do T.order[ i ] = false end
     T.count, T.demoOn, T.demoHead = 0, false, 0
     reveal( T )
 
@@ -372,7 +481,7 @@ function Highway.Build( d, conf )
     return T.notes
 end
 
--- An icon's size at x pixels from the ring: full at the ring, farScale at the far end, growing faster near the ring.
+-- A pin's size at x pixels from the ring: full at the ring, farScale at the far end (1 by default: one size).
 local function sizeAt( h, x )
     local g = 1 - x / h.length
     if g < 0 then g = 0 end
@@ -380,22 +489,48 @@ local function sizeAt( h, x )
 end
 
 local function setKb( b, kb, g, i, text )
-    local show = text ~= nil and text ~= "" and kb.enabled and ( i == 1 or kb.queued )
+    local show = text ~= nil and text ~= "" and not b.ghost and kb.enabled and ( i == 1 or kb.queued )
     ns.UI.SetKeybindingText( b.Keybinding, b, show and text or nil, kb.anchor, kb.x, kb.y, g )
 end
 
--- The tint and fade of note `b` from its flags: out of range in the range colour, short of its resource faded.
+-- The countdown tone of a pin `t` seconds out: 3 due (green), 2 close (yellow), 1 coming (red); 0 for a ghost.
+local function toneOf( b, cd, t )
+    if b.ghost then return 0 end
+    if t <= READY_EPS then return 3 end
+    if t <= cd.nearAt then return 2 end
+    return 1
+end
+
+-- The pin (or the rim) and the seconds in tone `tone`.
+local function setTone( b, h, tone )
+    if tone == b.tone then return end
+    b.tone = tone
+    local cd = h.countdown
+    local c = tone == 3 and cd.dueColor or tone == 2 and cd.nearColor or tone == 1 and cd.farColor or h.ghost.color
+    b.Pin:SetVertexColor( c[ 1 ], c[ 2 ], c[ 3 ], c[ 4 ] )
+    b.Border:SetVertexColor( c[ 1 ], c[ 2 ], c[ 3 ], c[ 4 ] )
+    b.Countdown:SetTextColor( c[ 1 ], c[ 2 ], c[ 3 ], 1 )
+end
+
+-- The icon's tint and fade from its flags: a ghost dark, out of range in the range colour, short of its resource faded
+-- (when the waiting look is on).
 local function paint( b, h )
-    local fade = b.gated or b.unusable
-    if b.far then
+    local w = h.waiting
+    local fade = w.enabled and ( b.gated or b.unusable )
+    if b.ghost then
+        b.Texture:SetVertexColor( 1, 1, 1, 1 )
+        b.Texture:SetDesaturated( true )
+        b.dim = h.ghost.alpha
+    elseif b.far then
         local c = h.range.color
         b.Texture:SetVertexColor( c[ 1 ], c[ 2 ], c[ 3 ], c[ 4 ] )
         b.Texture:SetDesaturated( true )
+        b.dim = fade and w.alpha or 1
     else
         b.Texture:SetVertexColor( 1, 1, 1, 1 )
-        b.Texture:SetDesaturated( fade and h.waiting.desaturate or false )
+        b.Texture:SetDesaturated( fade and w.desaturate or false )
+        b.dim = fade and w.alpha or 1
     end
-    b.dim = fade and h.waiting.alpha or 1
 end
 
 -- The flags of note `b` from its resolved record `rr` (range, usability, the overlay glow).
@@ -426,32 +561,43 @@ end
 local function spawn( b, exact, now )
     b.state, b.at, b.Key, b.born = "live", exact, exact, now
     b.x, b.k, b.a = -1, -1, -1
-    b.etaK = -1
+    b.etaK, b.tone = -1, false
     b:SetAlpha( 0 )
     b:Show()
 end
 
 -- A note no record kept: through the ring (it was due: cast) or faded where it is.
 local function leave( T, h, b, now )
-    local hit = b.Key - now <= READY_EPS + 0.15
+    local hit = not b.ghost and b.Key - now <= READY_EPS + 0.15
     b.state = hit and "hit" or "drop"
     b.t0, b.k0, b.a0 = now, b.k > 0 and b.k or 1, b.a > 0 and b.a or 1
     b.recIndex, b.Recommendation = 0, nil
     glowOff( b )
     setHalo( b, 0 )
     b.Keybinding:SetText( nil )
-    b:SetFrameLevel( T.root:GetFrameLevel() + 2 * MAX_ICONS + 4 ) -- the flash over the next icon
+    b.Countdown:SetText( "" )
+    b.etaK = 0
+    b:SetFrameLevel( T.root:GetFrameLevel() + 2 * MAX_ORDER + 4 ) -- the flash over the next pin
     if hit and h.ring.flash then T.flash = 1 end
 end
 
--- A publish (or a demo step): the first maxIcons records with an action and a time keep their notes by spell and
--- time; a record no note matches takes a free one, and a live note no record kept leaves.
+-- Whether record `r` rides below the rail: an off-GCD spell or a cooldown (its toggle), with the rows on.
+local function lower( h, r, action )
+    if not h.lanes then return false end
+    if r.offGCD then return true end
+    local a = Registry.Abilities()[ action ]
+    return a ~= nil and rawget( a, "toggle" ) == "cooldowns"
+end
+
+-- A publish (or a demo step): the first maxIcons + ghosts records with an action and a time keep their notes by spell
+-- and time; a record no note matches takes a free one, and a live note no record kept leaves.
 local function sync( T, h, recs, count, res, now )
     local notes = T.notes
     for i = 1, NOTES do notes[ i ].claimed = false end
-    local n, maxI, kb = 0, mmin( MAX_ICONS, h.maxIcons ), h.keybindings
+    local n, colored = 0, mmin( MAX_ICONS, h.maxIcons )
+    local maxN, kb = colored + mmin( MAX_GHOSTS, h.ghosts ), h.keybindings
     for i = 1, count do
-        if n >= maxI then break end
+        if n >= maxN then break end
         local r = recs[ i ]
         local action, exact = r.actionName, r.exact_time
         local id = r.actionID
@@ -476,27 +622,35 @@ local function sync( T, h, recs, count, res, now )
                 spawn( best, exact, now )
             end
             best.claimed = true
+            best.ghost = n > colored
             best.Key, best.Action, best.actionID, best.recIndex = exact, action, id, i
             best.Recommendation, best.offGCD = r, r.offGCD == true
             best.Texture:SetTexture( r.iconOverride or r.texture )
+            setLane( T, best, lower( h, r, action ) and 2 or 1 )
             local rt = r.resource_type
             local have = rt and r.floors[ rt ]
             best.gated = have ~= nil and have < r.cost
             best.Keybind = r.keybind
             setKb( best, kb, h.gamepad, i, r.keybind )
-            flags( best, h, res and res[ i ] )
+            if best.ghost then
+                best.far, best.unusable, best.proc = false, false, false
+                best.Countdown:SetText( "" )
+                best.etaK = 0
+            else
+                flags( best, h, res and res[ i ] )
+            end
             paint( best, h )
             T.order[ n ] = best
         end
     end
-    for k = n + 1, MAX_ICONS do T.order[ k ] = false end
+    for k = n + 1, MAX_ORDER do T.order[ k ] = false end
     T.count = n
     for k = 1, NOTES do
         local b = notes[ k ]
         if b.state == "live" and not b.claimed then leave( T, h, b, now ) end
     end
     local base = T.root:GetFrameLevel() + 2
-    for k = 1, n do T.order[ k ]:SetFrameLevel( base + 2 * ( MAX_ICONS - k + 1 ) ) end -- the nearer icon on top
+    for k = 1, n do T.order[ k ]:SetFrameLevel( base + 2 * ( MAX_ORDER - k + 1 ) ) end -- the nearer pin on top
 end
 
 -- Every live note leaves (a blank publish).
@@ -505,7 +659,7 @@ local function dropAll( T, h, now )
         local b = T.notes[ k ]
         if b.state == "live" then leave( T, h, b, now ) end
     end
-    for k = 1, MAX_ICONS do T.order[ k ] = false end
+    for k = 1, MAX_ORDER do T.order[ k ] = false end
     T.count = 0
 end
 
@@ -527,7 +681,7 @@ local function setNote( T, b, x, scale, a )
     if abs( x - b.x ) >= MOVE_EPS then
         b.x = x
         b:ClearAllPoints()
-        b:SetPoint( "CENTER", T.root, T.pt, T.sx * ( T.x0 + x ) / b.k, 0 )
+        b:SetPoint( "CENTER", T.root, T.pt, T.sx * ( T.x0 + x ) / b.k, ( b.lane == 2 and T.y2 or T.y1 ) / b.k )
     end
     if abs( a - b.a ) >= ALPHA_EPS then
         b.a = a
@@ -553,21 +707,22 @@ local function glowLook( b, h, due, now )
     return pulse
 end
 
-local function countdown( b, h, t )
-    if not h.countdown.enabled then return end
-    local k = etaStep( t )
+-- The seconds beside a coloured pin, once it is within the countdown window.
+local function countdown( b, cd, t )
+    if not cd.enabled or b.ghost then return end
+    local k = t <= cd.window and etaStep( t ) or 0
     if k ~= b.etaK then
         b.etaK = k
         b.Countdown:SetText( ETA[ k ] )
     end
 end
 
--- Every frame: the live notes toward their times (spaced, sized and faded), the leaving ones through their exit, the
--- ring's brightness and flash.
+-- Every frame: the live notes toward their times (spaced in their row, sized, faded and coloured), the leaving ones
+-- through their exit, the ring's brightness and flash.
 local function animate( T, h, now, elapsed )
     local keep = h.glide > 0 and exp( -elapsed / h.glide ) or 0
-    local len, hz = h.length, h.horizon
-    local prevX, prevS
+    local len, hz, cd = h.length, h.horizon, h.countdown
+    local px1, ps1, px2, ps2 -- the previous pin's x and size in rows 1 and 2
     local first = T.order[ 1 ]
     local due = first and first.Key - now <= READY_EPS or false
     for k = 1, T.count do
@@ -578,6 +733,8 @@ local function animate( T, h, now, elapsed )
         local x = t / hz * len
         if x > len then x = len end
         local sz = sizeAt( h, x )
+        local prevX, prevS
+        if b.lane == 2 then prevX, prevS = px2, ps2 else prevX, prevS = px1, ps1 end
         if prevX then
             local minX = prevX + 0.5 * ( prevS + sz ) * SPACING
             if x < minX then
@@ -585,7 +742,7 @@ local function animate( T, h, now, elapsed )
                 sz = sizeAt( h, x )
             end
         end
-        prevX, prevS = x, sz
+        if b.lane == 2 then px2, ps2 = x, sz else px1, ps1 = x, sz end
         local scale = sz / h.size
         if b.offGCD then scale = scale * h.offGCDScale end
         local a = b.dim
@@ -593,9 +750,11 @@ local function animate( T, h, now, elapsed )
         if u > 0.85 then a = a * ( 1 - ( u - 0.85 ) / 0.15 * 0.7 ) end -- fades in from the far end
         local age = now - b.born
         if age < SPAWN_TIME then a = a * age / SPAWN_TIME end
-        scale = scale * glowLook( b, h, k == 1 and due, now )
+        local left = b.Key - now
+        setTone( b, h, toneOf( b, cd, left ) )
+        if not b.ghost then scale = scale * glowLook( b, h, k == 1 and due, now ) end
         setNote( T, b, x, scale, a )
-        countdown( b, h, b.Key - now )
+        countdown( b, cd, left )
     end
     for i = 1, NOTES do
         local b = T.notes[ i ]
@@ -605,7 +764,7 @@ local function animate( T, h, now, elapsed )
             if p >= 1 then
                 finish( b )
             elseif st == "hit" then
-                setNote( T, b, 0, b.k0 * ( 1 + 0.35 * p ), b.a0 * ( 1 - p ) )
+                setNote( T, b, 0, b.k0 * ( 1 + 0.3 * p ), b.a0 * ( 1 - p ) )
             else
                 setNote( T, b, b.x, b.k, b.a0 * ( 1 - p ) )
             end
@@ -618,7 +777,10 @@ local function animate( T, h, now, elapsed )
         local ra = T.ringA + ( target - T.ringA ) * mmin( 1, elapsed * 12 )
         if abs( ra - T.ringA ) >= 0.002 then
             T.ringA = ra
-            T.ring:SetAlpha( ra * rg.color[ 4 ] )
+            local a = ra * rg.color[ 4 ]
+            T.ring:SetAlpha( a )
+            T.ringIn:SetAlpha( a )
+            T.ringDot:SetAlpha( a )
         end
         T.flash = T.flash * exp( -elapsed / FLASH_DECAY )
         local bloom = mmax( T.flash, due and 0.35 or 0 )
@@ -699,22 +861,22 @@ local function demoSpells( T, out )
     if #tex == 0 then tex[ 1 ], keys[ 1 ] = QUESTION, DEMO_KEYS[ 1 ] end
 end
 
--- One demo step: the notes due from `head` on, every DEMO_GAP seconds, with a few faded, out of range, off the GCD
--- or proccing, so each look can be seen.
+-- One demo step: the notes due from `head` on, every DEMO_GAP seconds, with a few short of rage, out of range, off the
+-- GCD (below the rail) or proccing, so each look can be seen.
 local function demoStep( T, h, now )
     local head = floor( ( now - T.demoT0 - DEMO_HOLD ) / DEMO_GAP ) + 1
     if head < 1 then head = 1 end
     if head == T.demoHead then return end
     T.demoHead = head
     local tex, keys, nTex = T.demoTex, T.demoKey, #T.demoTex
-    for k = 1, MAX_ICONS do
+    for k = 1, MAX_ORDER do
         local j = head + k - 1
         local r, rr = T.fake[ k ], T.fakeRes[ k ]
         local m = ( j - 1 ) % nTex + 1
         r.actionName = DEMO_NAMES[ ( j - 1 ) % #DEMO_NAMES + 1 ]
         r.texture, r.keybind = tex[ m ], keys[ m ]
-        r.exact_time = T.demoT0 + j * DEMO_GAP
-        r.offGCD = j % 6 == 4
+        r.offGCD = j % 4 == 2
+        r.exact_time = T.demoT0 + j * DEMO_GAP - ( r.offGCD and DEMO_GAP / 2 or 0 )
         if j % 5 == 3 then
             r.resource_type, r.floors.demo, r.cost = "demo", 0, 1
         else
@@ -723,14 +885,14 @@ local function demoStep( T, h, now )
         rr.inRange, rr.inMelee = j % 7 ~= 5, j % 7 ~= 5
         rr.glow = j % 8 == 6
     end
-    sync( T, h, T.fake, MAX_ICONS, T.fakeRes, now )
+    sync( T, h, T.fake, MAX_ORDER, T.fakeRes, now )
 end
 
 -- Starts or stops the demo: its notes replace the real ones until it stops, then the published records come back.
 local function setDemo( d, T, h, out, on, now )
     T.demoOn = on
     for k = 1, NOTES do finish( T.notes[ k ] ) end
-    for k = 1, MAX_ICONS do T.order[ k ] = false end
+    for k = 1, MAX_ORDER do T.order[ k ] = false end
     T.count, T.lit, T.gaugeReady, T.gaugeTimer = 0, -1, nil, 0
     if on then
         demoSpells( T, out )
@@ -776,8 +938,10 @@ function Highway.Draw( d, conf, out, status )
     local res = d.resolved
     for k = 1, T.count do
         local b = T.order[ k ]
-        flags( b, h, res and res[ b.recIndex ] )
-        paint( b, h )
+        if not b.ghost then
+            flags( b, h, res and res[ b.recIndex ] )
+            paint( b, h )
+        end
     end
 end
 
@@ -788,7 +952,7 @@ function Highway.OnGameEvent( d, conf, event, ... )
         local show, id = event == "SPELL_ACTIVATION_OVERLAY_GLOW_SHOW", ...
         for k = 1, T.count do
             local b = T.order[ k ]
-            if b.actionID == id then b.proc = show end
+            if b.actionID == id and not b.ghost then b.proc = show end
         end
     end
 end
@@ -816,7 +980,7 @@ function Highway.Clear( d )
         finish( b )
         b.recIndex, b.Recommendation = 0, nil
     end
-    for k = 1, MAX_ICONS do T.order[ k ] = false end
+    for k = 1, MAX_ORDER do T.order[ k ] = false end
     T.count, T.demoOn = 0, false
     T.root:Hide()
     T.cleared = true
@@ -867,77 +1031,90 @@ local function trackable()
     return values
 end
 
---- Five tabs, keyed so the path finds the config: a tab or inline group named like a config subtable (line, ring,
---- glow, tracked, keybindings, range, gamepad) holds that subtable's options; the rest are flat in highway.
+--- The style's tabs, keyed so the path finds the config: a tab or inline group named like a config subtable (rail,
+--- ring, countdown, ghost, glow, tracked, keybindings, range, gamepad) holds that subtable's options; the rest are flat
+--- in highway.
 function Highway.Options( id, conf )
     local P = ns.UI.DisplayOptionParts
     local fe = P.fontElements
     local h = conf.highway
 
-    local countdown = {
-        enabled = optToggle( L["Show Countdown"], L["Show the seconds until each icon is due, on the icon."], 1 ),
+    local highway = {
+        sec_layout = section( L["Layout"], 1, {
+            direction = optSelect( L["Direction"], L["Which way the pins travel; the target ring sits at the end they travel to."], { LEFT = L["Right to Left"], RIGHT = L["Left to Right"] }, 1 ),
+            maxIcons = optRange( L["Pins"], L["How many pins ride the rail in color."], 1, MAX_ICONS, 1, 2 ),
+            ghosts = optRange( L["Ghost Pins"], L["How many dark pins show the spells after them."], 0, MAX_GHOSTS, 1, 3 ),
+            lanes = optToggle( L["Off-GCD Below"], L["Spells off the global cooldown and cooldowns ride below the rail, the rest above it."], 4 ),
+            shape = optSelect( L["Shape"], L["Map pins pointing at the rail, or round or square icons riding on it."], { pin = L["Pin"], round = L["Round"], square = L["Square"] }, 5 ),
+            size = optRange( L["Pin Size"], L["The size of a pin's icon disc."], 16, 96, 1, 6 ),
+            farScale = optRange( L["Far Size"], L["A pin's size at the far end of the rail, a fraction of its size at the ring (1: the same size all the way)."], 0.2, 1, 0.01, 7 ),
+            length = optRange( L["Length"], L["The rail's length in pixels, from the ring to the far end."], 80, 800, 1, 8 ),
+            horizon = optRange( L["Seconds Shown"], L["How many seconds ahead the rail reaches; a later pin waits at the far end."], 1.5, 10, 0.1, 9 ),
+            offGCDScale = optRange( L["Off-GCD Size"], L["The size of a spell that does not trigger the global cooldown, a fraction of a normal pin's."], 0.5, 1, 0.01, 10 ),
+            glide = optRange( L["Glide"], L["Seconds a pin takes to settle on a new predicted time (0: jump)."], 0, 0.5, 0.01, 11 ),
+            demo = optToggle( L["Demo While Options Are Open"], L["Out of combat, run a moving sample on the highway while the options are open, so each change shows at once."], 12 ),
+        } ),
+        rail = section( L["Rail"], 2, {
+            enabled = optToggle( L["Show Rail"], L["Show the rail the pins ride."], 1 ),
+            thickness = optRange( L["Thickness"], L["The rail's thickness in pixels."], 2, 16, 1, 2 ),
+            color = optColor( L["Color"], L["The rail's color."], 3 ),
+            edge = optColor( L["Edge Color"], L["The rail's outline."], 4 ),
+            ticks = optToggle( L["Second Ticks"], L["A mark on the rail every second."], 5 ),
+            tickColor = optColor( L["Tick Color"], L["The color of the second marks."], 6 ),
+        } ),
+        ring = section( L["Target Ring"], 3, {
+            enabled = optToggle( L["Show Ring"], L["Show the target the pins travel to."], 1 ),
+            size = optRange( L["Size"], L["The target ring's size."], 16, 96, 1, 2 ),
+            color = optColor( L["Color"], L["The target ring's color."], 3 ),
+            idleAlpha = optRange( L["Resting Brightness"], L["The ring's brightness while nothing is due; it goes full when a pin is due."], 0, 1, 0.05, 4 ),
+            flash = optToggle( L["Flash on Cast"], L["Flash the ring when a pin goes through it."], 5 ),
+            crosshair = optToggle( L["Crosshair"], L["A thin upright line through the ring."], 6 ),
+        } ),
+        iconBorder = section( L["Round and Square Icons"], 4, {
+            thickness = optRange( L["Rim Thickness"], L["The colored rim around a round or square icon (the Countdown colors)."], 1, 8, 1, 1 ),
+        } ),
+    }
+
+    local countdownFont = {
+        enabled = optToggle( L["Show Seconds"], L["Show the seconds beside a pin as it comes in."], 1 ),
+        window = optRange( L["Show From"], L["The seconds show once a pin is this close."], 0.5, 10, 0.1, 2 ),
+        nearAt = optRange( L["Yellow From"], L["A pin turns from red to yellow this many seconds before it is due; green once it is due."], 0.1, 3, 0.05, 3 ),
+        farColor = optColor( L["Coming Color"], L["A pin on its way (red by default)."], 4 ),
+        nearColor = optColor( L["Close Color"], L["A pin about to be due (yellow by default)."], 5 ),
+        dueColor = optColor( L["Due Color"], L["A pin due now: press it (green by default)."], 6 ),
         font = ns.tableCopy( fe.font ),
         style = ns.tableCopy( fe.fontStyle ),
         size = ns.tableCopy( fe.fontSize ),
-        color = ns.tableCopy( fe.color ),
     }
-    countdown.font.order, countdown.style.order, countdown.size.order, countdown.color.order = 2, 3, 4, 5
+    countdownFont.font.order, countdownFont.style.order, countdownFont.size.order = 7, 8, 9
 
-    local highway = {
-        sec_layout = section( L["Layout"], 1, {
-            direction = optSelect( L["Direction"], L["Which way the icons travel; the hit ring sits at the end they travel to."], { LEFT = L["Right to Left"], RIGHT = L["Left to Right"] }, 1 ),
-            maxIcons = optRange( L["Icons"], L["How many icons ride the line at once."], 1, 3, 1, 2 ),
-            size = optRange( L["Icon Size"], L["An icon's size when it reaches the ring."], 16, 128, 1, 3 ),
-            farScale = optRange( L["Far Size"], L["An icon's size at the far end of the line, a fraction of its size at the ring."], 0.2, 1, 0.01, 4 ),
-            length = optRange( L["Length"], L["The line's length in pixels, from the ring to the far end."], 80, 800, 1, 5 ),
-            horizon = optRange( L["Seconds Shown"], L["How many seconds ahead the line reaches; a later icon waits at the far end."], 1.5, 10, 0.1, 6 ),
-            shape = optSelect( L["Shape"], L["Round or square icons."], { round = L["Round"], square = L["Square"] }, 7 ),
-            offGCDScale = optRange( L["Off-GCD Size"], L["The size of a spell that does not trigger the global cooldown, a fraction of a normal icon's."], 0.5, 1, 0.01, 8 ),
-            glide = optRange( L["Glide"], L["Seconds an icon takes to settle on a new predicted time (0: jump)."], 0, 0.5, 0.01, 9 ),
-            demo = optToggle( L["Demo While Options Are Open"], L["Out of combat, run a moving sample on the highway while the options are open, so each change shows at once."], 10 ),
+    local look = {
+        countdown = section( L["Countdown"], 1, countdownFont ),
+        ghost = section( L["Ghost Pins"], 2, {
+            color = optColor( L["Color"], L["The color of a ghost pin."], 1 ),
+            alpha = optRange( L["Icon Opacity"], L["The opacity of a ghost pin's icon."], 0.1, 1, 0.05, 2 ),
         } ),
-        line = section( L["Line"], 2, {
-            enabled = optToggle( L["Show Line"], L["Show the line the icons ride."], 1 ),
-            thickness = optRange( L["Thickness"], L["The line's thickness in pixels."], 1, 8, 1, 2 ),
-            color = optColor( L["Color"], L["The line's color."], 3 ),
-        } ),
-        ring = section( L["Hit Ring"], 3, {
-            enabled = optToggle( L["Show Ring"], L["Show the ring the icons travel to."], 1 ),
-            style = optSelect( L["Thickness"], L["The ring's thickness."], { thin = L["Thin"], medium = L["Medium"], thick = L["Thick"] }, 2 ),
-            color = optColor( L["Color"], L["The ring's color."], 3 ),
-            pad = optRange( L["Gap"], L["The space between an icon at the ring and the ring."], 0, 24, 1, 4 ),
-            idleAlpha = optRange( L["Resting Brightness"], L["The ring's brightness while nothing is due; it goes full when an icon is due."], 0, 1, 0.05, 5 ),
-            flash = optToggle( L["Flash on Cast"], L["Flash the ring when an icon goes through it."], 6 ),
-        } ),
-        iconBorder = section( L["Icon Border"], 4, {
-            enabled = optToggle( L["Show Border"], L["Show a border around each icon."], 1 ),
-            thickness = optRange( L["Thickness"], L["The border's thickness in pixels."], 1, 6, 1, 2 ),
-            color = optColor( L["Color"], L["The border's color."], 3 ),
-        } ),
-        waiting = section( L["Waiting on Resources"], 5, {
-            alpha = optRange( L["Opacity"], L["The opacity of an icon still short of its rage or mana."], 0.1, 1, 0.05, 1 ),
-            desaturate = optToggle( L["Grey Out"], L["Also take the color out of an icon short of its rage or mana."], 2 ),
+        waiting = section( L["Waiting on Resources"], 3, {
+            enabled = optToggle( L["Fade When Short"], L["Fade a pin whose spell you cannot afford yet (rage or mana)."], 1 ),
+            alpha = optRange( L["Opacity"], L["The opacity of a pin still short of its rage or mana."], 0.1, 1, 0.05, 2 ),
+            desaturate = optToggle( L["Grey Out"], L["Also take the color out of its icon."], 3 ),
         } ),
     }
 
-    local keybindings = SO.keybindings( "highway", ZONES, 2, id, conf )
-    keybindings.args.queued = optToggle( L["Enabled for Queued Icons"], L["Show keybinds on the icons behind the first one too."], 2 )
+    local keybindings = SO.keybindings( "highway", ZONES, 3, id, conf )
+    keybindings.args.queued = optToggle( L["Enabled for Queued Icons"], L["Show keybinds on the pins behind the first one too."], 2 )
     keybindings.args.queued.disabled = function() return h.keybindings.enabled == false end
 
-    local text = {
-        countdown = section( L["Countdown"], 1, countdown ),
-    }
-
     local glow = {
-        mode = optSelect( L["Glow"], L["How the icon at the ring shows that it is due: None, a gentle Pulse, a soft Halo, or a Custom glow (LibCustomGlow)."],
+        mode = optSelect( L["Glow"], L["How the pin at the ring shows that it is due: None, a gentle Pulse, a soft Halo, or a Custom glow (LibCustomGlow)."],
             { none = L["None"], pulse = L["Pulse"], halo = L["Halo"], custom = L["Custom"] }, 1 ),
         lib = optSelect( L["Custom Glow"], L["The LibCustomGlow effect the Custom glow uses."], { autocast = L["AutoCast Shine"], pixel = L["Pixel Glow"], button = L["Action Button Glow"] }, 2 ),
-        procs = optToggle( L["Glow on Procs"], L["Also glow any icon on the line whose spell is lit up by a proc."], 3 ),
+        procs = optToggle( L["Glow on Procs"], L["Also glow any pin on the rail whose spell is lit up by a proc."], 3 ),
         color = optColor( L["Color"], L["The glow's color."], 4 ),
     }
     glow.lib.hidden = function() return h.glow.mode ~= "custom" end
 
-    local range = SO.range( "highway", ZONES, 1, id, conf )
+    local range = SO.range( "highway", ZONES, 5, id, conf )
     range.args.color = optColor( L["Out of Range Color"], L["The tint of an icon whose spell cannot reach your target."], 10 )
 
     local tracked = {
@@ -952,10 +1129,10 @@ function Highway.Options( id, conf )
     }
 
     return {
-        tab_highway = tab( L["Highway"], L["The line, the hit ring and the icons."], 1, highway ),
+        tab_highway = tab( L["Highway"], L["The rail, the target ring and the pins."], 1, highway ),
+        tab_look = tab( L["Countdown"], L["The pins' countdown colors and seconds, the ghost pins and the waiting look."], 2, look ),
         keybindings = keybindings,
-        tab_text = tab( L["Countdown"], L["Seconds on the icons."], 3, text ),
-        glow = tab( L["Glow"], L["How the icon at the ring and proccing icons glow."], 4, glow ),
+        glow = tab( L["Glow"], L["How the pin at the ring and proccing pins glow."], 4, glow ),
         range = range,
         tracked = tab( L["Tracked Spell"], L["One spell shown as a half circle behind the ring that fills as its cooldown recovers."], 6, tracked ),
         gamepad = SO.gamepad( "highway", ZONES, 7, id, conf ),
