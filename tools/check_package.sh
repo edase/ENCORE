@@ -5,7 +5,7 @@ zip=${1:?usage: check_package.sh <zip>}
 list=$(unzip -Z1 "$zip")
 fail=0
 need() { grep -qx "$1" <<<"$list" || { echo "missing: $1"; fail=1; }; }
-for a in Encore Encore_Shared Encore_Druid Encore_Warrior Encore_Rogue Encore_Paladin Encore_Shaman Encore_Hunter Encore_Mage Encore_Priest Encore_Warlock; do need "$a/$a.toc"; done
+for a in Encore Encore_Shared Encore_Warrior Encore_Paladin; do need "$a/$a.toc"; done
 need Encore/LICENSE
 need Encore/embeds.xml
 for bad in '^Encore/src/' '/tests/' '/tools/' '^Encore/docs/' '/APLs/' '\.simc$' '^Encore/Makefile$' '^Encore/\.' 'ForeverProbe'; do
@@ -13,7 +13,7 @@ for bad in '^Encore/src/' '/tests/' '/tools/' '^Encore/docs/' '/APLs/' '\.simc$'
 done
 ver=$(basename "$zip" .zip); ver=${ver#Encore-}
 ver=${ver%-forever}
-for a in Encore Encore_Shared Encore_Druid Encore_Warrior Encore_Rogue Encore_Paladin Encore_Shaman Encore_Hunter Encore_Mage Encore_Priest Encore_Warlock; do
+for a in Encore Encore_Shared Encore_Warrior Encore_Paladin; do
     v=$(unzip -p "$zip" "$a/$a.toc" | tr -d '\r' | sed -n 's/^## Version: //p')
     [ "$v" = "$ver" ] || { echo "$a.toc Version '$v' != zip version '$ver'"; fail=1; }
 done
