@@ -107,7 +107,7 @@ function M.poll(T, t, H, W)
     if last and t < last.t then
         T.polls = {}
     end
-    local out, ab = H.Hekili.Engine.Output.Primary, H.Hekili.Class.abilities
+    local out, ab = H.Encore.Engine.Output.Primary, H.Encore.Class.abilities
     local p = { t = t, name = {}, wait = {}, off = {}, n = out.count }
     for i = 1, out.count do
         local r = out.recs[i]

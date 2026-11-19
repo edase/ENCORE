@@ -21,7 +21,7 @@ describe("the engine on the harness's channel and cast events", function()
         c.known[#c.known + 1] = CANNIBALIZE
         H = headless.new({ character = c, pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
-        st = H.Hekili.State
+        st = H.Encore.State
         W = world.new(1)
         us = W.add(entities.new({ guid = "Player-1", weapons = entities.weapons(22) }))
         local mob = W.add(entities.new({ guid = "Creature-1", kind = "mob", weapons = { { 1, 1, 2 } }, health = 1e6 }))
@@ -74,7 +74,7 @@ describe("the engine on the harness's channel and cast events", function()
     it(
         "breaks a channel on its interrupt= modifier at a tick with the GCD ready, not mid-tick or in the GCD",
         function()
-            H.Hekili.Class.abilities.cannibalize.tick_time = 2
+            H.Encore.Class.abilities.cannibalize.tick_time = 2
             W.t = 1
             assert.is_true(
                 W.press(us, "cannibalize", { spell = CANNIBALIZE, gcd = 1.5, channel = { length = 10, tick = 2 } })
@@ -89,23 +89,23 @@ describe("the engine on the harness's channel and cast events", function()
             }
             upTo(3.1) -- 2.1 s in: just past the first tick
             st.buff.casting.v1 = CANNIBALIZE -- the harness's UnitChannelInfo names no spell
-            H.Hekili.Scripts.Channels[st.system.packName] = channels
+            H.Encore.Scripts.Channels[st.system.packName] = channels
             assert.is_true(st.cooldown.global_cooldown.ready)
-            assert.is_true(H.Hekili:CheckChannel("slam"))
+            assert.is_true(H.Encore:CheckChannel("slam"))
             -- the same tick with the GCD running (the harness's channel press starts none the instance sees)
             st.setCooldown("global_cooldown", 1)
             assert.is_false(st.cooldown.global_cooldown.ready)
-            assert.is_false(H.Hekili:CheckChannel("slam"))
+            assert.is_false(H.Encore:CheckChannel("slam"))
             upTo(4) -- 3 s in: mid-tick
             st.buff.casting.v1 = CANNIBALIZE
-            H.Hekili.Scripts.Channels[st.system.packName] = channels
+            H.Encore.Scripts.Channels[st.system.packName] = channels
             assert.is_true(st.cooldown.global_cooldown.ready)
-            assert.is_false(H.Hekili:CheckChannel("slam"))
+            assert.is_false(H.Encore:CheckChannel("slam"))
         end
     )
 
     it("reads a hard cast as casting from its UNIT_SPELLCAST_START, not as a channel", function()
-        local slam = H.Hekili.Class.abilities.slam
+        local slam = H.Encore.Class.abilities.slam
         W.t = 1
         assert.is_true(W.press(us, "slam", { spell = slam.id, gcd = 1.5, cast = 1.5 }))
         W.run(5)

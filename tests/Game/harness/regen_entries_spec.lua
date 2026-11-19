@@ -10,7 +10,7 @@ describe("the sim's generated regen entries (RegisterResource)", function()
 
     before_each(function()
         H = headless.new()
-        spec, S, Rage = H.Hekili.Class.specs[0], H.Hekili.State, H.env.Enum.PowerType.Rage
+        spec, S, Rage = H.Encore.Class.specs[0], H.Encore.State, H.env.Enum.PowerType.Rage
     end)
 
     local function register(model, meta)

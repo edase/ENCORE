@@ -394,7 +394,7 @@ describe("now handlers", function()
         assert.are.same({}, missing)
     end)
 
-    it("runs removeBuff, spend, addStack and setCooldown through the context with Hekili's signatures", function()
+    it("runs removeBuff, spend, addStack and setCooldown through the context with Encore's signatures", function()
         register("verbs_test", {
             id = 6161,
             now = function()
@@ -766,7 +766,7 @@ describe("now handlers", function()
         end
     )
 
-    it("reads settings.<name> as the core's plain copy, refreshed by Hekili:SettingsChanged", function()
+    it("reads settings.<name> as the core's plain copy, refreshed by Encore:SettingsChanged", function()
         local seen = {}
         register("settings_read", {
             id = 6265,
@@ -1177,7 +1177,7 @@ describe("now handlers", function()
         end)
     end)
 
-    it("reaches no game API, no Hekili state and no _G from a `now`", function()
+    it("reaches no game API, no Encore state and no _G from a `now`", function()
         local seen = {}
         -- compiled apart, so `state` is the global name, not this file's upvalue
         local make = loadstring(
@@ -1203,7 +1203,7 @@ describe("now handlers", function()
         assert.is_function(I.nowCtx.gain)
     end)
 
-    it("skips and counts a `now` that is the ability's own handler (its environment stays Hekili's)", function()
+    it("skips and counts a `now` that is the ability's own handler (its environment stays Encore's)", function()
         local f = function() end
         register("same_test", { id = 6565, now = f })
         h.Class.abilities.same_test.funcs.handler = f
@@ -2055,7 +2055,7 @@ describe("now handlers", function()
             assert.are.equal(0, I.auraVerdict.refunds[kp])
         end)
 
-        it("the Cooldown Manager off (Hekili.cdmOff): no verdict, no refund, the record stands", function()
+        it("the Cooldown Manager off (Encore.cdmOff): no verdict, no refund, the record stands", function()
             begin(40, true)
             cast(fs.SPENDER_C, 5)
             for t = 5.3, 7.5, 0.2 do

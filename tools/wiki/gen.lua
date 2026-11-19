@@ -5,7 +5,7 @@
 --                                  an expression that no longer evaluates, a command not reviewed, or banned content;
 --                                  open TODO placeholders and missing screenshots are warnings (`make wiki-check`)
 -- Run from the repository root. The collectors boot the addon headless (tools/wiki/boot.lua), one boot per class.
-package.path = "./src/Hekili/?.lua;./tests/?.lua;./?.lua;" .. package.path
+package.path = "./src/Encore/?.lua;./tests/?.lua;./?.lua;" .. package.path
 
 local markers = require("tools.wiki.markers")
 local check = require("tools.wiki.check")
@@ -100,7 +100,7 @@ end
 -- `local L = {` table at the top of its file), stripped as option labels are.
 local function lib()
     local out = {}
-    local s = assert(slurp("src/Hekili/Libs/AceDBOptions-3.0/AceDBOptions-3.0.lua"))
+    local s = assert(slurp("src/Encore/Libs/AceDBOptions-3.0/AceDBOptions-3.0.lua"))
     local body = assert(s:match("local L = {\n(.-)\n}"), "AceDBOptions-3.0: no English table")
     for value in ("\n" .. body .. "\n"):gmatch('\n%s+[%w_]+ = "(.-)",?%s-\n') do
         out[text.strip(value)] = true

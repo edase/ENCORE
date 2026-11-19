@@ -19,14 +19,14 @@ describe("the resource forecast's horizon", function()
         local C = mw.Arcane
         H = headless.new({ character = C.character(), pack = C.PACK })
         assert.are.same({}, H.loadErrors)
-        S = H.Hekili.State
+        S = H.Encore.State
         H.ctl.power[0] = math.floor(S.mana.max / 2)
         t = H.ctl.now
         cycle()
-        local settings = H.Hekili.Engine.settings
+        local settings = H.Encore.Engine.settings
         assert.are.equal(15, settings.performance.forecastWindow)
         settings.displays.Cooldowns.forecastPeriod = 30
-        assert.is_true(H.Hekili.Engine.Subscribe("Cooldowns", function() end))
+        assert.is_true(H.Encore.Engine.Subscribe("Cooldowns", function() end))
     end)
 
     -- The mana the forecast's floor reaches `dt` seconds on, and the reach time the state answers for it.
@@ -40,7 +40,7 @@ describe("the resource forecast's horizon", function()
     end
 
     it("reaches a separate Cooldowns display's longer Forecast Period", function()
-        local cds = H.Hekili.Engine.settings.toggles.cooldowns
+        local cds = H.Encore.Engine.settings.toggles.cooldowns
         cds.separate, cds.value = true, true
         cycle()
         local reach, horizon = reachAt(20)
@@ -49,7 +49,7 @@ describe("the resource forecast's horizon", function()
     end)
 
     it("stays at the global window while that display is not in use", function()
-        local cds = H.Hekili.Engine.settings.toggles.cooldowns
+        local cds = H.Encore.Engine.settings.toggles.cooldowns
         cds.separate, cds.value = false, true
         cycle()
         local reach, horizon = reachAt(20)
@@ -66,7 +66,7 @@ describe("the combined regen rate", function()
         local C = require("Forever.helpers.druid_loop_world").Guardian
         local H = headless.new({ character = C.character(), pack = C.PACK })
         assert.are.same({}, H.loadErrors)
-        local S = H.Hekili.State
+        local S = H.Encore.State
         assert.is_true(headless.cycle(H, H.ctl.now + 0.2))
         assert.is_true(S.buff.bear_form.up)
         local ok, rate = pcall(function()
@@ -88,7 +88,7 @@ describe("the combined regen rate", function()
         local C = require("Forever.helpers.druid_loop_world").Guardian
         local H = headless.new({ character = C.character(), pack = C.PACK })
         assert.are.same({}, H.loadErrors)
-        local S = H.Hekili.State
+        local S = H.Encore.State
         assert.is_true(headless.cycle(H, H.ctl.now + 0.2))
         assert.is_true(S.rage.regenModel.mainhand.value() / S.mainhand_speed > 0)
         S.removeBuff("bear_form")

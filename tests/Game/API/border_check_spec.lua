@@ -30,17 +30,17 @@ describe("tools/check_border.sh", function()
     end)
 
     it("accepts the core's Drain, Build, SetLog and WindowOp, and nothing else", function()
-        local rc, out = run("src/Hekili/Game", FIXTURES .. "core_ok.lua")
+        local rc, out = run("src/Encore/Game", FIXTURES .. "core_ok.lua")
         assert.are.equal(0, rc, out)
         for _, name in ipairs({ "core_near", "core_window" }) do
-            rc, out = run("src/Hekili/Game", FIXTURES .. name .. ".lua")
+            rc, out = run("src/Encore/Game", FIXTURES .. name .. ".lua")
             assert.are.equal(1, rc, out)
             assert.is_truthy(out:find(name .. ".lua:3:", 1, true), out)
         end
     end)
 
     it("fails a core stand-in path that matches no file", function()
-        local rc, out = run("src/Hekili/Game", FIXTURES .. "missing")
+        local rc, out = run("src/Encore/Game", FIXTURES .. "missing")
         assert.are.equal(1, rc, out)
         assert.is_truthy(out:find("missing", 1, true), out)
     end)

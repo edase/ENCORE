@@ -12,7 +12,7 @@ describe("a wrapping swing clock's recheck times (Scripts.lua ConvertTimeCompari
 
     local H
     setup(function()
-        H = headless.new({}).Hekili
+        H = headless.new({}).Encore
         Sc = H.Scripts
     end)
 

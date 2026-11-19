@@ -58,7 +58,7 @@ describe("alternatives (headless Arms, a scripted belief band)", function()
         t = H.ctl.now + 0.2
         assert(headless.cycle(H, t))
         -- A spender (30 rage), a cheaper spender (10) and a free filler, in that order.
-        H.Hekili.DB.profile.packs[ww.PACK].lists = {
+        H.Encore.DB.profile.packs[ww.PACK].lists = {
             precombat = {},
             default = {
                 { enabled = true, action = "mortal_strike" },
@@ -66,11 +66,11 @@ describe("alternatives (headless Arms, a scripted belief band)", function()
                 { enabled = true, action = "berserker_stance" },
             },
         }
-        H.Hekili:LoadScripts()
+        H.Encore:LoadScripts()
         H.Fire("PLAYER_REGEN_DISABLED")
         script()
-        out = H.Hekili.Engine.Output.Primary
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", need, true, { alts = true }))
+        out = H.Encore.Engine.Output.Primary
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", need, true, { alts = true }))
     end)
 
     it(
@@ -91,7 +91,7 @@ describe("alternatives (headless Arms, a scripted belief band)", function()
                 { "berserker_stance", "lo", 3, "default" },
                 { a[2].actionName, a[2].bound, a[2].action, a[2].list }
             )
-            local abilities = H.Hekili.Class.abilities
+            local abilities = H.Encore.Class.abilities
             assert.are.equal(abilities.mortal_strike.id, a[1].actionID)
             assert.are.equal(abilities.berserker_stance.id, a[2].actionID)
             assert.is_not_nil(a[1].texture)
@@ -102,11 +102,11 @@ describe("alternatives (headless Arms, a scripted belief band)", function()
 
     it("the same pick at both bounds is one alternative, not two", function()
         -- the free filler only outside 10..30 rage: at 15 the pick is hamstring, at 5 and at 40 the filler
-        H.Hekili.DB.profile.packs[ww.PACK].lists.default = {
+        H.Encore.DB.profile.packs[ww.PACK].lists.default = {
             { enabled = true, action = "berserker_stance", criteria = "rage<10|rage>30" },
             { enabled = true, action = "hamstring" },
         }
-        H.Hekili:LoadScripts()
+        H.Encore:LoadScripts()
         band = { est = 15, lo = 5, hi = 40 }
         cycle()
         local r = out.recs[1]
@@ -117,7 +117,7 @@ describe("alternatives (headless Arms, a scripted belief band)", function()
     end)
 
     it("a band that does not straddle the pick's cost yields none", function()
-        local st = H.Hekili.State
+        local st = H.Encore.State
         band = { est = 15, lo = 5, hi = 40 }
         cycle()
         assert.are.equal(2, out.recs[1].alts.n)
@@ -136,13 +136,13 @@ describe("alternatives (headless Arms, a scripted belief band)", function()
         band = { est = 15, lo = 5, hi = 40 }
         -- a hard cast in progress, 1 s left: the client's cast bar (the fake names every cast "Cast"; aliased to a
         -- cast-time ability so the reset finds it) delays the queue to the cast's end
-        local abilities = H.Hekili.Class.abilities
+        local abilities = H.Encore.Class.abilities
         abilities.Cast = abilities.slam
         H.ctl.casting = { (t + 0.2 - 0.5) * 1000, (t + 0.2 + 1) * 1000 }
-        local hk, at = H.Hekili, {}
+        local hk, at = H.Encore, {}
         local predict = hk.GetNextPrediction
         hk.GetNextPrediction = function(...)
-            at[#at + 1] = H.Hekili.State.offset
+            at[#at + 1] = H.Encore.State.offset
             return predict(...)
         end
         cycle()
@@ -171,7 +171,7 @@ describe("alternatives (headless Arms, a scripted belief band)", function()
         band = { est = 15, lo = 5, hi = 40 }
         cycle()
         assert.are.equal(2, out.recs[1].alts.n)
-        H.Hekili.Engine.Unsubscribe("Primary", need)
+        H.Encore.Engine.Unsubscribe("Primary", need)
         assert.are.equal(0, out.needAlts)
         cycle()
         assert.are.equal("hamstring", out.recs[1].actionName)

@@ -1,0 +1,24 @@
+## Interface: 16001
+## Version: @project-version@
+## Title: Encore - Shared
+## Author: Chad (edase), from Hekili Forever by defzach
+## IconTexture: Interface\AddOns\Encore\Textures\Encore
+## Notes: Encore's shared content (racials, consumables, items, common auras). From Hekili Forever by defzach, based on the original work by Hekili.
+## X-Website: https://github.com/edase/encore
+## Dependencies: Encore
+## Group: Encore
+## LoadOnDemand: 1
+## X-Encore-ContentAPI: 16
+
+Shared\Auras.lua
+Shared\Consumables.lua
+Shared\Items.lua
+Races\Gnome.lua
+Races\NightElf.lua
+Races\Tauren.lua
+Races\Human.lua
+Races\Dwarf.lua
+Races\Orc.lua
+Races\Troll.lua
+Races\Undead.lua
+Races\HighOrderSkyborne.lua

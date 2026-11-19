@@ -5,12 +5,12 @@
 local M = {}
 
 --- The addon root (what WoW loads), relative to the repository root; Hekili.toc paths are relative to it.
-M.ROOT = "src/Hekili/"
+M.ROOT = "src/Encore/"
 
 --- The VirtualState files Hekili.toc lists, in order, as repository-relative paths (ROOT included).
 function M.files()
     local out = {}
-    for _, path in ipairs(require("helpers.addons").files("Hekili")) do
+    for _, path in ipairs(require("helpers.addons").files("Encore")) do
         if path:find("^" .. M.ROOT .. "Game/") then
             out[#out + 1] = path
         end
@@ -39,7 +39,7 @@ function M.module()
     for _, path in ipairs(M.files()) do
         local f = CHUNKS[path] or assert(loadfile(path))
         CHUNKS[path] = f
-        f("Hekili", ns)
+        f("Encore", ns)
     end
     return ns
 end
@@ -57,14 +57,14 @@ end
 
 --- Loads the core's build of the tracked set (Engine/Schema/Tracked.lua: `ns.BuildTracked`, `ns.TrackPassive`) into
 --- `ns` with `_G.Hekili` set to `hekili` (its State, Class) for the duration; `ns.SCHOOL` seeded as Spec.lua sets it.
-function M.schema(ns, hekili)
-    local saved = rawget(_G, "Hekili")
-    _G.Hekili = hekili
+function M.schema(ns, encore)
+    local saved = rawget(_G, "Encore")
+    _G.Encore = encore
     ns.SCHOOL = ns.SCHOOL or M.school()
     ns.FSR, ns.GCD_SPELL = ns.FSR or M.constant("FSR"), ns.GCD_SPELL or M.constant("GCD_SPELL")
     ns.ORACLE_MIN = ns.ORACLE_MIN or M.constant("ORACLE_MIN")
-    assert(loadfile(M.ROOT .. "Engine/Schema/Tracked.lua"))("Hekili", ns)
-    _G.Hekili = saved
+    assert(loadfile(M.ROOT .. "Engine/Schema/Tracked.lua"))("Encore", ns)
+    _G.Encore = saved
 end
 
 return M

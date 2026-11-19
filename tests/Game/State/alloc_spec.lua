@@ -303,7 +303,7 @@ describe("zero allocation", function()
         def.providers = { presence = "router", viewer = true }
         I.Build(def, 1)
         -- a saved proof store (L1113) with an entry for a hidden-now-and-then viewer: judged by some reads, not others
-        api.HekiliCDMProof = { v = 1, items = { [501] = { key = "spender_a", viewer = 4, unit = 1, silent = 0 } } }
+        api.EncoreCDMProof = { v = 1, items = { [501] = { key = "spender_a", viewer = 4, unit = 1, silent = 0 } } }
         ns.VirtualState.Start(api)
         local R = I.presence
         local n = 0

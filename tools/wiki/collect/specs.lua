@@ -15,7 +15,7 @@ local function each()
     local out = {}
     for _, token in ipairs(boot.tokens()) do
         local H = boot.get(token)
-        local kit = H.Hekili.Class.kit
+        local kit = H.Encore.Class.kit
         for _, s in ipairs(kit and kit.trees or {}) do
             out[#out + 1] = { class = className(token), H = H, spec = s }
         end
@@ -50,7 +50,7 @@ function M.nameplate()
     local rows = {}
     for _, e in ipairs(each()) do
         if not e.spec.unsupported then
-            local p = e.H.Hekili.DB.profile.specs[e.spec.id]
+            local p = e.H.Encore.DB.profile.specs[e.spec.id]
             rows[#rows + 1] = { e.class, e.spec.name, text.num(p.nameplateRange) }
         end
     end
@@ -67,7 +67,7 @@ function M.packs()
         else
             local default = s.options.package
             local others = {}
-            for name, p in pairs(e.H.Hekili.DB.profile.packs) do
+            for name, p in pairs(e.H.Encore.DB.profile.packs) do
                 if p.builtIn and p.spec == s.id and name ~= default then
                     others[#others + 1] = name
                 end

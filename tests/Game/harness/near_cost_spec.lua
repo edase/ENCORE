@@ -9,8 +9,8 @@ describe("the sim's near-cost mark (TimeToReady)", function()
     local H, S, r
     setup(function()
         H = headless.new()
-        S = H.Hekili.State
-        local class = H.Hekili.Class
+        S = H.Encore.State
+        local class = H.Encore.Class
         local spec = class.specs[0]
         spec:RegisterResource(H.env.Enum.PowerType.Mana)
         r = spec.resources.mana.state
@@ -165,7 +165,7 @@ describe("the sim's near-cost mark (TimeToReady)", function()
     )
 
     it("compiles a `.lo` or `.pct_lo` line's recheck to timeToLo", function()
-        local Sc = H.Hekili.Scripts
+        local Sc = H.Encore.Scripts
         assert.is_truthy((Sc:BuildRecheck("mana.lo>=370") or ""):find("timeToLo", 1, true))
         assert.is_truthy((Sc:BuildRecheck("mana.pct_lo>=50") or ""):find("timeToLo", 1, true))
     end)

@@ -16,7 +16,7 @@ local CLASSES = {
 }
 
 local function packSource(class)
-    local dir = "src/Hekili_" .. class:sub(1, 1) .. class:sub(2):lower()
+    local dir = "src/Encore_" .. class:sub(1, 1) .. class:sub(2):lower()
     local out, p = {}, assert(io.popen("find " .. dir .. " -name '*.lua' | sort"))
     for path in p:lines() do
         local f = assert(io.open(path))

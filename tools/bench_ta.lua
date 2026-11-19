@@ -4,7 +4,7 @@
 -- ms/tick (idle, and with a full pool expiring); fails above 0.02 ms a row or 0.10 ms either tick, or below 0.8 x
 -- tools/bench_ta_floor.lua's rows/s.
 -- Run: make bench-ta (or lua5.1 tools/bench_ta.lua [N]).
-package.path = "./src/Hekili/?.lua;./tests/?.lua;./?.lua;" .. package.path
+package.path = "./src/Encore/?.lua;./tests/?.lua;./?.lua;" .. package.path
 local load = require("Game.State.helpers.load")
 local fake = require("Game.State.helpers.fake_api")
 local fs = require("Game.State.helpers.fake_spec")

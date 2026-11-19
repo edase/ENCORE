@@ -85,8 +85,8 @@ M.VIEWERS = { "EssentialCooldownViewer", "UtilityCooldownViewer", "BuffIconCoold
 
 -- LibRangeCheck-3.0 run against the fake client (range plan R2, round 2): the vendored files, and what the library
 -- reads at load that the client leaves to the headless loader (WoW's Lua aliases, C_Timer, Enum).
-M.LIBSTUB = "src/Hekili/Libs/LibStub/LibStub.lua"
-M.LIBRANGECHECK = "src/Hekili/Libs/LibRangeCheck-3.0/LibRangeCheck-3.0.lua"
+M.LIBSTUB = "src/Encore/Libs/LibStub/LibStub.lua"
+M.LIBRANGECHECK = "src/Encore/Libs/LibRangeCheck-3.0/LibRangeCheck-3.0.lua"
 M.LIB_SHIMS = {
     tinsert = table.insert,
     tremove = table.remove,
@@ -730,7 +730,7 @@ function M.new()
     for _, name in ipairs(addons.ADDONS) do
         toc[name] = addons.meta(name)
     end
-    assert(toc.Hekili.Version, "src/Hekili/Hekili.toc: no ## Version line")
+    assert(toc.Encore.Version, "src/Encore/Encore.toc: no ## Version line")
     api.C_AddOns = {
         GetAddOnMetadata = function(name, k)
             return toc[name] and toc[name][k]

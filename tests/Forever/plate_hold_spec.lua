@@ -11,13 +11,13 @@ describe("the token plate count's hold (T1)", function()
 
     setup(function()
         H = mw.new("B")
-        local hooks = H.Hekili.Class.hooks
+        local hooks = H.Encore.Class.hooks
         hooks.TARGET_COUNT_CHANGED = hooks.TARGET_COUNT_CHANGED or {}
         H.ns.addHook("TARGET_COUNT_CHANGED", function(...)
             hooked = H.ns.getNumberTargets()
             return ...
         end)
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         t = H.ctl.now
     end)
 
@@ -38,8 +38,8 @@ describe("the token plate count's hold (T1)", function()
         assert(headless.cycle(H, t))
         assert.are.same({}, H.errors)
         local n = H.ns.getNumberTargets()
-        assert.are.equal(n, H.Hekili:GetNumTargets())
-        assert.are.equal(n, H.Hekili.Engine.Output.status.numTargets)
+        assert.are.equal(n, H.Encore:GetNumTargets())
+        assert.are.equal(n, H.Encore.Engine.Output.status.numTargets)
         assert.are.equal(n, hooked)
         return n
     end

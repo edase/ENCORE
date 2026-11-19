@@ -421,19 +421,19 @@ local function classData(H)
     end
     local X = { aura = {}, covered = {} }
     cache[H] = X
-    for key, a in pairs(H.Hekili.Class.auras) do
+    for key, a in pairs(H.Encore.Class.auras) do
         if type(key) == "string" and type(a) == "table" and a.id then
             local d = a.duration -- a function of the talents (Insect Swarm's): the booted state's answer
             X.aura[key] = { id = a.id, duration = type(d) == "function" and d() or d or 0, max_stack = a.max_stack }
         end
     end
-    X.eclipse = (H.Hekili.State.talent.eclipse.rank or 0) > 0
-    X.bloodFrenzy = (H.Hekili.State.talent.primal_fury.rank or 0) / 2 -- "Blood Frenzy" on Forever (catHit)
+    X.eclipse = (H.Encore.State.talent.eclipse.rank or 0) > 0
+    X.bloodFrenzy = (H.Encore.State.talent.primal_fury.rank or 0) / 2 -- "Blood Frenzy" on Forever (catHit)
     -- Primal Fury's rage on a crit of ours in Bear Form at the character's rank: the class file's white-crit rule read
     -- under the booted state's talents, less its rank-0 crit (the recording load's)
     local w, base = class(), rules().crit
     local talent = w.state.talent
-    w.state.talent = H.Hekili.State.talent
+    w.state.talent = H.Encore.State.talent
     X.primalFury = setfenv(w.resources[RAGE].models.mainhand.crit, w.state)() - base
     w.state.talent = talent
     pfRage = X.primalFury
@@ -573,12 +573,12 @@ local function content(name)
     -- The press's cost: the state's for the main power and any other the world keeps (Clearcasting's, from the
     -- run's truth instance: loop.run's), none for one it does not (mana in the Guardian world).
     local function cost(key, a, H, X)
-        local c = H.Hekili.State.action[key].cost or 0
+        local c = H.Encore.State.action[key].cost or 0
         local spendPt = ({ mana = MANA, rage = RAGE, energy = ENERGY })[a.spendType]
         if spendPt ~= pt and not P.res[spendPt] then
             return 0, nil
         elseif spendPt ~= pt then -- a kept pool's: the declared cost, priced as the engine prices it (ns.SpendPoints)
-            return H.ns.SpendPoints(declared(a), H.Hekili.State[a.spendType], a), spendPt
+            return H.ns.SpendPoints(declared(a), H.Encore.State[a.spendType], a), spendPt
         end
         if X.covered[a.id] and H.ns.VirtualState.Aura("player", X.aura.clearcasting.id, H.ctl.now) then
             return 0, spendPt, true
@@ -594,9 +594,9 @@ local function content(name)
         if not m then
             error("unmapped key " .. tostring(key), 2)
         end
-        local a = H.Hekili.Class.abilities[key]
+        local a = H.Encore.Class.abilities[key]
         local X = classData(H)
-        local S = H.Hekili.State
+        local S = H.Encore.State
         local c, cpt, free = cost(key, a, H, X)
         -- Clearcasting (owner L1110, in game): it procs on a cast, at its success, and the next covered cast that costs
         -- something takes it. So a covered press is priced from the world's aura when it succeeds (`price`: a hard
@@ -638,7 +638,7 @@ local function content(name)
             price = price,
             amount = m.amount,
             drain = m.drain,
-            refund = world.refundOf(H.Hekili.Class, key), -- an avoid gives back the kit's share (W.hit)
+            refund = world.refundOf(H.Encore.Class, key), -- an avoid gives back the kit's share (W.hit)
             outcomes = M.OUTCOMES[key], -- nil: the special melee tables
             crits = m.crits, -- a queued strike's crit at its swing (behaviours.lua)
         }
@@ -682,9 +682,9 @@ local function content(name)
         local out = {}
         local X = classData(H)
         for key, m in pairs(M.MAP) do
-            local a = H.Hekili.Class.abilities[key]
+            local a = H.Encore.Class.abilities[key]
             if a and C.IDS[key] then
-                local c = H.Hekili.State.action[key].cost or 0
+                local c = H.Encore.State.action[key].cost or 0
                 local cpt = ({ rage = RAGE, energy = ENERGY, mana = MANA })[a.spendType]
                 local covered = X.covered[a.id]
                 local function answer(W, e, power, view)
@@ -720,7 +720,7 @@ local function content(name)
     function C.uptime(H)
         local out = {}
         for _, key in ipairs(P.uptime) do
-            out[#out + 1] = { key, H.Hekili.Class.auras[key].id }
+            out[#out + 1] = { key, H.Encore.Class.auras[key].id }
         end
         return out
     end

@@ -53,16 +53,16 @@ describe("the priority importer", function()
     end)
 
     it("keeps a line's ^ and everything after it, as one entry", function()
-        local out = H.Hekili:ParseActionList("actions+=/slam,if=buff.a.up^action.slam.ready=1\n")
+        local out = H.Encore:ParseActionList("actions+=/slam,if=buff.a.up^action.slam.ready=1\n")
         assert.are.equal(1, #out)
         assert.are.equal("buff.a.up^action.slam.ready=1", bare(out[1].criteria))
-        local lists = H.Hekili:ImportSimcAPL(nil, nil, "actions=slam,if=buff.a.up^action.slam.ready=1\n")
+        local lists = H.Encore:ImportSimcAPL(nil, nil, "actions=slam,if=buff.a.up^action.slam.ready=1\n")
         assert.are.equal(1, #lists.default)
         assert.are.equal("buff.a.up^action.slam.ready=1", bare(lists.default[1].criteria))
     end)
 
     it("round-trips a pure=1 variable line as make_pack writes it (no op, value unspaced)", function()
-        local got = H.Hekili:ImportSimcAPL(nil, nil, "actions=variable,name=v_x,pure=1,value=(a=0&b>1)&c\n")
+        local got = H.Encore:ImportSimcAPL(nil, nil, "actions=variable,name=v_x,pure=1,value=(a=0&b>1)&c\n")
         local e = { action = "variable", var_name = "v_x", pure = "1", value = "(a=0&b>1)&c", enabled = true }
         assert.are.equal("1", tostring(got.default[1].pure))
         assert.are.same({}, entryDiff(e, got.default[1]))
@@ -82,7 +82,7 @@ describe("the priority importer", function()
             .. "actions+=/open_window,name=w,if=rage>1\n"
             .. "actions+=/close_window,name=w,if=window.w.up&!window.w.done\n"
         local want = mp.parse(text).default
-        local got, warnings = H.Hekili:ParseActionList(text, true)
+        local got, warnings = H.Encore:ParseActionList(text, true)
         assert.are.same({}, warnings or {})
         assert.are.equal(#want, #got)
         local hits = {}
@@ -97,7 +97,7 @@ describe("the priority importer", function()
     end)
 
     it("splits a line only at commas outside parentheses", function()
-        local out = H.Hekili:ParseActionList("actions+=/slam,use_off_gcd=1,if=min(rage,energy)>max(1,2),focus=2\n")
+        local out = H.Encore:ParseActionList("actions+=/slam,use_off_gcd=1,if=min(rage,energy)>max(1,2),focus=2\n")
         assert.are.equal(1, #out)
         assert.are.equal("slam", out[1].action)
         assert.are.equal(1, out[1].use_off_gcd)
@@ -106,13 +106,13 @@ describe("the priority importer", function()
     end)
 
     it("splits at every comma, with a warning naming the line, when a ( is never closed", function()
-        local out, warnings = H.Hekili:ParseActionList("actions+=/slam,label=(burst,if=rage>50\n")
+        local out, warnings = H.Encore:ParseActionList("actions+=/slam,label=(burst,if=rage>50\n")
         assert.are.equal(1, #out)
         assert.are.equal("(burst", out[1].label)
         assert.are.equal("rage>50", bare(out[1].criteria))
         assert.are.same({ "Line 1: Unclosed '(' in 'slam,label=(burst,if=rage>50'; split at every comma." }, warnings)
         -- the same through a "# Caption::Description" comment, whose caption goes onto the line
-        local lists = H.Hekili:ImportSimcAPL(nil, nil, "# Burst (big::the opener\nactions=slam,if=rage>50\n")
+        local lists = H.Encore:ImportSimcAPL(nil, nil, "# Burst (big::the opener\nactions=slam,if=rage>50\n")
         assert.are.equal("rage>50", bare(lists.default[1].criteria))
         assert.are.equal("Burst (big", lists.default[1].caption)
         assert.are.equal("the opener", lists.default[1].description)
@@ -134,9 +134,9 @@ local WORLDS = {
 
 -- the compile errors of every loaded script: its conditions (syntax or the pcall at the booted spec) and its modifiers
 local function scriptErrors(H, names)
-    local DB, out = H.Hekili.Scripts.DB, {}
+    local DB, out = H.Encore.Scripts.DB, {}
     for name in pairs(names) do
-        for list, entries in pairs(H.Hekili.DB.profile.packs[name].lists) do
+        for list, entries in pairs(H.Encore.DB.profile.packs[name].lists) do
             for i in ipairs(entries) do
                 local id = name .. ":" .. list .. ":" .. i
                 local s = DB[id]
@@ -162,7 +162,7 @@ end
 describe("every shipped pack's Source tab text", function()
     it("re-imports to the pack's own entries, every line compiling", function()
         local manifest, seen = {}, {}
-        local pipe = assert(io.popen("ls src/Hekili_*/APLs/packs.lua"))
+        local pipe = assert(io.popen("ls src/Encore_*/APLs/packs.lua"))
         for file in pipe:lines() do
             local def = dofile(file)
             for _, name in ipairs(def.packs) do
@@ -178,19 +178,19 @@ describe("every shipped pack's Source tab text", function()
             local H = headless.new({ character = C.character(), pack = C.PACK })
             assert.are.same({}, H.loadErrors)
             local names = {}
-            for name, p in pairs(H.Hekili.DB.profile.packs) do
+            for name, p in pairs(H.Encore.DB.profile.packs) do
                 if manifest[name] == class then
                     names[name] = true
                 end
             end
-            H.Hekili:LoadScripts()
+            H.Encore:LoadScripts()
             local before = scriptErrors(H, names)
             for name in pairs(names) do
                 seen[name] = true
-                local p = H.Hekili.DB.profile.packs[name]
+                local p = H.Encore.DB.profile.packs[name]
                 -- the Source tab's text is the pack's `profile` (GetPackOption returns it as is); Import strips `"`
                 assert.is_string(p.profile, name)
-                local got = H.Hekili:ImportSimcAPL(nil, nil, (p.profile:gsub('"', "")))
+                local got = H.Encore:ImportSimcAPL(nil, nil, (p.profile:gsub('"', "")))
                 for list, entries in pairs(got) do
                     local want = p.lists[list]
                     if not want then -- only the importer's placeholder for an absent precombat or default list
@@ -220,7 +220,7 @@ describe("every shipped pack's Source tab text", function()
                 end
                 p.lists = got
             end
-            H.Hekili:LoadScripts()
+            H.Encore:LoadScripts()
             assert.are.same({}, before)
             for _, e in ipairs(scriptErrors(H, names)) do
                 hits[#hits + 1] = e

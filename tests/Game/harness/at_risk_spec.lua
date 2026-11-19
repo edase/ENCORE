@@ -7,7 +7,7 @@ describe("the at_risk condition", function()
 
     setup(function()
         H = headless.new({ raw = { "UnitHealth", "UnitHealthMax", "UnitExists", "UnitIsDeadOrGhost" } })
-        S, ctl = H.Hekili.State, H.ctl
+        S, ctl = H.Encore.State, H.ctl
     end)
 
     local function count(party)

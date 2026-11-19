@@ -41,32 +41,32 @@ local function settle(H)
     end
     assert.is_truthy(frame, "no event frame with an OnUpdate")
     for _ = 1, 2 do
-        if not H.Hekili.PendingSpecializationChange then
+        if not H.Encore.PendingSpecializationChange then
             return
         end
         frame.__scripts.OnUpdate(frame, 0.016)
     end
-    assert.is_false(H.Hekili.PendingSpecializationChange, "the spec change did not settle")
+    assert.is_false(H.Encore.PendingSpecializationChange, "the spec change did not settle")
 end
 
 describe("the active spec (headless Warrior)", function()
     it("picks the dominant tree on first login and stores it", function()
         local H = boot()
         settle(H)
-        assert.are.equal(ARMS, H.Hekili.State.spec.id)
-        assert.are.equal(1491, H.Hekili.State.spec.clientID)
-        assert.are.same({ last = 1 }, H.Hekili.DB.profile.specChoice[CHAR]) -- the tree seen, no choice made
-        assert.are.equal("arms", H.Hekili.Engine.Output.status.specKey)
-        assert.is_truthy(H.Hekili:GenerateProfile():find("\nspec: arms (", 1, true))
+        assert.are.equal(ARMS, H.Encore.State.spec.id)
+        assert.are.equal(1491, H.Encore.State.spec.clientID)
+        assert.are.same({ last = 1 }, H.Encore.DB.profile.specChoice[CHAR]) -- the tree seen, no choice made
+        assert.are.equal("arms", H.Encore.Engine.Output.status.specKey)
+        assert.is_truthy(H.Encore:GenerateProfile():find("\nspec: arms (", 1, true))
         local f = boot({ talents = FURY_TALENTS })
         settle(f)
-        assert.are.equal(FURY, f.Hekili.State.spec.id)
-        assert.are.same({ last = 2 }, f.Hekili.DB.profile.specChoice[CHAR])
+        assert.are.equal(FURY, f.Encore.State.spec.id)
+        assert.are.same({ last = 2 }, f.Encore.DB.profile.specChoice[CHAR])
     end)
 
     it("binds each built-in priority to its spec and makes it that spec's package", function()
         local H = boot()
-        local p = H.Hekili.DB.profile
+        local p = H.Encore.DB.profile
         assert.are.same({ ARMS, FURY, PROT }, {
             p.packs["Arms (wowsims.com)"].spec,
             p.packs["Fury (wowsims.com)"].spec,
@@ -83,38 +83,38 @@ describe("the active spec (headless Warrior)", function()
         function()
             local H = boot({ talents = {}, level = 5 })
             settle(H)
-            assert.are.equal(ARMS, H.Hekili.State.spec.id)
-            assert.are.equal("default", H.Hekili.State.spec.source)
-            assert.are.same({}, H.Hekili.DB.profile.specChoice[CHAR])
+            assert.are.equal(ARMS, H.Encore.State.spec.id)
+            assert.are.equal("default", H.Encore.State.spec.source)
+            assert.are.same({}, H.Encore.DB.profile.specChoice[CHAR])
             assert.is_true(headless.cycle(H, H.ctl.now + 0.2))
             assert.are.same({}, H.errors)
             H.ctl.traits = traits(FURY_TALENTS)
             H.Fire("TRAIT_CONFIG_UPDATED") -- the event Forever fires for spent points (probe session W)
-            assert.is_true(H.Hekili.PendingSpecializationChange)
+            assert.is_true(H.Encore.PendingSpecializationChange)
             settle(H)
-            assert.are.equal(FURY, H.Hekili.State.spec.id)
-            assert.are.same({ last = 2 }, H.Hekili.DB.profile.specChoice[CHAR])
+            assert.are.equal(FURY, H.Encore.State.spec.id)
+            assert.are.same({ last = 2 }, H.Encore.DB.profile.specChoice[CHAR])
         end
     )
 
     it("keeps a spec activated for a tree across a /reload and another build of that tree; no hint", function()
         local H1 = boot()
         settle(H1)
-        assert.are.equal("fury", H1.Hekili:SetSpecChoice("fu").key) -- a prefix
+        assert.are.equal("fury", H1.Encore:SetSpecChoice("fu").key) -- a prefix
         settle(H1)
-        assert.are.equal(FURY, H1.Hekili.State.spec.id)
-        assert.are.same({ [1] = "fury", last = 1 }, H1.Hekili.DB.profile.specChoice[CHAR]) -- for the Arms tree
-        local H = boot({ saved = H1.env.HekiliDB }) -- Arms talents, Fury chosen for them
+        assert.are.equal(FURY, H1.Encore.State.spec.id)
+        assert.are.same({ [1] = "fury", last = 1 }, H1.Encore.DB.profile.specChoice[CHAR]) -- for the Arms tree
+        local H = boot({ saved = H1.env.EncoreDB }) -- Arms talents, Fury chosen for them
         settle(H)
-        assert.are.equal(FURY, H.Hekili.State.spec.id)
-        assert.are.equal("stored", H.Hekili.State.spec.source)
+        assert.are.equal(FURY, H.Encore.State.spec.id)
+        assert.are.equal("stored", H.Encore.State.spec.source)
         H.ctl.traits = traits({ [12294] = 1, [12296] = 1, [12834] = 3 }) -- a respec deeper into Arms
         H.Fire("PLAYER_TALENT_UPDATE")
         settle(H)
-        assert.are.equal(FURY, H.Hekili.State.spec.id)
-        assert.is_nil(H.Hekili.GetSpecHint) -- the hint is gone: a swap to another tree switches instead
-        assert.is_nil(H.Hekili:SetSpecChoice("nope"))
-        assert.is_nil(H.Hekili:SetSpecChoice("")) -- every key is a prefix of "": ambiguous
+        assert.are.equal(FURY, H.Encore.State.spec.id)
+        assert.is_nil(H.Encore.GetSpecHint) -- the hint is gone: a swap to another tree switches instead
+        assert.is_nil(H.Encore:SetSpecChoice("nope"))
+        assert.is_nil(H.Encore:SetSpecChoice("")) -- every key is a prefix of "": ambiguous
     end)
 
     it("follows a dual-spec swap: Protection, Arms, Protection", function()
@@ -122,48 +122,48 @@ describe("the active spec (headless Warrior)", function()
         local ARMS_TALENTS = { [12294] = 1, [12296] = 1, [12834] = 3 }
         local H = boot({ talents = PROT_TALENTS })
         settle(H)
-        assert.are.equal(PROT, H.Hekili.State.spec.id)
+        assert.are.equal(PROT, H.Encore.State.spec.id)
         local seen = {}
         for _, talents in ipairs({ ARMS_TALENTS, PROT_TALENTS }) do
             H.ctl.traits = traits(talents)
             H.Fire("TRAIT_CONFIG_UPDATED")
             settle(H)
-            seen[#seen + 1] = H.Hekili.State.spec.id
+            seen[#seen + 1] = H.Encore.State.spec.id
         end
         assert.are.same({ ARMS, PROT }, seen)
-        assert.are.equal(3, H.Hekili.DB.profile.specChoice[CHAR].last)
+        assert.are.equal(3, H.Encore.DB.profile.specChoice[CHAR].last)
     end)
 
     it("moves a legacy scalar choice onto the current dominant tree once", function()
         local saved = { profiles = { Default = { specChoice = { [CHAR] = "fury" } } } }
         local H = boot({ saved = saved }) -- Arms talents
         settle(H)
-        assert.are.equal(FURY, H.Hekili.State.spec.id)
-        assert.are.same({ [1] = "fury", last = 1 }, H.Hekili.DB.profile.specChoice[CHAR])
+        assert.are.equal(FURY, H.Encore.State.spec.id)
+        assert.are.same({ [1] = "fury", last = 1 }, H.Encore.DB.profile.specChoice[CHAR])
         H.ctl.traits = traits(FURY_TALENTS) -- the Fury tree: nothing chosen for it, its first spec
         H.Fire("TRAIT_CONFIG_UPDATED")
         settle(H)
-        assert.are.equal(FURY, H.Hekili.State.spec.id)
-        assert.are.same({ [1] = "fury", last = 2 }, H.Hekili.DB.profile.specChoice[CHAR])
+        assert.are.equal(FURY, H.Encore.State.spec.id)
+        assert.are.same({ [1] = "fury", last = 2 }, H.Encore.DB.profile.specChoice[CHAR])
     end)
 
     it("ends an OnUpdate pass whose early pick was on stale ranks on the settled spec (the extra pass runs)", function()
         local H = boot({ talents = {}, level = 5 })
         settle(H)
-        assert.are.equal(ARMS, H.Hekili.State.spec.id)
+        assert.are.equal(ARMS, H.Encore.State.spec.id)
         -- new points the talent walk has not seen yet: the pass picks on the old ranks (no points: Arms), its own walk
         -- then sees Fury, and SettleSpecChoice asks for one more pass
         H.ctl.traits = traits(FURY_TALENTS)
-        H.Hekili.PendingSpecializationChange = true
+        H.Encore.PendingSpecializationChange = true
         settle(H)
-        assert.are.same({ last = 2 }, H.Hekili.DB.profile.specChoice[CHAR])
-        assert.are.equal(FURY, H.Hekili.State.spec.id)
+        assert.are.same({ last = 2 }, H.Encore.DB.profile.specChoice[CHAR])
+        assert.are.equal(FURY, H.Encore.State.spec.id)
     end)
 
     it("selects the spec of the priority a harness instance asks for", function()
         local H = boot({ pack = "Protection (wowsims.com)" })
-        assert.are.equal(PROT, H.Hekili.State.spec.id)
-        assert.are.equal("Protection (wowsims.com)", H.Hekili.DB.profile.specs[PROT].package)
+        assert.are.equal(PROT, H.Encore.State.spec.id)
+        assert.are.equal("Protection (wowsims.com)", H.Encore.DB.profile.specs[PROT].package)
     end)
 
     it("refreshes the belief's settings copy when the legacy profile's settings migrate onto the spec", function()
@@ -171,30 +171,30 @@ describe("the active spec (headless Warrior)", function()
             { profiles = { Default = { specs = { [1491] = { settings = { wowsims_recklessness = true } } } } } }
         local H = boot({ saved = saved })
         settle(H)
-        assert.are.equal(ARMS, H.Hekili.State.spec.id)
-        assert.is_true(H.Hekili.DB.profile.specs[ARMS].settings.wowsims_recklessness)
+        assert.are.equal(ARMS, H.Encore.State.spec.id)
+        assert.is_true(H.Encore.DB.profile.specs[ARMS].settings.wowsims_recklessness)
         assert.is_true(H.ns.VirtualStateInternal.def.settings.wowsims_recklessness)
     end)
 
     it("refreshes the belief's settings copy when the options page fills a spec setting's default", function()
         local H = boot()
         settle(H)
-        local prof = H.Hekili.DB.profile.specs[ARMS].settings
+        local prof = H.Encore.DB.profile.specs[ARMS].settings
         prof.wowsims_recklessness = nil
-        H.Hekili:SettingsChanged()
+        H.Encore:SettingsChanged()
         assert.is_nil(H.ns.VirtualStateInternal.def.settings.wowsims_recklessness)
-        H.Hekili:EmbedSpecOptions()
+        H.Encore:EmbedSpecOptions()
         assert.is_not_nil(prof.wowsims_recklessness)
         assert.are.equal(prof.wowsims_recklessness, H.ns.VirtualStateInternal.def.settings.wowsims_recklessness)
     end)
 end)
 
-describe("the spec options and /hekili spec (headless Warrior)", function()
+describe("the spec options and /encore spec (headless Warrior)", function()
     -- The spec nodes, then the priorities under them (RefreshOptions's order).
     local function embed(H)
-        H.Hekili:EmbedSpecOptions()
-        H.Hekili:EmbedPackOptions()
-        return H.Hekili.Options.args.packs.plugins.specializations
+        H.Encore:EmbedSpecOptions()
+        H.Encore:EmbedPackOptions()
+        return H.Encore.Options.args.packs.plugins.specializations
     end
 
     it("has no steady icons setting: they are always on (owner 2026-11-07)", function()
@@ -222,24 +222,24 @@ describe("the spec options and /hekili spec (headless Warrior)", function()
         assert.is_nil(prefs("protection").wowsims_recklessness) -- Protection's priority reads no setting
         nodes.fury.args.core.args.activate.func()
         settle(H)
-        assert.are.equal(FURY, H.Hekili.State.spec.id)
-        assert.are.equal("fury", H.Hekili.DB.profile.specChoice[CHAR][1])
-        local printed, print0 = {}, H.Hekili.Print
-        H.Hekili.Print = function(_, text)
+        assert.are.equal(FURY, H.Encore.State.spec.id)
+        assert.are.equal("fury", H.Encore.DB.profile.specChoice[CHAR][1])
+        local printed, print0 = {}, H.Encore.Print
+        H.Encore.Print = function(_, text)
             printed[#printed + 1] = text
         end
-        H.Hekili:CmdLine("spec") -- the list, then an unmatched name (the list again): no change
-        H.Hekili:CmdLine("spec zzz")
+        H.Encore:CmdLine("spec") -- the list, then an unmatched name (the list again): no change
+        H.Encore:CmdLine("spec zzz")
         local out = table.concat(printed, "\n")
         assert.is_truthy(out:find("|cFFFFD100fury|r |cFF00FF00(current)|r", 1, true))
         assert.is_falsy(out:find("arms|r |cFF00FF00(current)", 1, true))
         assert.is_truthy(out:find("No single specialization matches 'zzz'.", 1, true))
         assert.is_falsy(out:find("favor", 1, true)) -- no talent hint
-        H.Hekili.Print = print0
-        assert.are.equal("fury", H.Hekili.DB.profile.specChoice[CHAR][1])
-        H.Hekili:CmdLine("spec prot")
+        H.Encore.Print = print0
+        assert.are.equal("fury", H.Encore.DB.profile.specChoice[CHAR][1])
+        H.Encore:CmdLine("spec prot")
         settle(H)
-        assert.are.equal(PROT, H.Hekili.State.spec.id)
+        assert.are.equal(PROT, H.Encore.State.spec.id)
     end)
 
     it("has no Active Specialization dropdown anywhere", function()
@@ -264,14 +264,14 @@ describe("the spec options and /hekili spec (headless Warrior)", function()
                 end
             end
         end
-        walk(H.Hekili.Options, "Options")
+        walk(H.Encore.Options, "Options")
         assert.are.same({}, found)
     end)
 
     it("puts each priority under its spec's node; Priorities keeps sharing and the new-priority controls", function()
         local H = boot()
         settle(H)
-        local packs = H.Hekili.DB.profile.packs
+        local packs = H.Encore.DB.profile.packs
         local aaa = {} -- a custom Fury pack whose name sorts before "Arms": spec order, not name order
         for k, v in pairs(packs["Fury (wowsims.com)"]) do
             aaa[k] = v
@@ -298,7 +298,7 @@ describe("the spec options and /hekili spec (headless Warrior)", function()
             order("arms", "Arms (wowsims.com)") < order("fury", "Aaa")
                 and order("fury", "Aaa") < order("fury", "Fury (wowsims.com)")
         )
-        local root = H.Hekili.Options.args.packs
+        local root = H.Encore.Options.args.packs
         assert.are.same({}, root.plugins.packages)
         assert.is_nil(root.plugins.links)
         local keys = {}
@@ -317,14 +317,14 @@ describe("the spec options and /hekili spec (headless Warrior)", function()
             "sharePacks",
         }, keys)
         -- a pack's own options read its name after its spec's key, or at info[2] directly under Priorities
-        assert.are.equal(FURY, H.Hekili:GetPackOption({ "packs", "fury", "Aaa", "pack", "spec" }))
-        assert.are.equal(FURY, H.Hekili:GetPackOption({ "packs", "Aaa", "pack", "spec" }))
+        assert.are.equal(FURY, H.Encore:GetPackOption({ "packs", "fury", "Aaa", "pack", "spec" }))
+        assert.are.equal(FURY, H.Encore:GetPackOption({ "packs", "Aaa", "pack", "spec" }))
     end)
 
     it("moves a priority's node to its new spec when its Specialization changes", function()
         local H = boot()
         settle(H)
-        local packs = H.Hekili.DB.profile.packs
+        local packs = H.Encore.DB.profile.packs
         local aaa = {}
         for k, v in pairs(packs["Fury (wowsims.com)"]) do
             aaa[k] = v
@@ -333,25 +333,25 @@ describe("the spec options and /hekili spec (headless Warrior)", function()
         packs.Aaa = aaa
         local nodes = embed(H)
         assert.is_not_nil(nodes.fury.plugins.packs.Aaa)
-        H.Hekili:SetPackOption({ "packs", "fury", "Aaa", "pack", "spec" }, PROT)
+        H.Encore:SetPackOption({ "packs", "fury", "Aaa", "pack", "spec" }, PROT)
         assert.are.equal(PROT, packs.Aaa.spec)
         assert.is_nil(nodes.fury.plugins.packs.Aaa)
         assert.is_not_nil(nodes.protection.plugins.packs.Aaa)
         local ACD = H.env.LibStub("AceConfigDialog-3.0")
-        assert.are.equal("packs\001protection\001Aaa", ACD:GetStatusTable("Hekili").groups.selected)
+        assert.are.equal("packs\001protection\001Aaa", ACD:GetStatusTable("Encore").groups.selected)
     end)
 
     it("hides Delete and locks Specialization on a built-in priority outside a Dev build (gap BA)", function()
         local H = boot()
         settle(H)
-        local packs = H.Hekili.DB.profile.packs
+        local packs = H.Encore.DB.profile.packs
         local aaa = {}
         for k, v in pairs(packs["Arms (wowsims.com)"]) do
             aaa[k] = v
         end
         aaa.builtIn = false
         packs.Aaa = aaa
-        H.Hekili.Version = "v0.3.0"
+        H.Encore.Version = "v0.3.0"
         local nodes = embed(H)
         local pack = function(name)
             return nodes.arms.plugins.packs[name].args.pack.args
@@ -360,14 +360,14 @@ describe("the spec options and /hekili spec (headless Warrior)", function()
         assert.is_true(pack("Arms (wowsims.com)").spec.disabled)
         assert.is_false(pack("Aaa").deletePack.hidden())
         assert.is_falsy(pack("Aaa").spec.disabled)
-        H.Hekili.Version = "Dev-test"
+        H.Encore.Version = "Dev-test"
         assert.is_false(pack("Arms (wowsims.com)").deletePack.hidden())
     end)
 
     it("deleting the active priority falls back to a default that still exists, else (none)", function()
         local H = boot()
         settle(H)
-        local packs, specs = H.Hekili.DB.profile.packs, H.Hekili.DB.profile.specs
+        local packs, specs = H.Encore.DB.profile.packs, H.Encore.DB.profile.specs
         local aaa = {}
         for k, v in pairs(packs["Arms (wowsims.com)"]) do
             aaa[k] = v
@@ -400,9 +400,9 @@ describe("the spec options and /hekili spec (headless Warrior)", function()
         -- unwrapped: the stock view, and the active spec's name in gold in place of the tree's mark
         assert.are.equal("|cFFFFD100Arms|r", nodes.arms.name())
         assert.are.equal("Fury", nodes.fury.name())
-        H.Hekili:WrapOptionsDialog() -- as the open path does
+        H.Encore:WrapOptionsDialog() -- as the open path does
         assert.are_not.equal(newer, ACD.FeedGroup)
-        local ok, err = pcall(ACD.FeedGroup, ACD, "Hekili", H.Hekili.Options, { children = {} }, nil, {})
+        local ok, err = pcall(ACD.FeedGroup, ACD, "Encore", H.Encore.Options, { children = {} }, nil, {})
         assert.is_false(ok)
         assert.is_truthy(tostring(err):find("boom", 1, true))
         assert.are.equal("tree", depth) -- fed at the root: the tree's view
@@ -423,7 +423,7 @@ describe("the spec options and /hekili spec (headless Warrior)", function()
         assert.is_true(nodes.arms.order() < nodes.fury.order() and nodes.fury.order() < nodes.protection.order())
         core("protection").activate.func()
         settle(H)
-        assert.are.equal(PROT, H.Hekili.State.spec.id)
+        assert.are.equal(PROT, H.Encore.State.spec.id)
         assert.are.same({ false, true }, { core("arms").activate.hidden(), core("arms").activeMarker.hidden() })
         assert.are.same(
             { true, false },
@@ -449,10 +449,10 @@ describe("the spec options and /hekili spec (headless Warrior)", function()
         local info = { "packs", "fury", "core", "enabled" }
         assert.is_false(toggle.get(info))
         toggle.set(info, true)
-        assert.is_false(H.Hekili.DB.profile.specs[FURY].enabled)
+        assert.is_false(H.Encore.DB.profile.specs[FURY].enabled)
         assert.is_true(toggle.get(info))
         toggle.set(info, false)
-        assert.is_true(H.Hekili.DB.profile.specs[FURY].enabled)
+        assert.is_true(H.Encore.DB.profile.specs[FURY].enabled)
     end)
 
     it("gives a spec node tabs on its page, its priorities in the tree, and marks the active spec's row", function()
@@ -465,8 +465,8 @@ describe("the spec options and /hekili spec (headless Warrior)", function()
         assert.is_false(nodes.arms.plugins.packs["Arms (wowsims.com)"].hidden())
         -- the real AceConfigDialog, headless (its widgets on the harness's frames)
         local ACD = H.env.LibStub("AceConfigDialog-3.0")
-        ACD:Open("Hekili")
-        local tree = ACD.OpenFrames.Hekili.children[1]
+        ACD:Open("Encore")
+        local tree = ACD.OpenFrames.Encore.children[1]
         local top, entries, kids = {}, {}, {}
         for _, e in ipairs(tree.tree) do
             top[#top + 1] = e.value
@@ -491,10 +491,10 @@ describe("the spec options and /hekili spec (headless Warrior)", function()
             fury = { "Fury (wowsims.com)" },
             protection = { "Protection (wowsims.com)" },
         }, kids)
-        assert.is_true(ACD:GetStatusTable("Hekili").groups.groups.packs) -- Priorities starts expanded
+        assert.is_true(ACD:GetStatusTable("Encore").groups.groups.packs) -- Priorities starts expanded
         -- the current spec's node starts expanded too, the others not; its active priority wears the ready check
-        local Status = H.Hekili.Engine.Output.status
-        local groups = ACD:GetStatusTable("Hekili").groups.groups
+        local Status = H.Encore.Engine.Output.status
+        local groups = ACD:GetStatusTable("Encore").groups.groups
         assert.is_true(groups["packs\001" .. Status.specKey])
         for _, k in ipairs({ "arms", "fury", "protection" }) do
             if k ~= Status.specKey then
@@ -503,7 +503,7 @@ describe("the spec options and /hekili spec (headless Warrior)", function()
         end
         local cur = nodes[Status.specKey].plugins.packs[Status.specKey:gsub("^%l", string.upper) .. " (wowsims.com)"]
         assert.is_truthy(cur.name():find("ReadyCheck-Ready", 1, true))
-        H.Hekili.DB.profile.specs[Status.specID].package = "(none)"
+        H.Encore.DB.profile.specs[Status.specID].package = "(none)"
         assert.is_nil(cur.name():find("ReadyCheck-Ready", 1, true))
         tree:SelectByValue("packs\001fury") -- the spec's page: its three tabs, no priority among them
         local tabs = {}
@@ -511,9 +511,9 @@ describe("the spec options and /hekili spec (headless Warrior)", function()
             tabs[#tabs + 1] = e.value
         end
         assert.are.same({ "core", "targets", "performance" }, tabs)
-        H.Hekili:SelectPack("Fury (wowsims.com)") -- under its spec in the tree
-        assert.are.equal("packs\001fury\001Fury (wowsims.com)", ACD:GetStatusTable("Hekili").groups.selected)
-        tree = ACD.OpenFrames.Hekili.children[1] -- the dialog redrew on the selection
+        H.Encore:SelectPack("Fury (wowsims.com)") -- under its spec in the tree
+        assert.are.equal("packs\001fury\001Fury (wowsims.com)", ACD:GetStatusTable("Encore").groups.selected)
+        tree = ACD.OpenFrames.Encore.children[1] -- the dialog redrew on the selection
         -- the rows: plain buttons (the harness has no OptionsListButtonTemplate), drawn by a refresh that stops
         -- before laying out (no height), so only the hook places the mark
         local function region() -- the harness's frames answer IsShown false: these keep their shown state
@@ -545,8 +545,8 @@ describe("the spec options and /hekili spec (headless Warrior)", function()
         local function marked()
             local out, made = {}, 0
             for _, button in ipairs(tree.buttons) do
-                made = made + (button.hekiliActive and 1 or 0)
-                if button.hekiliActive and button.hekiliActive:IsShown() then
+                made = made + (button.encoreActive and 1 or 0)
+                if button.encoreActive and button.encoreActive:IsShown() then
                     out[#out + 1] = button.uniquevalue
                 end
             end
@@ -582,7 +582,7 @@ describe("the legacy profile and shares (headless Warrior)", function()
         }
         local H = boot({ saved = saved })
         settle(H)
-        local p = H.Hekili.DB.profile
+        local p = H.Encore.DB.profile
         assert.are.same({ true, true, true }, {
             p.specs[ARMS].settings.wowsims_recklessness,
             p.specs[FURY].settings.wowsims_recklessness,
@@ -597,12 +597,12 @@ describe("the legacy profile and shares (headless Warrior)", function()
         assert.are.equal(ARMS, p.packs.Mine.spec)
         assert.is_true(p.specMigrated.WARRIOR)
         p.specs[ARMS].settings.wowsims_stance_dance = true
-        H.Hekili:SpecializationChanged()
+        H.Encore:SpecializationChanged()
         assert.is_true(p.specs[ARMS].settings.wowsims_stance_dance)
         assert.is_true(p.specs[1491].settings.wowsims_recklessness)
-        local H2 = boot({ saved = H.env.HekiliDB }) -- a /reload: the migration does not run again
+        local H2 = boot({ saved = H.env.EncoreDB }) -- a /reload: the migration does not run again
         settle(H2)
-        local p2 = H2.Hekili.DB.profile
+        local p2 = H2.Encore.DB.profile
         assert.is_true(p2.specs[ARMS].settings.wowsims_stance_dance)
         assert.are.equal("Mine", p2.specs[ARMS].package)
         assert.is_true(p2.specMigrated.WARRIOR)
@@ -611,39 +611,39 @@ describe("the legacy profile and shares (headless Warrior)", function()
     it("exports the spec as its share key and imports keys and legacy ids as this session's spec", function()
         local H = boot()
         settle(H)
-        local str = H.Hekili.SerializeActionPack("Fury (wowsims.com)")
+        local str = H.Encore.SerializeActionPack("Fury (wowsims.com)")
         assert.are.equal("WARRIOR:fury", mp.decode(str).spec)
-        assert.are.equal(FURY, H.Hekili.DeserializeActionPack(str).payload.spec)
+        assert.are.equal(FURY, H.Encore.DeserializeActionPack(str).payload.spec)
         local legacy = mp.encode({ name = "Old", version = 1, spec = 1491, desc = "", simc = "", lists = {} })
-        assert.are.equal(ARMS, H.Hekili.DeserializeActionPack(legacy).payload.spec)
+        assert.are.equal(ARMS, H.Encore.DeserializeActionPack(legacy).payload.spec)
         local other =
             mp.encode({ name = "Ret", version = 1, spec = "PALADIN:retribution", desc = "", simc = "", lists = {} })
-        assert.are.equal("PALADIN:retribution", H.Hekili.DeserializeActionPack(other).payload.spec)
+        assert.are.equal("PALADIN:retribution", H.Encore.DeserializeActionPack(other).payload.spec)
     end)
 
     it("imports a legacy pseudo-spec share on an idle healing spec as the first supported spec", function()
         local pw = require("Forever.helpers.paladin_world")
         local H = headless.new({ character = pw.Retribution.character() })
         settle(H)
-        H.Hekili:SetSpecChoice("holy")
+        H.Encore:SetSpecChoice("holy")
         settle(H)
-        assert.are.equal(100021, H.Hekili.State.spec.id)
+        assert.are.equal(100021, H.Encore.State.spec.id)
         local legacy = mp.encode({ name = "Old", version = 1, spec = pw.CLIENT_SPEC, desc = "", simc = "", lists = {} })
-        assert.are.equal(100022, H.Hekili.DeserializeActionPack(legacy).payload.spec) -- Protection, tree 2
+        assert.are.equal(100022, H.Encore.DeserializeActionPack(legacy).payload.spec) -- Protection, tree 2
     end)
 
     it("rebinds a built-in priority stored on the legacy pseudo-spec at the current version (an upgrade)", function()
         local rw = require("Forever.helpers.rogue_world")
         local H1 = headless.new({ character = rw.Combat.character(), pack = rw.Combat.PACK })
-        local saved = H1.env.HekiliDB
+        local saved = H1.env.EncoreDB
         saved.profiles.Default.packs[rw.Combat.PACK].spec = rw.CLIENT_SPEC -- the pack as the pseudo-spec release stored it
         local H = headless.new({ character = rw.Combat.character(), saved = saved, pack = rw.Combat.PACK })
         assert.are.same({}, H.loadErrors)
         settle(H)
-        assert.are.equal(100042, H.Hekili.State.spec.id)
-        assert.are.equal(100042, H.Hekili.DB.profile.packs[rw.Combat.PACK].spec)
+        assert.are.equal(100042, H.Encore.State.spec.id)
+        assert.are.equal(100042, H.Encore.DB.profile.packs[rw.Combat.PACK].spec)
         assert.is_true(headless.cycle(H, H.ctl.now + 0.2))
-        assert.is_true(H.Hekili.Engine.Output.Primary.count > 0)
+        assert.is_true(H.Encore.Engine.Output.Primary.count > 0)
     end)
 end)
 
@@ -655,11 +655,11 @@ describe("a Druid (headless)", function()
         local H = headless.new({ character = dw.Feral.character(), pack = "Feral (wowsims.com)" })
         assert.are.same({}, H.loadErrors)
         settle(H)
-        assert.are.equal(FERAL, H.Hekili.State.spec.id)
+        assert.are.equal(FERAL, H.Encore.State.spec.id)
         local G = headless.new({ character = dw.Guardian.character(), pack = "Guardian (wowsims.com)" })
-        assert.are.equal(GUARDIAN, G.Hekili.State.spec.id)
-        assert.are.equal("guardian", G.Hekili.Engine.Output.status.specKey)
-        local p = G.Hekili.DB.profile
+        assert.are.equal(GUARDIAN, G.Encore.State.spec.id)
+        assert.are.equal("guardian", G.Encore.Engine.Output.status.specKey)
+        local p = G.Encore.DB.profile
         assert.are.same({ BALANCE, FERAL, GUARDIAN }, {
             p.packs["Balance (wowsims.com)"].spec,
             p.packs["Feral (wowsims.com)"].spec,
@@ -674,15 +674,15 @@ describe("a Druid (headless)", function()
         H.ctl.traits = traits(FERAL_BUILD)
         H.Fire("TRAIT_CONFIG_UPDATED")
         settle(H)
-        assert.are.equal(FERAL, H.Hekili.State.spec.id)
-        assert.are.equal("guardian", H.Hekili:SetSpecChoice("guardian").key)
+        assert.are.equal(FERAL, H.Encore.State.spec.id)
+        assert.are.equal("guardian", H.Encore:SetSpecChoice("guardian").key)
         settle(H)
-        local seen = { H.Hekili.State.spec.id }
+        local seen = { H.Encore.State.spec.id }
         for _, build in ipairs({ { [16814] = 5 }, FERAL_BUILD, { [16942] = 3, [17007] = 1 } }) do
             H.ctl.traits = traits(build) -- Balance (Improved Wrath), Feral, Feral with Leader of the Pack
             H.Fire("TRAIT_CONFIG_UPDATED")
             settle(H)
-            seen[#seen + 1] = H.Hekili.State.spec.id
+            seen[#seen + 1] = H.Encore.State.spec.id
         end
         assert.are.same({ GUARDIAN, BALANCE, GUARDIAN, GUARDIAN }, seen)
     end)
@@ -691,18 +691,18 @@ describe("a Druid (headless)", function()
         local H = headless.new({ character = dw.Feral.character() })
         assert.are.same({}, H.loadErrors)
         settle(H)
-        assert.is_not_nil(H.Hekili:SetSpecChoice("resto"))
+        assert.is_not_nil(H.Encore:SetSpecChoice("resto"))
         settle(H)
-        assert.are.equal(RESTO, H.Hekili.State.spec.id)
-        local p = H.Hekili.DB.profile
+        assert.are.equal(RESTO, H.Encore.State.spec.id)
+        local p = H.Encore.DB.profile
         assert.is_nil(rawget(p.specs[RESTO], "package"))
         assert.is_false(p.specs[RESTO].enabled)
-        assert.is_true(H.Hekili.Class.initialized) -- the "no modules loaded" notice's guard
+        assert.is_true(H.Encore.Class.initialized) -- the "no modules loaded" notice's guard
         assert.is_true(headless.cycle(H, H.ctl.now + 0.2))
         assert.are.same({}, H.errors)
-        H.Hekili:EmbedSpecOptions()
-        H.Hekili:EmbedPackOptions()
-        local node = H.Hekili.Options.args.packs.plugins.specializations.restoration
+        H.Encore:EmbedSpecOptions()
+        H.Encore:EmbedPackOptions()
+        local node = H.Encore.Options.args.packs.plugins.specializations.restoration
         assert.is_not_nil(node.args.core.args.notice)
         assert.is_nil(node.args.core.args.enabled)
     end)
@@ -714,7 +714,7 @@ describe("Rogue and Paladin specs (headless)", function()
         for name, id in pairs({ Assassination = 100041, Combat = 100042, Subtlety = 100043 }) do
             local H = headless.new({ character = rw[name].character(), pack = rw[name].PACK })
             assert.are.same({}, H.loadErrors)
-            assert.are.equal(id, H.Hekili.State.spec.id, name)
+            assert.are.equal(id, H.Encore.State.spec.id, name)
         end
     end)
 
@@ -723,22 +723,22 @@ describe("Rogue and Paladin specs (headless)", function()
         local H = headless.new({ character = pw.Retribution.character() })
         assert.are.same({}, H.loadErrors)
         settle(H)
-        assert.are.equal("holy", H.Hekili:SetSpecChoice("holy").key)
+        assert.are.equal("holy", H.Encore:SetSpecChoice("holy").key)
         settle(H)
-        assert.are.equal(100021, H.Hekili.State.spec.id)
-        assert.is_nil(rawget(H.Hekili.DB.profile.specs[100021], "package"))
-        assert.is_false(H.Hekili.DB.profile.specs[100021].enabled)
-        assert.is_true(H.Hekili.Class.initialized)
+        assert.are.equal(100021, H.Encore.State.spec.id)
+        assert.is_nil(rawget(H.Encore.DB.profile.specs[100021], "package"))
+        assert.is_false(H.Encore.DB.profile.specs[100021].enabled)
+        assert.is_true(H.Encore.Class.initialized)
         assert.is_true(headless.cycle(H, H.ctl.now + 0.2))
         assert.are.same({}, H.errors)
-        H.Hekili:EmbedSpecOptions()
-        H.Hekili:EmbedPackOptions()
-        assert.is_not_nil(H.Hekili.Options.args.packs.plugins.specializations.holy.args.core.args.notice)
-        local values = H.Hekili.Options.args.packs.args.newPackSpec.values -- no priority for a healing spec
+        H.Encore:EmbedSpecOptions()
+        H.Encore:EmbedPackOptions()
+        assert.is_not_nil(H.Encore.Options.args.packs.plugins.specializations.holy.args.core.args.notice)
+        local values = H.Encore.Options.args.packs.args.newPackSpec.values -- no priority for a healing spec
         assert.is_nil(values[100021])
         assert.is_not_nil(values[100023])
         -- the new priority's spec defaults to a listed one, never the idle healing spec
-        local get = H.Hekili.GetPackOption
-        assert.are.equal(100022, get(H.Hekili, { "packs", "newPackSpec", "newPackSpec" }))
+        local get = H.Encore.GetPackOption
+        assert.are.equal(100022, get(H.Encore, { "packs", "newPackSpec", "newPackSpec" }))
     end)
 end)

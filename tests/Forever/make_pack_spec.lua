@@ -39,7 +39,7 @@ describe("tools/make_pack.lua", function()
         end)
 
         it("leaves the checked-in " .. CLASSES[class] .. ".lua alone (every pack unchanged)", function()
-            local src = slurp("src/Hekili_" .. CLASSES[class] .. "/" .. CLASSES[class] .. ".lua")
+            local src = slurp("src/Encore_" .. CLASSES[class] .. "/" .. CLASSES[class] .. ".lua")
             local out, report = mp.sync(src, mp.load(class))
             assert.is_true(src == out, "the source changed")
             for _, r in ipairs(report) do
@@ -52,7 +52,7 @@ describe("tools/make_pack.lua", function()
     describe("sync on an in-memory Warrior.lua", function()
         local src, packs, furyBlock
         before_each(function()
-            src = slurp("src/Hekili_Warrior/Warrior.lua")
+            src = slurp("src/Encore_Warrior/Warrior.lua")
             packs = mp.load("warrior")
             furyBlock = src:match('spec:RegisterPack%(\n    "Fury %(wowsims%.com%)",\n.-\n%)\n')
             assert.is_not_nil(furyBlock)
@@ -77,7 +77,7 @@ describe("tools/make_pack.lua", function()
         end)
 
         it("removes a block the manifest does not list", function()
-            local zzz = 'spec:RegisterPack(\n    "Zzz",\n    1,\n    [[Hekili:x]]\n)\n'
+            local zzz = 'spec:RegisterPack(\n    "Zzz",\n    1,\n    [[Encore:x]]\n)\n'
             local edited, n = src:gsub("%)\n\n%-%- The hand%-built lists", ")\n" .. zzz .. "\n-- The hand-built lists") -- after the last block
             assert.are.equal(1, n)
             local out, report = mp.sync(edited, packs)
@@ -88,7 +88,7 @@ describe("tools/make_pack.lua", function()
         it("refuses a RegisterPack it cannot parse, a duplicate, stray content or no block", function()
             local _, n = src:gsub("\n", "")
             assert.has_error(function()
-                mp.sync(src .. 'spec:RegisterPack("Zzz", 1, [[Hekili:x]])\n', packs)
+                mp.sync(src .. 'spec:RegisterPack("Zzz", 1, [[Encore:x]])\n', packs)
             end, "line " .. (n + 1) .. ": a RegisterPack( not in the generated block layout")
             assert.has_error(function()
                 mp.sync(src .. furyBlock, packs)
@@ -127,7 +127,7 @@ describe("tools/make_pack.lua", function()
     end)
 
     it("refuses a manifest with no class", function()
-        local root = scratch("src/Hekili_Warrior/APLs/", {
+        local root = scratch("src/Encore_Warrior/APLs/", {
             ["packs.lua"] = 'return { packs = { "Arms (wowsims.com)" } }\n',
             ["Arms (wowsims.com).simc"] = true,
         })
@@ -298,14 +298,14 @@ describe("tools/make_pack.lua", function()
 
         for class, Class in pairs(CLASSES) do
             it("leaves the checked-in " .. Class .. ".lua alone on any day", function()
-                local src = slurp("src/Hekili_" .. Class .. "/" .. Class .. ".lua")
+                local src = slurp("src/Encore_" .. Class .. "/" .. Class .. ".lua")
                 assert.is_true(src == mp.write(src, class, TODAY), "the source changed")
             end)
         end
 
         -- writes the Warrior file with Fury's .simc text edited by `from` -> `to` (gsub patterns), from `src`, on `day`
         local function edit(src, from, to, day)
-            local apls = "src/Hekili_Warrior/APLs/"
+            local apls = "src/Encore_Warrior/APLs/"
             local fury, n = slurp(apls .. "Fury (wowsims.com).simc"):gsub(from, to, 1)
             assert.are.equal(1, n)
             local root = scratch(apls, {
@@ -327,19 +327,19 @@ describe("tools/make_pack.lua", function()
         end
 
         it("versions only the pack whose text changed: unchanged keeps it, a later day gives today * 1000", function()
-            local src = slurp("src/Hekili_Warrior/Warrior.lua")
+            local src = slurp("src/Encore_Warrior/Warrior.lua")
             local out, report = edit(src, "rage.lo>=40", "rage.lo>40", TODAY) -- one character
             assert.are.same({ "Fury (wowsims.com)", "updated" }, report[2])
             assert.are.equal(TODAY * 1000, version(out, "Fury (wowsims.com)"))
             for _, name in ipairs({ "Protection (wowsims.com)", "Arms (wowsims.com)" }) do
                 assert.are.equal(version(src, name), version(out, name), name)
             end
-            local druid = slurp("src/Hekili_Druid/Druid.lua")
+            local druid = slurp("src/Encore_Druid/Druid.lua")
             assert.is_true(druid == mp.write(druid, "druid", TODAY), "the Druid file changed")
         end)
 
         it("counts up on the same day, once per change", function()
-            local src = slurp("src/Hekili_Warrior/Warrior.lua")
+            local src = slurp("src/Encore_Warrior/Warrior.lua")
             local one = edit(src, "rage.lo>=40", "rage.lo>40", TODAY)
             local two = edit(one, "rage.lo>=40", "rage.lo>41", TODAY) -- Fury's text differs from `one`'s again
             assert.are.equal(TODAY * 1000 + 1, version(two, "Fury (wowsims.com)"))
@@ -348,7 +348,7 @@ describe("tools/make_pack.lua", function()
         end)
 
         it("refuses a thousandth same-day change", function()
-            local src = slurp("src/Hekili_Warrior/Warrior.lua")
+            local src = slurp("src/Encore_Warrior/Warrior.lua")
             local one = edit(src, "rage.lo>=40", "rage.lo>40", TODAY)
             local full = one:gsub('(Fury %(wowsims%.com%)",\n    )%d+', "%1" .. TODAY * 1000 + 999)
             assert.has_error(function()

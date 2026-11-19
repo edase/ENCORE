@@ -13,7 +13,7 @@ local function settled(H)
     local t = H.ctl.now + 0.1
     assert(headless.cycle(H, t))
     H.ns.VirtualState.Drain(t)
-    H.Hekili.State.reset("Primary", true)
+    H.Encore.State.reset("Primary", true)
     return H
 end
 
@@ -24,7 +24,7 @@ describe("the Priest loop worlds", function()
             local H = headless.new({ character = C.character() })
             assert.are.same({}, H.loadErrors)
             local unmapped = {}
-            for key, a in pairs(H.Hekili.Class.abilities) do
+            for key, a in pairs(H.Encore.Class.abilities) do
                 if type(key) == "string" and a.key == key and a.id and H.ctl.known[a.id] and not pw.MAP[key] then
                     unmapped[#unmapped + 1] = key
                 end
@@ -41,7 +41,7 @@ describe("the Priest loop worlds", function()
                     end
                 end
             end
-            assert.are.equal(C.SPEC, H.Hekili.State.spec.id)
+            assert.are.equal(C.SPEC, H.Encore.State.spec.id)
             assert.is_false(pcall(C.resolve, "not_an_ability", H))
             assert.is_true(#C.usable(H) > 0)
             assert.are.same({}, H.errors)

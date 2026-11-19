@@ -29,12 +29,12 @@ class Repository(unittest.TestCase):
             start = lines.index(block[0])
             self.assertEqual(lines[start : start + len(block)], block, name)
             first_code = next(i for i, l in enumerate(lines) if l.endswith(".lua") and not l.startswith("Locales\\"))
-            if name == locales.CORE:  # after the facade, before Hekili.lua
-                first_code = lines.index("Hekili.lua")
+            if name == locales.CORE:  # after the facade, before Encore.lua
+                first_code = lines.index("Encore.lua")
             self.assertLess(start + len(block) - 1, first_code, name)
 
     def test_the_shared_content_has_no_text(self):
-        self.assertFalse(os.path.isdir(locales.locales_dir("Hekili_Shared")))
+        self.assertFalse(os.path.isdir(locales.locales_dir("Encore_Shared")))
 
 
 class Keys(unittest.TestCase):
@@ -64,13 +64,13 @@ class Keys(unittest.TestCase):
 
 class Render(unittest.TestCase):
     def test_enus_is_every_key_as_true_under_a_silent_default_locale(self):
-        text = locales.render_enus("Hekili_Warrior", {"src/Hekili_Warrior/Warrior.lua": ["Arms", 'say "hi"']})
-        self.assertIn('local L = LibStub("AceLocale-3.0"):NewLocale("Hekili_Warrior", "enUS", true, true)\n', text)
-        self.assertIn('-- Hekili_Warrior/Warrior.lua\nL["Arms"] = true\nL[\'say "hi"\'] = true\n', text)
+        text = locales.render_enus("Encore_Warrior", {"src/Encore_Warrior/Warrior.lua": ["Arms", 'say "hi"']})
+        self.assertIn('local L = LibStub("AceLocale-3.0"):NewLocale("Encore_Warrior", "enUS", true, true)\n', text)
+        self.assertIn('-- Encore_Warrior/Warrior.lua\nL["Arms"] = true\nL[\'say "hi"\'] = true\n', text)
 
     def test_a_language_file_registers_its_own_locale_and_returns_elsewhere(self):
-        text = locales.render("Hekili_Warrior", "zhCN", {"src/Hekili_Warrior/Warrior.lua": ["Arms", "Fury"]}, {"Arms": "武器"})
-        self.assertIn('local L = LibStub("AceLocale-3.0"):NewLocale("Hekili_Warrior", "zhCN")\nif not L then\n    return\nend\n', text)
+        text = locales.render("Encore_Warrior", "zhCN", {"src/Encore_Warrior/Warrior.lua": ["Arms", "Fury"]}, {"Arms": "武器"})
+        self.assertIn('local L = LibStub("AceLocale-3.0"):NewLocale("Encore_Warrior", "zhCN")\nif not L then\n    return\nend\n', text)
         self.assertIn('L["Arms"] = "武器"\n-- L["Fury"] = ""\n', text)
 
 
@@ -92,9 +92,9 @@ class PackNames(unittest.TestCase):
 
     def test_a_label_that_reads_as_another_priority_is_a_problem(self):
         packs = ["Arms (wowsims.com)", "Fury (wowsims.com)"]
-        self.assertEqual(locales.label_problems("Hekili_Warrior", packs, {"Arms (wowsims.com)": "武器"}, "zhCN"), [])
-        self.assertTrue(locales.label_problems("Hekili_Warrior", packs, {"Arms (wowsims.com)": "Fury (wowsims.com)"}, "zhCN"))
-        self.assertTrue(locales.label_problems("Hekili_Warrior", packs, {"Arms (wowsims.com)": "X", "Fury (wowsims.com)": "X"}, "zhCN"))
+        self.assertEqual(locales.label_problems("Encore_Warrior", packs, {"Arms (wowsims.com)": "武器"}, "zhCN"), [])
+        self.assertTrue(locales.label_problems("Encore_Warrior", packs, {"Arms (wowsims.com)": "Fury (wowsims.com)"}, "zhCN"))
+        self.assertTrue(locales.label_problems("Encore_Warrior", packs, {"Arms (wowsims.com)": "X", "Fury (wowsims.com)": "X"}, "zhCN"))
 
 
 class Codes(unittest.TestCase):
@@ -137,19 +137,19 @@ class Sinks(unittest.TestCase):
         src = ('f:SetText( "Hi" ) t:AddLine( format( "%s left", x ) ) self:Print( ("Set %s."):format( v ) )\n'
                't:AddDoubleLine( L["a"], "Right" ) self:Notify( string.format( "No %d", n ) ) f:SetFormattedText( "%d s", n )')
         self.assertEqual(self.hits(src), [":SetText", ":AddLine", ":Print", ":AddDoubleLine", ":Notify", ":SetFormattedText"])
-        self.assertEqual(self.hits('Hekili:Error( "Boom" ) Hekili:Debug( "x %s", y ) t:AddLine( L["Ok"] ) f:SetText( name )'), [])
+        self.assertEqual(self.hits('Encore:Error( "Boom" ) Encore:Debug( "x %s", y ) t:AddLine( L["Ok"] ) f:SetText( name )'), [])
 
     def test_no_letters_codes_only_and_verbatim(self):
         self.assertEqual(self.hits('t:AddLine( " " ) x = { name = "|cFFFFD100%s|r: %d" } y = { name = "|T136243:0|t" }'), [])
-        self.assertEqual(self.hits('x = { name = "Hekili Forever" } -- l10n: verbatim'), [])
+        self.assertEqual(self.hits('x = { name = "Encore" } -- l10n: verbatim'), [])
         self.assertEqual(self.hits('-- x = { name = "Commented" }\ns = [[ t:AddLine( "in a string" ) ]]'), [])
 
     def test_skipped_files(self):
-        for rel in ["src/Hekili/Libs/AceGUI-3.0/x.lua", "src/Hekili/Locales/zhCN.lua", "src/Hekili_Druid/Locales/enUS.lua",
-                    "src/Hekili/Options/DevTools.lua", "src/Hekili/Engine/Snapshot.lua",
-                    "src/Hekili/Game/State/Snapshot.lua"]:
+        for rel in ["src/Encore/Libs/AceGUI-3.0/x.lua", "src/Encore/Locales/zhCN.lua", "src/Encore_Druid/Locales/enUS.lua",
+                    "src/Encore/Options/DevTools.lua", "src/Encore/Engine/Snapshot.lua",
+                    "src/Encore/Game/State/Snapshot.lua"]:
             self.assertTrue(locales.LINT_SKIP.search(rel), rel)
-        self.assertFalse(locales.LINT_SKIP.search("src/Hekili/Options/Options.lua"))
+        self.assertFalse(locales.LINT_SKIP.search("src/Encore/Options/Options.lua"))
 
 
 class Quoting(unittest.TestCase):

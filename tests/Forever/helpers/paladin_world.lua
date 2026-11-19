@@ -29,7 +29,7 @@ local AMOUNT = {
 
 local W0
 local function class()
-    W0 = W0 or ld.load(nil, "src/Hekili_Paladin/Paladin.lua", "PALADIN")
+    W0 = W0 or ld.load(nil, "src/Encore_Paladin/Paladin.lua", "PALADIN")
     return W0
 end
 
@@ -289,16 +289,16 @@ local function classData(H, C)
     end
     local X = { aura = {}, ids = C.IDS }
     cache[H] = X
-    for key, a in pairs(H.Hekili.Class.auras) do
+    for key, a in pairs(H.Encore.Class.auras) do
         if type(key) == "string" and type(a) == "table" and a.id then
             local d = a.duration
             X.aura[key] = { id = a.id, duration = type(d) == "function" and d() or d or 0, max_stack = a.max_stack }
         end
     end
-    local talent = H.Hekili.State.talent
+    local talent = H.Encore.State.talent
     -- Sanctified Judgement's refund in the world: only at 3/3, a sure one (the class file counts the mean at 1-2, the
     -- world builds take none there): the seals' cost multiplier
-    X.S, X.sanctified = H.Hekili.State, (talent.sanctified_judgement.rank or 0) >= 3
+    X.S, X.sanctified = H.Encore.State, (talent.sanctified_judgement.rank or 0) >= 3
     X.mult = 1 - 0.02 * (talent.benediction.rank or 0)
     return X
 end
@@ -418,9 +418,9 @@ local function content(name, pack)
         if not m then
             error("unmapped key " .. tostring(key), 2)
         end
-        local a = H.Hekili.Class.abilities[key]
+        local a = H.Encore.Class.abilities[key]
         local X = classData(H, C)
-        local S = H.Hekili.State
+        local S = H.Encore.State
         local p = {
             spell = H.ns.VirtualState.KnownID(a.id),
             ids = C.IDS[key],
@@ -430,7 +430,7 @@ local function content(name, pack)
             gcd = GCD[a.gcd or "spell"],
             offGcd = a.gcd == "off",
             cast = S.action[key].cast_time or tonumber(a.cast) or 0,
-            refund = world.refundOf(H.Hekili.Class, key), -- an avoid gives back the kit's share (W.hit)
+            refund = world.refundOf(H.Encore.Class, key), -- an avoid gives back the kit's share (W.hit)
             outcomes = M.OUTCOMES[key], -- nil: the special melee tables
         }
         p.requires = function(W, e)
@@ -453,12 +453,12 @@ local function content(name, pack)
         local out = {}
         local X = classData(H, C)
         for key, m in pairs(M.MAP) do
-            if H.Hekili.Class.abilities[key] and C.IDS[key] then
+            if H.Encore.Class.abilities[key] and C.IDS[key] then
                 local function answer(W, e, power)
                     if m.requires and not m.requires(W, e, X) then
                         return false, false
                     end
-                    local c = H.Hekili.State.action[key].cost or 0
+                    local c = H.Encore.State.action[key].cost or 0
                     return power >= c, power < c
                 end
                 for _, id in ipairs(C.IDS[key]) do
@@ -476,7 +476,7 @@ local function content(name, pack)
     function C.uptime(H)
         local out = {}
         for _, key in ipairs(P.uptime) do
-            out[#out + 1] = { key, H.Hekili.Class.auras[key].id }
+            out[#out + 1] = { key, H.Encore.Class.auras[key].id }
         end
         return out
     end

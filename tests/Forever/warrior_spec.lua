@@ -1216,8 +1216,8 @@ describe("Forever Warrior", function()
         assert.are.equal(guard, swap.criteria:gsub("||", "|"):sub(-#guard)) -- stored as the importer stores a |
     end)
 
-    it("keeps its priorities in src/Hekili_Warrior/APLs/, tools/make_pack.lua's default class", function()
-        local def = dofile("src/Hekili_Warrior/APLs/packs.lua")
+    it("keeps its priorities in src/Encore_Warrior/APLs/, tools/make_pack.lua's default class", function()
+        local def = dofile("src/Encore_Warrior/APLs/packs.lua")
         assert.are.same({
             "WARRIOR",
             { "Protection (wowsims.com)", "Fury (wowsims.com)", "Arms (wowsims.com)" },
@@ -1231,7 +1231,7 @@ describe("Forever Warrior", function()
     it("writes priorities that name only registered abilities, auras, talents, settings and lists", function()
         local packs = assert(loadfile("tools/make_pack.lua"))("lists")
         local scanNs = {}
-        assert(loadfile("src/Hekili/Engine/Sim/AplWarnings.lua"))("Hekili", scanNs)
+        assert(loadfile("src/Encore/Engine/Sim/AplWarnings.lua"))("Encore", scanNs)
         local secretToken = scanNs.AplSecretToken
         local set = require("Forever.helpers.engine").abilitySet("WARRIOR") -- the class's, the shared kit's, every race's
         local racial = set.racial
@@ -1307,7 +1307,7 @@ describe("Forever Warrior", function()
     it(
         "state.reset clears the pseudo-swing anchors before it rebuilds the resource forecasts (core edit E3)",
         function()
-            local src = assert(io.open("src/Hekili/Engine/Sim/State.lua")):read("*a")
+            local src = assert(io.open("src/Encore/Engine/Sim/State.lua")):read("*a")
             local clear = src:find("state.swings.mh_pseudo = nil", 1, true)
             local loop = src:find("for k, power in pairs( class.resources ) do", 1, true)
             assert.is_truthy(clear and loop and clear < loop)
@@ -1317,19 +1317,19 @@ describe("Forever Warrior", function()
         end
     )
     it("both State.lua range reads ask the facade by ability id; it asks the client by the known rank (H10)", function()
-        local src = assert(io.open("src/Hekili/Engine/Sim/State.lua")):read("*a")
+        local src = assert(io.open("src/Encore/Engine/Sim/State.lua")):read("*a")
         local _, n = src:gsub('C_Spell%.IsSpellInRange%( ability%.rangeSpell or ability%.id, "target" %) == false', "")
         assert.are.equal(2, n)
         assert.is_nil(src:find("KnownSpellID", 1, true))
         assert.is_nil(src:find("LSR", 1, true))
     end)
     it("the forecast's continuous rate excludes the aura-gated entries it ticks as events (core edit E7)", function()
-        local src = assert(io.open("src/Hekili/Engine/Sim/State.lua")):read("*a")
+        local src = assert(io.open("src/Encore/Engine/Sim/State.lua")):read("*a")
         assert.is_truthy(src:find("-- Forever E7:[^\n]*\n        local regen = r%.regen or 0\n"))
         assert.is_nil(src:find("local regen = r.regen_combined", 1, true))
     end)
     it("a real pull with no swing seen anchors the first swing at the combat start (core edit E8)", function()
-        local src = assert(io.open("src/Hekili/Engine/Sim/State.lua")):read("*a")
+        local src = assert(io.open("src/Encore/Engine/Sim/State.lua")):read("*a")
         local next_oh = src:find("state.nextOH = ", 1, true)
         local anchor = src:find(
             "-- Forever E8:[^\n]*\n        if state%.combat > 0 and state%.swings%.mh_actual == 0 then\n"
@@ -1341,11 +1341,11 @@ describe("Forever Warrior", function()
         assert.is_truthy(block:find("state:ForecastSwingbasedResources()", 1, true))
     end)
     it("the forecast horizon follows the forecast window, its loop guard scaled to it (core edit E9)", function()
-        local src = assert(io.open("src/Hekili/Engine/Sim/State.lua")):read("*a")
+        local src = assert(io.open("src/Encore/Engine/Sim/State.lua")):read("*a")
         assert.is_truthy(
             src:find(
                 "local timeout = state.ForecastWindow( state.forecastHorizon"
-                    .. " or Hekili.Engine.settings.performance.forecastWindow or 15 )\n",
+                    .. " or Encore.Engine.settings.performance.forecastWindow or 15 )\n",
                 1,
                 true
             )
@@ -1353,10 +1353,10 @@ describe("Forever Warrior", function()
         assert.is_truthy(src:find("local maxIter = ceil( 3 * timeout ) + 10", 1, true))
         assert.is_truthy(src:find("iter < maxIter ) do", 1, true))
         assert.is_nil(src:find("FORECAST_DURATION", 1, true))
-        local core = assert(io.open("src/Hekili/Engine/Sim/Core.lua")):read("*a")
+        local core = assert(io.open("src/Encore/Engine/Sim/Core.lua")):read("*a")
         assert.is_truthy(
             core:find(
-                "-- Forever E9:[^\n]*\n%s+local defaultMax = state%.ForecastWindow%( isMain and %( Hekili%.Engine%.settings%.performance%.forecastWindow or 15 %)"
+                "-- Forever E9:[^\n]*\n%s+local defaultMax = state%.ForecastWindow%( isMain and %( Encore%.Engine%.settings%.performance%.forecastWindow or 15 %)"
                     .. " or %( display%.forecastPeriod or 15 %) %)\n"
             )
         )
@@ -1366,11 +1366,11 @@ describe("Forever Warrior", function()
         assert.is_nil(src:find("assassination", 1, true)) -- time_to_max_combined: one rule for every spec
     end)
     it("the forecast window is a global Performance option, default 15 s (core edit E9)", function()
-        local opts = assert(io.open("src/Hekili/Options/Options.lua")):read("*a")
+        local opts = assert(io.open("src/Encore/Options/Options.lua")):read("*a")
         assert.is_truthy(opts:find("frameBudget = 0.7,\n%s+forecastWindow = 15,"))
         assert.is_truthy(opts:find('forecastHeader = {\n%s+type = "header",\n%s+name = L%["Forecast"%],'))
         assert.is_truthy(opts:find('forecastWindow = {\n%s+type = "range",\n%s+name = L%["Forecast window %(s%)"%],'))
-        assert.is_truthy(opts:find("Hekili.DB.profile.performance.forecastWindow = v", 1, true))
+        assert.is_truthy(opts:find("Encore.DB.profile.performance.forecastWindow = v", 1, true))
         assert.is_truthy(opts:find('forecastWindowInfo = {\n%s+type = "description",'))
         assert.is_nil(w.settings.forecast_window)
     end)

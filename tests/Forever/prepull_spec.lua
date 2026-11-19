@@ -16,7 +16,7 @@ describe("a pre-pull list out of combat", function()
     end
 
     local function id(key)
-        return H.Hekili.Class.abilities[key].id
+        return H.Encore.Class.abilities[key].id
     end
 
     local function cast(key)
@@ -26,13 +26,13 @@ describe("a pre-pull list out of combat", function()
     end
 
     local function lists(precombat)
-        H.Hekili.DB.profile.packs[ww.PACK].lists = { precombat = precombat, default = {} }
-        H.Hekili:LoadScripts()
+        H.Encore.DB.profile.packs[ww.PACK].lists = { precombat = precombat, default = {} }
+        H.Encore:LoadScripts()
     end
 
     -- Bloodrage's aura on the player from `on` (10 s), or gone.
     local function buff(on)
-        local aura = H.Hekili.Class.auras.bloodrage.id
+        local aura = H.Encore.Class.auras.bloodrage.id
         H.ctl.auras.player.HELPFUL[1] = on and { spellId = aura, expirationTime = on + 10, applications = 1 } or nil
         H.Fire("UNIT_AURA", "player")
     end
@@ -54,7 +54,7 @@ describe("a pre-pull list out of combat", function()
         H.ctl.inRange.target, H.ctl.level.target = true, 60
         H.Fire("PLAYER_TARGET_CHANGED")
         t = H.ctl.now
-        out = H.Hekili.Engine.Output.Primary
+        out = H.Encore.Engine.Output.Primary
         cycle()
     end)
 

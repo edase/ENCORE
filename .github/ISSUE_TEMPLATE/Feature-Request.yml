@@ -15,7 +15,7 @@ body:
           required: true
         - label: I am not playing on a private server.
           required: true
-        - label: I checked for an [existing, open ticket](https://github.com/zmsl/hekili/issues) for this request and was not able to find one.
+        - label: I checked for an [existing, open ticket](https://github.com/edase/encore/issues) for this request and was not able to find one.
           required: true
         - label: I edited the title of this feature request (above) so that it describes the issue I am reporting.
           required: true
@@ -26,7 +26,7 @@ body:
       description: |
         Please describe the new feature.  Why would it be helpful?  Explain the benefits.
         You can CTRL+V to paste a screenshot (image) or supply links to screenshot images.
-      placeholder: "Example: I'd like Hekili to flip all the recommendations upside down.  This would help me because I hang like a bat while playing WoW."
+      placeholder: "Example: I'd like Encore to flip all the recommendations upside down.  This would help me because I hang like a bat while playing WoW."
     validations:
       required: true    
   - type: textarea

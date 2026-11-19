@@ -1140,7 +1140,7 @@ end)
 -- OnPendingChanges) drop only the items they moved or removed. A restored proof is no light: no UP, no DOWN, only the
 -- item's dark counts again, so the first missed application of the session can be closed.
 describe("the CooldownViewer leaf: proof across sessions (L1113-L1115)", function()
-    local SAVED = "HekiliCDMProof"
+    local SAVED = "EncoreCDMProof"
     local DATA, PENDING = "CooldownViewerSettings.OnDataChanged", "CooldownViewerSettings.OnPendingChanges"
     local A = fs.SPENDER_A
     local VS, I, ctl, api, d, Q, e, b, c

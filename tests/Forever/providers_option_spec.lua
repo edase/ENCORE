@@ -15,21 +15,21 @@ describe("the providers, always on (no option)", function()
 
     local function boot(dev, saved)
         H = headless.new({ character = ww.character(), pack = ww.PACK })
-        H.Hekili.IsDev = dev
+        H.Encore.IsDev = dev
         I = H.ns.VirtualStateInternal
-        perf = H.Hekili.DB.profile.performance
+        perf = H.Encore.DB.profile.performance
         for k, v in pairs(saved or {}) do
             perf[k] = v -- a profile saved by an older build
         end
-        H.Hekili:ProvidersChanged()
+        H.Encore:ProvidersChanged()
         drain()
     end
 
     local function perfArgs()
-        H.Hekili:EmbedSpecOptions()
-        H.Hekili:EmbedPackOptions()
-        local key = H.Hekili.State.spec.key
-        return H.Hekili.Options.args.packs.plugins.specializations[key].args.performance.args
+        H.Encore:EmbedSpecOptions()
+        H.Encore:EmbedPackOptions()
+        local key = H.Encore.State.spec.key
+        return H.Encore.Options.args.packs.plugins.specializations[key].args.performance.args
     end
 
     it("providersOf gives viewer true in a release build with any saved value", function()
@@ -46,7 +46,7 @@ describe("the providers, always on (no option)", function()
         boot(true)
         local args = perfArgs()
         assert.is_nil(args.cooldownViewer)
-        assert.is_nil(H.Hekili.DB.defaults.profile.performance.cooldownViewer)
+        assert.is_nil(H.Encore.DB.defaults.profile.performance.cooldownViewer)
     end)
 
     it("a saved performance.cooldownViewer = false is ignored", function()
@@ -58,7 +58,7 @@ describe("the providers, always on (no option)", function()
         boot(true)
         local args = perfArgs()
         assert.is_nil(args.damageMeter)
-        assert.is_nil(H.Hekili.DB.defaults.profile.performance.damageMeter)
+        assert.is_nil(H.Encore.DB.defaults.profile.performance.damageMeter)
     end)
 
     it("a saved performance.damageMeter = true is ignored without an error", function()
@@ -76,7 +76,7 @@ describe("the providers, always on (no option)", function()
     it("a saved coalesceCooldown or narrowUnitAura is ignored: no option, every event runs at once", function()
         for _, dev in ipairs({ true, false }) do
             boot(dev or nil, { coalesceCooldown = true, narrowUnitAura = true })
-            local args, defaults = perfArgs(), H.Hekili.DB.defaults.profile.performance
+            local args, defaults = perfArgs(), H.Encore.DB.defaults.profile.performance
             for _, name in ipairs({ "coalesceCooldown", "narrowUnitAura" }) do
                 assert.is_nil(args[name], name)
                 assert.is_nil(defaults[name], name)
@@ -105,18 +105,18 @@ describe("the providers, always on (no option)", function()
     end)
 
     it(
-        "Hekili.cdmOff = true then ProvidersChanged gives viewer false (out of combat at once, else at combat end)",
+        "Encore.cdmOff = true then ProvidersChanged gives viewer false (out of combat at once, else at combat end)",
         function()
             boot(nil)
             assert.is_true(I.presenceViewer)
-            H.Hekili.cdmOff = true
-            H.Hekili:ProvidersChanged()
+            H.Encore.cdmOff = true
+            H.Encore:ProvidersChanged()
             assert.is_false(I.def.providers.viewer)
             drain()
             assert.are.same({ "router", false }, { I.presence.name, I.presenceViewer })
-            H.Hekili.cdmOff = nil
+            H.Encore.cdmOff = nil
             I.inCombat = true
-            H.Hekili:ProvidersChanged()
+            H.Encore:ProvidersChanged()
             drain()
             assert.is_false(I.presenceViewer) -- in combat: waits for the fight's end
             I.inCombat = false
@@ -128,11 +128,11 @@ describe("the providers, always on (no option)", function()
     it("a toggle back before the fight ends cancels the pending swap", function()
         boot(nil)
         I.inCombat = true
-        H.Hekili.cdmOff = true
-        H.Hekili:ProvidersChanged()
+        H.Encore.cdmOff = true
+        H.Encore:ProvidersChanged()
         drain()
-        H.Hekili.cdmOff = nil
-        H.Hekili:ProvidersChanged()
+        H.Encore.cdmOff = nil
+        H.Encore:ProvidersChanged()
         drain()
         I.inCombat = false
         H.Fire("PLAYER_REGEN_ENABLED")
@@ -146,8 +146,8 @@ describe("the providers, always on (no option)", function()
             clears = clears + 1
             return clear()
         end
-        H.Hekili.cdmOff = true
-        H.Hekili:ProvidersChanged()
+        H.Encore.cdmOff = true
+        H.Encore:ProvidersChanged()
         drain()
         assert.are.same({ false, 0 }, { I.presenceViewer, clears })
     end)

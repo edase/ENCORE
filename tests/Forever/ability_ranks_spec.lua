@@ -6,7 +6,7 @@
 -- doing the same.
 local headless = require("Game.harness.headless")
 
-local PACKS = { "src/Hekili_Mage/Mage.lua", "src/Hekili_Warrior/Warrior.lua" }
+local PACKS = { "src/Encore_Mage/Mage.lua", "src/Encore_Warrior/Warrior.lua" }
 
 local function read(path)
     local f = assert(io.open(path))
@@ -64,8 +64,8 @@ describe("RegisterAbility's ranks and effect", function()
 
     setup(function()
         H = headless.new()
-        S, ctl = H.Hekili.State, H.ctl
-        spec = H.Hekili.Class.specs[0]
+        S, ctl = H.Encore.State, H.ctl
+        spec = H.Encore.Class.specs[0]
         n = 0
     end)
 
@@ -233,7 +233,7 @@ describe("RegisterAbility's ranks and effect", function()
         local path = os.tmpname()
         local f = assert(io.open(path, "w"))
         f:write([[
-local spec = Hekili:NewClass("MAGE", {})
+local spec = Encore:NewClass("MAGE", {})
 spec:RegisterAbilities({
     dry = {
         ranks = { 990301, 990302, 990303 },

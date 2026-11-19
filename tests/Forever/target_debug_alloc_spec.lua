@@ -54,7 +54,7 @@ describe("Engine/Sim/Targets.lua's nameplate log", function()
 
     it("allocates nothing per count at 0, 5 and 15 plates while debug is off", function()
         local got = {}
-        H.Hekili.ActiveDebug = false
+        H.Encore.ActiveDebug = false
         for _, n in ipairs({ 0, 5, 15 }) do
             plates(n - (n == 15 and 5 or 0))
             got[#got + 1] = bytes()
@@ -66,7 +66,7 @@ describe("Engine/Sim/Targets.lua's nameplate log", function()
     -- range plan R2: the plates' range reads go through the facade row; counts and bytes as at the base (982b7d2f0)
     it("counts 0, 5 and 15 plain-GUID plates as before, allocating nothing per count", function()
         local counts, got = {}, {}
-        H.Hekili.ActiveDebug = false
+        H.Encore.ActiveDebug = false
         local calls = H.ctl.rangeLibCalls
         for _, n in ipairs({ 0, 5, 15 }) do
             plates(n) -- re-adding a plate already up changes nothing
@@ -82,8 +82,8 @@ describe("Engine/Sim/Targets.lua's nameplate log", function()
     -- caster range (L644): the engaged rule beyond 10 yd (a radius of 40, as a ranged spec's default) reads each far
     -- plate's combat answer and allocates nothing, in combat or out
     it("counts 15 far plates by their combat answer, allocating nothing per count", function()
-        H.Hekili.ActiveDebug = false
-        H.Hekili.DB.profile.specs[ww.SPEC].nameplateRange = 40
+        H.Encore.ActiveDebug = false
+        H.Encore.DB.profile.specs[ww.SPEC].nameplateRange = 40
         plates(15)
         local counts, got = {}, {}
         for _, engaged in ipairs({ true, false }) do
@@ -99,17 +99,17 @@ describe("Engine/Sim/Targets.lua's nameplate log", function()
 
     it("keeps the log, a line per plate, while debug is on", function()
         plates(15)
-        H.Hekili.ActiveDebug = true
-        H.Hekili.TargetDebug = nil
+        H.Encore.ActiveDebug = true
+        H.Encore.TargetDebug = nil
         H.ns.getNumberTargets(true)
-        assert.is_truthy(tostring(H.Hekili.TargetDebug):find("Nameplates are enabled", 1, true))
-        assert.is_true(select(2, H.Hekili.TargetDebug:gsub("nameplate", "")) > 0, "no plate line in the log")
+        assert.is_truthy(tostring(H.Encore.TargetDebug):find("Nameplates are enabled", 1, true))
+        assert.is_true(select(2, H.Encore.TargetDebug:gsub("nameplate", "")) > 0, "no plate line in the log")
     end)
 
     -- T1: under the Map restriction the plates are kept by token; a count and each plate handler allocate nothing.
     it("allocates nothing per count at 0, 5 and 15 token plates (Map), nor per plate event", function()
         local got, counts = {}, {}
-        H.Hekili.ActiveDebug = false
+        H.Encore.ActiveDebug = false
         H.ctl.guid.target, H.ctl.unitIs.target = fake.SECRET, "nameplate1"
         local function tokens(from, n)
             for i = from, n do
@@ -141,15 +141,15 @@ describe("Engine/Sim/Targets.lua's nameplate log", function()
         local d = (collectgarbage("count") - b) * 1024
         collectgarbage("restart")
         H.ctl.friendly.nameplate8 = nil
-        assert.is_nil(H.Hekili.npTokens.nameplate8)
+        assert.is_nil(H.Encore.npTokens.nameplate8)
         assert.are.equal(0, d, "bytes per plate event")
     end)
 
     -- integ/dot review M2: token plates past 10 yd with a ranged radius reach the engaged rule's combat read; a count
     -- allocates nothing, in combat or out (the target's plate is exempt, so out of combat counts 1)
     it("counts 15 far token plates (Map) by their combat answer, allocating nothing per count", function()
-        H.Hekili.ActiveDebug = false
-        H.Hekili.DB.profile.specs[ww.SPEC].nameplateRange = 40
+        H.Encore.ActiveDebug = false
+        H.Encore.DB.profile.specs[ww.SPEC].nameplateRange = 40
         H.ctl.guid.target, H.ctl.unitIs.target = fake.SECRET, "nameplate1"
         for i = 1, 15 do
             local unit = "nameplate" .. i

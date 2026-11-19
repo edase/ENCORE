@@ -3,7 +3,7 @@
 -- from tools/data/cooldownviewer/<CLASS>.lua. Only the aura categories (2 BuffIcon, 3 BuffBar) count as covered: the
 -- Essential and Utility items are always shown (CV §2), so they carry no edges; every category's hits are printed.
 -- Loads packs as tools/check_spell_data.lua does.
-package.path = "./src/Hekili/?.lua;./tests/?.lua;./?.lua;" .. package.path
+package.path = "./src/Encore/?.lua;./tests/?.lua;./?.lua;" .. package.path
 local loader = require("Forever.helpers.load_druid")
 local warrior = require("Forever.helpers.load_warrior")
 
@@ -28,7 +28,7 @@ for _, class in ipairs(CLASSES) do
             end
         end
         local w = class == "Warrior" and warrior.load()
-            or loader.load(nil, "src/Hekili_" .. class .. "/" .. class .. ".lua", class:upper())
+            or loader.load(nil, "src/Encore_" .. class .. "/" .. class .. ".lua", class:upper())
         local keys = {}
         for key, a in pairs(w.auras) do
             if type(key) == "string" and type(a) == "table" then -- the recording loaders merge auras by key, no `key` field

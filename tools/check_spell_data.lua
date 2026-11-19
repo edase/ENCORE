@@ -3,14 +3,14 @@
 -- expects), for tools/check_spell_data.py; tick_time is the ticking aura's (resolved `cycle or aura or key`, as the
 -- simulation does; `fn` for a function; empty when the ability does not tick). Loads each pack through the recording
 -- loader the specs use.
-package.path = "./src/Hekili/?.lua;./tests/?.lua;./?.lua;" .. package.path
+package.path = "./src/Encore/?.lua;./tests/?.lua;./?.lua;" .. package.path
 local loader = require("Forever.helpers.load_druid")
 local warrior = require("Forever.helpers.load_warrior")
 
 local CLASSES = { "Druid", "Hunter", "Mage", "Paladin", "Priest", "Rogue", "Shaman", "Warlock", "Warrior" }
 for _, class in ipairs(CLASSES) do
     local w = class == "Warrior" and warrior.load()
-        or loader.load(nil, "src/Hekili_" .. class .. "/" .. class .. ".lua", class:upper())
+        or loader.load(nil, "src/Encore_" .. class .. "/" .. class .. ".lua", class:upper())
     local keys = {}
     for key, d in pairs(w.abilities) do
         if type(key) == "string" and type(d) == "table" and (d.startsCombat or d.expects) then

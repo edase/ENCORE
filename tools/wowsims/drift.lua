@@ -11,7 +11,7 @@
 -- export.lua's request from the new tree, translated with the pin's log, so automatic-action lines are the pin's),
 -- the store records (assets/db_inputs/spell_store_inputs.json) of the kit's spell IDs, the class's generated rank
 -- ladders and the class's commits. Then once: the store's builds and hotfixes, and the sim/core + sim/common commits.
-package.path = "./src/Hekili/?.lua;./tests/?.lua;./?.lua;" .. package.path
+package.path = "./src/Encore/?.lua;./tests/?.lua;./?.lua;" .. package.path
 
 local M = {}
 
@@ -300,7 +300,7 @@ function M.spec(ctx, spec)
         old = nil
     else
         local Class = r.class:sub(1, 1) .. r.class:sub(2):lower()
-        local shipped = slurp(("src/Hekili_%s/APLs/%s.simc"):format(Class, r.pack)) or ""
+        local shipped = slurp(("src/Encore_%s/APLs/%s.simc"):format(Class, r.pack)) or ""
         local same = shipped:sub(-(#old + 1)) == old .. "\n"
         emit("- pin translation equals the shipped .simc body: %s", same and "yes" or "NO (harness mismatch)")
     end

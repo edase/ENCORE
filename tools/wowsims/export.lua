@@ -17,7 +17,7 @@
 -- Loaded with loadfile(...)() it returns M. Env: WOWSIMS (the checkout [~/src/wowsims-forever]), WOWSIMS_CLI
 -- [$WOWSIMS/wowsimcli-sim-pin], WOWSIMS_OUT (M.OUT [tests/Forever/wowsims/]), WOWDB [~/.local/share/wow-db2/bin/wowdb]. Credit: the request shape, the presets,
 -- the talent trees and the APLs are wowsims/forever's (MIT, https://github.com/wowsims/forever); no code copied.
-package.path = "./src/Hekili/?.lua;./tests/?.lua;./?.lua;" .. package.path
+package.path = "./src/Encore/?.lua;./tests/?.lua;./?.lua;" .. package.path
 local json = require("dkjson")
 
 local M = {}

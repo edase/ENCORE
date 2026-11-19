@@ -9,7 +9,7 @@ local M = {}
 -- The core's registration-time derivation of `ranks` and `effect` (Engine/Schema/Spec/Ranks.lua), run on each
 -- recorded ability as RegisterAbility runs it, so a class file declaring them reads the same fields here.
 local Ranks = {}
-assert(loadfile("src/Hekili/Engine/Schema/Spec/Ranks.lua"))("Hekili", Ranks)
+assert(loadfile("src/Encore/Engine/Schema/Spec/Ranks.lua"))("Encore", Ranks)
 
 --- [spellID] = the name the fake client's C_Spell.GetSpellInfo answers (unset: no info, as for a spell the client has
 --- not cached); a spec fills it before M.load and empties it after.
@@ -54,17 +54,17 @@ function M.load(vs, file, class)
             return { rank = 0, enabled = false }
         end,
     })
-    local hekili = { State = w.state }
-    function hekili:GetLocale()
+    local encore = { State = w.state }
+    function encore:GetLocale()
         return require("helpers.english")
     end
     w.spec = spec
-    function hekili:NewClass(token, def)
+    function encore:NewClass(token, def)
         w.class, w.def = token, def
         return spec
     end
     local fakes = {
-        Hekili = hekili,
+        Encore = encore,
         UnitClassBase = function()
             return class or "DRUID"
         end,
@@ -110,7 +110,7 @@ function M.load(vs, file, class)
         saved[k] = rawget(_G, k) or false
         _G[k] = v
     end
-    hekili.Client = fakes -- the class file reads the game through Hekili.Client (Hekili.lua)
+    encore.Client = fakes -- the class file reads the game through Hekili.Client (Hekili.lua)
     -- the belief's spellbook, as the file's knownRank calls it through `state` (State.lua's name)
     w.state.knownRank = vs and vs.KnownRank
         or function(ids) -- the plain known reads (`game.known`)
@@ -121,7 +121,7 @@ function M.load(vs, file, class)
             end
             return 0
         end
-    local ok, err = pcall(assert(loadfile(file or "src/Hekili_Druid/Druid.lua")))
+    local ok, err = pcall(assert(loadfile(file or "src/Encore_Druid/Druid.lua")))
     for k, v in pairs(saved) do
         _G[k] = v or nil
     end

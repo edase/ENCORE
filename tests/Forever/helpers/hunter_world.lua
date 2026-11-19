@@ -110,7 +110,7 @@ local SHARED = {
 
 local W0
 local function class()
-    W0 = W0 or ld.load(nil, "src/Hekili_Hunter/Hunter.lua", "HUNTER")
+    W0 = W0 or ld.load(nil, "src/Encore_Hunter/Hunter.lua", "HUNTER")
     return W0
 end
 
@@ -410,7 +410,7 @@ local function classData(H)
     end
     local X = { aura = {} }
     cache[H] = X
-    for key, a in pairs(H.Hekili.Class.auras) do
+    for key, a in pairs(H.Encore.Class.auras) do
         if type(key) == "string" and type(a) == "table" and a.id then
             local d = a.duration
             X.aura[key] = { id = a.id, duration = type(d) == "function" and d() or d or 0, max_stack = a.max_stack }
@@ -610,16 +610,16 @@ local function content(name)
         if not m then
             error("unmapped key " .. tostring(key), 2)
         end
-        local a = H.Hekili.Class.abilities[key]
+        local a = H.Encore.Class.abilities[key]
         local X = classData(H)
-        local S = H.Hekili.State
+        local S = H.Encore.State
         local VS, now = H.ns.VirtualState, H.ctl.now
         -- a key the world's kit lacks (a replay's or a bracket's added ability): every rank the class registers
         local function idsOf(k)
             if C.IDS[k] then
                 return C.IDS[k]
             end
-            local b = H.Hekili.Class.abilities[k]
+            local b = H.Encore.Class.abilities[k]
             local out = { b.id }
             for _, id in ipairs(type(b.copy) == "table" and b.copy or { b.copy }) do
                 out[#out + 1] = id
@@ -658,7 +658,7 @@ local function content(name)
             range = RANGE[key] and RANGE[key][2] > 0 and RANGE[key] or nil,
             -- the ranged haste from the oracle's (true) belief, as shaman_world's Maelstrom Weapon
             cast = CAST[key] and CAST[key] / haste(VS, now, X) or 0,
-            refund = world.refundOf(H.Hekili.Class, key), -- an avoid gives back the kit's share (W.hit)
+            refund = world.refundOf(H.Encore.Class, key), -- an avoid gives back the kit's share (W.hit)
             outcomes = M.OUTCOMES[key], -- nil: the special melee tables
             crits = m.queued and m.crits or nil, -- a queued strike's crit shows at its swing (behaviours)
         }
@@ -704,7 +704,7 @@ local function content(name)
         local out = {}
         local X = classData(H)
         for key, m in pairs(M.MAP) do
-            if H.Hekili.Class.abilities[key] and C.IDS[key] then
+            if H.Encore.Class.abilities[key] and C.IDS[key] then
                 local cost = costOf(key, C.IDS[key], H)
                 local function answer(W, e, power)
                     if m.requires and not m.requires(W, e, X) then
@@ -728,7 +728,7 @@ local function content(name)
     function C.uptime(H)
         local out = {}
         for _, key in ipairs(P.uptime) do
-            out[#out + 1] = { key, H.Hekili.Class.auras[key].id }
+            out[#out + 1] = { key, H.Encore.Class.auras[key].id }
         end
         return out
     end

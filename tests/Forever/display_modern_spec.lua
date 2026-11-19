@@ -12,7 +12,7 @@ local fx = { n = 0, ignore = {} } -- GetSpellCooldownDuration: calls, and the la
 -- The client's overlay answer for ability `key`, keyed by the ability's id: the facade asks the overlay untranslated
 -- (cooldown, duration and usability are asked by the known rank: ids below).
 local function lit(H, key)
-    overlayed[H.Hekili.Engine.Registry.Abilities()[key].id] = true
+    overlayed[H.Encore.Engine.Registry.Abilities()[key].id] = true
 end
 
 local rec = {}
@@ -92,14 +92,14 @@ local function boot(style, truth)
     assert(headless.cycle(H, H.ctl.now + 0.2))
     -- the styles' contract is the published set as it is: the steady hold (always on for players) off on this instance
     H.ns.Output.steady = false
-    local conf = H.Hekili.DB.profile.displays.Primary
+    local conf = H.Encore.DB.profile.displays.Primary
     conf.style = style
     if conf.truth then -- Task 3 adds the field; Task 2's cases boot with it off
         conf.truth.enabled = truth == true
         conf.truth.confirm = truth == true -- the mark is off by default (owner ruling 2026-10-29); tests that boot it on want it
     end
-    H.Hekili:BuildUI()
-    local d = rawget(H.env, "HekiliDisplayPrimary")
+    H.Encore:BuildUI()
+    local d = rawget(H.env, "EncoreDisplayPrimary")
     for _, b in ipairs(d.Buttons) do
         instrument(b)
         instrument(b.Texture)
@@ -118,7 +118,7 @@ end
 -- Each ability's known rank: the ID the client answers for (the facade asks it by VS.KnownID).
 local function ids(H)
     local out = {}
-    for k, a in pairs(H.Hekili.Engine.Registry.Abilities()) do
+    for k, a in pairs(H.Encore.Engine.Registry.Abilities()) do
         out[k] = H.ns.VirtualState.KnownID(a.id)
     end
     return out
@@ -142,7 +142,7 @@ local ACTIVE = { isActive = true, isOnGCD = false, startTime = fake.SECRET, dura
 local ON_GCD = { isActive = true, isOnGCD = true, startTime = fake.SECRET, duration = fake.SECRET }
 
 local function publish(H, set)
-    local abilities = H.Hekili.Engine.Registry.Abilities()
+    local abilities = H.Encore.Engine.Registry.Abilities()
     local now = H.ctl.now
     local s = H.ns.Output.Begin("Primary")
     for i, e in ipairs(set) do
@@ -209,7 +209,7 @@ describe("the button contract (spec §5.1)", function()
             usableAll(H)
             publish(H, SET)
             frame(H, d, 0.2)
-            local n = H.Hekili.DB.profile.displays.Primary.numIcons
+            local n = H.Encore.DB.profile.displays.Primary.numIcons
             for c, b in ipairs(d.Buttons) do
                 assert.are.equal(c <= n and c <= #SET and c or 0, b.recIndex, "button " .. c)
                 assert.is_falsy(b.isFocus)
@@ -290,7 +290,7 @@ describe("the button contract (spec §5.1)", function()
     it("Timeline: timersHidden follows Timers Out of Combat and combat", function()
         local H, d = boot("timeline")
         usableAll(H)
-        local tl = H.Hekili.DB.profile.displays.Primary.timeline
+        local tl = H.Encore.DB.profile.displays.Primary.timeline
         local function all(v, msg)
             for c, b in ipairs(d.Buttons) do
                 assert.are.equal(v, b.timersHidden == true, msg .. " cell " .. c)
@@ -308,16 +308,16 @@ describe("the button contract (spec §5.1)", function()
         publish(H, SET)
         frame(H, d, 0.2)
         all(true, "ooc, option off again")
-        H.Hekili.Engine.Output.status.combat = true
+        H.Encore.Engine.Output.status.combat = true
         publish(H, SET)
         frame(H, d, 0.2)
         all(false, "in combat")
-        H.Hekili.Engine.Output.status.combat = false
+        H.Encore.Engine.Output.status.combat = false
         tl.oocTimers = true
         publish(H, SET)
         frame(H, d, 0.2)
         all(false, "back out of combat, option on")
-        H.Hekili.Engine.Output.status.combat = false
+        H.Encore.Engine.Output.status.combat = false
         assert.are.same({}, H.errors)
     end)
 end)
@@ -364,27 +364,27 @@ describe("the Modern toggle (spec §5.1, §7)", function()
 
     it("defaults off, in its own core field and one Modern tab on every style", function()
         local H = boot("classic")
-        local conf = H.Hekili.DB.profile.displays.Primary
+        local conf = H.Encore.DB.profile.displays.Primary
         -- AceDB serves defaults through metatables: read each field
         local t = conf.truth
         assert.are.same({ false, true, true, false }, { t.enabled, t.swipes, t.edge, t.confirm })
         assert.is_true(H.ns.UI.StyleNameTaken("truth"))
         assert.is_nil(H.ns.UI.Styles.modern)
-        H.Hekili:EmbedDisplayOptions()
-        local args = H.Hekili.Options.args.displays.plugins.Primary.Primary.args
+        H.Encore:EmbedDisplayOptions()
+        local args = H.Encore.Options.args.displays.plugins.Primary.Primary.args
         assert.is_table(args.truth)
         assert.is_nil(args.truth.hidden)
         assert.is_nil(args.classic.args.tab_modern)
         local path = { "displays", "Primary", "truth", "enabled" }
-        assert.is_false(H.Hekili:GetDisplayOption(path))
+        assert.is_false(H.Encore:GetDisplayOption(path))
         assert.is_true(args.truth.args.swipes.disabled())
-        H.Hekili:SetDisplayOption(path, true)
+        H.Encore:SetDisplayOption(path, true)
         assert.is_true(conf.truth.enabled)
         assert.is_false(args.truth.args.swipes.disabled())
         for _, k in ipairs({ "swipes", "edge" }) do
-            assert.is_true(H.Hekili:GetDisplayOption({ "displays", "Primary", "truth", k }), k)
+            assert.is_true(H.Encore:GetDisplayOption({ "displays", "Primary", "truth", k }), k)
         end
-        assert.is_false(H.Hekili:GetDisplayOption({ "displays", "Primary", "truth", "confirm" }))
+        assert.is_false(H.Encore:GetDisplayOption({ "displays", "Primary", "truth", "confirm" }))
         assert.is_nil(args.truth.args.execute)
         assert.is_nil(args.truth.args.ride)
         conf.style = "timeline"
@@ -394,9 +394,9 @@ describe("the Modern toggle (spec §5.1, §7)", function()
 
     it("disables the Modern tab's sub-toggles exactly while its toggle is off (on Multi: Primary's)", function()
         local H = boot("classic")
-        H.Hekili:EmbedDisplayOptions()
-        local plugins = H.Hekili.Options.args.displays.plugins
-        local truth = H.Hekili.DB.profile.displays.Primary.truth
+        H.Encore:EmbedDisplayOptions()
+        local plugins = H.Encore.Options.args.displays.plugins
+        local truth = H.Encore.DB.profile.displays.Primary.truth
         for _, on in ipairs({ false, true, false }) do
             truth.enabled = on
             for _, args in ipairs({ plugins.Primary.Primary.args, plugins.Multi.Multi.args }) do
@@ -425,12 +425,12 @@ describe("the Modern toggle (spec §5.1, §7)", function()
         publish(H, SET)
         frame(H, d, 0.2)
         assert.are.equal(3, registered())
-        H.Hekili:SetDisplayOption({ "displays", "Primary", "main", "style" }, "timeline")
-        H.Hekili:BuildUI()
+        H.Encore:SetDisplayOption({ "displays", "Primary", "main", "style" }, "timeline")
+        H.Encore:BuildUI()
         assert.are.equal(3, registered())
         assert.are.equal(d.styleFrames.timeline.cells, d.truthState.buttons)
-        H.Hekili:SetDisplayOption({ "displays", "Primary", "truth", "enabled" }, false)
-        H.Hekili:BuildUI()
+        H.Encore:SetDisplayOption({ "displays", "Primary", "truth", "enabled" }, false)
+        H.Encore:BuildUI()
         assert.are.equal(0, registered())
         assert.is_false(d.truthOn)
         assert.are.same({}, H.errors)
@@ -446,7 +446,7 @@ describe("the Modern toggle (spec §5.1, §7)", function()
                 return f(...)
             end
         end
-        H.Hekili:BuildUI()
+        H.Encore:BuildUI()
         usableAll(H)
         publish(H, SET)
         frame(H, d, 0.2)
@@ -459,8 +459,8 @@ describe("the Modern toggle (spec §5.1, §7)", function()
 
     it("paints nothing on a style without the button contract", function()
         local H = boot("classic")
-        assert.is_true(H.Hekili:RegisterDisplayStyle("bare", {
-            api = H.Hekili.DisplayStyleAPI,
+        assert.is_true(H.Encore:RegisterDisplayStyle("bare", {
+            api = H.Encore.DisplayStyleAPI,
             label = "Bare",
             Build = function(d)
                 local b = rawget(d, "bareButton") or H.env.CreateFrame("Button", nil, d)
@@ -477,10 +477,10 @@ describe("the Modern toggle (spec §5.1, §7)", function()
                 return nil
             end,
         }))
-        local conf = H.Hekili.DB.profile.displays.Primary
+        local conf = H.Encore.DB.profile.displays.Primary
         conf.style, conf.truth.enabled = "bare", true
-        H.Hekili:BuildUI()
-        local d = rawget(H.env, "HekiliDisplayPrimary")
+        H.Encore:BuildUI()
+        local d = rawget(H.env, "EncoreDisplayPrimary")
         local A = ids(H)
         usableAll(H)
         H.ctl.cooldown[A.mortal_strike] = { isActive = true, isOnGCD = false }
@@ -526,7 +526,7 @@ describe("Modern's real cooldown swipe (R2, §3.4)", function()
         assert.is_false(ov[1].cd.__shown)
         assert.is_true(b[1].Cooldown.__shown)
         -- R2: the style's own delay look (classic's extend) still runs to Hekili's time
-        local exact = H.Hekili.Engine.Output.Primary.recs[1].exact_time
+        local exact = H.Encore.Engine.Output.Primary.recs[1].exact_time
         assert.is_true(math.abs(b[1].Cooldown.__cdStart + b[1].Cooldown.__cdDuration - exact) < 1e-6)
         assert.are.same({}, H.errors)
     end)
@@ -582,7 +582,7 @@ describe("Modern's real cooldown swipe (R2, §3.4)", function()
         usableAll(H)
         H.ctl.cooldown[A.mortal_strike], H.ctl.cooldown[A.overpower] = ACTIVE, ACTIVE
         durations[A.mortal_strike], durations[A.overpower] = fake.SECRET, fake.SECRET
-        rawset(H.Hekili.Engine.Registry.Abilities().overpower, "charges", 2)
+        rawset(H.Encore.Engine.Registry.Abilities().overpower, "charges", 2)
         local s = H.ns.Output.Begin("Primary")
         s[1].actionName, s[1].actionID, s[1].item = "mortal_strike", A.mortal_strike, 1234 -- an item record
         s[1].texture, s[1].time, s[1].exact_time = "t1", 1, H.ctl.now + 1
@@ -591,8 +591,8 @@ describe("Modern's real cooldown swipe (R2, §3.4)", function()
         H.ns.Output.Publish("Primary", 2)
         frame(H, d, 0.2)
         assert.are.equal(0, fx.n)
-        H.Hekili.DB.profile.displays.Primary.truth.swipes = false
-        H.Hekili:BuildUI()
+        H.Encore.DB.profile.displays.Primary.truth.swipes = false
+        H.Encore:BuildUI()
         publish(H, SET)
         frame(H, d, 0.2)
         H.Fire("SPELL_UPDATE_COOLDOWN")
@@ -604,7 +604,7 @@ describe("Modern's real cooldown swipe (R2, §3.4)", function()
         local H, d = boot("timeline", true)
         local A = ids(H)
         usableAll(H)
-        H.Hekili.DB.profile.displays.Primary.timeline.oocTimers = true -- RM1: Timeline's timers show out of combat
+        H.Encore.DB.profile.displays.Primary.timeline.oocTimers = true -- RM1: Timeline's timers show out of combat
         H.ctl.cooldown[A.mortal_strike] = ACTIVE
         durations[A.mortal_strike] = fake.SECRET
         publish(H, SET)
@@ -627,7 +627,7 @@ describe("Modern's real cooldown swipe (R2, §3.4)", function()
 
     it("passes the duration object only to the swipe: one read site, no error on the secret sentinel", function()
         local reads = {}
-        for l in io.lines("src/Hekili/UI/Truth.lua") do
+        for l in io.lines("src/Encore/UI/Truth.lua") do
             local code = l:gsub("%-%-.*$", "")
             if code:find("Display%.") or code:find("Facade%.Display") then
                 reads[#reads + 1] = code:match("^%s*(.-)%s*$")
@@ -656,7 +656,7 @@ describe("Modern's real cooldown swipe (R2, §3.4)", function()
             local H, d = boot("timeline", true)
             local A = ids(H)
             usableAll(H)
-            local tl = H.Hekili.DB.profile.displays.Primary.timeline
+            local tl = H.Encore.DB.profile.displays.Primary.timeline
             tl.oocTimers = false -- out of combat: Timeline hides its sweeps
             H.ctl.cooldown[A.mortal_strike] = ACTIVE
             durations[A.mortal_strike] = fake.SECRET
@@ -695,7 +695,7 @@ describe("Modern's real cooldown swipe (R2, §3.4)", function()
                     local H, d = boot(style, on)
                     local A = ids(H)
                     usableAll(H)
-                    H.Hekili.DB.profile.displays.Primary.timeline.oocTimers = true
+                    H.Encore.DB.profile.displays.Primary.timeline.oocTimers = true
                     H.ctl.cooldown[A.mortal_strike] = ACTIVE
                     durations[A.mortal_strike] = fake.SECRET
                     publish(H, SET)
@@ -761,7 +761,7 @@ describe("Modern's real cooldown swipe (R2, §3.4)", function()
         assert.is_false(ov.real)
         assert.is_false(ov.cd.__shown)
         assert.is_true(b.Cooldown.__shown)
-        local exact = H.Hekili.Engine.Output.Primary.recs[1].exact_time
+        local exact = H.Encore.Engine.Output.Primary.recs[1].exact_time
         assert.is_true(math.abs(b.Cooldown.__cdStart + b.Cooldown.__cdDuration - exact) < 1e-6)
         assert.are.same({}, H.errors)
     end)
@@ -770,7 +770,7 @@ describe("Modern's real cooldown swipe (R2, §3.4)", function()
         local H, d = boot("classic", true)
         local A = ids(H)
         usableAll(H)
-        local abilities = H.Hekili.Engine.Registry.Abilities()
+        local abilities = H.Encore.Engine.Registry.Abilities()
         assert.are.equal(1, rawget(abilities.mortal_strike, "charges"))
         rawset(abilities.overpower, "charges", nil)
         abilities.overpower.funcs.charges = function()
@@ -905,8 +905,8 @@ describe("Modern's usability edge (§3.2)", function()
         H.ctl.usable[spell] = { false, true }
         H.Fire("SPELL_UPDATE_USABLE")
         assert.is_true(d.truthState.ov[lane].dimShown)
-        H.Hekili.DB.profile.displays.Primary.truth.edge = false
-        H.Hekili:BuildUI()
+        H.Encore.DB.profile.displays.Primary.truth.edge = false
+        H.Encore:BuildUI()
         publish(H, SET)
         frame(H, d, 0.2)
         H.Fire("SPELL_UPDATE_USABLE")
@@ -995,8 +995,8 @@ describe("Modern's proc mark (R3, M11)", function()
         frame(H, d, 0.06)
         assert.is_false(ov.dimShown)
         assert.is_true(ov.markShown)
-        H.Hekili.DB.profile.displays.Primary.truth.confirm = false
-        H.Hekili:BuildUI()
+        H.Encore.DB.profile.displays.Primary.truth.confirm = false
+        H.Encore:BuildUI()
         publish(H, SET)
         frame(H, d, 0.2)
         assert.is_false(d.truthState.ov[1].markShown)
@@ -1007,8 +1007,8 @@ describe("Modern's proc mark (R3, M11)", function()
         local H, d = boot("classic", true)
         local A = ids(H)
         usableAll(H)
-        H.Hekili.DB.profile.displays.Primary.truth.confirm = nil -- back to the default
-        H.Hekili:BuildUI()
+        H.Encore.DB.profile.displays.Primary.truth.confirm = nil -- back to the default
+        H.Encore:BuildUI()
         publish(H, SET)
         frame(H, d, 0.2)
         assert.is_false(d.truthState.ov[1].markShown)
@@ -1090,7 +1090,7 @@ describe("Modern's proc mark: only a published spell, settled, keyed apart (Task
         usableAll(H)
         publish(H, SET_ONE)
         frame(H, d, 0.2)
-        local Truth, conf = H.ns.UI.Truth, H.Hekili.DB.profile.displays.Primary
+        local Truth, conf = H.ns.UI.Truth, H.Encore.DB.profile.displays.Primary
         local out, b, ov = d.truthState.out, d.Buttons[2], d.truthState.ov[2]
         d.resolved[2].glow = true -- left over from an earlier, longer publish (Resolve rewrites 1 .. out.count)
         b.recIndex, b.isFocus = 2, true -- a contract pointing past out.count
@@ -1111,7 +1111,7 @@ describe("Modern's proc mark: only a published spell, settled, keyed apart (Task
         local s = H.ns.Output.Begin("Primary")
         local r = s[1]
         r.actionName, r.actionID, r.texture, r.keybind =
-            "mortal_strike", H.Hekili.Engine.Registry.Abilities().mortal_strike.id, "tex1", "K1"
+            "mortal_strike", H.Encore.Engine.Registry.Abilities().mortal_strike.id, "tex1", "K1"
         r.time, r.exact_time, r.item = 0.5, H.ctl.now + 0.5, 1
         H.ns.Output.Publish("Primary", 1)
         for _ = 1, 3 do
@@ -1156,7 +1156,7 @@ describe("Modern's proc mark: only a published spell, settled, keyed apart (Task
         local H, d = boot("timeline", true)
         local A = ids(H)
         usableAll(H)
-        local tl = H.Hekili.DB.profile.displays.Primary.timeline
+        local tl = H.Encore.DB.profile.displays.Primary.timeline
         tl.focusReadyStyle, tl.nowFallback = "glow", "empty"
         tl.glow.enabled, tl.glow.mode = true, "autocast" -- the style's own glow: unkeyed
         lit(H, "overpower")

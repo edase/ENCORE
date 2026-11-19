@@ -36,7 +36,7 @@ describe("a talent's spell an aura lists as its copy", function()
         local world, content, key, copy = c[1], c[2], c[3], c[4]
         it(key .. " (" .. copy .. "): no expiry is the talent's passive, a timed listing is the buff", function()
             local H = boot(world, content)
-            local class = H.Hekili.Class
+            local class = H.Encore.Class
             assert.are.equal(copy, class.talents[key][2]) -- the copy is the talent's spell
             local id = class.auras[key].id
             assert.are_not.equal(copy, id)
@@ -54,7 +54,7 @@ describe("a talent's spell an aura lists as its copy", function()
     -- on the Smite character, out of form at login (the Shadow one logs in shifted: its form read keeps the aura up)
     it("Shadowform, whose own ID is the talent: its permanent listing still reads up", function()
         local H = boot("priest_world", "Smite")
-        local class = H.Hekili.Class
+        local class = H.Encore.Class
         assert.are.equal(class.auras.shadowform.id, class.talents.shadowform[2])
         local VS, t = H.ns.VirtualState, H.ctl.now + 1
         list(H, t, nil)

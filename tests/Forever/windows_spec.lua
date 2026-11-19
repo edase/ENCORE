@@ -18,7 +18,7 @@ describe("RegisterWindow", function()
     local H, kit
     before_each(function()
         H = boot()
-        kit = H.Hekili.Class.kit
+        kit = H.Encore.Class.kit
     end)
 
     -- two abilities the belief tracks (the build's first two: the class's, sorted; passives come after them)
@@ -33,7 +33,7 @@ describe("RegisterWindow", function()
             return false
         end
         kit:RegisterWindow("test_window", { evaluator = ev, duration = 6, steps = keys, strict = true })
-        H.Hekili:SpecializationChanged()
+        H.Encore:SpecializationChanged()
         local def = H.ns.VirtualStateInternal.def
         local rec
         for w = 1, #def.windows do
@@ -55,7 +55,7 @@ describe("RegisterWindow", function()
 
     it("carries reset_on_target_change = true into the record", function()
         kit:RegisterWindow("reset_window", { evaluator = noEval, duration = 6, reset_on_target_change = true })
-        H.Hekili:SpecializationChanged()
+        H.Encore:SpecializationChanged()
         local def = H.ns.VirtualStateInternal.def
         local rec
         for w = 1, #def.windows do
@@ -95,7 +95,7 @@ describe("RegisterWindow", function()
             kit:RegisterWindow("bad_reset", { duration = 6, reset_on_target_change = 1 })
         end, "RegisterWindow: bad_reset's reset_on_target_change is not a boolean")
         assert.has_error(function() -- spec 0's windows merge beside the spec's
-            H.Hekili.Class.specs[0]:RegisterWindow("twice", { duration = 6 })
+            H.Encore.Class.specs[0]:RegisterWindow("twice", { duration = 6 })
         end)
         -- Task 8a-5: a duration is a positive number, "combat", or the forecast's function beside the belief's
         local f = function()
@@ -123,7 +123,7 @@ describe("RegisterWindow", function()
         end
         kit:RegisterWindow("fight_window", { duration = "combat" })
         kit:RegisterWindow("fn_window", { duration = f, now_duration = g })
-        H.Hekili:SpecializationChanged()
+        H.Encore:SpecializationChanged()
         local def = H.ns.VirtualStateInternal.def
         local got = {}
         for w = 1, #def.windows do
@@ -139,7 +139,7 @@ describe("RegisterReaction", function()
     local H, kit
     before_each(function()
         H = boot()
-        kit = H.Hekili.Class.kit
+        kit = H.Encore.Class.kit
     end)
 
     it("hands a plain record to Build(def), never an ability (no index, no options row)", function()
@@ -147,7 +147,7 @@ describe("RegisterReaction", function()
             openWindow("w") -- luacheck: ignore 113 (the `now` context's verb)
         end
         kit:RegisterReaction("test_reaction", { who = "target", outcome = "dodge", now = f })
-        H.Hekili:SpecializationChanged()
+        H.Encore:SpecializationChanged()
         local def = H.ns.VirtualStateInternal.def
         local rec
         for k = 1, #def.reactions do
@@ -162,8 +162,8 @@ describe("RegisterReaction", function()
         for a = 1, #def.abilities do
             assert.are_not.equal("test_reaction", def.abilities[a].key)
         end
-        assert.is_nil(H.Hekili.Class.abilities.test_reaction)
-        assert.is_truthy(H.Hekili.Class.reactions.test_reaction)
+        assert.is_nil(H.Encore.Class.abilities.test_reaction)
+        assert.is_truthy(H.Encore.Class.reactions.test_reaction)
     end)
 
     it("raises at load on a second name, a bad who or outcome, or a now that is no function", function()
@@ -204,7 +204,7 @@ describe("RegisterReaction", function()
             kit:RegisterReaction("dodge_hand", { who = "target", outcome = "dodge", hand = "main", now = f })
         end)
         assert.has_error(function() -- spec 0's reactions merge beside the spec's
-            H.Hekili.Class.specs[0]:RegisterReaction("twice", { who = "player", outcome = "parry", now = f })
+            H.Encore.Class.specs[0]:RegisterReaction("twice", { who = "player", outcome = "parry", now = f })
         end)
     end)
 end)
@@ -219,7 +219,7 @@ describe("the core's windows", function()
     -- `now`, as mainhand_remains reads a projected swing), targets a mob and runs one cycle.
     local function core(windows, exprs)
         H = boot()
-        local kit = H.Hekili.Class.kit
+        local kit = H.Encore.Class.kit
         for name, data in pairs(windows) do
             kit:RegisterWindow(name, data)
         end
@@ -230,8 +230,8 @@ describe("the core's windows", function()
             local v = 1.2 - (query_time - now) -- luacheck: ignore 113 (state's fields: the expression runs under state)
             return v > 0 and v or 0
         end)
-        H.Hekili:SpecializationChanged()
-        S, VS = H.Hekili.State, H.ns.VirtualState
+        H.Encore:SpecializationChanged()
+        S, VS = H.Encore.State, H.ns.VirtualState
         H.ctl.inRange.target, H.ctl.level.target = true, 60
         H.Fire("PLAYER_TARGET_CHANGED")
         assert(headless.cycle(H, H.ctl.now + 0.2))
@@ -240,15 +240,15 @@ describe("the core's windows", function()
     -- Loads `apl` (simc lines) as the pack's default list and runs one cycle; returns the Primary display's slots.
     -- `flap`: the priority flaps a window (opened and closed by lines in one slot): its one-time warning (L1205)
     local function run(apl, flap)
-        local lines, warnings = H.Hekili:ParseActionList(apl)
+        local lines, warnings = H.Encore:ParseActionList(apl)
         assert.are.same({}, warnings or {})
         for _, l in ipairs(lines) do
             l.enabled = true
         end
-        H.Hekili.DB.profile.packs[ww.PACK].lists = { precombat = {}, default = lines }
-        H.Hekili:LoadScripts()
+        H.Encore.DB.profile.packs[ww.PACK].lists = { precombat = {}, default = lines }
+        H.Encore:LoadScripts()
         H.Fire("PLAYER_REGEN_DISABLED")
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         assert(headless.cycle(H, H.ctl.now + 0.2))
         if flap then
             assert.are.equal(1, #H.errors)
@@ -256,7 +256,7 @@ describe("the core's windows", function()
             table.remove(H.errors, 1)
         end
         assert.are.same({}, H.errors)
-        return H.Hekili.Engine.Output.Primary.recs
+        return H.Encore.Engine.Output.Primary.recs
     end
 
     local function near(want, got)
@@ -414,7 +414,7 @@ describe("the core's windows", function()
 
     it("opens from a handler in the forecast only, never in the belief", function()
         core({ w = { duration = 6 } })
-        local ab = H.Hekili.Class.abilities.bloodrage
+        local ab = H.Encore.Class.abilities.bloodrage
         local handler = ab.handler
         ab.handler = setfenv(function()
             openWindow("w") -- luacheck: ignore 113 (state's verb: handlers run under state)
@@ -469,7 +469,7 @@ describe("the core's windows", function()
     it("fails ParseActionList with the line for a window no spec registered", function()
         core({ w = { duration = 6 } })
         local lines, warnings =
-            H.Hekili:ParseActionList("actions+=/open_window,name=w\nactions+=/close_window,name=nope")
+            H.Encore:ParseActionList("actions+=/open_window,name=w\nactions+=/close_window,name=nope")
         assert.are.equal("w", lines[1].window_name)
         assert.are.equal(1, #warnings)
         assert.is_truthy(warnings[1]:find("Line 2", 1, true))
@@ -485,7 +485,7 @@ describe("the core's windows", function()
 
     it("does not forecast an open beyond the Maximum Forecasting Time", function()
         core({ w = { duration = 6 } })
-        rawget(H.Hekili.Engine.settings.specs, H.Hekili.State.spec.id).throttleForecastingTime = 0.5
+        rawget(H.Encore.Engine.settings.specs, H.Encore.State.spec.id).throttleForecastingTime = 0.5
         local recs = run("actions+=/open_window,name=w,if=test_swing_remains<0.5\nactions+=/bloodrage,if=window.w.up")
         assert.is_nil(recs[1] and recs[1].actionName)
     end)
@@ -494,7 +494,7 @@ describe("the core's windows", function()
         "the priority editor's window_name lists the spec's windows, shows for window lines only, and writes name=",
         function()
             core({ w = { duration = 6 } })
-            H.Hekili:EmbedPackOptions()
+            H.Encore:EmbedPackOptions()
             local function find(t, seen)
                 if type(t) ~= "table" or seen[t] then
                     return
@@ -510,11 +510,11 @@ describe("the core's windows", function()
                     end
                 end
             end
-            local field = find(H.Hekili.Options.args, {})
+            local field = find(H.Encore.Options.args, {})
             assert.truthy(field)
             assert.are.same({ w = "w" }, field.values())
             local entry = { action = "open_window", enabled = true }
-            for _, p in pairs(H.Hekili.DB.profile.packs) do
+            for _, p in pairs(H.Encore.DB.profile.packs) do
                 p.lists = { precombat = {}, default = { entry } } -- whichever pack's editor `find` met
             end
             assert.is_false(field.hidden())
@@ -523,9 +523,9 @@ describe("the core's windows", function()
             entry.action = "bloodrage"
             assert.is_true(field.hidden())
             entry.action = "open_window"
-            H.Hekili:SetActionOption({ "packs", ww.PACK, "lists", "entry", "x", "window_name" }, "w")
+            H.Encore:SetActionOption({ "packs", ww.PACK, "lists", "entry", "x", "window_name" }, "w")
             assert.are.equal("w", entry.window_name) -- the import and export read it as name=w
-            assert.are.equal("w", H.Hekili:GetActionOption({ "packs", ww.PACK, "lists", "entry", "x", "window_name" }))
+            assert.are.equal("w", H.Encore:GetActionOption({ "packs", ww.PACK, "lists", "entry", "x", "window_name" }))
         end
     )
 

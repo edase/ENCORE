@@ -11,11 +11,11 @@ local SCALARS = { "enabled", "screenshot" }
 
 -- A fresh Settings.lua: returns Hekili.Engine.
 local function load()
-    local env = setmetatable({ Hekili = { Engine = {} } }, { __index = _G })
-    local f = assert(loadfile("src/Hekili/Engine/Settings.lua"))
+    local env = setmetatable({ Encore = { Engine = {} } }, { __index = _G })
+    local f = assert(loadfile("src/Encore/Engine/Settings.lua"))
     setfenv(f, env)
-    f("Hekili", {})
-    return env.Hekili.Engine
+    f("Encore", {})
+    return env.Encore.Engine
 end
 
 local function profile()
@@ -73,7 +73,7 @@ describe("Engine.Configure (headless Arms boot)", function()
     it("runs once from the fixture profile through OnInitialize -> InitializeProfile", function()
         local H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
-        local s, p = H.Hekili.Engine.settings, H.Hekili.DB.profile
+        local s, p = H.Encore.Engine.settings, H.Encore.DB.profile
         assert.are.equal(1, s.version)
         for _, k in ipairs(SUBTABLES) do
             assert.are.equal(p[k], s[k], k)
@@ -84,7 +84,7 @@ describe("Engine.Configure (headless Arms boot)", function()
         H.ctl.inRange.target, H.ctl.level.target = true, 60
         H.Fire("PLAYER_TARGET_CHANGED")
         assert.is_true(headless.cycle(H, H.ctl.now + 0.2))
-        assert.is_string(H.Hekili.Engine.Output.Primary.recs[1].actionName)
+        assert.is_string(H.Encore.Engine.Output.Primary.recs[1].actionName)
         assert.are.same({}, H.errors)
         assert.are.same({}, headless.unexpected(H, "run"))
     end)
@@ -100,12 +100,12 @@ describe("Engine.Configure (headless Arms boot)", function()
         }
         local H = headless.new({ character = ww.character(), pack = ww.PACK, saved = saved })
         assert.are.same({}, H.loadErrors)
-        local p = H.Hekili.DB.profile
+        local p = H.Encore.DB.profile
         assert.is_true(p.specs[100011].settings.wowsims_recklessness)
         assert.is_false(p.specs[100011].settings.wowsims_stance_dance) -- a default the spec registered
         assert.are.equal(p.iconStore, saved.profiles.Default.iconStore)
         local icon = H.env.LibStub("LibDBIcon-1.0", true)
-        local button = icon and icon:GetMinimapButton("Hekili")
+        local button = icon and icon:GetMinimapButton("Encore")
         assert.is_not_nil(button)
         assert.are.equal(p.iconStore, button.db)
     end)
@@ -117,14 +117,14 @@ describe("a setting's harness default", function()
     local function boot(scenario)
         local H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
-        H.Hekili.Engine.scenario = scenario
-        local id = H.Hekili.State.spec.id
-        local spec = H.Hekili.Class.specs[id]
+        H.Encore.Engine.scenario = scenario
+        local id = H.Encore.State.spec.id
+        local spec = H.Encore.Class.specs[id]
         local option = { type = "toggle", name = "Probe", desc = "A probe.", sim = true }
         spec:RegisterSetting("probe_sim", false, option)
         spec:RegisterSetting("probe_plain", true, { type = "toggle", name = "Plain", desc = "No sim." })
-        H.Hekili:SpecializationChanged() -- the spec load's fill of unset profile values
-        return H.Hekili.DB.profile.specs[id].settings, option, spec
+        H.Encore:SpecializationChanged() -- the spec load's fill of unset profile values
+        return H.Encore.DB.profile.specs[id].settings, option, spec
     end
 
     it("fills its sim value under the harness and its default in game; a setting without one, its default", function()
@@ -144,10 +144,10 @@ describe("a setting's harness default", function()
 
     it("a false sim value wins over a true default (an `if`, not `and/or`)", function()
         local H = {}
-        local env = setmetatable({ Hekili = { Engine = H } }, { __index = _G })
-        local f = assert(loadfile("src/Hekili/Engine/Settings.lua"))
+        local env = setmetatable({ Encore = { Engine = H } }, { __index = _G })
+        local f = assert(loadfile("src/Encore/Engine/Settings.lua"))
         setfenv(f, env)
-        f("Hekili", {})
+        f("Encore", {})
         H.scenario = "sim"
         assert.is_false(H.SettingDefault({ default = true, sim = false }))
         H.scenario = nil
@@ -158,13 +158,13 @@ end)
 describe("the harness's scenario", function()
     it("headless.new sets it; the loop boots both instances in sim unless the content says game", function()
         local H = headless.new({ character = ww.character(), pack = ww.PACK, scenario = "sim" })
-        assert.are.equal("sim", H.Hekili.Engine.scenario)
-        assert.is_nil(headless.new({ character = ww.character(), pack = ww.PACK }).Hekili.Engine.scenario)
+        assert.are.equal("sim", H.Encore.Engine.scenario)
+        assert.is_nil(headless.new({ character = ww.character(), pack = ww.PACK }).Encore.Engine.scenario)
         local loop = require("Game.harness.loop")
         local L = loop.new(ww)
-        assert.are.same({ "sim", "sim" }, { L.us.Hekili.Engine.scenario, L.oracle.Hekili.Engine.scenario })
+        assert.are.same({ "sim", "sim" }, { L.us.Encore.Engine.scenario, L.oracle.Encore.Engine.scenario })
         L = loop.new(setmetatable({ SCENARIO = "game" }, { __index = ww }))
-        assert.are.same({}, { L.us.Hekili.Engine.scenario, L.oracle.Hekili.Engine.scenario })
+        assert.are.same({}, { L.us.Encore.Engine.scenario, L.oracle.Encore.Engine.scenario })
     end)
 end)
 
@@ -179,13 +179,13 @@ describe("a choice setting", function()
     local function boot(scenario)
         local H = headless.new({ character = ww.character(), pack = ww.PACK, scenario = scenario })
         assert.are.same({}, H.loadErrors)
-        local id = H.Hekili.State.spec.id
-        local spec = H.Hekili.Class.specs[id]
+        local id = H.Encore.State.spec.id
+        local spec = H.Encore.Class.specs[id]
         local option =
             { type = "select", name = "Pick", desc = "A choice.", values = CHOICES, sorting = ORDER, sim = "none" }
         spec:RegisterSetting("pick", "beta", option)
-        H.Hekili:SpecializationChanged()
-        return H, H.Hekili.DB.profile.specs[id].settings, option, spec
+        H.Encore:SpecializationChanged()
+        return H, H.Encore.DB.profile.specs[id].settings, option, spec
     end
 
     it("fills its default in game and its sim value under the harness; notes the sim choice by name", function()
@@ -209,7 +209,7 @@ describe("a choice setting", function()
 
     it("answers each candidate's condition, allocation-free once warm", function()
         local H, settings = boot(nil)
-        local lists = H.Hekili.DB.profile.packs[ww.PACK].lists
+        local lists = H.Encore.DB.profile.packs[ww.PACK].lists
         local list = next(lists)
         for i, k in ipairs(ORDER) do
             table.insert(
@@ -218,13 +218,13 @@ describe("a choice setting", function()
                 { action = "battle_shout", criteria = "settings.pick='" .. k .. "'", enabled = true }
             )
         end
-        H.Hekili:LoadScripts()
+        H.Encore:LoadScripts()
         local function fired()
             assert.is_true(headless.cycle(H, H.ctl.now + 1))
-            H.Hekili.State.reset()
+            H.Encore.State.reset()
             local out = {}
             for i = 1, #ORDER do
-                out[i] = H.Hekili.Scripts:CheckScript(ww.PACK .. ":" .. list .. ":" .. i)
+                out[i] = H.Encore.Scripts:CheckScript(ww.PACK .. ":" .. list .. ":" .. i)
             end
             return out
         end
@@ -238,7 +238,7 @@ describe("a choice setting", function()
         assert.are.equal(
             0,
             alloc.bytes(function()
-                H.Hekili.Scripts:CheckScript(id)
+                H.Encore.Scripts:CheckScript(id)
             end, 500)
         )
     end)
@@ -247,7 +247,7 @@ describe("a choice setting", function()
     -- the candidate as a state key ("Unknown key 'alpha'").
     it("renders the term with its value in a snapshot, never reading the quoted candidate", function()
         local H = boot(nil)
-        local hk = H.Hekili
+        local hk = H.Encore
         hk.Engine.settings.screenshot = false -- the harness has no Screenshot()
         local lists = hk.DB.profile.packs[ww.PACK].lists
         table.insert(
@@ -270,20 +270,20 @@ describe("a choice setting", function()
         assert.is_true(hk.Scripts:CheckScript(ww.PACK .. ":precombat:2"))
     end)
 
-    it("is a dropdown on the spec's settings page, and /hekili set spec picks a candidate", function()
+    it("is a dropdown on the spec's settings page, and /encore set spec picks a candidate", function()
         local H, settings = boot(nil)
-        H.Hekili:EmbedSpecOptions()
-        H.Hekili:EmbedPackOptions()
-        local key = H.Hekili.State.spec.key
-        local o = H.Hekili.Options.args.packs.plugins.specializations[key].args.core.plugins.settings.pick
+        H.Encore:EmbedSpecOptions()
+        H.Encore:EmbedPackOptions()
+        local key = H.Encore.State.spec.key
+        local o = H.Encore.Options.args.packs.plugins.specializations[key].args.core.plugins.settings.pick
         assert.are.same({ "select", CHOICES, ORDER }, { o.type, o.values, o.sorting })
         local info = { "packs", key, "core", "pick" }
         assert.are.equal("beta", o.get(info))
         o.set(info, "alpha")
         assert.are.equal("alpha", settings.pick)
-        H.Hekili:CmdLine("set spec pick none")
+        H.Encore:CmdLine("set spec pick none")
         assert.are.equal("none", settings.pick)
-        H.Hekili:CmdLine("set spec pick gamma") -- not a candidate: unchanged
+        H.Encore:CmdLine("set spec pick gamma") -- not a candidate: unchanged
         assert.are.equal("none", settings.pick)
     end)
 end)

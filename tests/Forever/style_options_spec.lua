@@ -99,7 +99,7 @@ local function walk(H, node, path, info, lines)
             local old = { pcall(node.get, info) }
             local sentinel = {}
             pcall(v, info, sentinel)
-            local profile = H.Hekili.DB.profile
+            local profile = H.Encore.DB.profile
             local at = find(profile.displays.Primary, sentinel, "display.", 4) or find(profile, sentinel, "profile.", 0)
             pcall(v, info, old[2])
             lines[#lines + 1] = p .. " set-> " .. tostring(at)
@@ -113,7 +113,7 @@ end
 
 -- Every boolean of classic's defaults negated, and the strings the option closures test set to another value.
 local function flip(H)
-    local conf = H.Hekili.DB.profile.displays.Primary.classic
+    local conf = H.Encore.DB.profile.displays.Primary.classic
     local function each(def, into)
         for k, v in pairs(def) do
             if type(v) == "boolean" then
@@ -138,9 +138,9 @@ local function dump()
         if state == "flipped" then
             flip(H)
         end
-        H.Hekili.BuildUI = function() end -- the queue setters rebuild; the dump only needs where they write
-        H.Hekili:EmbedDisplayOptions()
-        local tabs = H.Hekili.Options.args.displays.plugins.Primary.Primary.args.classic.args
+        H.Encore.BuildUI = function() end -- the queue setters rebuild; the dump only needs where they write
+        H.Encore:EmbedDisplayOptions()
+        local tabs = H.Encore.Options.args.displays.plugins.Primary.Primary.args.classic.args
         lines[#lines + 1] = "-- " .. state
         if state == "defaults" then -- classic's config template, which the shared defaults now build
             lines[#lines + 1] = "classic.defaults = " .. ser(H.ns.UI.Styles.classic.defaults)
@@ -189,9 +189,9 @@ local GROUPS = { "keybindings", "captions", "indicators", "range", "glow", "bord
 local ZONES = { "now", "next" }
 
 local function external(H, groups)
-    local SO = H.Hekili.StyleOptions
-    return H.Hekili:RegisterDisplayStyle("ext", {
-        api = H.Hekili.DisplayStyleAPI,
+    local SO = H.Encore.StyleOptions
+    return H.Encore:RegisterDisplayStyle("ext", {
+        api = H.Encore.DisplayStyleAPI,
         label = "External",
         defaults = SO.defaults(groups or GROUPS, ZONES),
         Build = function()
@@ -214,10 +214,10 @@ local function external(H, groups)
 end
 
 describe("the shared style option builders", function()
-    it("are public as Hekili.StyleOptions and give a later zone its own prefixed blocks", function()
+    it("are public as Encore.StyleOptions and give a later zone its own prefixed blocks", function()
         local H = boot()
-        assert.are.equal(H.ns.StyleOptions, H.Hekili.StyleOptions)
-        local SO = H.Hekili.StyleOptions
+        assert.are.equal(H.ns.StyleOptions, H.Encore.StyleOptions)
+        local SO = H.Encore.StyleOptions
         local conf = { ext = SO.defaults(GROUPS, ZONES) }
         local kb = SO.keybindings("ext", ZONES, 7, "Primary", conf).args
         assert.truthy(kb.nextTextStyle.args.nextFont)
@@ -237,7 +237,7 @@ describe("the shared style option builders", function()
 
     it("give a zone named queued the normal per-zone shape unless the zones are marked legacy", function()
         local H = boot()
-        local SO = H.Hekili.StyleOptions
+        local SO = H.Encore.StyleOptions
         local zones = { "now", "queued" }
         local conf = { ext = SO.defaults(GROUPS, zones) }
         local kb = SO.keybindings("ext", zones, 7, "Primary", conf).args
@@ -253,7 +253,7 @@ describe("the shared style option builders", function()
 
     it("default every zone's fields; classic's queue keeps its legacy queued* fields only", function()
         local H = boot()
-        local SO = H.Hekili.StyleOptions
+        local SO = H.Encore.StyleOptions
         local d = SO.defaults({ "keybindings", "captions", "indicators" }, ZONES)
         assert.are.same(d.keybindings.color, d.keybindings.nextColor)
         assert.are_not.equal(d.keybindings.color, d.keybindings.nextColor) -- copied, not shared
@@ -274,19 +274,19 @@ describe("the shared style option builders", function()
     it("serve an external style's tabs from its own subtable, zone colours included", function()
         local H = boot()
         assert.is_true(external(H))
-        local displays = H.Hekili.DB.profile.displays
-        H.Hekili:EmbedDisplayOptions()
-        local tabs = H.Hekili.Options.args.displays.plugins.Primary.Primary.args.ext.args
+        local displays = H.Encore.DB.profile.displays
+        H.Encore:EmbedDisplayOptions()
+        local tabs = H.Encore.Options.args.displays.plugins.Primary.Primary.args.ext.args
         assert.truthy(tabs.range.args.type)
         local path = { "displays", "Primary", "ext", "range", "type" }
-        assert.are.equal("ability", H.Hekili:GetDisplayOption(path))
-        H.Hekili:SetDisplayOption(path, "melee")
+        assert.are.equal("ability", H.Encore:GetDisplayOption(path))
+        H.Encore:SetDisplayOption(path, "melee")
         assert.are.equal("melee", displays.Primary.ext.range.type)
         assert.are.equal("ability", displays.Primary.classic.range.type)
         local color = { "displays", "Primary", "ext", "keybindings", "nextTextStyle", "nextColor", type = "color" }
-        H.Hekili:SetDisplayOption(color, 0.5, 0.25, 0, 1)
+        H.Encore:SetDisplayOption(color, 0.5, 0.25, 0, 1)
         assert.are.same({ 0.5, 0.25, 0, 1 }, displays.Primary.ext.keybindings.nextColor)
-        assert.are.same({ 0.5, 0.25, 0, 1 }, { H.Hekili:GetDisplayOption(color) })
+        assert.are.same({ 0.5, 0.25, 0, 1 }, { H.Encore:GetDisplayOption(color) })
         assert.are.same({}, H.errors)
     end)
 end)
@@ -295,18 +295,18 @@ describe("the engine's and the shared resolve's range, flash and keybinding sett
     it("come from the bound style's group, or classic's when the style has none", function()
         local H = boot()
         assert.is_true(external(H, { "range" }))
-        local conf = H.Hekili.DB.profile.displays.Primary
-        local group = H.Hekili.Engine.StyleGroup
+        local conf = H.Encore.DB.profile.displays.Primary
+        local group = H.Encore.Engine.StyleGroup
         assert.are.equal(conf.classic.range, group(conf, "range")) -- still classic
         conf.style = "ext"
         assert.are.equal(conf.ext.range, group(conf, "range"))
         assert.are.equal(conf.classic.glow, group(conf, "glow")) -- ext offers no glow
         conf.ext.range.type = "xclude"
-        H.Hekili.State.reset("Primary")
-        assert.is_true(H.Hekili.State.rangefilter)
+        H.Encore.State.reset("Primary")
+        assert.is_true(H.Encore.State.rangefilter)
         conf.style = "classic"
-        H.Hekili.State.reset("Primary")
-        assert.is_false(H.Hekili.State.rangefilter)
+        H.Encore.State.reset("Primary")
+        assert.is_false(H.Encore.State.rangefilter)
         assert.are.same({}, H.errors)
     end)
 
@@ -318,13 +318,13 @@ describe("the engine's and the shared resolve's range, flash and keybinding sett
             calls = calls + 1
             return getRange(...)
         end
-        local d = rawget(H.env, "HekiliDisplayPrimary")
-        local conf = H.Hekili.DB.profile.displays.Primary
-        local out = H.Hekili.Engine.Output.Primary
+        local d = rawget(H.env, "EncoreDisplayPrimary")
+        local conf = H.Encore.DB.profile.displays.Primary
+        local out = H.Encore.Engine.Output.Primary
         H.ns.UI.Resolve(d, conf, out, H.ctl.now) -- classic's default: per ability
         assert.are.equal(0, calls)
         assert.is_true(external(H, { "range" }))
-        conf = H.Hekili.DB.profile.displays.Primary -- AceDB may re-copy it with the new defaults
+        conf = H.Encore.DB.profile.displays.Primary -- AceDB may re-copy it with the new defaults
         conf.style, conf.ext.range.type = "ext", "melee"
         H.ns.UI.Resolve(d, conf, out, H.ctl.now)
         assert.are.equal(1, calls)
@@ -338,12 +338,12 @@ describe("the engine's and the shared resolve's range, flash and keybinding sett
     it("resolves the melee range check without raising while the target's GUID is secret", function()
         local H = boot()
         H.ctl.guid.target = fake.SECRET
-        local d = rawget(H.env, "HekiliDisplayPrimary")
+        local d = rawget(H.env, "EncoreDisplayPrimary")
         assert.is_true(external(H, { "range" }))
-        local conf = H.Hekili.DB.profile.displays.Primary
+        local conf = H.Encore.DB.profile.displays.Primary
         conf.style, conf.ext.range.type = "ext", "melee"
         assert.has_no.errors(function()
-            H.ns.UI.Resolve(d, conf, H.Hekili.Engine.Output.Primary, H.ctl.now)
+            H.ns.UI.Resolve(d, conf, H.Encore.Engine.Output.Primary, H.ctl.now)
         end)
         assert.are.same({}, H.errors)
         -- the vendored library itself (the harness answers through a double; H.realGetRange is the library's own)
@@ -380,9 +380,9 @@ describe("the timeline's option tabs", function()
 
     it("are tab_now, tab_next, tab_lane and tab_timeline, each option resolving to its own timeline field", function()
         local H = boot()
-        H.Hekili.BuildUI = function() end
-        H.Hekili:EmbedDisplayOptions()
-        local group = H.Hekili.Options.args.displays.plugins.Primary.Primary.args.timeline
+        H.Encore.BuildUI = function() end
+        H.Encore:EmbedDisplayOptions()
+        local group = H.Encore.Options.args.displays.plugins.Primary.Primary.args.timeline
         local keys = {}
         for k, v in pairs(group.args) do
             keys[#keys + 1] = k
@@ -396,7 +396,7 @@ describe("the timeline's option tabs", function()
             group.args.tab_lane.name,
             group.args.tab_timeline.name,
         })
-        local display = H.Hekili.DB.profile.displays.Primary
+        local display = H.Encore.DB.profile.displays.Primary
         for _, k in ipairs(keys) do
             assert.is_nil(display.timeline[k], k) -- a tab key is never a config key
         end
@@ -404,9 +404,9 @@ describe("the timeline's option tabs", function()
         local where, byTab = {}, {}
         for _, leaf in ipairs(leaves(group, { "displays", "Primary", "timeline" }, nil, {})) do
             local info, option = leaf.info, leaf.info[#leaf.info]
-            local old = { H.Hekili:GetDisplayOption(info) }
+            local old = { H.Encore:GetDisplayOption(info) }
             local sentinel = {}
-            H.Hekili:SetDisplayOption(info, sentinel, 0, 0, 1)
+            H.Encore:SetDisplayOption(info, sentinel, 0, 0, 1)
             local at = find(display, sentinel, "display.", 5)
             local path = table.concat(info, ".")
             assert.truthy(at, path)
@@ -415,10 +415,10 @@ describe("the timeline's option tabs", function()
             end
             assert.are.equal("display.timeline.", at:sub(1, 17), path)
             assert.are.equal(option, at:match("([^.]+)$"), path)
-            assert.are.equal(sentinel, (H.Hekili:GetDisplayOption(info)), path)
+            assert.are.equal(sentinel, (H.Encore:GetDisplayOption(info)), path)
             assert.is_nil(where[at], path .. " and " .. tostring(where[at]))
             where[at] = path
-            H.Hekili:SetDisplayOption(info, unpack(old))
+            H.Encore:SetDisplayOption(info, unpack(old))
             byTab[leaf.tab] = byTab[leaf.tab] or {}
             byTab[leaf.tab][at:sub(18)] = true
         end

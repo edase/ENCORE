@@ -14,7 +14,7 @@ describe("the Driver's update rate", function()
         H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
         f = H.ns.EngineFrame
-        H.Hekili.Update = function()
+        H.Encore.Update = function()
             runs = runs + 1
         end
         runs = 0
@@ -40,7 +40,7 @@ describe("the Driver's update rate", function()
         local every = auraRate > 0 and math.floor(60 / auraRate + 0.5)
         return rate(20, function(i)
             if i % 3 == 0 then
-                H.Hekili:ForceUpdate("TEST")
+                H.Encore:ForceUpdate("TEST")
             end
             if every and i % every == 0 then
                 H.Fire("UNIT_AURA", "player")

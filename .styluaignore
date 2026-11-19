@@ -1,17 +1,17 @@
-# Upstream Hekili keeps its own style (spaces inside parentheses, which StyLua cannot produce); format only our files.
-src/Hekili/Hekili.lua
-src/Hekili/Engine/Sim/
-src/Hekili/Libs/
-src/Hekili/Options/
-src/Hekili/UI/
-src/Hekili/Engine/Schema/Spec.lua
-src/Hekili/Engine/Schema/Spec/
-src/Hekili/Engine/Snapshot.lua
+# Upstream Encore keeps its own style (spaces inside parentheses, which StyLua cannot produce); format only our files.
+src/Encore/Encore.lua
+src/Encore/Engine/Sim/
+src/Encore/Libs/
+src/Encore/Options/
+src/Encore/UI/
+src/Encore/Engine/Schema/Spec.lua
+src/Encore/Engine/Schema/Spec/
+src/Encore/Engine/Snapshot.lua
 .claude/
 .lua/
 # The language files are written by tools/locales.py (one L[...] line per key, however long); Locales.lua is ours.
-src/Hekili/Locales/[a-z][a-z][A-Z][A-Z].lua
-src/Hekili_*/Locales/[a-z][a-z][A-Z][A-Z].lua
+src/Encore/Locales/[a-z][a-z][A-Z][A-Z].lua
+src/Encore_*/Locales/[a-z][a-z][A-Z][A-Z].lua
 # The grep-check fixtures hold the exact spacing and quotes the checks must catch.
 tests/Game/API/fixtures/border/spaced.lua
 tests/Game/API/fixtures/g_spaced_double.lua

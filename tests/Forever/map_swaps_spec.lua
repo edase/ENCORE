@@ -35,7 +35,7 @@ local function queue(H, t)
         assert.is_true(headless.cycle(H, t))
     end
     assert.are.same({}, H.errors)
-    local out, recs = H.Hekili.Engine.Output.Primary, {}
+    local out, recs = H.Encore.Engine.Output.Primary, {}
     for i = 1, out.count do
         recs[i] = { out.recs[i].actionName, out.recs[i].indicator or "" }
     end
@@ -59,22 +59,22 @@ end
 describe("a dungeon pull through the token plate count (T1)", function()
     it("Elemental: 3 plates count 3 and the AoE totem line fires; 1 plate: the single-target one", function()
         local H = mw.new("C", {
-            character = character("src/Hekili_Shaman/Shaman.lua", "SHAMAN", 7, 1489),
+            character = character("src/Encore_Shaman/Shaman.lua", "SHAMAN", 7, 1489),
             pack = "Elemental (wowsims.com)",
         })
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         for k = 1, 3 do
             mw.plate(H, k)
         end
         mw.target(H, 1)
         local recs, t = queue(H, H.ctl.now)
-        assert.are.equal(3, H.Hekili.State.active_enemies)
+        assert.are.equal(3, H.Encore.State.active_enemies)
         assert.is_truthy(find(recs, "magma_totem"), names(recs))
         assert.is_nil(find(recs, "searing_totem"), names(recs))
         mw.unplate(H, 2)
         mw.unplate(H, 3)
         recs = queue(H, t)
-        assert.are.equal(1, H.Hekili.State.active_enemies)
+        assert.are.equal(1, H.Encore.State.active_enemies)
         assert.is_truthy(find(recs, "searing_totem"), names(recs))
         assert.is_nil(find(recs, "magma_totem"), names(recs))
     end)
@@ -83,12 +83,12 @@ describe("a dungeon pull through the token plate count (T1)", function()
         "Destruction with Recommend Target Swaps: its curse and DoTs swap to the other plate until it carries them",
         function()
             local H = mw.new("C", {
-                character = character("src/Hekili_Warlock/Warlock.lua", "WARLOCK", 9, 1490),
+                character = character("src/Encore_Warlock/Warlock.lua", "WARLOCK", 9, 1490),
                 pack = "Destruction (wowsims.com)",
             })
-            assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
-            local spec = H.Hekili.Engine.settings.specs[100093]
-            local A = H.Hekili.Class.abilities
+            assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
+            local spec = H.Encore.Engine.settings.specs[100093]
+            local A = H.Encore.Class.abilities
             local SPREAD = { "curse_of_the_elements", "immolate", "corruption" } -- the cycle_targets=1 lines' debuffs
             mw.plate(H, 1)
             mw.plate(H, 2)
@@ -97,12 +97,12 @@ describe("a dungeon pull through the token plate count (T1)", function()
             local start = t
             local recs
             recs, t = queue(H, t)
-            assert.are.equal(2, H.Hekili.State.active_enemies)
+            assert.are.equal(2, H.Encore.State.active_enemies)
             assert.is_nil(find(recs, nil, "cycle"))
             -- the enemies the belief holds aura `k` up on now (Facade.DebuffCount: active_dot's source; the State after an
             -- update is the queue's last simulated step, where Conflagrate may have eaten an Immolate)
             local function carriers(k)
-                return H.ns.Facade.DebuffCount(H.Hekili.Class.auras[k].id, t)
+                return H.ns.Facade.DebuffCount(H.Encore.Class.auras[k].id, t)
             end
             local n = 0
             local function cast(id) -- our cast on the current target, folded there (the belief's drain) before a tab
@@ -166,12 +166,12 @@ describe("a dungeon pull through the token plate count (T1)", function()
         local H, A, t, n
         local function boot(plates)
             H = mw.new("C", {
-                character = character("src/Hekili_Warlock/Warlock.lua", "WARLOCK", 9, 1490),
+                character = character("src/Encore_Warlock/Warlock.lua", "WARLOCK", 9, 1490),
                 pack = "Destruction (wowsims.com)",
             })
-            assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
-            H.Hekili.Engine.settings.specs[100093].cycle = true
-            A, t, n = H.Hekili.Class.abilities, H.ctl.now, 0
+            assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
+            H.Encore.Engine.settings.specs[100093].cycle = true
+            A, t, n = H.Encore.Class.abilities, H.ctl.now, 0
             for k = 1, plates do
                 mw.plate(H, k)
             end
@@ -194,7 +194,7 @@ describe("a dungeon pull through the token plate count (T1)", function()
             t = t + 0.2
             assert.is_true(headless.cycle(H, t))
             assert.are.same({}, H.errors)
-            local out, recs = H.Hekili.Engine.Output.Primary, {}
+            local out, recs = H.Encore.Engine.Output.Primary, {}
             for i = 1, out.count do
                 recs[i] = { out.recs[i].actionName, out.recs[i].indicator or "" }
             end

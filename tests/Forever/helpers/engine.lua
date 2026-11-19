@@ -230,27 +230,27 @@ function M.load(classToken, race)
     local state = newState(class, race)
     local client = { SECRET = {}, isUnit = {}, exists = {} }
     local env = { errors = {}, loadErrors = {}, class = class, state = state, client = client }
-    local hekili = { Class = class, State = state }
-    function hekili:GetLocale()
+    local encore = { Class = class, State = state }
+    function encore:GetLocale()
         return english
     end
-    function hekili.IsForever()
+    function encore.IsForever()
         return false
     end
-    function hekili:Error(...)
+    function encore:Error(...)
         table.insert(env.errors, select("#", ...) > 1 and string.format(...) or (...))
     end
-    function hekili:Loadstring(str)
+    function encore:Loadstring(str)
         return loadstring(str)
     end
-    function hekili:ContinueOnSpellLoad(_, fn)
+    function encore:ContinueOnSpellLoad(_, fn)
         fn(true)
     end
-    env.Hekili = hekili
+    env.Encore = encore
     -- The race registry: every race file's token and the keys it registers (`races`, `raceKeys[token]` = { abilities,
     -- auras }), recorded whether or not the race is live (Engine/Schema/Races.lua registers another race's unknown).
     env.races, env.raceKeys = {}, {}
-    setmetatable(hekili, {
+    setmetatable(encore, {
         __newindex = function(t, k, v)
             if k == "NewRace" then
                 local newRace = v
@@ -365,7 +365,7 @@ function M.load(classToken, race)
     ns.commitKey = noop
     ns.metatables = { mt_resource = {} }
     ns.RegisterEvent, ns.RegisterUnitEvent = noop, noop
-    hekili.Client = ns.Facade -- the content's one engine name for the client (Hekili.lua)
+    encore.Client = ns.Facade -- the content's one engine name for the client (Hekili.lua)
     -- the belief's reads content calls through `state` (State.lua's names), from the real VirtualState
     local VS = ns.VirtualState
     rawset(state, "knownRank", VS.KnownRank)
@@ -393,7 +393,7 @@ function M.load(classToken, race)
         }
     end
     local fakes = {
-        Hekili = hekili,
+        Encore = encore,
         Item = {
             CreateFromItemID = function(_, id)
                 return item(id)
@@ -433,9 +433,9 @@ function M.load(classToken, race)
         saved[k] = rawget(_G, k) or false
         _G[k] = v
     end
-    assert(loadfile(vload.ROOT .. "Engine/Sim/Constants.lua"))("Hekili", ns)
+    assert(loadfile(vload.ROOT .. "Engine/Sim/Constants.lua"))("Encore", ns)
     for _, path in ipairs(M.files()) do
-        local ok, err = pcall(assert(loadfile(path)), "Hekili", ns)
+        local ok, err = pcall(assert(loadfile(path)), "Encore", ns)
         if not ok then
             table.insert(env.loadErrors, path .. ": " .. tostring(err))
         end

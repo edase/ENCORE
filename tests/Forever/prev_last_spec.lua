@@ -7,7 +7,7 @@ describe("prev.last", function()
     it("answers the last cast after a reset, as prev_gcd.last does", function()
         local H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
-        local S = H.Hekili.State
+        local S = H.Encore.State
         S.player.lastcast, S.player.lastgcd = "slam", "slam"
         S.reset("Primary", true)
         assert.are.equal("slam", S.prev_gcd.last)

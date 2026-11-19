@@ -33,7 +33,7 @@ function M.meta()
         n = n + 1
     end
     return {
-        { "Measured on", "Hekili Forever " .. d.version },
+        { "Measured on", "Encore " .. d.version },
         { "Priorities", "Built from wowsims.com as of " .. d.wowsimsAsOf },
         { "Specializations and priorities", tostring(n) },
         { "Scale", "0 to 1; higher is better" },

@@ -12,7 +12,7 @@ local MANA, ENERGY = 0, 3
 
 -- The pack's one line that starts with `head`, as an `actions+=/` line.
 local function line(class, pack, head)
-    local f = assert(io.open(("src/Hekili_%s/APLs/%s.simc"):format(class, pack), "rb"))
+    local f = assert(io.open(("src/Encore_%s/APLs/%s.simc"):format(class, pack), "rb"))
     local s = f:read("*a")
     f:close()
     local rest = assert(s:match("\n" .. head:gsub("%p", "%%%0") .. "([^\n]*)"), head)
@@ -30,28 +30,28 @@ local function engine(ch, pack, text, max, distance)
     H.Fire("PLAYER_TARGET_CHANGED")
     local t = H.ctl.now + 0.2
     assert(headless.cycle(H, t))
-    local lines = H.Hekili:ParseActionList(text)
+    local lines = H.Encore:ParseActionList(text)
     for _, l in ipairs(lines) do
         l.enabled = true
     end
-    H.Hekili.DB.profile.packs[pack].lists = { precombat = {}, default = lines }
-    H.Hekili:LoadScripts()
-    H.Hekili.DB.profile.toggles.cooldowns.value = true -- Dark Sacrifice is a cooldowns-toggle ability
+    H.Encore.DB.profile.packs[pack].lists = { precombat = {}, default = lines }
+    H.Encore:LoadScripts()
+    H.Encore.DB.profile.toggles.cooldowns.value = true -- Dark Sacrifice is a cooldowns-toggle ability
     H.Fire("PLAYER_REGEN_DISABLED")
     local VS = H.ns.VirtualState
     local power, pools = VS.Power, {}
     VS.Power = function(pt, now)
         return pools[pt] or power(pt, now)
     end
-    local out = H.Hekili.Engine.Output.Primary
-    assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+    local out = H.Encore.Engine.Output.Primary
+    assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
     return function(mana, energy)
         pools[MANA] = { est = mana, lo = mana, hi = mana, conf = 1 }
         pools[ENERGY] = energy and { est = energy, lo = energy, hi = energy, conf = 1 } or nil
         t = t + 0.2
         assert(headless.cycle(H, t))
         assert.are.same({}, H.errors)
-        assert.are.equal(max, H.Hekili.State.mana.max)
+        assert.are.equal(max, H.Encore.State.mana.max)
         return out.recs[1] and out.recs[1].actionName
     end
 end

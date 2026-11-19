@@ -140,7 +140,7 @@ local T = {
 
 local W0
 local function class()
-    W0 = W0 or ld.load(nil, "src/Hekili_Mage/Mage.lua", "MAGE")
+    W0 = W0 or ld.load(nil, "src/Encore_Mage/Mage.lua", "MAGE")
     return W0
 end
 
@@ -324,7 +324,7 @@ local function classData(H)
     end
     local X = { aura = {} }
     cache[H] = X
-    for key, a in pairs(H.Hekili.Class.auras) do
+    for key, a in pairs(H.Encore.Class.auras) do
         if type(key) == "string" and type(a) == "table" and a.id then
             local d = a.duration
             X.aura[key] = { id = a.id, duration = type(d) == "function" and d() or d or 0, max_stack = a.max_stack }
@@ -528,7 +528,7 @@ M.MAP = {
     cold_snap = {
         effect = function(W, e, _, _, H)
             for _, key in ipairs({ "cone_of_cold", "ice_barrier" }) do
-                local a = H.Hekili.Class.abilities[key]
+                local a = H.Encore.Class.abilities[key]
                 local ids = { a.id }
                 for _, id in ipairs(a.copy) do
                     ids[#ids + 1] = id
@@ -763,9 +763,9 @@ local function content(name)
         if not m then
             error("unmapped key " .. tostring(key), 2)
         end
-        local a = H.Hekili.Class.abilities[key]
+        local a = H.Encore.Class.abilities[key]
         local X = classData(H)
-        local S = H.Hekili.State
+        local S = H.Encore.State
         local VS = H.ns.VirtualState
         local ids = C.IDS[key]
         if not ids then -- a key the world's kit lacks: every rank the class registers
@@ -787,7 +787,7 @@ local function content(name)
             gcd = GCD[a.gcd or "spell"],
             offGcd = a.gcd == "off",
             cast = castOf(key, H, up, stacks),
-            refund = world.refundOf(H.Hekili.Class, key),
+            refund = world.refundOf(H.Encore.Class, key),
             outcomes = m.outcomes,
         }
         if m.channel then
@@ -821,7 +821,7 @@ local function content(name)
         local out = {}
         local X = classData(H)
         for key, m in pairs(M.MAP) do
-            if H.Hekili.Class.abilities[key] and C.IDS[key] then
+            if H.Encore.Class.abilities[key] and C.IDS[key] then
                 local ids = C.IDS[key]
                 local function answer(W, e, power)
                     if m.requires and not m.requires(W, e, X) then
@@ -845,7 +845,7 @@ local function content(name)
     function C.uptime(H)
         local out = {}
         for _, key in ipairs(P.uptime) do
-            out[#out + 1] = { key, H.Hekili.Class.auras[key].id }
+            out[#out + 1] = { key, H.Encore.Class.auras[key].id }
         end
         return out
     end

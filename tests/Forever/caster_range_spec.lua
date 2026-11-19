@@ -54,7 +54,7 @@ describe("caster range: a ranged spec's plate count (Destruction, 30 yd default)
 
     before_each(function()
         H = boot(wl.Destruction)
-        assert.are.equal(30, H.Hekili.DB.profile.specs[wl.Destruction.SPEC].nameplateRange)
+        assert.are.equal(30, H.Encore.DB.profile.specs[wl.Destruction.SPEC].nameplateRange)
     end)
 
     it("counts the target only while the far plates are out of combat", function()
@@ -94,10 +94,10 @@ describe("caster range: a ranged spec's plate count (Destruction, 30 yd default)
 
     it("says why a far plate is left out in the debug log", function()
         plates(H, { { 30, false } })
-        H.Hekili.ActiveDebug, H.Hekili.TargetDebug = true, nil
+        H.Encore.ActiveDebug, H.Encore.TargetDebug = true, nil
         count(H)
-        H.Hekili.ActiveDebug = false
-        assert.is_truthy(tostring(H.Hekili.TargetDebug):find("Excluded: not in combat beyond 10 yd", 1, true))
+        H.Encore.ActiveDebug = false
+        assert.is_truthy(tostring(H.Encore.TargetDebug):find("Excluded: not in combat beyond 10 yd", 1, true))
     end)
 end)
 
@@ -106,7 +106,7 @@ describe("caster range: a melee spec's plate count (10 yd default), unchanged", 
 
     it("counts near plates out of combat and no far plate in combat", function()
         local H = boot({ character = ww.character, PACK = ww.PACK })
-        assert.are.equal(10, H.Hekili.DB.profile.specs[ww.SPEC].nameplateRange)
+        assert.are.equal(10, H.Encore.DB.profile.specs[ww.SPEC].nameplateRange)
         plates(H, { { 8, false }, { 8, false } })
         H.ctl.distance.nameplate1 = 8
         assert.are.equal(3, count(H))

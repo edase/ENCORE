@@ -24,7 +24,7 @@ run_one() {
 export -f run_one
 
 mapfile -t files < <(find tests -name '*_spec.lua' | LC_ALL=C sort)
-TIMES=${XDG_CACHE_HOME:-${HOME:-/nonexistent}/.cache}/hekili-busted/$(printf '%s ' "$@" | md5sum | cut -c1-12)
+TIMES=${XDG_CACHE_HOME:-${HOME:-/nonexistent}/.cache}/encore-busted/$(printf '%s ' "$@" | md5sum | cut -c1-12)
 mkdir -p "$(dirname "$TIMES")" 2>/dev/null
 touch "$TIMES" 2>/dev/null
 [ -r "$TIMES" ] && [ -w "$TIMES" ] || TIMES=/dev/null # the order is an optimisation: never fail a run over it

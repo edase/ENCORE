@@ -9,7 +9,7 @@ local ww = require("Forever.helpers.warrior_world")
 local BATTLE_SHOUT = 6673
 local REND = 11574 -- the highest rank the kit knows
 
-describe("an own-cast aura and Hekili's scrape", function()
+describe("an own-cast aura and Encore's scrape", function()
     it("is up at the very next cycle's reset, with no client UNIT_AURA", function()
         local H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
@@ -17,11 +17,11 @@ describe("an own-cast aura and Hekili's scrape", function()
         H.Fire("UNIT_AURA", "player")
         H.Fire("SPELL_UPDATE_COOLDOWN")
         H.Fire("UPDATE_SHAPESHIFT_FORM")
-        local hooks = H.Hekili.Class.hooks
+        local hooks = H.Encore.Class.hooks
         hooks.reset_precast = hooks.reset_precast or {}
         local seen = {} -- the buff as each reset of the cycle saw it
         table.insert(hooks.reset_precast, function()
-            seen[#seen + 1] = H.Hekili.State.buff.battle_shout.up
+            seen[#seen + 1] = H.Encore.State.buff.battle_shout.up
         end)
         H.ctl.now = H.ctl.now + 1
         assert(headless.cycle(H, H.ctl.now))
@@ -46,11 +46,11 @@ describe("an own-cast aura and Hekili's scrape", function()
         H.Fire("UNIT_AURA", "target")
         H.Fire("SPELL_UPDATE_COOLDOWN")
         H.Fire("UPDATE_SHAPESHIFT_FORM")
-        local hooks = H.Hekili.Class.hooks
+        local hooks = H.Encore.Class.hooks
         hooks.reset_precast = hooks.reset_precast or {}
         local seen = {}
         table.insert(hooks.reset_precast, function()
-            seen[#seen + 1] = H.Hekili.State.debuff.rend.up
+            seen[#seen + 1] = H.Encore.State.debuff.rend.up
         end)
         H.ctl.combat, H.ctl.auraError.target = true, true -- the target's walk raises in combat, as on Forever
         H.Fire("PLAYER_REGEN_DISABLED")

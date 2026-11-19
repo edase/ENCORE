@@ -27,7 +27,7 @@ local HITS = { "updateTarget", "trackDebuff", "storeDamage", "updateMinion", "el
 local function boot()
     local H = headless.new({ character = ww.character(), pack = ww.PACK })
     assert.are.same({}, H.loadErrors)
-    H.Hekili.UpdateDamageDetectionForCLEU(H.Hekili)
+    H.Encore.UpdateDamageDetectionForCLEU(H.Encore)
     H.I, H.L = H.ns.VirtualStateInternal, H.ns.VirtualStateInternal.Log
     H.log = {}
     for _, name in ipairs(HITS) do
@@ -59,7 +59,7 @@ end
 describe("the combat-log handler", function()
     it("does the same with each kind of row (identity table)", function()
         local H = boot()
-        local me, st = H.ctl.guid.player, H.Hekili.State
+        local me, st = H.ctl.guid.player, H.Encore.State
         H.ctl.guid.pet, H.ctl.exists.pet = PET, true
 
         fight(H, true)
@@ -89,7 +89,7 @@ describe("the combat-log handler", function()
         -- a debuff of ours on a foe
         fight(H, true)
         local id
-        for k, a in pairs(H.Hekili.Class.auras) do
+        for k, a in pairs(H.Encore.Class.auras) do
             if type(k) == "number" and not a.friendly then
                 id = k
                 break
@@ -102,8 +102,8 @@ describe("the combat-log handler", function()
         H.ns.updateMinion(STRANGER, H.ctl.now)
         H.log = {}
         assert.are.equal("", row(H, "SPELL_DAMAGE", STRANGER, FOE))
-        H.Hekili.Engine.settings.specs[st.spec.id].damagePets = true
-        H.Hekili:UpdateDamageDetectionForCLEU()
+        H.Encore.Engine.settings.specs[st.spec.id].damagePets = true
+        H.Encore:UpdateDamageDetectionForCLEU()
         assert.are.equal("updateTarget:" .. FOE, row(H, "SPELL_DAMAGE", STRANGER, FOE))
         assert.are.same({}, H.errors)
     end)

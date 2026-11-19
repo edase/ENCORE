@@ -7,7 +7,7 @@
 local ld = require("Forever.helpers.load_druid")
 local headless = require("Game.harness.headless")
 
-local FILE = "src/Hekili_Shaman/Shaman.lua"
+local FILE = "src/Encore_Shaman/Shaman.lua"
 
 -- key = { spell IDs in rank order, the top rank's mana cost, cooldown, gcd }, from the DB2 (`wowdb spell <name>`;
 -- Stormstrike's, Chain Lightning's and Mana Tide Totem's costs and its Forever-only rank 4 (1325256) from wowsims/forever's
@@ -1070,7 +1070,7 @@ describe("Forever Shaman through the engine", function()
     it(
         "resolves each totem buff by name and by its _totem alias to one aura, and an unknown totem buff stays unknown",
         function()
-            local auras = H.Hekili.Class.auras
+            local auras = H.Encore.Class.auras
             for _, t in ipairs(TOTEM_AURAS) do
                 local a = assert(auras[t[1]], t[1])
                 assert.are.equal(a, auras[t[1] .. "_totem"], t[1])
@@ -1085,7 +1085,7 @@ describe("Forever Shaman through the engine", function()
     -- the nearest whole mana (CN22: wowsims e4ef929e54 mana.go rounds, from the game's form costs): Stormstrike's 8% is
     -- 121.6, so 122.
     it("prices the percent-of-base costs at 60 from base mana 1520: 152, 91, 122", function()
-        local S, VS = H.Hekili.State, H.ns.VirtualState
+        local S, VS = H.Encore.State, H.ns.VirtualState
         assert.are.same({ 1520, 152, 152, 91, 91, 122 }, {
             VS.BasePower(0),
             S.action.poison_cleansing_totem.cost,
@@ -1103,7 +1103,7 @@ describe("Forever Shaman through the engine", function()
         local c = character()
         c.talents = { [16173] = 5 }
         local T = headless.new({ character = c, pack = "Enhancement (wowsims.com)" })
-        local S, VS, I = T.Hekili.State, T.ns.VirtualState, T.ns.VirtualStateInternal
+        local S, VS, I = T.Encore.State, T.ns.VirtualState, T.ns.VirtualStateInternal
         T.ctl.costs[8166] = { { type = 0, cost = 114 } } -- Poison Cleansing Totem: 0.1 x 1520 x 0.75
         T.Fire("SPELLS_CHANGED")
         local function belief(key) -- the belief's price at the cast (I.CostOf)
@@ -1128,7 +1128,7 @@ describe("Forever Shaman through the engine", function()
     end)
 
     it("reads a totem buff through the engine by either name without an error", function()
-        local S = H.Hekili.State
+        local S = H.Encore.State
         for _, k in ipairs({ "stoneskin_totem", "stoneskin", "windfury_totem", "flametongue", "mana_tide_totem" }) do
             assert.is_false(S.buff[k].up, k)
         end
@@ -1136,7 +1136,7 @@ describe("Forever Shaman through the engine", function()
     end)
 
     it("answers a Searing Totem summoned in combat from the modelled slot, in the belief and the simulation", function()
-        local VS, S = H.ns.VirtualState, H.Hekili.State
+        local VS, S = H.ns.VirtualState, H.Encore.State
         local t = H.ctl.now + 1
         assert.is_true(headless.cycle(H, t))
         S.reset("Primary", true) -- at now: the cycle leaves the state after its simulated precombat totems
@@ -1163,7 +1163,7 @@ describe("Forever Shaman through the engine", function()
     -- Totemic Recall (36936) through the real engine: a Windfury Totem cast in combat, then the recall: the air slot
     -- ends at the recall in the belief and the simulation, and Windfury's buff goes with it.
     it("ends a totem summoned in combat at a Totemic Recall, in the belief and the simulation", function()
-        local VS, S = H.ns.VirtualState, H.Hekili.State
+        local VS, S = H.ns.VirtualState, H.Encore.State
         local t = H.ctl.now + 1
         assert.is_true(headless.cycle(H, t))
         H.ctl.combat = true
@@ -1196,7 +1196,7 @@ describe("Forever Shaman through the engine", function()
     -- Weapon buffs review §4.2: the engine's buff.<imbue> and main_hand_enchant follow the belief's reads and models
     -- (the same answer in both layers), whatever the hand's temporary layer holds.
     it("answers the imbue auras alike in the belief and the engine: reads, a cast in combat, a swap", function()
-        local VS, S, auras = H.ns.VirtualState, H.Hekili.State, H.Hekili.Class.auras
+        local VS, S, auras = H.ns.VirtualState, H.Encore.State, H.Encore.Class.auras
         local I = H.ns.VirtualStateInternal
         for _, k in ipairs({ "rockbiter_weapon", "flametongue_weapon", "windfury_weapon", "frostbrand_weapon" }) do
             local found -- every `enchants` aura crossed Build(def) with its IDs as plain numbers
@@ -1247,13 +1247,13 @@ describe("Forever Shaman through the engine", function()
 
     -- Upstream's `essential`: a precombat imbue line is prompted in combat while the imbue is down, never while up.
     it("prompts an essential precombat imbue line in combat only while the main hand has no imbue", function()
-        local out = H.Hekili.Engine.Output.Primary
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
-        local pack = H.Hekili.DB.profile.packs["Enhancement (wowsims.com)"]
+        local out = H.Encore.Engine.Output.Primary
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
+        local pack = H.Encore.DB.profile.packs["Enhancement (wowsims.com)"]
         local line = { enabled = true, action = "rockbiter_weapon", criteria = "!buff.main_hand_enchant.up" }
         pack.lists = { precombat = { line }, default = {} }
-        H.Hekili:LoadScripts()
-        H.Hekili:ReviewPacks()
+        H.Encore:LoadScripts()
+        H.Encore:ReviewPacks()
         H.ctl.inRange.target, H.ctl.level.target = true, 60
         H.Fire("PLAYER_TARGET_CHANGED")
         H.ctl.combat = true
@@ -1278,10 +1278,10 @@ describe("Forever Shaman through the engine", function()
         H.Fire("WEAPON_ENCHANT_CHANGED")
         -- and Water Shield up, so its line (R55: while the shield is down) stays silent
         H.ctl.auras.player.HELPFUL[1] =
-            { spellId = H.Hekili.Class.auras.water_shield.id, expirationTime = H.ctl.now + 600, applications = 3 }
+            { spellId = H.Encore.Class.auras.water_shield.id, expirationTime = H.ctl.now + 600, applications = 3 }
         H.Fire("UNIT_AURA", "player")
         -- and the build's four totems standing, so their refresh lines (remains<=2) stay silent too
-        local A = H.Hekili.Class.abilities
+        local A = H.Encore.Class.abilities
         for slot, key in ipairs({ "magma_totem", "strength_of_earth_totem", "mana_spring_totem", "windfury_totem" }) do
             H.ctl.totems[slot] = { name = "", start = H.ctl.now, duration = 120, icon = 0, spell = A[key].id }
             H.Fire("PLAYER_TOTEM_UPDATE", slot)
@@ -1289,9 +1289,9 @@ describe("Forever Shaman through the engine", function()
         H.Fire("PLAYER_TARGET_CHANGED")
         local t = H.ctl.now + 0.2
         assert(headless.cycle(H, t))
-        local out = H.Hekili.Engine.Output.Primary
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
-        local cds = H.Hekili.DB.profile.toggles.cooldowns
+        local out = H.Encore.Engine.Output.Primary
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
+        local cds = H.Encore.DB.profile.toggles.cooldowns
         H.Fire("PLAYER_REGEN_DISABLED")
         for _, on in ipairs({ true, false }) do
             cds.value = on
@@ -1309,7 +1309,7 @@ describe("Forever Shaman through the engine", function()
         H.Fire("PLAYER_TARGET_CHANGED")
         H.ctl.combat = true
         H.Fire("PLAYER_REGEN_DISABLED")
-        local id = H.Hekili.Class.auras.stormstrike.id
+        local id = H.Encore.Class.auras.stormstrike.id
         local t = H.ctl.now + 1
         local function cast(spell, at)
             H.ctl.now = at

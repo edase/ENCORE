@@ -13,7 +13,7 @@ describe("recommendation listeners (headless Arms)", function()
     before_each(function()
         H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
-        hk = H.Hekili
+        hk = H.Encore
         Out = H.ns.Output
         assert(headless.cycle(H, H.ctl.now + 0.2))
         added = {}

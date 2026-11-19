@@ -66,15 +66,15 @@ end
 -- The core's tables and functions a belief function must not reach (`state`, `Hekili`, `class` and what `state` holds
 -- directly: `state.swings`, a function of its own), and where the walk stops: the facade, the border's sanctioned read,
 -- and Lua's own libraries, either of which `state` may also list.
-local function fencesOf(Hekili)
-    local bad, stop = { [Hekili] = "Hekili", [Hekili.State] = "state", [Hekili.Class] = "class" }, {}
-    for k, v in pairs(Hekili.State) do
+local function fencesOf(Encore)
+    local bad, stop = { [Encore] = "Encore", [Encore.State] = "state", [Encore.Class] = "class" }, {}
+    for k, v in pairs(Encore.State) do
         if type(v) == "table" or type(v) == "function" then
             bad[v] = bad[v] or ("state." .. tostring(k))
         end
     end
-    local libs = { _G, math, string, table, Hekili.Client }
-    for _, v in pairs(Hekili.Client) do
+    local libs = { _G, math, string, table, Encore.Client }
+    for _, v in pairs(Encore.Client) do
         if type(v) == "table" then
             libs[#libs + 1] = v -- a namespace (Facade.C_Item)
         end
@@ -336,7 +336,7 @@ describe("the build's plain records at every pack #slow", function()
             local world = require(w[1])
             local L = loop.new(w[2] and world[w[2]] or world)
             ns = L.us.ns
-            I, H = ns.VirtualStateInternal, L.us.Hekili
+            I, H = ns.VirtualStateInternal, L.us.Encore
             def = I.def
         end)
 
@@ -363,7 +363,7 @@ describe("the build's plain records at every pack #slow", function()
             assert.are.equal(errors0, I.nowErrors)
         end)
 
-        it(name .. ": no function the belief evaluates reaches state, Hekili or class", function()
+        it(name .. ": no function the belief evaluates reaches state, Encore or class", function()
             local bad, stop = fencesOf(H)
             local hits, seen = {}, {}
             eachField(def, function(rec, field, path)

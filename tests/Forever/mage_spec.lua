@@ -7,7 +7,7 @@
 local ld = require("Forever.helpers.load_druid")
 local headless = require("Game.harness.headless")
 
-local FILE = "src/Hekili_Mage/Mage.lua"
+local FILE = "src/Encore_Mage/Mage.lua"
 
 -- key = { spell IDs in rank order, the top rank's mana cost, cooldown, gcd }, from the DB2 (`wowdb spell <name>`; Arcane
 -- Wrath from wowsims's data): the cooldown is the larger of RecoveryTime and CategoryRecoveryTime; a percent-of-base
@@ -97,9 +97,9 @@ describe("Forever Mage", function()
         assert.are.same({}, H.loadErrors)
         H.ctl.combat = true
         H.Fire("PLAYER_REGEN_DISABLED")
-        local max0 = H.Hekili.Client.UnitPowerMax("player", 0)
+        local max0 = H.Encore.Client.UnitPowerMax("player", 0)
         H.ctl.powerMax[0] = max0 + 300 -- Arcane Intellect lands in combat
-        assert.are.equal(max0 + 300, H.Hekili.Client.UnitPowerMax("player", 0))
+        assert.are.equal(max0 + 300, H.Encore.Client.UnitPowerMax("player", 0))
     end)
 
     it("declares Arcane, Fire and Frost on trees 1, 2 and 3 with their wowsims.com packs", function()
@@ -550,7 +550,7 @@ describe("Forever Mage through the engine", function()
         function()
             local H = headless.new({ character = character() })
             assert.are.same({}, H.loadErrors)
-            local specs = H.Hekili.Class.specs
+            local specs = H.Encore.Class.specs
             assert.are.same(
                 { "arcane", "fire", "frost", false },
                 { specs[100081].key, specs[100082].key, specs[100083].key, specs[100083].unsupported or false }
@@ -591,7 +591,7 @@ describe("Forever Mage through the engine", function()
     -- base, the 1.2 at 4 charges included (central fix 22, gap BB).
     it("counts Arcane Blast's charges in the belief and the simulation, four at most, each pricing the next", function()
         local H = headless.new({ character = character() })
-        local I, VS, S = H.ns.VirtualStateInternal, H.ns.VirtualState, H.Hekili.State
+        local I, VS, S = H.ns.VirtualStateInternal, H.ns.VirtualState, H.Encore.State
         local a, out = I.ab.bySpell[400574], {}
         for k = 1, 5 do
             local t = H.ctl.now + 1
@@ -637,7 +637,7 @@ describe("Forever Mage through the engine", function()
                 .. (barrage and "up" or "down"),
             function()
                 local H = headless.new({ character = character() })
-                local I, VS, S = H.ns.VirtualStateInternal, H.ns.VirtualState, H.Hekili.State
+                local I, VS, S = H.ns.VirtualStateInternal, H.ns.VirtualState, H.Encore.State
                 local t = H.ctl.now + 1
                 H.ctl.now = t
                 assert.is_true(headless.cycle(H, t)) -- the rebuild's player aura walk first (the client lists none)
@@ -684,7 +684,7 @@ describe("Forever Mage through the engine", function()
             end
         end
         H.ns.BuildTracked()
-        local I, VS, S = H.ns.VirtualStateInternal, H.ns.VirtualState, H.Hekili.State
+        local I, VS, S = H.ns.VirtualStateInternal, H.ns.VirtualState, H.Encore.State
         local a = I.ab.bySpell[400574]
         local t = H.ctl.now + 1
         H.ctl.now = t

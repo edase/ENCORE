@@ -6,7 +6,7 @@ local addons = require("helpers.addons")
 
 -- Every shared content file Hekili_Shared.toc lists, in its order.
 local SHARED = {}
-for _, path in ipairs(addons.files("Hekili_Shared")) do
+for _, path in ipairs(addons.files("Encore_Shared")) do
     local file = path:match("/Shared/(%w+)%.lua$")
     if file then
         SHARED[#SHARED + 1] = file
@@ -45,13 +45,13 @@ local DROPPED = {
 local STUBS = { "voidbinding", "voidform", "shadowform", "adrenaline_rush" }
 -- Keys `all` gave up to the class or race file that registers them.
 local OWNERS = {
-    mark_of_the_wild = "Hekili_Shared/Shared/Auras.lua", -- back from the Druid pack: every class carries it (L971)
-    battle_shout = "Hekili_Warrior/Warrior.lua",
-    berserking = "Hekili_Shared/Races/Troll.lua",
-    blood_fury = "Hekili_Shared/Races/Orc.lua",
-    shadowmeld = "Hekili_Shared/Races/NightElf.lua",
-    will_to_survive = "Hekili_Shared/Races/Human.lua",
-    stoneform = "Hekili_Shared/Races/Dwarf.lua",
+    mark_of_the_wild = "Encore_Shared/Shared/Auras.lua", -- back from the Druid pack: every class carries it (L971)
+    battle_shout = "Encore_Warrior/Warrior.lua",
+    berserking = "Encore_Shared/Races/Troll.lua",
+    blood_fury = "Encore_Shared/Races/Orc.lua",
+    shadowmeld = "Encore_Shared/Races/NightElf.lua",
+    will_to_survive = "Encore_Shared/Races/Human.lua",
+    stoneform = "Encore_Shared/Races/Dwarf.lua",
 }
 
 local function read(path)
@@ -98,7 +98,7 @@ describe("shared content", function()
         function all:RegisterStateExpr(key, fn)
             self.exprs[key] = fn
         end
-        _G.Hekili = { State = { race_token = "BloodElf" }, Class = { specs = { [0] = all }, file = "WARRIOR" } }
+        _G.Encore = { State = { race_token = "BloodElf" }, Class = { specs = { [0] = all }, file = "WARRIOR" } }
         debuffs, bags, controls = {}, {}, {}
         ns = {
             Facade = {
@@ -134,12 +134,12 @@ describe("shared content", function()
                 },
             },
         }
-        _G.Hekili.Client = ns.Facade
-        _G.Hekili.SCHOOL = require("Game.State.helpers.load").school() -- Auras.lua reads it at load
-        assert(loadfile("src/Hekili/Engine/Schema/Races.lua"))("Hekili", ns)
-        assert(loadfile("src/Hekili/Engine/Schema/Shared.lua"))("Hekili", ns)
+        _G.Encore.Client = ns.Facade
+        _G.Encore.SCHOOL = require("Game.State.helpers.load").school() -- Auras.lua reads it at load
+        assert(loadfile("src/Encore/Engine/Schema/Races.lua"))("Encore", ns)
+        assert(loadfile("src/Encore/Engine/Schema/Shared.lua"))("Encore", ns)
         for _, f in ipairs(files or SHARED) do
-            assert(loadfile(addons.root("Hekili_Shared") .. "Shared/" .. f .. ".lua"))()
+            assert(loadfile(addons.root("Encore_Shared") .. "Shared/" .. f .. ".lua"))()
         end
     end
 
@@ -151,17 +151,17 @@ describe("shared content", function()
     end
 
     before_each(function()
-        saved = { rawget(_G, "Hekili") or false, rawget(_G, "INVTYPE_WEAPONMAINHAND") or false }
+        saved = { rawget(_G, "Encore") or false, rawget(_G, "INVTYPE_WEAPONMAINHAND") or false }
         _G.INVTYPE_WEAPONMAINHAND = "Main Hand" -- the client's global string, read at load
     end)
 
     after_each(function()
-        _G.Hekili, _G.INVTYPE_WEAPONMAINHAND = saved[1] or nil, saved[2] or nil
+        _G.Encore, _G.INVTYPE_WEAPONMAINHAND = saved[1] or nil, saved[2] or nil
     end)
 
     it("writes every registration into `all`, for any race, and the modifiers into the race packs' lists", function()
         load({})
-        local shared = _G.Hekili:NewShared()
+        local shared = _G.Encore:NewShared()
         local a, b = { id = 1 }, { id = 2 }
         shared:RegisterAbility("x", a)
         shared:RegisterAura("x", b)
@@ -326,7 +326,7 @@ describe("shared content", function()
             { all.abilities.healthstone.cooldown, all.abilities.healthstone.gcd, all.abilities.healthstone.toggle }
         )
         assert.is_nil(all.abilities.healthstone.now or all.abilities.potion.now) -- item actions: no cast the belief sees
-        for _, path in ipairs({ "src/Hekili/Engine/Sim/Core.lua", "src/Hekili/Options/DevTools.lua" }) do
+        for _, path in ipairs({ "src/Encore/Engine/Sim/Core.lua", "src/Encore/Options/DevTools.lua" }) do
             assert.is_false(names(read(path), "tempered_potion"), path) -- the `potion` verb's old fallback
         end
     end)
@@ -460,9 +460,9 @@ describe("shared content", function()
         assert.are.same({ false, "must be damaged" }, { usable() })
     end)
 
-    it("potion's item and consumable run under Hekili's setfenv without touching a global state", function()
+    it("potion's item and consumable run under Encore's setfenv without touching a global state", function()
         load({ "Consumables" })
-        local state = _G.Hekili.State -- the env is the state table itself, as in game: no `state` or `class` key
+        local state = _G.Encore.State -- the env is the state table itself, as in game: no `state` or `class` key
         state.args, state.settings, state.spec = {}, {}, {}
         for _, field in ipairs({ "item", "consumable" }) do
             local fn = all.abilities.potion[field]
@@ -482,10 +482,10 @@ describe("shared content", function()
             { a.actual_trinket1, a.actual_trinket2, a.actual_main_hand }
         )
         assert.are.same({ "|cff00ccff[Main Hand]|r", false }, { a.main_hand.name, a.main_hand.usable })
-        assert.are.same({}, _G.Hekili.Class.trinkets[12345])
+        assert.are.same({}, _G.Encore.Class.trinkets[12345])
     end)
 
-    it("registers each shared key in one file only, every file Hekili_Shared.toc lists", function()
+    it("registers each shared key in one file only, every file Encore_Shared.toc lists", function()
         load()
         assert.are.same({ "Auras", "Consumables", "Items" }, SHARED)
         for _, kind in ipairs({ "abilities", "auras" }) do
@@ -500,7 +500,7 @@ describe("shared content", function()
     it(
         "leaves no dropped key in a priority, a class, race, engine or shared file, and no stub outside its own",
         function()
-            local roots = { "src/Hekili/Engine/Schema" } -- the class pack roots below hold the APLs/packs.lua manifests
+            local roots = { "src/Encore/Engine/Schema" } -- the class pack roots below hold the APLs/packs.lua manifests
             for _, name in ipairs(addons.CONTENT) do
                 roots[#roots + 1] = addons.root(name)
             end
@@ -512,8 +512,8 @@ describe("shared content", function()
                     assert.is_false(names(src, k), path .. ": " .. k)
                 end
                 -- A class file (a future Priest or Rogue) may register a stubbed key for real; its registration wins.
-                if path ~= addons.root("Hekili_Shared") .. "Shared/Auras.lua" then
-                    local class = path:find("^src/Hekili_%w+/")
+                if path ~= addons.root("Encore_Shared") .. "Shared/Auras.lua" then
+                    local class = path:find("^src/Encore_%w+/")
                     for _, k in ipairs(STUBS) do
                         assert.is_true(class and registers(src, k) or not names(src, k), path .. ": " .. k)
                     end
@@ -530,7 +530,7 @@ describe("shared content", function()
             assert.is_true(names(read("src/" .. owner), k), owner .. ": " .. k)
             for _, file in ipairs({ "Spec.lua", "Spec/All.lua" }) do -- `all` is Spec/All.lua since the split
                 assert.is_false(
-                    names(read("src/Hekili/Engine/Schema/" .. file), k),
+                    names(read("src/Encore/Engine/Schema/" .. file), k),
                     "Engine/Schema/" .. file .. ": " .. k
                 )
             end

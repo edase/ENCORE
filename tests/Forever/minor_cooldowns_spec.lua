@@ -21,7 +21,7 @@ describe("the minor_cooldowns toggle", function()
             },
         }
         local H = boot(saved)
-        local p = H.Hekili.DB.profile
+        local p = H.Encore.DB.profile
         assert.is_nil(rawget(p.toggles, "essences"))
         local t = p.toggles.minor_cooldowns
         assert.are.equal("ALT-G", t.key)
@@ -29,14 +29,14 @@ describe("the minor_cooldowns toggle", function()
         assert.is_true(t.separate)
         assert.is_false(t.override)
         assert.are.equal("minor_cooldowns", p.specs[ww.SPEC].abilities.mortal_strike.toggle)
-        H.Hekili:RunOneTimeFixes() -- again: nothing left to move
+        H.Encore:RunOneTimeFixes() -- again: nothing left to move
         assert.are.equal("ALT-G", p.toggles.minor_cooldowns.key)
         assert.are.same({}, H.errors)
     end)
 
     it("keeps the defaults on a fresh profile", function()
         local H = boot()
-        local t = H.Hekili.DB.profile.toggles
+        local t = H.Encore.DB.profile.toggles
         assert.is_nil(rawget(t, "essences"))
         assert.are.equal("ALT-SHIFT-G", t.minor_cooldowns.key)
         assert.is_true(t.minor_cooldowns.value)
@@ -44,19 +44,19 @@ describe("the minor_cooldowns toggle", function()
 
     it("answers toggle.essences, FireToggle('essences') and an imported toggle.essences as minor_cooldowns", function()
         local H = boot()
-        local t = H.Hekili.DB.profile.toggles.minor_cooldowns
+        local t = H.Encore.DB.profile.toggles.minor_cooldowns
         t.override = false
         t.value = true
-        assert.is_true(H.Hekili.State.toggle.essences)
-        H.Hekili:FireToggle("essences")
+        assert.is_true(H.Encore.State.toggle.essences)
+        H.Encore:FireToggle("essences")
         assert.is_false(t.value)
-        assert.is_false(H.Hekili.State.toggle.essences)
-        local out = H.Hekili:ParseActionList("actions+=/mortal_strike,if=toggle.essences&rage>=30")
+        assert.is_false(H.Encore.State.toggle.essences)
+        local out = H.Encore:ParseActionList("actions+=/mortal_strike,if=toggle.essences&rage>=30")
         assert.are.equal("toggle.minor_cooldowns&rage>=30", out[1].criteria:gsub("%s", ""))
     end)
 
     it("is not spelled essences in any class pack's priorities or class file", function()
-        for _, glob in ipairs({ "src/Hekili_*/APLs/*.simc", "src/Hekili_*/*.lua" }) do
+        for _, glob in ipairs({ "src/Encore_*/APLs/*.simc", "src/Encore_*/*.lua" }) do
             local ls = assert(io.popen("ls " .. glob))
             for file in ls:lines() do
                 local f = assert(io.open(file))

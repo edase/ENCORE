@@ -30,7 +30,7 @@ jobs:
       - uses: BigWigsMods/packager@e50a250f8705041e40f2fa1ddcb280a686d65aa0 # v2.6.1
         with:
           args: -d -l # -d: build only, never upload; -l: skip @localization@ (the SFX-Widgets Info-URL widget carries one)
-      - run: bash tools/check_package.sh .release/Hekili-*.zip
+      - run: bash tools/check_package.sh .release/Encore-*.zip
       - name: Release notes
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -42,8 +42,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          zips=(.release/Hekili-*.zip)
-          [ ${#zips[@]} -eq 1 ] && [ -s "${zips[0]}" ] || { echo "expected one .release/Hekili-*.zip: ${zips[*]}"; exit 1; }
+          zips=(.release/Encore-*.zip)
+          [ ${#zips[@]} -eq 1 ] && [ -s "${zips[0]}" ] || { echo "expected one .release/Encore-*.zip: ${zips[*]}"; exit 1; }
           pre=()
           case "$GITHUB_REF_NAME" in *-*) pre=(--prerelease) ;; esac
           gh release create "$GITHUB_REF_NAME" --draft "${pre[@]}" --title "$GITHUB_REF_NAME" --notes-file notes.md "${zips[0]}"

@@ -11,15 +11,15 @@ local function run(list)
     H.ctl.inRange.target, H.ctl.level.target = true, 60
     H.Fire("PLAYER_TARGET_CHANGED")
     assert(headless.cycle(H, H.ctl.now + 0.2))
-    H.Hekili.DB.profile.packs[ww.PACK].lists = { default = list }
-    H.Hekili:LoadScripts()
-    assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+    H.Encore.DB.profile.packs[ww.PACK].lists = { default = list }
+    H.Encore:LoadScripts()
+    assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
     H.ctl.combat = true
     H.Fire("PLAYER_REGEN_DISABLED")
     assert(headless.cycle(H, H.ctl.now + 0.2))
     assert.are.same({}, H.errors)
-    assert.are.equal(3, H.Hekili.DB.profile.displays.Primary.numIcons)
-    local out, names = H.Hekili.Engine.Output.Primary, {}
+    assert.are.equal(3, H.Encore.DB.profile.displays.Primary.numIcons)
+    local out, names = H.Encore.Engine.Output.Primary, {}
     for i = 1, out.count do
         names[i] = out.recs[i].actionName
     end

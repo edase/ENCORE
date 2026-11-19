@@ -16,8 +16,8 @@ local function load(C, haste)
     H.ctl.spellHaste = haste or 0
     H.Fire("UNIT_SPELL_HASTE", "player")
     assert.is_true(headless.cycle(H, H.ctl.now + 0.1))
-    H.Hekili.State.reset("Primary", true)
-    return H, H.Hekili.State
+    H.Encore.State.reset("Primary", true)
+    return H, H.Encore.State
 end
 
 describe("the simulation's GCD rule (dry-gcd)", function()
@@ -105,8 +105,8 @@ describe("the simulation's GCD rule (dry-gcd)", function()
 
     it("reads a bare `gcd` as gcd.max in the compiler, as the SimC importer does", function()
         local H = load(dw.Balance, 0)
-        assert.are.equal("gcd.max<2", H.Hekili.Scripts.SimToLua("gcd<2"))
-        local out = H.Hekili:ParseActionList("actions+=/wrath,if=gcd<2\n")
+        assert.are.equal("gcd.max<2", H.Encore.Scripts.SimToLua("gcd<2"))
+        local out = H.Encore:ParseActionList("actions+=/wrath,if=gcd<2\n")
         assert.are.equal("gcd.max<2", (out[1].criteria:gsub(" ", "")))
     end)
 
@@ -117,8 +117,8 @@ describe("the simulation's GCD rule (dry-gcd)", function()
         assert.are.same({}, H.loadErrors)
         H.ctl.spellHaste = 60
         H.Fire("UNIT_SPELL_HASTE", "player")
-        local out = H.Hekili.Engine.Output.Primary
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        local out = H.Encore.Engine.Output.Primary
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         H.ctl.inRange.target, H.ctl.level.target = true, 60
         H.Fire("PLAYER_TARGET_CHANGED")
         H.ctl.now = H.ctl.now + 1

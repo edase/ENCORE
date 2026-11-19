@@ -24,10 +24,10 @@ end
 
 -- src/Hekili_<Class>/<Class>.lua (the class pack addon) holds the RegisterPack blocks; APLs/ beside it, the sources.
 local function classFile(class)
-    return "src/Hekili_" .. Class(class) .. "/" .. Class(class) .. ".lua"
+    return "src/Encore_" .. Class(class) .. "/" .. Class(class) .. ".lua"
 end
 local function aplRoot(class)
-    return "src/Hekili_" .. Class(class) .. "/APLs/"
+    return "src/Encore_" .. Class(class) .. "/APLs/"
 end
 
 local OPTIONS = {
@@ -470,7 +470,7 @@ local function libs()
         }, { __index = _G })
         env._G = env
         for _, lib in ipairs({ "LibStub/LibStub", "LibDeflate/LibDeflate", "AceSerializer-3.0/AceSerializer-3.0" }) do
-            setfenv(assert(loadfile("src/Hekili/Libs/" .. lib .. ".lua")), env)()
+            setfenv(assert(loadfile("src/Encore/Libs/" .. lib .. ".lua")), env)()
         end
         LibDeflate, Serializer = env.LibStub("LibDeflate"), env.LibStub("AceSerializer-3.0")
     end
@@ -495,20 +495,20 @@ local function encode(p)
             lists = p.lists,
         },
     }
-    return "Hekili:" .. deflate:EncodeForPrint(deflate:CompressDeflate(serializer:Serialize(pack), { level = 5 }))
+    return "Encore:" .. deflate:EncodeForPrint(deflate:CompressDeflate(serializer:Serialize(pack), { level = 5 }))
 end
 
 -- encode's inverse, as Options.lua's StringToTable reads a chat string; returns the package's payload.
 local function decode(s)
     local deflate, serializer = libs()
-    local decoded = deflate:DecodeForPrint((s:gsub("^Hekili:", "")))
+    local decoded = deflate:DecodeForPrint((s:gsub("^Encore:", "")))
     local decompressed = decoded and deflate:DecompressDeflate(decoded)
     if not decompressed then
         error("unable to decode or decompress the string", 0)
     end
     local ok, pack = serializer:Deserialize(decompressed)
     if not ok or type(pack) ~= "table" or type(pack.payload) ~= "table" then
-        error("not a Hekili package: " .. tostring(pack), 0)
+        error("not a Encore package: " .. tostring(pack), 0)
     end
     return pack.payload
 end
@@ -527,7 +527,7 @@ local function sync(src, packs)
     end
     while at do
         local s, e, name =
-            src:find('^spec:RegisterPack%(\n    "([^"\n]+)",\n    %d+,\n    %[%[Hekili:[^%]\n]*%]%]\n%)\n', at - 5)
+            src:find('^spec:RegisterPack%(\n    "([^"\n]+)",\n    %d+,\n    %[%[Encore:[^%]\n]*%]%]\n%)\n', at - 5)
         if not s then
             local line = select(2, src:sub(1, at):gsub("\n", "")) + 1
             error("line " .. line .. ": a RegisterPack( not in the generated block layout", 0)

@@ -8,21 +8,21 @@ local PREFIX = "The Import String provided could not be decompressed.\n"
 local function boot()
     local H = headless.new({ character = ww.character(), pack = ww.PACK })
     assert.are.same({}, H.loadErrors)
-    H.Hekili:EmbedDisplayOptions()
-    H.Hekili:EmbedPackOptions()
+    H.Encore:EmbedDisplayOptions()
+    H.Encore:EmbedPackOptions()
     return H
 end
 
 -- the import groups (stage0, stage1, ...) of the priority and the style share panels
 local function boxes(H)
-    local O = H.Hekili.Options.args
+    local O = H.Encore.Options.args
     return O.packs.args.sharePacks.args.import.args, O.displays.args.shareDisplays.args.import.args
 end
 
 -- the style export string for display `name`, as the Export tab makes it
 local function exportStyle(H, name)
-    H.Hekili:SetDisplayShareOption({ name }, true)
-    local ex = H.Hekili.Options.args.displays.args.shareDisplays.args.export.args
+    H.Encore:SetDisplayShareOption({ name }, true)
+    local ex = H.Encore.Options.args.displays.args.shareDisplays.args.export.args
     ex.stage0.args.exportBtn.func()
     return ex.stage1.args.exportString.get()
 end
@@ -52,10 +52,10 @@ describe("the import boxes", function()
     setup(function()
         H = boot()
         packBox, styleBox = boxes(H)
-        packString = H.Hekili.SerializeActionPack(next(H.Hekili.DB.profile.packs))
+        packString = H.Encore.SerializeActionPack(next(H.Encore.DB.profile.packs))
         styleString = exportStyle(H, "Primary")
-        assert.are.equal("Hekili:", packString:sub(1, 7))
-        assert.are.equal("Hekili:", styleString:sub(1, 7))
+        assert.are.equal("Encore:", packString:sub(1, 7))
+        assert.are.equal("Encore:", styleString:sub(1, 7))
     end)
 
     it("take their own kind to stage 1", function()
@@ -70,13 +70,13 @@ describe("the import boxes", function()
     end)
 
     it("garbage in either box: the message, stage 0 stays", function()
-        for _, s in ipairs({ "garbage", "Hekili:garbage" }) do
+        for _, s in ipairs({ "garbage", "Encore:garbage" }) do
             refused(packBox, s)
             refused(styleBox, s)
         end
     end)
 
-    it("a string without the Hekili: prefix (the removed legacy format): the decode message", function()
+    it("a string without the Encore: prefix (the removed legacy format): the decode message", function()
         refused(packBox, packString:sub(8), "Unable to decode.")
         refused(styleBox, styleString:sub(8), "Unable to decode.")
     end)
@@ -95,7 +95,7 @@ end)
 describe("the style import's Apply Changes", function()
     it("fills the defaults an older export lacks, so the display builds", function()
         local H = boot()
-        local p = H.Hekili.DB.profile
+        local p = H.Encore.DB.profile
         local saved = p.displays.Primary
         p.displays.Primary = { enabled = true, numIcons = 3, x = 0, y = -225 }
         local old = exportStyle(H, "Primary")
@@ -106,9 +106,9 @@ describe("the style import's Apply Changes", function()
         styleBox.stage1.args.apply.func()
 
         assert.has_no.errors(function()
-            H.Hekili:BuildUI()
+            H.Encore:BuildUI()
         end)
-        assert.is_table(H.Hekili.DB.profile.displays.Primary.truth)
-        assert.is_table(H.Hekili.DB.profile.displays.Primary.classic)
+        assert.is_table(H.Encore.DB.profile.displays.Primary.truth)
+        assert.is_table(H.Encore.DB.profile.displays.Primary.classic)
     end)
 end)

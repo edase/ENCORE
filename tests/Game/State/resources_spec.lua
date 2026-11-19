@@ -67,7 +67,7 @@ describe("resources", function()
         end)
 
         it("asks the swing ticket whether a swing is pending (no private copy)", function()
-            local src = assert(io.open("src/Hekili/Game/State/Families/Resources.lua")):read("*a")
+            local src = assert(io.open("src/Encore/Game/State/Families/Resources.lua")):read("*a")
             assert.is_nil(src:find("pendT", 1, true))
             assert.is_nil(src:find("LAND_CAP", 1, true))
             ctl.now = 40

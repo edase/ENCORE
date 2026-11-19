@@ -11,15 +11,15 @@ describe("headless Arms", function()
     it("boots the Arms character: two entries out of combat with a target, no error, no unlisted nil read", function()
         local H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
-        assert.are.equal(ww.SPEC, H.Hekili.State.spec.id)
+        assert.are.equal(ww.SPEC, H.Encore.State.spec.id)
         H.ctl.inRange.target, H.ctl.level.target = true, 60
         H.Fire("PLAYER_TARGET_CHANGED")
         assert.is_true(headless.cycle(H, H.ctl.now + 0.2))
-        local out = H.Hekili.Engine.Output.Primary
+        local out = H.Encore.Engine.Output.Primary
         assert.is_true(out.count >= 2) -- Bloodrage and Battle Shout: no positions, so no Charge (pre_pull_move)
         local q = out.recs
         for i = 1, 2 do
-            assert.is_table(H.Hekili.Class.abilities[q[i].actionName], tostring(q[i].actionName))
+            assert.is_table(H.Encore.Class.abilities[q[i].actionName], tostring(q[i].actionName))
         end
         assert.are.same({}, H.errors)
         assert.are.same({}, headless.unexpected(H, "run"))
@@ -68,9 +68,9 @@ describe("the Warrior world mapping", function()
 
     it("maps every ability the Arms pack can recommend that the character knows; an unmapped key fails", function()
         local unmapped = {}
-        for _, list in pairs(H.Hekili.DB.profile.packs[ww.PACK].lists) do
+        for _, list in pairs(H.Encore.DB.profile.packs[ww.PACK].lists) do
             for _, entry in ipairs(list) do
-                local a = entry.action and H.Hekili.Class.abilities[entry.action]
+                local a = entry.action and H.Encore.Class.abilities[entry.action]
                 if a and a.id and H.ctl.known[a.id] and not ww.MAP[entry.action] then
                     unmapped[#unmapped + 1] = entry.action
                 end
@@ -85,11 +85,11 @@ describe("the Warrior world mapping", function()
     it("maps every ability of the three Warrior packs, known or not (but other races' racials)", function()
         local unmapped, packs = {}, {}
         for _, name in ipairs({ "Arms (wowsims.com)", "Fury (wowsims.com)", "Protection (wowsims.com)" }) do
-            local pack = H.Hekili.DB.profile.packs[name]
+            local pack = H.Encore.DB.profile.packs[name]
             packs[#packs + 1] = pack ~= nil
             for _, list in pairs(pack and pack.lists or {}) do
                 for _, entry in ipairs(list) do
-                    local a = entry.action and H.Hekili.Class.abilities[entry.action]
+                    local a = entry.action and H.Encore.Class.abilities[entry.action]
                     -- a spell (internal handlers: id <= 0) the character's race allows (another race's: known = false)
                     if a and (a.id or 0) > 0 and a.known ~= false and not ww.MAP[entry.action] then
                         unmapped[#unmapped + 1] = name .. ":" .. entry.action
@@ -103,7 +103,7 @@ describe("the Warrior world mapping", function()
     end)
 
     it("knows Recklessness and Slam; Slam resolves with the class file's cast time", function()
-        local a = H.Hekili.Class.abilities
+        local a = H.Encore.Class.abilities
         assert.is_truthy(H.ctl.known[a.recklessness.id])
         assert.is_truthy(H.ctl.known[a.slam.id])
         assert.is_falsy(H.ctl.known[a.slam.copy[#a.slam.copy]]) -- Improved Slam's override: not this build
@@ -113,7 +113,7 @@ describe("the Warrior world mapping", function()
     end)
 
     it("keeps the rage the class file's swap_stance keeps on a stance swap", function()
-        local s = H.Hekili.State
+        local s = H.Encore.State
         s.rage.current, s.rage.lo, s.rage.actual = 100, 100, 100 -- the class file reads the floor (border batch 2)
         s.swap_stance("berserker_stance") -- the booted class file, on the character's talents and spells
         local keep = s.rage.actual
@@ -134,17 +134,17 @@ describe("the Warrior world mapping", function()
         "resolves a press from the class file: cost, cooldown and GCD as the state has them; a strike on the next swing",
         function()
             local ms, hs = ww.resolve("mortal_strike", H), ww.resolve("heroic_strike", H)
-            local a = H.Hekili.Class.abilities
+            local a = H.Encore.Class.abilities
             assert.are.same({ -- the rank the client casts, the highest known; every rank answers its cooldown
                 H.ns.VirtualState.KnownID(a.mortal_strike.id),
-                H.Hekili.State.action.mortal_strike.cost,
+                H.Encore.State.action.mortal_strike.cost,
                 a.mortal_strike.cooldown,
                 false,
             }, { ms.spell, ms.cost, ms.cooldown, ms.offGcd })
             assert.are.equal(a.mortal_strike.id, ms.ids[1])
             assert.are.equal(ms.spell, ms.ids[#ms.ids])
             assert.are.same(
-                { true, true, H.Hekili.State.action.heroic_strike.cost },
+                { true, true, H.Encore.State.action.heroic_strike.cost },
                 { hs.onNextSwing, hs.offGcd, hs.cost }
             )
         end
@@ -157,7 +157,7 @@ describe("the Warrior world mapping", function()
             for _, u in ipairs(answers) do
                 by[u[1]] = u[2]
             end
-            local a = H.Hekili.Class.abilities
+            local a = H.Encore.Class.abilities
             local mob = { health = 100, healthMax = 100 }
             local W, e = { t = 10 }, { form = ww.FORM.battle_stance, target = mob, avoidAt = {} }
             assert.is_false(by[a.execute.id](W, e, 100))
@@ -181,7 +181,7 @@ describe("the Protection world", function()
     it("resolves a kit addition's every rank, so Shield Slam is never pressed through its cooldown", function()
         local C = pg.content()
         local L = loop.new(C)
-        local a = L.us.Hekili.Class.abilities.shield_slam
+        local a = L.us.Encore.Class.abilities.shield_slam
         assert.are.same({ a.id, unpack(a.copy) }, C.resolve("shield_slam", L.us).ids)
         local refused, wrapped = 0, {}
         loop.run(L, 1, {
@@ -213,7 +213,7 @@ describe("the Protection world", function()
             for _, u in ipairs(C.usable(L.oracle)) do
                 by[u[1]] = u[2]
             end
-            local id = L.oracle.Hekili.Class.abilities.revenge.id
+            local id = L.oracle.Encore.Class.abilities.revenge.id
             local e = { guid = "Player-1", form = ww.FORM.defensive_stance }
             local W = { t = 10, truth = {} }
             assert.is_false((by[id](W, e, 100)))
@@ -264,7 +264,7 @@ describe("the headless Arms loop", function()
         "believes Sunder Armor's true stacks on the oracle across two forced presses (a read in the cast's frame)",
         function()
             local H = L.oracle
-            local id = H.Hekili.Class.auras.sunder_armor.id
+            local id = H.Encore.Class.auras.sunder_armor.id
             local VS = H.ns.VirtualState
             local wrong, presses = {}, 0
             loop.run(L, 1, {
@@ -294,7 +294,7 @@ describe("the headless Arms loop", function()
         "believes Sunder Armor's true stacks on ours across seven presses: target auras raise in combat; 5 is the cap",
         function()
             local H = L.us
-            local id = H.Hekili.Class.auras.sunder_armor.id
+            local id = H.Encore.Class.auras.sunder_armor.id
             local VS = H.ns.VirtualState
             local wrong, presses = {}, 0
             loop.run(L, 1, {

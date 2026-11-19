@@ -22,7 +22,7 @@ describe("Forever priorities", function()
 
     it("use no bare aura alias (up, down, remains, ticking, refreshable, react, stack) in a condition", function()
         local hits = {}
-        local pipe = assert(io.popen("ls src/Hekili_*/APLs/*.simc"))
+        local pipe = assert(io.popen("ls src/Encore_*/APLs/*.simc"))
         for file in pipe:lines() do
             local n = 0
             for line in io.lines(file) do
@@ -46,7 +46,7 @@ describe("Forever priorities", function()
     -- content addon may declare either.
     it("declare no min_ttd or max_ttd on any ability (time to die is never known on Forever)", function()
         local hits = {}
-        local pipe = assert(io.popen("find src/Hekili_* -name '*.lua' | sort"))
+        local pipe = assert(io.popen("find src/Encore_* -name '*.lua' | sort"))
         for file in pipe:lines() do
             local n = 0
             for line in io.lines(file) do
@@ -69,16 +69,16 @@ describe("Forever priorities", function()
             return require("Forever.helpers.load_druid").load()
         end,
         rogue = function()
-            return require("Forever.helpers.load_druid").load(nil, "src/Hekili_Rogue/Rogue.lua", "ROGUE")
+            return require("Forever.helpers.load_druid").load(nil, "src/Encore_Rogue/Rogue.lua", "ROGUE")
         end,
         paladin = function()
-            return require("Forever.helpers.load_druid").load(nil, "src/Hekili_Paladin/Paladin.lua", "PALADIN")
+            return require("Forever.helpers.load_druid").load(nil, "src/Encore_Paladin/Paladin.lua", "PALADIN")
         end,
         shaman = function()
-            return require("Forever.helpers.load_druid").load(nil, "src/Hekili_Shaman/Shaman.lua", "SHAMAN")
+            return require("Forever.helpers.load_druid").load(nil, "src/Encore_Shaman/Shaman.lua", "SHAMAN")
         end,
         hunter = function()
-            return require("Forever.helpers.load_druid").load(nil, "src/Hekili_Hunter/Hunter.lua", "HUNTER")
+            return require("Forever.helpers.load_druid").load(nil, "src/Encore_Hunter/Hunter.lua", "HUNTER")
         end,
     }
     for class, load in pairs(LOADS) do
@@ -128,7 +128,7 @@ describe("Forever priorities", function()
             local w = LOADS[class] and LOADS[class]()
                 or require("Forever.helpers.load_druid").load(
                     nil,
-                    "src/Hekili_" .. Class .. "/" .. Class .. ".lua",
+                    "src/Encore_" .. Class .. "/" .. Class .. ".lua",
                     class:upper()
                 )
             local hits = {}
@@ -148,7 +148,7 @@ describe("Forever priorities", function()
             local w = LOADS[class] and LOADS[class]()
                 or require("Forever.helpers.load_druid").load(
                     nil,
-                    "src/Hekili_" .. Class .. "/" .. Class .. ".lua",
+                    "src/Encore_" .. Class .. "/" .. Class .. ".lua",
                     class:upper()
                 )
             local reads = {}

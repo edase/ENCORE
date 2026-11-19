@@ -12,22 +12,22 @@ local addons = require("helpers.addons")
 
 local M = {}
 
-M.ROOT = "src/Hekili/"
+M.ROOT = "src/Encore/"
 M.SETTLE = 5 -- seconds the clock runs after login before the instance is handed over
 -- The one file the loader skips, and why.
-M.SKIPPED = { ["src/Hekili/UI/PopupSlider.xml"] = "XML frames (no XML frame loader headless; not on the queue path)" }
+M.SKIPPED = { ["src/Encore/UI/PopupSlider.xml"] = "XML frames (no XML frame loader headless; not on the queue path)" }
 
 -- Reads of unset globals while the TOC loads and at login: feature probes the client also answers nil (other
 -- addons, retail- or classic-only names). A name not listed fails `H.unexpected` (§1.4): a person decides.
 M.KNOWN_LOAD_NILS = {
-    ElvUI = "another addon (Hekili skins for it when present)",
+    ElvUI = "another addon (Encore skins for it when present)",
     WeakAuras = "another addon",
     io = "LibDeflate.lua:3453 probes the standalone Lua io library (absent in WoW)",
     ["LibDualSpec-1.0-35 test"] = "LibStub probes a minor version",
     LibStub = "LibStub.lua's own `_G.LibStub` probe before it defines it",
-    HekiliDB = "no saved variables (a fresh profile)",
+    EncoreDB = "no saved variables (a fresh profile)",
     GAME_LOCALE = "AceLocale-3.0's translator override (unset on a player's client)",
-    HekiliCustomEditorInsertLink = "Hekili's own probe of an optional hook",
+    EncoreCustomEditorInsertLink = "Encore's own probe of an optional hook",
     AceGUIEditBoxInsertLink = "AceGUI's own probe",
     AceGUIMultiLineEditBoxInsertLink = "AceGUI's own probe",
     ChatEdit_InsertLink = "chat UI (not on Forever's headless client)",
@@ -64,7 +64,7 @@ M.KNOWN_LOAD_NILS = {
     WOW_PROJECT_WRATH_CLASSIC = "the flavour probes",
     WOW_PROJECT_CATACLYSM_CLASSIC = "the flavour probes",
     WOW_PROJECT_MISTS_CLASSIC = "the flavour probes",
-    id = "Hekili reads an unset global `id` (an upstream slip, nil in game too)",
+    id = "Encore reads an unset global `id` (an upstream slip, nil in game too)",
     squawk = "Scripts.lua:1032 reads an unset global (upstream, nil in game too)",
     -- namespace members: the facade's five passthrough rows absent on Forever
     ["C_SpellBook.GetSpellBookItemInfo"] = "facade row absent on Forever (retail spellbook item API)",
@@ -875,7 +875,7 @@ function M.new(o)
         end
         setfenv(f, env)
         local ok, e = xpcall(function()
-            return f(name or "Hekili", addonNs or ns)
+            return f(name or "Encore", addonNs or ns)
         end, debug.traceback)
         if not ok then
             H.loadErrors[#H.loadErrors + 1] = path .. ": " .. tostring(e)
@@ -984,7 +984,7 @@ function M.new(o)
         H.Fire("ADDON_LOADED", name)
         return true
     end
-    env.HekiliDB = o.saved -- saved variables, as the client sets them before the addon's ADDON_LOADED (nil: fresh)
+    env.EncoreDB = o.saved -- saved variables, as the client sets them before the addon's ADDON_LOADED (nil: fresh)
     loadAddon(addons.CORE)
     -- the vendored LibRangeCheck-3.0 answers from this client's world (fake_api's spellbook, interact and item checks)
     -- with fake_api's knobs on its GetRange; H.realGetRange is the library's own, unwrapped
@@ -994,7 +994,7 @@ function M.new(o)
     end
     -- the scenario the settings' defaults are for (Engine.SettingDefault: "sim" for the harness's own, nil in game),
     -- set before ADDON_LOADED fills the profile
-    local core = rawget(env, "Hekili")
+    local core = rawget(env, "Encore")
     if not (core and core.Engine) then
         error("headless.new: the core did not load: " .. table.concat(H.loadErrors, "; "), 2)
     end
@@ -1007,7 +1007,7 @@ function M.new(o)
     -- (OnEnable, VS.Start, the content notice) and PLAYER_ENTERING_WORLD
     H.phase = "login"
     local ok, err = xpcall(function()
-        H.Fire("ADDON_LOADED", "Hekili")
+        H.Fire("ADDON_LOADED", "Encore")
         loggedIn = true
         H.Fire("PLAYER_LOGIN")
         H.Fire("PLAYER_ENTERING_WORLD", true, false)
@@ -1018,8 +1018,8 @@ function M.new(o)
     -- the seconds after login: the display visibility (UI.lua:2102, +3 s) and the spec's pack review (+5 s) run
     ctl.now = ctl.now + M.SETTLE
     H.RunTimers(ctl.now)
-    H.Hekili = rawget(env, "Hekili")
-    local hk = H.Hekili
+    H.Encore = rawget(env, "Encore")
+    local hk = H.Encore
     if hk and o.pack and ctl.specID then
         -- the priority's spec becomes the character's choice (a class on NewClass), then the priority its package
         local pack = rawget(hk.DB.profile.packs, o.pack)
@@ -1062,7 +1062,7 @@ function M.cycle(H, t)
         u(f, 0.1)
     end
     H.RunTimers(t)
-    return xpcall(H.Hekili.Update, debug.traceback)
+    return xpcall(H.Encore.Update, debug.traceback)
 end
 
 return M

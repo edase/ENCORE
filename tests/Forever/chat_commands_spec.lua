@@ -3,7 +3,7 @@
 local headless = require("Game.harness.headless")
 local ww = require("Forever.helpers.warrior_world")
 
-describe("the /hekili command table", function()
+describe("the /encore command table", function()
     local H
 
     setup(function()
@@ -42,9 +42,9 @@ describe("the /hekili command table", function()
     end)
 
     it("runs a command reached through an alias", function()
-        local p = H.Hekili.DB.profile
+        local p = H.Encore.DB.profile
         local before = p.toggles.cooldowns.value
-        H.Hekili:CmdLine("set cds")
+        H.Encore:CmdLine("set cds")
         assert.are.equal(not before, p.toggles.cooldowns.value)
     end)
 end)

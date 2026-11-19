@@ -9,8 +9,8 @@ local ex = assert(loadfile("tools/wowsims/export.lua"))()
 
 local function load()
     local ns = {}
-    assert(loadfile("src/Hekili/Engine/Schema/Trees.lua"))("Hekili", ns)
-    assert(loadfile("src/Hekili/Engine/Schema/Selectors.lua"))("Hekili", ns)
+    assert(loadfile("src/Encore/Engine/Schema/Trees.lua"))("Encore", ns)
+    assert(loadfile("src/Encore/Engine/Schema/Selectors.lua"))("Encore", ns)
     return ns
 end
 
@@ -263,12 +263,12 @@ local function settle(H)
         end
     end
     for _ = 1, 3 do
-        if not H.Hekili.PendingSpecializationChange then
+        if not H.Encore.PendingSpecializationChange then
             return
         end
         frame.__scripts.OnUpdate(frame, 0.016)
     end
-    assert.is_false(H.Hekili.PendingSpecializationChange, "the spec change did not settle")
+    assert.is_false(H.Encore.PendingSpecializationChange, "the spec change did not settle")
 end
 
 local WORLDS = {
@@ -286,8 +286,8 @@ local function boot(class, talents, saved)
     local H = headless.new({ character = c, saved = saved })
     assert.are.same({}, H.loadErrors)
     H.notes = {}
-    local notify = H.Hekili.Notify
-    H.Hekili.Notify = function(self, msg, ...)
+    local notify = H.Encore.Notify
+    H.Encore.Notify = function(self, msg, ...)
         H.notes[#H.notes + 1] = msg
         return notify(self, msg, ...)
     end
@@ -306,8 +306,8 @@ local function respec(H, talents)
 end
 
 local function active(H)
-    local id = H.Hekili.State.spec.id
-    return id, H.Hekili.DB.profile.specs[id].package
+    local id = H.Encore.State.spec.id
+    return id, H.Encore.DB.profile.specs[id].package
 end
 
 -- Each shipped build: its class, its spec id, the pack it must run and the selector that picks it (none: the tree's
@@ -341,10 +341,10 @@ describe("the shipped selectors (headless)", function()
         it(spec .. "'s shipped build picks its own spec and pack", function()
             local H = boot(want[1], build(spec, want[1]))
             assert.are.same({ want[2], want[3] }, { active(H) })
-            assert.are.equal(want[4] or false, H.Hekili.State.spec.selector or false) -- state.spec reads false unset
-            assert.are.equal(want[4] and "selector" or "dominant", H.Hekili.State.spec.source)
+            assert.are.equal(want[4] or false, H.Encore.State.spec.selector or false) -- state.spec reads false unset
+            assert.are.equal(want[4] and "selector" or "dominant", H.Encore.State.spec.source)
             assert.are.same({}, H.errors)
-            assert.is_nil(H.Hekili.Class.kit.selectorErrors)
+            assert.is_nil(H.Encore.Class.kit.selectorErrors)
         end)
     end
 
@@ -380,7 +380,7 @@ describe("the shipped selectors (headless)", function()
         }) do
             local H = boot(case[1], case[2])
             assert.are.same({ case[3], case[4] }, { active(H) }, case[1])
-            assert.are.equal("dominant", H.Hekili.State.spec.source, case[1])
+            assert.are.equal("dominant", H.Encore.State.spec.source, case[1])
             assert.are.same({}, H.notes, case[1])
         end
     end)
@@ -408,13 +408,13 @@ describe("the shipped selectors (headless)", function()
         assert.are.same({ 100113, "Guardian (wowsims.com)" }, { active(H) })
         respec(H, {}) -- the ranks read zero (a walk before they arrive, a wipe)
         assert.are.same({ 100113, "Guardian (wowsims.com)" }, { active(H) })
-        assert.are.equal("held", H.Hekili.State.spec.source)
+        assert.are.equal("held", H.Encore.State.spec.source)
         respec(H, build("druid_guardian", "druid"))
         assert.are.same({ 100113, "Guardian (wowsims.com)" }, { active(H) })
         assert.are.same({}, H.notes)
         local F = boot("druid", {}) -- no settle with points yet: the first supported spec, as before
         assert.are.equal(100111, (active(F)))
-        assert.are.equal("default", F.Hekili.State.spec.source)
+        assert.are.equal("default", F.Encore.State.spec.source)
     end)
 
     it("gives one notice naming the pack when a selector switches the spec and its pack together", function()
@@ -423,7 +423,7 @@ describe("the shipped selectors (headless)", function()
         -- Destruction to Affliction and SM Ruin over its default, the pass's first pick on the last walk's ranks (as
         -- spec_choice_spec's stale-ranks case): the pack changes on that pass, the spec on the next
         H.ctl.traits = traits(build("warlock_sm_ruin", "warlock"))
-        H.Hekili.PendingSpecializationChange = true
+        H.Encore.PendingSpecializationChange = true
         settle(H)
         H.ctl.now = H.ctl.now + 6
         H.RunTimers(H.ctl.now)
@@ -444,14 +444,14 @@ describe("the shipped selectors (headless)", function()
 
     it("names the selector in the snapshot's spec line", function()
         local H = boot("druid", build("druid_guardian", "druid"))
-        assert.are.equal("selector", H.Hekili.State.spec.source)
-        assert.is_truthy(H.Hekili:GenerateProfile():find("\nspec: guardian (selector guardian)", 1, true))
+        assert.are.equal("selector", H.Encore.State.spec.source)
+        assert.is_truthy(H.Encore:GenerateProfile():find("\nspec: guardian (selector guardian)", 1, true))
     end)
 
     -- A pack node's Active toggle (Options.lua's packs tree), as the player clicks it.
     local function toggleActive(H, spec, pack)
-        H.Hekili:EmbedSpecOptions()
-        H.Hekili:EmbedPackOptions()
+        H.Encore:EmbedSpecOptions()
+        H.Encore:EmbedPackOptions()
         local function find(t)
             if type(t) ~= "table" then
                 return nil
@@ -466,7 +466,7 @@ describe("the shipped selectors (headless)", function()
                 end
             end
         end
-        local nodes = H.Hekili.Options.args.packs.plugins.specializations
+        local nodes = H.Encore.Options.args.packs.plugins.specializations
         local node = assert(find(nodes[spec].plugins.packs[pack]), "no Active toggle for " .. pack)
         node.set()
     end
@@ -474,29 +474,29 @@ describe("the shipped selectors (headless)", function()
     it("lets a pack the player picked in another spec of the tree override the selector's spec and pack", function()
         local H = boot("druid", build("druid_guardian", "druid"))
         assert.are.same({ 100113, "Guardian (wowsims.com)" }, { active(H) })
-        H.Hekili:EmbedSpecOptions()
-        H.Hekili:SetSpecOption({ "packs", "feral", "core", "package" }, "Feral (wowsims.com)") -- Feral's page
+        H.Encore:EmbedSpecOptions()
+        H.Encore:SetSpecOption({ "packs", "feral", "core", "package" }, "Feral (wowsims.com)") -- Feral's page
         settle(H)
         assert.are.same({ 100112, "Feral (wowsims.com)" }, { active(H) })
         respec(H, build("druid_guardian", "druid"))
         assert.are.same({ 100112, "Feral (wowsims.com)" }, { active(H) })
         -- Activate <Spec> (and /hekili spec) is pack-level: it activates that spec's pack in place
-        assert.are.equal("guardian", H.Hekili:SetSpecChoice("guardian").key)
+        assert.are.equal("guardian", H.Encore:SetSpecChoice("guardian").key)
         settle(H)
         assert.are.same({ 100113, "Guardian (wowsims.com)" }, { active(H) })
-        assert.is_true(H.Hekili.DB.profile.specs[100113].packManual)
+        assert.is_true(H.Encore.DB.profile.specs[100113].packManual)
     end)
 
     it("takes (none) on another spec's page as that spec's pick only: the active spec stays", function()
         local H = boot("druid", build("druid_feral", "druid"))
         assert.are.equal(100112, (active(H)))
-        H.Hekili:EmbedSpecOptions()
-        H.Hekili:SetSpecOption({ "packs", "guardian", "core", "package" }, "(none)")
+        H.Encore:EmbedSpecOptions()
+        H.Encore:SetSpecOption({ "packs", "guardian", "core", "package" }, "(none)")
         settle(H)
         assert.are.same({ 100112, "Feral (wowsims.com)" }, { active(H) })
-        local sp = H.Hekili.DB.profile.specs[100113]
+        local sp = H.Encore.DB.profile.specs[100113]
         assert.are.same({ "(none)", true }, { sp.package, sp.packManual })
-        assert.is_nil(H.Hekili.DB.profile.specChoice["Player-Realm"][2])
+        assert.is_nil(H.Encore.DB.profile.specChoice["Player-Realm"][2])
     end)
 
     it("leaves an automatic Frostfire alone until the player activates the Fire pack, then keeps Fire", function()
@@ -521,40 +521,40 @@ describe("the shipped selectors (headless)", function()
             old = { profiles = { Default = { specChoice = { ["Player-Realm"] = { [2] = "guardian", last = 2 } } } } }
             H = boot("druid", build("druid_feral", "druid"), old) -- no selector holds: the stored Guardian stays
             assert.are.same({ 100113, "Guardian (wowsims.com)" }, { active(H) })
-            assert.is_nil(rawget(H.Hekili.DB.profile.specs[100113], "packManual"))
+            assert.is_nil(rawget(H.Encore.DB.profile.specs[100113], "packManual"))
             assert.are.same({}, H.errors)
         end
     )
 
     it("keeps a pack the player picked in the options or by command, and a reset hands it back", function()
         local H = boot("mage", build("mage_frostfire", "mage"))
-        local sp = H.Hekili.DB.profile.specs[100082]
-        H.Hekili:EmbedSpecOptions()
-        H.Hekili:SetSpecOption({ "packs", "fire", "core", "package" }, "Fire (wowsims.com)")
+        local sp = H.Encore.DB.profile.specs[100082]
+        H.Encore:EmbedSpecOptions()
+        H.Encore:SetSpecOption({ "packs", "fire", "core", "package" }, "Fire (wowsims.com)")
         assert.is_true(sp.packManual)
         assert.is_nil(sp.packAuto)
         respec(H, build("mage_frostfire", "mage"))
         assert.are.equal("Fire (wowsims.com)", sp.package)
-        H.Hekili:HandlePriorityCommand({ "priority", "default" }) -- the default: the selector may pick again
+        H.Encore:HandlePriorityCommand({ "priority", "default" }) -- the default: the selector may pick again
         assert.is_nil(sp.packManual)
         respec(H, build("mage_frostfire", "mage"))
         assert.are.equal("Frostfire (wowsims.com)", sp.package)
-        H.Hekili:HandlePriorityCommand({ "priority", "fire" })
+        H.Encore:HandlePriorityCommand({ "priority", "fire" })
         assert.is_true(sp.packManual)
         respec(H, build("mage_frostfire", "mage"))
         assert.are.equal("Fire (wowsims.com)", sp.package)
     end)
 
-    it("lets /hekili priority pick a Hunter weave pack by hand, and the default hands the Turret back", function()
+    it("lets /encore priority pick a Hunter weave pack by hand, and the default hands the Turret back", function()
         local H = boot("hunter", build("hunter_survival_melee", "hunter"))
-        local sp = H.Hekili.DB.profile.specs[100033]
+        local sp = H.Encore.DB.profile.specs[100033]
         assert.are.equal("Survival Turret (wowsims.com)", sp.package)
-        H.Hekili:HandlePriorityCommand({ "priority", "survival", "(wowsims.com)" }) -- the weave pack, by name
+        H.Encore:HandlePriorityCommand({ "priority", "survival", "(wowsims.com)" }) -- the weave pack, by name
         assert.are.same({ 100033, "Survival (wowsims.com)" }, { active(H) })
         assert.is_true(sp.packManual)
         respec(H, build("hunter_survival_turret", "hunter"))
         assert.are.equal("Survival (wowsims.com)", sp.package) -- (c) a hand pick stays through a respec
-        H.Hekili:HandlePriorityCommand({ "priority", "default" })
+        H.Encore:HandlePriorityCommand({ "priority", "default" })
         respec(H, build("hunter_survival_melee", "hunter"))
         assert.are.equal("Survival Turret (wowsims.com)", sp.package)
         assert.are.same({}, H.errors)
@@ -567,7 +567,7 @@ describe("the shipped selectors (headless)", function()
         }) do
             -- (a) a new profile
             local H = boot("hunter", build(names[3], "hunter"))
-            assert.are.equal(names[2], H.Hekili.DB.profile.specs[id].package)
+            assert.are.equal(names[2], H.Encore.DB.profile.specs[id].package)
             -- (b) an older profile naming the old default (the weave) without a pick: the Turret
             local old = { profiles = { Default = { specs = { [id] = { package = names[1] } } } } }
             H = boot("hunter", build(names[3], "hunter"), old)
@@ -585,7 +585,7 @@ describe("the shipped selectors (headless)", function()
 
     it("leaves a custom priority alone", function()
         local H = boot("mage", build("mage_fire", "mage"))
-        local p = H.Hekili.DB.profile
+        local p = H.Encore.DB.profile
         local copy = {}
         for k, v in pairs(p.packs["Fire (wowsims.com)"]) do
             copy[k] = v
@@ -604,21 +604,21 @@ describe("the shipped selectors (headless)", function()
         old = { profiles = { Default = { specs = { [100091] = { package = "SM Ruin (wowsims.com)" } } } } }
         H = boot("warlock", build("warlock_affliction", "warlock"), old) -- a non-default pick: the player's
         assert.are.same({ 100091, "SM Ruin (wowsims.com)" }, { active(H) })
-        assert.is_nil(rawget(H.Hekili.DB.profile.specs[100091], "packManual"))
-        assert.is_nil(rawget(H.Hekili.DB.profile.specs[100091], "packAuto"))
+        assert.is_nil(rawget(H.Encore.DB.profile.specs[100091], "packManual"))
+        assert.is_nil(rawget(H.Encore.DB.profile.specs[100091], "packAuto"))
         assert.are.same({}, H.errors)
     end)
 
     it("reports no activation when a spec's profile is unreadable", function()
         local H = boot("druid", build("druid_feral", "druid"))
-        rawset(H.Hekili.DB.profile.specs, 100113, "broken") -- never in a real profile (Options seeds a table)
-        assert.is_nil(H.Hekili:SetSpecChoice("guardian"))
-        assert.is_nil(H.Hekili.DB.profile.specChoice["Player-Realm"][2])
+        rawset(H.Encore.DB.profile.specs, 100113, "broken") -- never in a real profile (Options seeds a table)
+        assert.is_nil(H.Encore:SetSpecChoice("guardian"))
+        assert.is_nil(H.Encore.DB.profile.specChoice["Player-Realm"][2])
     end)
 
     it("rejects a selector for a spec the class does not have", function()
         local H = boot("druid", build("druid_feral", "druid"))
-        local kit = H.Hekili.Class.kit
+        local kit = H.Encore.Class.kit
         assert.error_matches(function()
             kit:RegisterSelector("bad", { spec = "nope", pack = "Feral (wowsims.com)" }, function()
                 return true

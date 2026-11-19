@@ -41,7 +41,7 @@ local AMOUNT = {
 
 local W0
 local function class()
-    W0 = W0 or ld.load(nil, "src/Hekili_Rogue/Rogue.lua", "ROGUE")
+    W0 = W0 or ld.load(nil, "src/Encore_Rogue/Rogue.lua", "ROGUE")
     return W0
 end
 
@@ -294,13 +294,13 @@ local function classData(H)
     end
     local X = { aura = {} }
     cache[H] = X
-    for key, a in pairs(H.Hekili.Class.auras) do
+    for key, a in pairs(H.Encore.Class.auras) do
         if type(key) == "string" and type(a) == "table" and a.id then
             local d = a.duration
             X.aura[key] = { id = a.id, duration = type(d) == "function" and d() or d or 0, max_stack = a.max_stack }
         end
     end
-    local talent = H.Hekili.State.talent
+    local talent = H.Encore.State.talent
     X.relentless = talent.relentless_strikes.rank or 0
     X.fos = talent.flash_of_steel.rank or 0
     X.venom = talent.venom.enabled == true
@@ -369,9 +369,9 @@ local function content(name)
         if not m then
             error("unmapped key " .. tostring(key), 2)
         end
-        local a = H.Hekili.Class.abilities[key]
+        local a = H.Encore.Class.abilities[key]
         local X = classData(H)
-        local S = H.Hekili.State
+        local S = H.Encore.State
         local p = {
             spell = H.ns.VirtualState.KnownID(a.id),
             ids = C.IDS[key],
@@ -381,7 +381,7 @@ local function content(name)
             gcd = GCD[a.gcd or "spell"],
             offGcd = a.gcd == "off",
             cast = 0,
-            refund = world.refundOf(H.Hekili.Class, key), -- an avoid gives back the kit's share (W.hit)
+            refund = world.refundOf(H.Encore.Class, key), -- an avoid gives back the kit's share (W.hit)
             outcomes = M.OUTCOMES[key], -- nil: the special melee tables
         }
         if m.points then
@@ -415,9 +415,9 @@ local function content(name)
         local out = {}
         local X = classData(H)
         for key, m in pairs(M.MAP) do
-            local a = H.Hekili.Class.abilities[key]
+            local a = H.Encore.Class.abilities[key]
             if a and C.IDS[key] then
-                local c = a.spendType == "energy" and (H.Hekili.State.action[key].cost or 0) or 0
+                local c = a.spendType == "energy" and (H.Encore.State.action[key].cost or 0) or 0
                 local function answer(W, e, power)
                     if m.requires and not m.requires(W, e, X) then
                         return false, false
@@ -439,7 +439,7 @@ local function content(name)
     function C.uptime(H)
         local out = {}
         for _, key in ipairs(P.uptime) do
-            out[#out + 1] = { key, H.Hekili.Class.auras[key].id }
+            out[#out + 1] = { key, H.Encore.Class.auras[key].id }
         end
         return out
     end

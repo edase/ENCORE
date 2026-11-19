@@ -46,14 +46,14 @@ test-fast:
 comma := ,
 GATE_TAGS := loop,party,druid,rogue,paladin,shaman,hunter,mage,priest,warlock
 LOOPS = $(addprefix test-,$(subst $(comma), ,$(GATE_TAGS)))
-GATE_LOCK ?= /tmp/hekili-gate.lock
+GATE_LOCK ?= /tmp/encore-gate.lock
 # One gate at a time per machine (flock): the loops assert a CPU budget per update (process CPU time, os.clock) that
 # another gate's load would still inflate through shared cores.
-# HEKILI_AB is never passed through from the shell (tests/Game/harness/ab.lua reads it per call, so a leaked one would
+# ENCORE_AB is never passed through from the shell (tests/Game/harness/ab.lua reads it per call, so a leaked one would
 # turn a plain gate or check into a record-only provider arm): only gate-ab sets it, per arm, through AB_ARM.
-unexport HEKILI_AB
+unexport ENCORE_AB
 gate: check-full
-	flock $(GATE_LOCK) env $(if $(AB_ARM),HEKILI_AB=$(AB_ARM)) BUSTED=$(BUSTED) BUSTED_JOBS=$$(($$(nproc) > 3 ? $$(nproc) - 2 : 1)) scripts/busted_parallel.sh --tags=$(GATE_TAGS)
+	flock $(GATE_LOCK) env $(if $(AB_ARM),ENCORE_AB=$(AB_ARM)) BUSTED=$(BUSTED) BUSTED_JOBS=$$(($$(nproc) > 3 ? $$(nproc) - 2 : 1)) scripts/busted_parallel.sh --tags=$(GATE_TAGS)
 
 # The per-spec accuracy table (.accuracy/report.{json,md}, gitignored): every loop and wowsims spec file once, three
 # seed sets, under the gate lock for the whole run. Dev tooling: not part of gate or check (tools/accuracy/).
@@ -78,7 +78,7 @@ gate-ab:
 
 # The gate's body alone (review S6): the loops under the lock, no check-full first (run `make check` once before).
 gate-body:
-	flock $(GATE_LOCK) env $(if $(AB_ARM),HEKILI_AB=$(AB_ARM)) BUSTED=$(BUSTED) BUSTED_JOBS=$$(($$(nproc) > 3 ? $$(nproc) - 2 : 1)) scripts/busted_parallel.sh --tags=$(GATE_TAGS)
+	flock $(GATE_LOCK) env $(if $(AB_ARM),ENCORE_AB=$(AB_ARM)) BUSTED=$(BUSTED) BUSTED_JOBS=$$(($$(nproc) > 3 ? $$(nproc) - 2 : 1)) scripts/busted_parallel.sh --tags=$(GATE_TAGS)
 
 # gate-ab without a check-full per arm: the default arm's body, then each of AB_ARMS's (a subset: AB_ARMS="a b"), each
 # arm's output in .ab/<arm>.log (the default's .ab/default.log, for scripts/results.sh); compare with scripts/ab_delta.sh.
@@ -154,7 +154,7 @@ api-check:
 	bash tools/check_engine_reads.sh
 	bash tools/check_border.sh
 
-# The generated RegisterPack blocks match src/Hekili_*/APLs/ (make_pack writes only a changed file, so `make -j` is safe).
+# The generated RegisterPack blocks match src/Encore_*/APLs/ (make_pack writes only a changed file, so `make -j` is safe).
 packs-check: wowsims-packs packs
 	git diff --exit-code src
 
@@ -184,7 +184,7 @@ tools-test:
 # FULL=1 also runs the Warlock 20-fight gate (make test-warlock, L633): a lane that edits it sees its red before integration
 # does; `make gate` runs every tag itself, so a plain check-full leaves it out (`make gate FULL=1` runs the Warlock gate twice, plain gate once).
 # shortcut: a failed or killed run leaves its start manifest in /tmp; harmless, write is the only reader.
-STAMP_START := $(shell mktemp -u /tmp/hekili-check-start.XXXXXX)
+STAMP_START := $(shell mktemp -u /tmp/encore-check-start.XXXXXX)
 STAMP_OFF := $(strip $(filter-out FULL=%,$(MAKEOVERRIDES)) $(findstring i,$(firstword -$(MAKEFLAGS))) $(findstring e,$(firstword -$(MAKEFLAGS))))
 check:
 	@if [ -z "$(FULL)$(STAMP_OFF)" ] && scripts/check_stamp.sh test; then :; else $(MAKE) check-full; fi
@@ -199,7 +199,7 @@ check-full:
 # Rewrites each class file's RegisterPack blocks from its APLs/ (tools/make_pack.lua write), re-dating a class (today,
 # or PACK_DATE=YYYYMMDD) only when its blocks change; not part of `check`.
 packs:
-	for d in src/Hekili_*/APLs; do c=$${d#src/Hekili_}; $(LUA) tools/make_pack.lua write $$(echo $${c%/APLs} | tr A-Z a-z) || exit 1; done
+	for d in src/Encore_*/APLs; do c=$${d#src/Encore_}; $(LUA) tools/make_pack.lua write $$(echo $${c%/APLs} | tr A-Z a-z) || exit 1; done
 
 # The BigWigs packager run locally, no upload (-d): zip in .release/ (docs/publishing/README.md). Needs network once.
 PACKAGER_REF ?= e50a250f8705041e40f2fa1ddcb280a686d65aa0
@@ -209,4 +209,4 @@ package:
 	bash $(LUA_ENV)/release-$(PACKAGER_REF).sh -d -l -r $(CURDIR)/.release
 
 package-check: package
-	bash tools/check_package.sh "$$(ls -t .release/Hekili-*.zip | head -1)"
+	bash tools/check_package.sh "$$(ls -t .release/Encore-*.zip | head -1)"

@@ -5,7 +5,7 @@ local addons = require("helpers.addons")
 
 local M = {}
 
-local SCHEMA = "src/Hekili/Engine/Schema/"
+local SCHEMA = "src/Encore/Engine/Schema/"
 -- the registration objects: their entry point and the files that define their calls
 M.OBJECTS = {
     { name = "class", files = { "Spec.lua", "Spec/Abilities.lua", "Spec/Auras.lua", "Spec/Regen.lua" } },
@@ -70,7 +70,7 @@ function M.rows()
             local s = slurp(p)
             for call in s:gmatch(":(Register%w+)%s*%(") do
                 users[call] = users[call] or {}
-                users[call][name:gsub("^Hekili_", "")] = true
+                users[call][name:gsub("^Encore_", "")] = true
             end
         end
     end
@@ -83,7 +83,7 @@ function M.rows()
     for _, name in ipairs(names) do
         local by = {}
         for _, a in ipairs(addons.CONTENT) do
-            local short = a:gsub("^Hekili_", "")
+            local short = a:gsub("^Encore_", "")
             if users[name] and users[name][short] then
                 by[#by + 1] = short
             end

@@ -8,37 +8,37 @@ local loaders = {
     Druid = require("Forever.helpers.load_druid"),
     Rogue = { -- the Rogue's class file through the Druid's recording loader
         load = function()
-            return require("Forever.helpers.load_druid").load(nil, "src/Hekili_Rogue/Rogue.lua", "ROGUE")
+            return require("Forever.helpers.load_druid").load(nil, "src/Encore_Rogue/Rogue.lua", "ROGUE")
         end,
     },
     Paladin = { -- the Paladin's, likewise
         load = function()
-            return require("Forever.helpers.load_druid").load(nil, "src/Hekili_Paladin/Paladin.lua", "PALADIN")
+            return require("Forever.helpers.load_druid").load(nil, "src/Encore_Paladin/Paladin.lua", "PALADIN")
         end,
     },
     Shaman = { -- the Shaman's, likewise
         load = function()
-            return require("Forever.helpers.load_druid").load(nil, "src/Hekili_Shaman/Shaman.lua", "SHAMAN")
+            return require("Forever.helpers.load_druid").load(nil, "src/Encore_Shaman/Shaman.lua", "SHAMAN")
         end,
     },
     Hunter = { -- the Hunter's, likewise
         load = function()
-            return require("Forever.helpers.load_druid").load(nil, "src/Hekili_Hunter/Hunter.lua", "HUNTER")
+            return require("Forever.helpers.load_druid").load(nil, "src/Encore_Hunter/Hunter.lua", "HUNTER")
         end,
     },
     Mage = { -- the Mage's, likewise
         load = function()
-            return require("Forever.helpers.load_druid").load(nil, "src/Hekili_Mage/Mage.lua", "MAGE")
+            return require("Forever.helpers.load_druid").load(nil, "src/Encore_Mage/Mage.lua", "MAGE")
         end,
     },
     Priest = { -- the Priest's, likewise
         load = function()
-            return require("Forever.helpers.load_druid").load(nil, "src/Hekili_Priest/Priest.lua", "PRIEST")
+            return require("Forever.helpers.load_druid").load(nil, "src/Encore_Priest/Priest.lua", "PRIEST")
         end,
     },
     Warlock = { -- the Warlock's, likewise
         load = function()
-            return require("Forever.helpers.load_druid").load(nil, "src/Hekili_Warlock/Warlock.lua", "WARLOCK")
+            return require("Forever.helpers.load_druid").load(nil, "src/Encore_Warlock/Warlock.lua", "WARLOCK")
         end,
     },
 }
@@ -185,7 +185,7 @@ local function content()
 
     -- the class packs' files, through their recording loaders (tests/Forever/helpers)
     for _, addon in ipairs(addons.CONTENT) do
-        local name = addon ~= "Hekili_Shared" and addon:match("^Hekili_(%w+)$") -- a class pack, not the shared addon
+        local name = addon ~= "Encore_Shared" and addon:match("^Encore_(%w+)$") -- a class pack, not the shared addon
         if name then
             local loader = assert(loaders[name], "no recording loader for " .. addon)
             local w = loader.load()
@@ -207,7 +207,7 @@ local function content()
     end
 
     -- the race and shared files, through Engine/Schema/Races.lua and Engine/Schema/Shared.lua against a recording `all`
-    local saved = rawget(_G, "Hekili") or false
+    local saved = rawget(_G, "Encore") or false
     local function run(path, token)
         local all = { abilities = {}, auras = {} }
         function all:RegisterAbility(k, d)
@@ -222,7 +222,7 @@ local function content()
         function all:RegisterStateExpr(k)
             def(k, nil, path)
         end
-        _G.Hekili = { State = { race_token = token }, Class = { specs = { [0] = all }, file = "WARRIOR" } }
+        _G.Encore = { State = { race_token = token }, Class = { specs = { [0] = all }, file = "WARRIOR" } }
         local any = setmetatable({}, {
             __index = function(t)
                 return t
@@ -233,10 +233,10 @@ local function content()
             end,
         })
         local ns = { Facade = any }
-        _G.Hekili.Client = any
-        _G.Hekili.SCHOOL = require("Game.State.helpers.load").school() -- Auras.lua reads it at load
-        assert(loadfile("src/Hekili/Engine/Schema/Races.lua"))("Hekili", ns)
-        assert(loadfile("src/Hekili/Engine/Schema/Shared.lua"))("Hekili", ns)
+        _G.Encore.Client = any
+        _G.Encore.SCHOOL = require("Game.State.helpers.load").school() -- Auras.lua reads it at load
+        assert(loadfile("src/Encore/Engine/Schema/Races.lua"))("Encore", ns)
+        assert(loadfile("src/Encore/Engine/Schema/Shared.lua"))("Encore", ns)
         -- a global the file reads at load (INVTYPE_*) answers `any`; Hekili and the Lua library stay real
         local chunk = assert(loadfile("src/" .. path))
         setfenv(
@@ -251,14 +251,14 @@ local function content()
                 end,
             })
         )
-        chunk("Hekili", ns)
+        chunk("Encore", ns)
         costMods(ns.raceMods.costMods, path)
     end
-    for _, file in ipairs(addons.lua({ "Hekili_Shared" })) do -- the race and shared files
+    for _, file in ipairs(addons.lua({ "Encore_Shared" })) do -- the race and shared files
         local path = file:gsub("^src/", "")
         run(path, read(file):match('NewRace%("(%w+)"'))
     end
-    _G.Hekili = saved or nil
+    _G.Encore = saved or nil
     return { keys = keys, ids = ids, abilities = abilities }
 end
 

@@ -11,8 +11,8 @@ describe("a proc aura's internal cooldown", function()
         H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
         assert(headless.cycle(H, H.ctl.now + 0.2))
-        st = H.Hekili.State
-        aura = H.Hekili.Class.auras.battle_shout
+        st = H.Encore.State
+        aura = H.Encore.Class.auras.battle_shout
         st.reset("Primary", true)
     end)
 

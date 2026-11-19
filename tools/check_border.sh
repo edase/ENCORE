@@ -10,20 +10,20 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 fail=0
-# Game/: no Hekili (the addon table, its methods, its debug flag), no `class.`/`class:`/`class[`/`state.`/`state:`
+# Game/: no Encore (the addon table, its methods, its debug flag), no `class.`/`class:`/`class[`/`state.`/`state:`
 # (the registry and the simulation), and no `ns` but `local _, ns = ...` and ns.Facade, ns.VirtualState,
 # ns.VirtualStateInternal (so no ns.Output, ns["x"], rawget(ns, ...)). `class`/`state` not after `.` or a name
 # character, so `I.class` and `r.state.meta` (a resource's own declarations, read through `def`) pass; no `state[`,
 # Tickets.lua's own state array. An optional path argument (a file or a tree) stands in for Game/, for the spec.
-for f in $(find "${1:-src/Hekili/Game}" -name '*.lua' | sort); do
+for f in $(find "${1:-src/Encore/Game}" -name '*.lua' | sort); do
     hits=$(sed -E 's/--.*$//' "$f" | sed -E 's/^[[:space:]]*local _, ns = \.\.\.[[:space:]]*$//; s/\bns\.(Facade|VirtualStateInternal|VirtualState)\b//g' |
-        grep -nE '\bHekili\b|(^|[^.[:alnum:]_])(state[.:]|class[.:[])|\bns\b' | sed "s|^|$f:|")
+        grep -nE '\bEncore\b|(^|[^.[:alnum:]_])(state[.:]|class[.:[])|\bns\b' | sed "s|^|$f:|")
     [ -n "$hits" ] && { echo "$hits"; fail=1; }
 done
-# Engine/, UI/, Options/, Integrations/ and Hekili.lua: no VS, ns.VirtualState or VirtualStateInternal but the four
+# Engine/, UI/, Options/, Integrations/ and Encore.lua: no VS, ns.VirtualState or VirtualStateInternal but the four
 # calls. An optional second path argument (a file or a tree, for the spec) is scanned with them; one that matches no
 # .lua file fails.
-core="$(find src/Hekili/Engine src/Hekili/UI src/Hekili/Options src/Hekili/Integrations -name '*.lua' | sort) src/Hekili/Hekili.lua"
+core="$(find src/Encore/Engine src/Encore/UI src/Encore/Options src/Encore/Integrations -name '*.lua' | sort) src/Encore/Encore.lua"
 if [ -n "${2:-}" ]; then
     extra=$(find "$2" -name '*.lua' 2>/dev/null | sort)
     [ -z "$extra" ] && { echo "$2: no .lua file to scan"; fail=1; }

@@ -102,7 +102,7 @@ describe("the Shaman loop worlds", function()
         local H = headless.new({ character = C.character() })
         assert.are.same({}, H.loadErrors)
         local unmapped = {}
-        for key, a in pairs(H.Hekili.Class.abilities) do
+        for key, a in pairs(H.Encore.Class.abilities) do
             if type(key) == "string" and a.key == key and a.id and H.ctl.known[a.id] and not sw.MAP[key] then
                 unmapped[#unmapped + 1] = key
             end
@@ -118,7 +118,7 @@ describe("the Shaman loop worlds", function()
                 end
             end
         end
-        assert.are.equal(C.SPEC, H.Hekili.State.spec.id)
+        assert.are.equal(C.SPEC, H.Encore.State.spec.id)
         assert.is_false(pcall(C.resolve, "not_an_ability", H))
         -- the top ranks with Convection 5/5 and Elemental Alacrity 3/3
         local got = {}
@@ -140,9 +140,9 @@ describe("the Shaman loop worlds", function()
             local H = headless.new({ character = C.character(), pack = C.PACK })
             assert.are.same({}, H.loadErrors)
             local unmapped = {}
-            for _, list in pairs(H.Hekili.DB.profile.packs[C.PACK].lists) do
+            for _, list in pairs(H.Encore.DB.profile.packs[C.PACK].lists) do
                 for _, entry in ipairs(list) do
-                    local a = entry.action and H.Hekili.Class.abilities[entry.action]
+                    local a = entry.action and H.Encore.Class.abilities[entry.action]
                     if a and a.id and H.ctl.known[a.id] and not sw.MAP[entry.action] then
                         unmapped[#unmapped + 1] = entry.action
                     end

@@ -6,7 +6,7 @@
 local ld = require("Forever.helpers.load_druid")
 local headless = require("Game.harness.headless")
 
-local FILE = "src/Hekili_Rogue/Rogue.lua"
+local FILE = "src/Encore_Rogue/Rogue.lua"
 
 -- key = { spell IDs in rank order, energy cost with every talent at rank 0, cooldown, gcd }, from the DB2 (`wowdb
 -- spell <name>`): the cooldown is the larger of RecoveryTime and CategoryRecoveryTime; gcd "totem" for the 1.0 s
@@ -725,7 +725,7 @@ describe("Forever Rogue through the engine", function()
     -- handlers: the poison reminders' reads follow the out-of-combat enchant read, and the player's aura and cast
     -- events around them raise nothing.
     it("reads the weapon-enchant pseudo-auras the poison reminders name, through the event handlers", function()
-        local S, auras = H.Hekili.State, H.Hekili.Class.auras
+        local S, auras = H.Encore.State, H.Encore.Class.auras
         assert.is_true(auras.main_hand_enchant.id < 0 and auras.off_hand_enchant.id < 0)
         local t = H.ctl.now + 1
         assert.is_true(headless.cycle(H, t))
@@ -753,12 +753,12 @@ describe("Forever Rogue through the engine", function()
 
     -- Weapon buffs review §4.2: a poison's own aura follows its enchant ID on either hand, through the engine.
     it("reads buff.deadly_poison from its enchant ID on either hand, beside the slot pseudo-aura", function()
-        local S, VS, I = H.Hekili.State, H.ns.VirtualState, H.ns.VirtualStateInternal
+        local S, VS, I = H.Encore.State, H.ns.VirtualState, H.ns.VirtualStateInternal
         local keys = {} -- every `enchants` aura is in both layers
         for _, rec in ipairs(I.def.auras) do
             if rec.enchants then
                 keys[#keys + 1] = rec.key
-                assert.is_not_nil(H.Hekili.Class.auras[rec.key], rec.key)
+                assert.is_not_nil(H.Encore.Class.auras[rec.key], rec.key)
             end
         end
         table.sort(keys)
@@ -795,7 +795,7 @@ describe("Forever Rogue through the engine", function()
     -- Player report 1 (hotfix 0.8.6, L1239): Ghostly Strike's next-Garrote buff is its landing's; its `onAvoid` takes
     -- it back on our own dodged, parried or missed strike, so Garrote and Ambush stay unusable out of stealth.
     it("makes Garrote and Ambush usable after a landed Ghostly Strike, not after a missed one", function()
-        local S, VS = H.Hekili.State, H.ns.VirtualState
+        local S, VS = H.Encore.State, H.ns.VirtualState
         H.ctl.inRange.target, H.ctl.level.target, H.ctl.power[3] = true, 60, 100
         H.Fire("PLAYER_TARGET_CHANGED")
         H.ctl.combat = true
@@ -831,7 +831,7 @@ describe("Forever Rogue combo points on the current target (L90)", function()
         local C = require("Forever.helpers.rogue_world").Combat
         H = headless.new({ character = C.character(), pack = C.PACK })
         assert.are.same({}, H.loadErrors)
-        S, VS = H.Hekili.State, H.ns.VirtualState
+        S, VS = H.Encore.State, H.ns.VirtualState
         H.ctl.inRange.target, H.ctl.level.target = true, 60
         H.ctl.power[3] = 100
         H.Fire("PLAYER_TARGET_CHANGED")
@@ -910,7 +910,7 @@ describe("Forever Assassination with no plain energy rate", function()
         local C = require("Forever.helpers.rogue_world").Assassination
         local H = headless.new({ character = C.character(), pack = C.PACK })
         assert.are.same({}, H.loadErrors)
-        local S = H.Hekili.State
+        local S = H.Encore.State
         local maxes, set = {}, S.SetConstraint
         S.SetConstraint = function(self, lo, hi)
             maxes[#maxes + 1] = hi
@@ -942,7 +942,7 @@ describe("Forever Rogue forecast window", function()
         H.ctl.inRange.target, H.ctl.level.target = true, 60
         H.Fire("PLAYER_TARGET_CHANGED")
         assert.is_true(headless.cycle(H, H.ctl.now + 0.5))
-        return H.Hekili.State, H
+        return H.Encore.State, H
     end
 
     it("stretches Assassination's to a full energy bar's regen, never below the display's own", function()
@@ -1004,7 +1004,7 @@ describe("Forever Rogue Shank after learning rank 2", function()
         end
         local H = headless.new({ character = ch, pack = C.PACK })
         assert.are.same({}, H.loadErrors)
-        local S, F = H.Hekili.State, H.ns.Facade
+        local S, F = H.Encore.State, H.ns.Facade
         H.ctl.inRange.target, H.ctl.level.target, H.ctl.power[3] = true, 60, 100
         H.Fire("PLAYER_TARGET_CHANGED")
         local t = H.ctl.now + 1
@@ -1042,7 +1042,7 @@ describe("Forever Rogue Shank after learning rank 2", function()
         end
         local H = headless.new({ character = ch, pack = C.PACK })
         assert.are.same({}, H.loadErrors)
-        local S, shank = H.Hekili.State, H.Hekili.Class.abilities.shank
+        local S, shank = H.Encore.State, H.Encore.Class.abilities.shank
         H.ctl.power[3] = 20 -- out of combat: plain, and room for the gain
         local t = H.ctl.now + 1
         local function gained()

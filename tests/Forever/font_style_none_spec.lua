@@ -35,7 +35,7 @@ describe("Style: None on a font", function()
                 seen[#seen + 1] = flags
             end
         end
-        local p = H.Hekili.DB.profile
+        local p = H.Encore.DB.profile
         local c = p.displays.Primary
         c.style = style
         for _, k in ipairs({ "captions", "keybindings", "targets", "delays" }) do
@@ -49,7 +49,7 @@ describe("Style: None on a font", function()
         if notify then
             p.notifications.fontStyle = "NONE"
         end
-        H.Hekili:BuildUI()
+        H.Encore:BuildUI()
         return H, seen
     end
 

@@ -24,7 +24,7 @@ local FLAP_SEQ = "was closed by a close_window line and started again in the sam
 local function boot(lua)
     H = headless.new({ character = ww.character(), pack = ww.PACK })
     assert.are.same({}, H.loadErrors)
-    local kit = H.Hekili.Class.kit
+    local kit = H.Encore.Class.kit
     for name, data in pairs(lua or {}) do
         kit:RegisterWindow(name, data)
     end
@@ -38,8 +38,8 @@ local function boot(lua)
         local v = 1.2 - (query_time - now) -- luacheck: ignore 113 (state's fields: the expression runs under state)
         return v > 0 and v or 0
     end)
-    H.Hekili:SpecializationChanged()
-    S, VS, VSI = H.Hekili.State, H.ns.VirtualState, H.ns.VirtualStateInternal
+    H.Encore:SpecializationChanged()
+    S, VS, VSI = H.Encore.State, H.ns.VirtualState, H.ns.VirtualStateInternal
     H.ctl.inRange.target, H.ctl.level.target = true, 60
     H.Fire("PLAYER_TARGET_CHANGED")
     t = H.ctl.now + 0.2
@@ -54,7 +54,7 @@ local function boot(lua)
 end
 
 local function parse(text)
-    local lines, warnings = H.Hekili:ParseActionList(text, true)
+    local lines, warnings = H.Encore:ParseActionList(text, true)
     assert.are.same({}, warnings or {})
     for _, l in ipairs(lines) do
         l.enabled = true
@@ -64,16 +64,16 @@ end
 
 -- The pack's lists (entries by list name); loads the scripts and enters combat.
 local function install(out)
-    H.Hekili.DB.profile.packs[ww.PACK].lists = out
-    H.Hekili:LoadScripts()
-    H.Hekili:ReviewPacks() -- the lists and entries the walk may run (UI.lua), as an edit in the options does
+    H.Encore.DB.profile.packs[ww.PACK].lists = out
+    H.Encore:LoadScripts()
+    H.Encore:ReviewPacks() -- the lists and entries the walk may run (UI.lua), as an edit in the options does
     -- the edit applied out of combat (§9): the belief builds the new rows at a Drain out of combat; in combat they
     -- would wait for combat end (L01)
-    H.Hekili.Scripts:ApplyWindows(ww.PACK)
+    H.Encore.Scripts:ApplyWindows(ww.PACK)
     S:BuildWindows()
     VS.Drain(H.ctl.now)
     H.Fire("PLAYER_REGEN_DISABLED")
-    assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+    assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
 end
 
 -- The pack's lists from simc text by list name, installed as above.
@@ -97,7 +97,7 @@ local function tick()
         end
     end
     assert.are.same({}, H.errors)
-    return H.Hekili.Engine.Output.Primary.recs, ops
+    return H.Encore.Engine.Output.Primary.recs, ops
 end
 
 local function key(name, display)
@@ -119,7 +119,7 @@ describe("the windows compiler (windows design v6 §3.4, §9)", function()
         for name, text in pairs(lists) do
             out[name] = parse(text)
         end
-        return H.Hekili.Scripts.CheckWindows(out, "pk"), out
+        return H.Encore.Scripts.CheckWindows(out, "pk"), out
     end
 
     local function codes(cw)
@@ -226,7 +226,7 @@ describe("the windows compiler (windows design v6 §3.4, §9)", function()
 
     it("disables a line with an error when the scripts load and lists it once", function()
         load({ default = "actions+=/open_window,name=nope\nactions+=/berserker_stance" })
-        local script = H.Hekili.Scripts.DB[ww.PACK .. ":default:1"]
+        local script = H.Encore.Scripts.DB[ww.PACK .. ":default:1"]
         assert.is_truthy(script.Error and script.Error:find("E1", 1, true))
         local function reported() -- the window compile errors reported (the harness keeps Error's format string)
             local n = 0
@@ -236,13 +236,13 @@ describe("the windows compiler (windows design v6 §3.4, §9)", function()
             return n
         end
         assert.are.equal(1, reported())
-        H.Hekili:LoadScripts() -- an options edit loads the scripts again: marked again, not reported again (M3)
-        assert.is_truthy(H.Hekili.Scripts.DB[ww.PACK .. ":default:1"].Error)
+        H.Encore:LoadScripts() -- an options edit loads the scripts again: marked again, not reported again (M3)
+        assert.is_truthy(H.Encore.Scripts.DB[ww.PACK .. ":default:1"].Error)
         assert.are.equal(1, reported())
         -- a CHANGED error on the same line is a new report
-        local lists = H.Hekili.DB.profile.packs[ww.PACK].lists
+        local lists = H.Encore.DB.profile.packs[ww.PACK].lists
         lists.default = parse("actions+=/open_window,name=x,duration=3\nactions+=/berserker_stance")
-        H.Hekili:LoadScripts()
+        H.Encore:LoadScripts()
         assert.are.equal(2, reported())
         for k in pairs(H.errors) do
             H.errors[k] = nil
@@ -257,8 +257,8 @@ describe("the windows compiler (windows design v6 §3.4, §9)", function()
         function()
             load({ default = "actions+=/open_window,name=nope\nactions+=/berserker_stance" })
             local n = #H.errors
-            H.Hekili:LoadScript(ww.PACK, "default", 1) -- an editor edit of the line's if=, say
-            local script = H.Hekili.Scripts.DB[ww.PACK .. ":default:1"]
+            H.Encore:LoadScript(ww.PACK, "default", 1) -- an editor edit of the line's if=, say
+            local script = H.Encore.Scripts.DB[ww.PACK .. ":default:1"]
             assert.is_truthy(script.Error and script.Error:find("E1", 1, true))
             assert.are.equal(n, #H.errors)
         end
@@ -266,13 +266,13 @@ describe("the windows compiler (windows design v6 §3.4, §9)", function()
 
     it("a line the editor moves takes its window error with it, and the line moved past it has none", function()
         load({ default = "actions+=/open_window,name=nope\nactions+=/berserker_stance" })
-        local lines = H.Hekili.DB.profile.packs[ww.PACK].lists.default
+        local lines = H.Encore.DB.profile.packs[ww.PACK].lists.default
         lines[1], lines[2] = lines[2], lines[1] -- the editor's move down (Options.lua moveDownBtn)
         local at = ww.PACK .. ":default:"
-        H.Hekili.Scripts:SwapScripts(at .. 1, at .. 2)
-        H.Hekili:LoadScript(ww.PACK, "default", 1) -- then an edit of the stance line, now first
-        assert.is_nil(H.Hekili.Scripts.DB[at .. 1].Error)
-        local moved = H.Hekili.Scripts.DB[at .. 2]
+        H.Encore.Scripts:SwapScripts(at .. 1, at .. 2)
+        H.Encore:LoadScript(ww.PACK, "default", 1) -- then an edit of the stance line, now first
+        assert.is_nil(H.Encore.Scripts.DB[at .. 1].Error)
+        local moved = H.Encore.Scripts.DB[at .. 2]
         assert.is_truthy(moved.Error and moved.Error:find("E1", 1, true))
     end)
 
@@ -281,10 +281,10 @@ describe("the windows compiler (windows design v6 §3.4, §9)", function()
             windows = "actions+=/window,name=x,duration=6",
             default = "actions+=/open_window,name=x\nactions+=/berserker_stance",
         })
-        assert.is_nil(H.Hekili.Scripts.DB[ww.PACK .. ":default:1"].Error)
+        assert.is_nil(H.Encore.Scripts.DB[ww.PACK .. ":default:1"].Error)
         -- the editor on default line 1 (its default selection) names a window this priority does not declare
-        H.Hekili:SetActionOption({ "packs", ww.PACK, "lists", "entry", "x", "window_name" }, "nope")
-        local script = H.Hekili.Scripts.DB[ww.PACK .. ":default:1"]
+        H.Encore:SetActionOption({ "packs", ww.PACK, "lists", "entry", "x", "window_name" }, "nope")
+        local script = H.Encore.Scripts.DB[ww.PACK .. ":default:1"]
         assert.is_truthy(script.Error and script.Error:find("E1", 1, true))
     end)
 
@@ -294,11 +294,11 @@ describe("the windows compiler (windows design v6 §3.4, §9)", function()
             aoe = "actions+=/berserker_stance",
         })
         local at = ww.PACK .. ":default:"
-        assert.is_truthy(H.Hekili.Scripts.DB[at .. 1].Error:find("E5", 1, true))
-        H.Hekili:SetActionOption({ "packs", ww.PACK, "lists", "entry", "x", "list_name" }, "aoe")
-        assert.is_nil(H.Hekili.Scripts.DB[at .. 1].Error)
-        H.Hekili:SetActionOption({ "packs", ww.PACK, "lists", "entry", "x", "list_name" }, "windows")
-        assert.is_truthy(H.Hekili.Scripts.DB[at .. 1].Error:find("E5", 1, true))
+        assert.is_truthy(H.Encore.Scripts.DB[at .. 1].Error:find("E5", 1, true))
+        H.Encore:SetActionOption({ "packs", ww.PACK, "lists", "entry", "x", "list_name" }, "aoe")
+        assert.is_nil(H.Encore.Scripts.DB[at .. 1].Error)
+        H.Encore:SetActionOption({ "packs", ww.PACK, "lists", "entry", "x", "list_name" }, "windows")
+        assert.is_truthy(H.Encore.Scripts.DB[at .. 1].Error:find("E5", 1, true))
     end)
 
     it("an editor edit of a non-window entry in the windows list is a full load", function()
@@ -307,39 +307,39 @@ describe("the windows compiler (windows design v6 §3.4, §9)", function()
             default = "actions+=/berserker_stance",
         })
         -- the editor selects the windows list, line 2 (the stance line): an edit of its if= is a full load
-        H.Hekili:SetPackOption({ "packs", ww.PACK, "listName" }, "windows")
-        H.Hekili:SetPackOption({ "packs", ww.PACK, "actionID" }, "0002")
+        H.Encore:SetPackOption({ "packs", ww.PACK, "listName" }, "windows")
+        H.Encore:SetPackOption({ "packs", ww.PACK, "actionID" }, "0002")
         local full = 0
-        local ls = H.Hekili.LoadScripts
-        H.Hekili.LoadScripts = function(...)
+        local ls = H.Encore.LoadScripts
+        H.Encore.LoadScripts = function(...)
             full = full + 1
             return ls(...)
         end
-        H.Hekili:SetActionOption({ "packs", ww.PACK, "lists", "entry", "x", "criteria" }, "1")
-        H.Hekili.LoadScripts = ls
-        H.Hekili:SetPackOption({ "packs", ww.PACK, "listName" }, "default")
+        H.Encore:SetActionOption({ "packs", ww.PACK, "lists", "entry", "x", "criteria" }, "1")
+        H.Encore.LoadScripts = ls
+        H.Encore:SetPackOption({ "packs", ww.PACK, "listName" }, "default")
         assert.are.equal(1, full)
     end)
 
     it("a window another priority declares reads closed, done included (M4)", function()
-        H.Hekili.Scripts.declaredWindows.other = true
+        H.Encore.Scripts.declaredWindows.other = true
         local w = S.window.other
         assert.is_false(w.up)
         assert.is_true(w.down)
         assert.is_false(w.done)
         assert.are.equal(0, w.remains)
-        H.Hekili.Scripts.declaredWindows.other = nil
+        H.Encore.Scripts.declaredWindows.other = nil
     end)
 
     it("C10: every shipped pack compiles with no window error", function()
-        for name, pack in pairs(H.Hekili.DB.profile.packs) do
-            local cw = H.Hekili.Scripts.CheckWindows(pack.lists or {}, name)
+        for name, pack in pairs(H.Encore.DB.profile.packs) do
+            local cw = H.Encore.Scripts.CheckWindows(pack.lists or {}, name)
             assert.are.same({}, codes(cw), name)
         end
     end)
 
     it("an import keeps a list-declared window's lines and warns E1 for an undeclared one", function()
-        local out, warnings = H.Hekili:ImportSimcAPL(
+        local out, warnings = H.Encore:ImportSimcAPL(
             "t",
             "t",
             "actions.windows=window,name=x,duration=6\nactions=open_window,name=x\nactions+=/open_window,name=y\nactions+=/berserker_stance"
@@ -355,7 +355,7 @@ describe("the windows compiler (windows design v6 §3.4, §9)", function()
     it(
         "an import comment above a sequence line is the line's description, a colon in it included (review M8)",
         function()
-            local out = H.Hekili:ImportSimcAPL(
+            local out = H.Encore:ImportSimcAPL(
                 "t",
                 "t",
                 "# Opener: on pull\nactions=sequence,name=p,mode=continue:bloodrage:berserker_stance\n"
@@ -373,9 +373,9 @@ describe("the windows compiler (windows design v6 §3.4, §9)", function()
                 { s.action, s.enabled, #s.steps, s.caption, s.description }
             )
             assert.is_nil(s.steps[2].caption)
-            assert.are.same({}, codes(H.Hekili.Scripts.CheckWindows(out, "t")))
+            assert.are.same({}, codes(H.Encore.Scripts.CheckWindows(out, "t")))
             -- an unclosed ( in the text does not hide the members' colons from the split
-            out = H.Hekili:ImportSimcAPL(
+            out = H.Encore:ImportSimcAPL(
                 "t",
                 "t",
                 "# Burst (big\nactions=sequence,name=p:bloodrage:berserker_stance\n"
@@ -610,7 +610,7 @@ describe("APL window lines as commands (windows design v6 §4, §5)", function()
             return got
         end
         local before = run()
-        local hk = H.Hekili
+        local hk = H.Encore
         local lists = hk.DeserializeActionPack(hk.SerializeActionPack(ww.PACK)).payload.lists
         local function walk(v) -- no display key in the exported lists: plain names only
             if type(v) == "string" then
@@ -637,7 +637,7 @@ describe("APL window lines as commands (windows design v6 §4, §5)", function()
             default = "actions+=/open_window,name=x\nactions+=/berserker_stance",
         })
         tick()
-        H.Hekili:SpecializationChanged()
+        H.Encore:SpecializationChanged()
         assert.are.equal(key("x"), VSI.def.aplWindows[1].key)
         local recs, sent = tick()
         assert.are.same({ { key("x"), OPEN } }, sent) -- the rows exist (no drop), closed after the Build
@@ -695,7 +695,7 @@ local function forecastRun(c)
     local disp = c.display or "Primary" -- the display whose keys are checked; Primary walks (and sends) too
     load(c.lists)
     if disp ~= "Primary" then
-        assert.is_true(H.Hekili.Engine.Subscribe(disp, function() end))
+        assert.is_true(H.Encore.Engine.Subscribe(disp, function() end))
     end
     flaps = 0
     assert.are.equal(c.loadErrors or 0, #H.errors) -- C01: its compile errors, reported once at load
@@ -725,8 +725,8 @@ local function forecastRun(c)
         end
         S.delay = delay
     end
-    local gnp, wop = H.Hekili.GetNextPrediction, VS.WindowOp
-    H.Hekili.GetNextPrediction = function(self, dispName, packName, slot)
+    local gnp, wop = H.Encore.GetNextPrediction, VS.WindowOp
+    H.Encore.GetNextPrediction = function(self, dispName, packName, slot)
         tail = false
         local a, w, d = gnp(self, dispName, packName, slot)
         if not captured and dispName == disp and slot.index == 1 then -- slot 1's now walk, before any wait
@@ -809,7 +809,7 @@ local function forecastRun(c)
         prev, perTick[i] = copy, #sentA
         copy = {}
     end
-    H.Hekili.GetNextPrediction, VS.WindowOp = gnp, wop
+    H.Encore.GetNextPrediction, VS.WindowOp = gnp, wop
     -- L1205: a window opened and closed by lines within one slot warns once per pack and window a session
     assert.are.equal(c.flaps or 0, flaps, c.id .. ": flapping-pair warnings")
     -- the last tick's sends too: one more Drain (no pass) must leave the belief equal to the last copy
@@ -1117,7 +1117,7 @@ describe("forecast == apply, the core's side (windows design v6 §13, L1180)", f
             for k in pairs(flags) do
                 flags[k] = false
             end
-            H.Hekili.Engine.settings.toggles.mode.value = "dual"
+            H.Encore.Engine.settings.toggles.mode.value = "dual"
             local d = setmetatable({ display = "AOE" }, { __index = c })
             assert.are.same(c.sends, forecastRun(d))
         end)
@@ -1132,11 +1132,11 @@ describe("forecast == apply, the core's side (windows design v6 §13, L1180)", f
         })
         assert.are.same({ 1 }, got)
         -- an edit in combat adds window z (the options' edit: the scripts load again, Update applies the new generation)
-        local lists = H.Hekili.DB.profile.packs[ww.PACK].lists
+        local lists = H.Encore.DB.profile.packs[ww.PACK].lists
         lists.windows = parse("actions+=/window,name=x,duration=6\nactions+=/window,name=z,duration=6")
         table.insert(lists.default, 1, parse("actions+=/open_window,name=z")[1])
-        H.Hekili:LoadScripts()
-        H.Hekili:ReviewPacks()
+        H.Encore:LoadScripts()
+        H.Encore:ReviewPacks()
         local Q = VSI.winOps
         local dropped = Q.dropped
         local _, sent = tick()
@@ -1160,7 +1160,7 @@ describe("a /reload in combat (windows design v6 §9; review M1)", function()
             windows = "actions+=/window,name=x,duration=6",
             default = "actions+=/open_window,name=x\nactions+=/bloodrage,if=window.x.up\nactions+=/berserker_stance",
         })
-        local saved = H.env.HekiliDB -- the profile as a /reload finds it
+        local saved = H.env.EncoreDB -- the profile as a /reload finds it
         local fakeNew = fake.new
         fake.new = function(...) -- the reload lands in combat: the client is in combat from the first event
             local api, ctl = fakeNew(...)
@@ -1171,11 +1171,11 @@ describe("a /reload in combat (windows design v6 §9; review M1)", function()
         fake.new = fakeNew
         assert(ok, H2)
         assert.are.same({}, H2.loadErrors)
-        H, S, VS, VSI = H2, H2.Hekili.State, H2.ns.VirtualState, H2.ns.VirtualStateInternal
+        H, S, VS, VSI = H2, H2.Encore.State, H2.ns.VirtualState, H2.ns.VirtualStateInternal
         assert.is_true(VSI.inCombat)
         H.ctl.inRange.target, H.ctl.level.target = true, 60
         H.Fire("PLAYER_TARGET_CHANGED")
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         t = H.ctl.now + 0.2
         assert(headless.cycle(H, t))
         local dropped = VSI.winOps.dropped
@@ -1199,7 +1199,7 @@ describe("the sequences compiler (windows design v6 §3.3, §3.4, §9)", functio
         for name, text in pairs(lists) do
             out[name] = parse(text)
         end
-        return H.Hekili.Scripts.CheckWindows(out, "pk"), out
+        return H.Encore.Scripts.CheckWindows(out, "pk"), out
     end
 
     local function codes(cw)
@@ -1226,7 +1226,7 @@ describe("the sequences compiler (windows design v6 §3.3, §3.4, §9)", functio
     end)
 
     it("L07: a member that is not an ability is a parse warning and disables the line", function()
-        local lines, warnings = H.Hekili:ParseActionList("actions+=/sequence,name=x:bloodrage:potion", true)
+        local lines, warnings = H.Encore:ParseActionList("actions+=/sequence,name=x:bloodrage:potion", true)
         assert.is_truthy(warnings and warnings[1]:find("not an ability", 1, true))
         assert.is_false(lines[1].enabled)
     end)
@@ -1314,7 +1314,7 @@ describe("the sequences compiler (windows design v6 §3.3, §3.4, §9)", functio
             }, keys)
             -- (§7, L1315) Cooldowns, Interrupts and Defensives never sequence: a stored "on" there adds no key
             for _, disp in ipairs({ "Cooldowns", "Interrupts", "Defensives" }) do
-                H.Hekili.Engine.settings.displays[disp].sequences = true
+                H.Encore.Engine.settings.displays[disp].sequences = true
             end
             local cw2 = check({ default = "actions+=/sequence,name=p:bloodrage" })
             assert.are.equal(2, #cw2.records)
@@ -1415,7 +1415,7 @@ describe("plain sequences (windows design v6 §6, rulings 12, 15, 26, 28)", func
                 assert.are.equal("berserker_stance", recs[1].actionName, opt)
                 flags.fb = false
                 H.Fire("PLAYER_REGEN_ENABLED") -- the next case starts closed
-                H.Hekili.DB.profile.packs[ww.PACK].lists = { precombat = {}, default = {} }
+                H.Encore.DB.profile.packs[ww.PACK].lists = { precombat = {}, default = {} }
             end
         end
     )
@@ -1448,7 +1448,7 @@ describe("plain sequences (windows design v6 §6, rulings 12, 15, 26, 28)", func
             end
             flags.fb = false
             H.Fire("PLAYER_REGEN_ENABLED") -- the next case starts closed
-            H.Hekili.DB.profile.packs[ww.PACK].lists = { precombat = {}, default = {} }
+            H.Encore.DB.profile.packs[ww.PACK].lists = { precombat = {}, default = {} }
         end
     end)
 
@@ -1486,7 +1486,7 @@ describe("plain sequences (windows design v6 §6, rulings 12, 15, 26, 28)", func
 
     it("D16: a display with Sequences off skips every sequence line; free-form windows still work there", function()
         load({ default = "actions+=/sequence,name=x:bloodrage\nactions+=/defensive_stance" })
-        local cw = H.Hekili.Scripts.appliedWindows
+        local cw = H.Encore.Scripts.appliedWindows
         assert.is_nil(cw.byName.x.keys.Cooldowns)
         S.CopyWindows("Cooldowns")
         S.delay = 0
@@ -1495,8 +1495,8 @@ describe("plain sequences (windows design v6 §6, rulings 12, 15, 26, 28)", func
     end)
 
     it("the Sequences toggle is on the Primary and AOE pages only (L1315; not Multi)", function()
-        H.Hekili:EmbedDisplayOptions()
-        local plugins = H.Hekili.Options.args.displays.plugins
+        H.Encore:EmbedDisplayOptions()
+        local plugins = H.Encore.Options.args.displays.plugins
         local function find(args)
             for k, v in pairs(args) do
                 if k == "sequences" and v.type == "toggle" then
@@ -1659,15 +1659,15 @@ describe("strict sequences (windows design v6 §6, rulings 4, 27, 29; L1181)", f
 
     -- (Fable Q1 (c), L1270) the default-list walks begun while a strict sequence holds Primary, over one tick
     local function heldWalks()
-        local n, apl = 0, H.Hekili.GetPredictionFromAPL
-        H.Hekili.GetPredictionFromAPL = function(self, dispName, packName, listName, ...)
+        local n, apl = 0, H.Encore.GetPredictionFromAPL
+        H.Encore.GetPredictionFromAPL = function(self, dispName, packName, listName, ...)
             if listName == "default" and dispName == "Primary" and S.WindowHold() then
                 n = n + 1
             end
             return apl(self, dispName, packName, listName, ...)
         end
         local ok, recs, sent = pcall(tick)
-        H.Hekili.GetPredictionFromAPL = apl
+        H.Encore.GetPredictionFromAPL = apl
         assert(ok, recs)
         return n, recs, sent
     end
@@ -1679,7 +1679,7 @@ describe("strict sequences (windows design v6 §6, rulings 4, 27, 29; L1181)", f
                     .. opt
                     .. ":berserker_stance:defensive_stance\nactions+=/defensive_stance",
             })
-            assert.is_false(H.Hekili.Scripts.appliedWindows.holdWalk, opt)
+            assert.is_false(H.Encore.Scripts.appliedWindows.holdWalk, opt)
             tick()
             local n, recs, sent = heldWalks()
             assert.are.same({ true, 1 }, { seqState("s") }, opt)
@@ -1700,7 +1700,7 @@ describe("strict sequences (windows design v6 §6, rulings 4, 27, 29; L1181)", f
             default = "actions+=/variable,name=v,value=1\nactions+=/strict_sequence,name=s,hold_off_gcd=1"
                 .. ":bloodrage:berserker_stance,if=variable.v>0\nactions+=/defensive_stance",
         })
-        assert.is_true(H.Hekili.Scripts.appliedWindows.holdWalk)
+        assert.is_true(H.Encore.Scripts.appliedWindows.holdWalk)
         tick()
         tick()
         cast(BR)
@@ -1718,8 +1718,8 @@ describe("strict sequences (windows design v6 §6, rulings 4, 27, 29; L1181)", f
         )
         default[1].enabled = false
         install({ precombat = {}, default = default })
-        assert.is_true(H.Hekili.Scripts.appliedWindows.holdWalk)
-        assert.is_false(H.Hekili.Scripts.NoWindows.holdWalk)
+        assert.is_true(H.Encore.Scripts.appliedWindows.holdWalk)
+        assert.is_false(H.Encore.Scripts.NoWindows.holdWalk)
     end)
 
     -- Fable L1286 item 4: the L1205 warning covers a close line against the chosen OPEN (once, the sequence's text)
@@ -1739,7 +1739,7 @@ describe("strict sequences (windows design v6 §6, rulings 4, 27, 29; L1181)", f
                 assert.are.equal(before + 1, flaps, i)
             end
             assert.is_truthy(flapMsg:find(FLAP_SEQ, 1, true))
-            local keys = H.Hekili.ErrorKeys -- formatted (H.errors holds the template)
+            local keys = H.Encore.ErrorKeys -- formatted (H.errors holds the template)
             assert.is_truthy(
                 keys[#keys]:find("Priority '" .. ww.PACK .. "': sequence 's' was closed", 1, true),
                 keys[#keys]
@@ -1751,10 +1751,10 @@ describe("strict sequences (windows design v6 §6, rulings 4, 27, 29; L1181)", f
         load({
             default = "actions+=/strict_sequence,name=s:bloodrage,use_off_gcd=1:berserker_stance\nactions+=/defensive_stance",
         })
-        local info = H.Hekili.Scripts.PackInfo[ww.PACK]
+        local info = H.Encore.Scripts.PackInfo[ww.PACK]
         assert.is_true(info.hasOffGCD)
-        local sid = H.Hekili.Scripts.appliedWindows.byName.s.hiddenIDs[1]
-        local script = H.Hekili.Scripts.DB[sid]
+        local sid = H.Encore.Scripts.appliedWindows.byName.s.hiddenIDs[1]
+        local script = H.Encore.Scripts.DB[sid]
         assert.are.equal("bloodrage", script.action)
         assert.is_true(script.ReadsWindow)
     end)
@@ -1877,9 +1877,9 @@ describe("strict sequences, more named cases (windows design v6 §13)", function
     )
 
     it("D11: Primary and AOE both choose the same strict sequence: two keys open; one cast advances both", function()
-        H.Hekili.Engine.settings.toggles.mode.value = "dual"
+        H.Encore.Engine.settings.toggles.mode.value = "dual"
         load({ default = "actions+=/strict_sequence,name=s:bloodrage:berserker_stance\nactions+=/defensive_stance" })
-        assert.is_true(H.Hekili.Engine.Subscribe("AOE", function() end))
+        assert.is_true(H.Encore.Engine.Subscribe("AOE", function() end))
         local _, sent = tick()
         local got = {}
         for _, o in ipairs(sent) do
@@ -1899,8 +1899,8 @@ describe("filter bypasses for sequence lines (windows design v6 §7, rulings 9, 
     before_each(function()
         boot()
         flags.fa, flags.fb = false, false
-        H.Hekili.Class.abilities.bloodrage.toggle = "cooldowns"
-        cds = H.Hekili.Engine.settings.toggles.cooldowns
+        H.Encore.Class.abilities.bloodrage.toggle = "cooldowns"
+        cds = H.Encore.Engine.settings.toggles.cooldowns
         cds.separate, cds.value = true, true
     end)
 
@@ -1912,8 +1912,8 @@ describe("filter bypasses for sequence lines (windows design v6 §7, rulings 9, 
             assert.are.same({ { key("s"), OPEN } }, sent)
             assert.are.equal("bloodrage", recs[1].actionName)
             boot()
-            H.Hekili.Class.abilities.bloodrage.toggle = "cooldowns"
-            cds = H.Hekili.Engine.settings.toggles.cooldowns
+            H.Encore.Class.abilities.bloodrage.toggle = "cooldowns"
+            cds = H.Encore.Engine.settings.toggles.cooldowns
             cds.separate, cds.value = true, false
             load({ default = "actions+=/strict_sequence,name=s:bloodrage:berserker_stance\nactions+=/defensive_stance" })
             recs, sent = tick()
@@ -1968,13 +1968,13 @@ describe("filter bypasses for sequence lines (windows design v6 §7, rulings 9, 
     -- (§7, L1315) Cooldowns, Interrupts and Defensives never sequence: a stored Sequences "on" there (an old profile)
     -- is ignored. Primary, AOE and Cooldowns walked; the operations sent, as a set by key
     local function storedOn(text)
-        H.Hekili.Engine.settings.toggles.mode.value = "dual"
+        H.Encore.Engine.settings.toggles.mode.value = "dual"
         for _, disp in ipairs({ "Cooldowns", "Interrupts", "Defensives" }) do
-            H.Hekili.DB.profile.displays[disp].sequences = true
+            H.Encore.DB.profile.displays[disp].sequences = true
         end
         load({ default = text })
-        assert.is_true(H.Hekili.Engine.Subscribe("AOE", function() end))
-        assert.is_true(H.Hekili.Engine.Subscribe("Cooldowns", function() end))
+        assert.is_true(H.Encore.Engine.Subscribe("AOE", function() end))
+        assert.is_true(H.Encore.Engine.Subscribe("Cooldowns", function() end))
     end
     local function sentSet(sent)
         local s = {}
@@ -1986,9 +1986,9 @@ describe("filter bypasses for sequence lines (windows design v6 §7, rulings 9, 
     -- nothing on Cooldowns' key, no copy there, and Cooldowns does not show the member Primary is at
     local function cooldownsQuiet(sent, name, member)
         assert.is_nil(sentSet(sent)[key(name, "Cooldowns")])
-        assert.is_nil(H.Hekili.Scripts.appliedWindows.byName[name].keys.Cooldowns)
+        assert.is_nil(H.Encore.Scripts.appliedWindows.byName[name].keys.Cooldowns)
         assert.is_false((seqState(name, "Cooldowns")))
-        local cd = H.Hekili.Engine.Output.Cooldowns.recs
+        local cd = H.Encore.Engine.Output.Cooldowns.recs
         assert.are_not.equal(member, cd[1] and cd[1].actionName)
     end
 
@@ -2007,7 +2007,7 @@ describe("filter bypasses for sequence lines (windows design v6 §7, rulings 9, 
         assert.are.same({ true, 2 }, { seqState("s") })
         assert.are.same({ true, 2 }, { seqState("s", "AOE") })
         assert.are.equal("berserker_stance", recs[1].actionName)
-        assert.are.equal("berserker_stance", H.Hekili.Engine.Output.AOE.recs[1].actionName)
+        assert.are.equal("berserker_stance", H.Encore.Engine.Output.AOE.recs[1].actionName)
         cooldownsQuiet(sent, "s", "berserker_stance")
     end)
 
@@ -2030,14 +2030,14 @@ describe("filter bypasses for sequence lines (windows design v6 §7, rulings 9, 
         "D13: Cooldowns separate (it never sequences): a strict nuke:classcd runs in Primary; Cooldowns skips it",
         function()
             load({ default = "actions+=/strict_sequence,name=s:berserker_stance:bloodrage\nactions+=/defensive_stance" })
-            assert.is_true(H.Hekili.Engine.Subscribe("Cooldowns", function() end))
+            assert.is_true(H.Encore.Engine.Subscribe("Cooldowns", function() end))
             local _, sent = tick()
             assert.are.same({ { key("s"), OPEN } }, sent)
             assert.is_false((seqState("s", "Cooldowns")))
             cast(BS)
             tick()
             assert.are.same({ true, 2 }, { seqState("s") })
-            local cd = H.Hekili.Engine.Output.Cooldowns.recs
+            local cd = H.Encore.Engine.Output.Cooldowns.recs
             assert.are_not.equal("berserker_stance", cd[1] and cd[1].actionName) -- no hold there, no bypass
         end
     )
@@ -2057,7 +2057,7 @@ describe("filter bypasses for sequence lines (windows design v6 §7, rulings 9, 
             windows = "actions+=/window,name=burst,duration=6",
             default = "actions+=/open_window,name=burst\nactions+=/bloodrage\nactions+=/defensive_stance",
         })
-        assert.is_true(H.Hekili.Engine.Subscribe("Cooldowns", function() end))
+        assert.is_true(H.Encore.Engine.Subscribe("Cooldowns", function() end))
         local _, sent = tick()
         assert.are.equal(OPEN, sentSet(sent)[key("burst", "Cooldowns")])
         tick()
@@ -2067,25 +2067,25 @@ describe("filter bypasses for sequence lines (windows design v6 §7, rulings 9, 
     it(
         "D17: Sequences switched on for Primary: keys at once out of combat, at combat end in combat; off removes them",
         function()
-            H.Hekili.DB.profile.displays.Primary.sequences = false
+            H.Encore.DB.profile.displays.Primary.sequences = false
             load({ default = "actions+=/strict_sequence,name=s:bloodrage:berserker_stance\nactions+=/defensive_stance" })
             local k, rows = key("s"), VSI.win.byKey
-            assert.is_nil(H.Hekili.Scripts.appliedWindows.byName.s.keys.Primary)
+            assert.is_nil(H.Encore.Scripts.appliedWindows.byName.s.keys.Primary)
             assert.is_nil(rows[k])
             -- in combat: the compile has the key at once, the belief's row waits for combat end
-            H.Hekili.DB.profile.displays.Primary.sequences = true
-            H.Hekili:LoadScripts()
+            H.Encore.DB.profile.displays.Primary.sequences = true
+            H.Encore:LoadScripts()
             tick()
-            assert.are.equal(k, H.Hekili.Scripts.appliedWindows.byName.s.keys.Primary)
+            assert.are.equal(k, H.Encore.Scripts.appliedWindows.byName.s.keys.Primary)
             assert.is_nil(rows[k])
             H.Fire("PLAYER_REGEN_ENABLED")
             tick()
             assert.is_number(rows[k])
             -- out of combat, switched off: the key and its row go at once
-            H.Hekili.DB.profile.displays.Primary.sequences = false
-            H.Hekili:LoadScripts()
+            H.Encore.DB.profile.displays.Primary.sequences = false
+            H.Encore:LoadScripts()
             tick()
-            assert.is_nil(H.Hekili.Scripts.appliedWindows.byName.s.keys.Primary)
+            assert.is_nil(H.Encore.Scripts.appliedWindows.byName.s.keys.Primary)
             assert.is_nil(rows[k])
         end
     )
@@ -2106,7 +2106,7 @@ describe("filter bypasses for sequence lines (windows design v6 §7, rulings 9, 
                 end
             end
             assert.are.same({ OPEN, "STEP 2" }, got, disp)
-            local recs = H.Hekili.Engine.Output[disp].recs
+            local recs = H.Encore.Engine.Output[disp].recs
             assert.are.equal("bloodrage", recs[1] and recs[1].actionName, disp)
         end
         cooldownsQuiet(sent, "s", "bloodrage")
@@ -2123,7 +2123,7 @@ describe("named cases, part D (windows design v6 §13)", function()
     it(
         "S12/P05: due in 0.3 s opens with start_on_first=1 (inside the queue window); 0.6 s never; unwritten at 0 only",
         function()
-            local cd = H.Hekili.Class.abilities.bloodrage.cooldown
+            local cd = H.Encore.Class.abilities.bloodrage.cooldown
             for _, opt in ipairs({ "", ",start_on_first=1" }) do
                 for _, due in ipairs({ 0.6, 0.3, 0 }) do
                     boot()
@@ -2153,7 +2153,7 @@ describe("named cases, part D (windows design v6 §13)", function()
     it(
         "P10: allow_skip=1 with start_on_first=1 starts within the queue window, then skips a member that cannot",
         function()
-            local cd = H.Hekili.Class.abilities.bloodrage.cooldown
+            local cd = H.Encore.Class.abilities.bloodrage.cooldown
             H.Fire("CVAR_UPDATE", "SpellQueueWindow", "400")
             load({
                 default = "actions+=/strict_sequence,name=s,allow_skip=1,start_on_first=1"
@@ -2176,32 +2176,32 @@ describe("named cases, part D (windows design v6 §13)", function()
     )
 
     it("D03: a display not walked at step 2: its key advances on casts; past the step timeout no stale hold", function()
-        H.Hekili.Engine.settings.toggles.mode.value = "dual"
+        H.Encore.Engine.settings.toggles.mode.value = "dual"
         load({
             default = "actions+=/strict_sequence,name=s:bloodrage:berserker_stance:defensive_stance\n"
                 .. "actions+=/battle_shout",
         })
         local sub = function() end
-        assert.is_true(H.Hekili.Engine.Subscribe("AOE", sub))
+        assert.is_true(H.Encore.Engine.Subscribe("AOE", sub))
         tick()
         cast(BR)
         tick()
         assert.are.same({ true, 2 }, { seqState("s", "AOE") })
-        H.Hekili.Engine.Unsubscribe("AOE", sub) -- AOE is not walked: it sends nothing
+        H.Encore.Engine.Unsubscribe("AOE", sub) -- AOE is not walked: it sends nothing
         cast(BS)
         tick()
         assert.are.same({ true, 3 }, belief("s", "AOE").up and { true, belief("s", "AOE").step })
-        H.Hekili.Engine.Subscribe("AOE", sub)
+        H.Encore.Engine.Subscribe("AOE", sub)
         tick()
-        assert.are.equal("defensive_stance", H.Hekili.Engine.Output.AOE.recs[1].actionName) -- held at step 3
-        H.Hekili.Engine.Unsubscribe("AOE", sub)
+        assert.are.equal("defensive_stance", H.Encore.Engine.Output.AOE.recs[1].actionName) -- held at step 3
+        H.Encore.Engine.Unsubscribe("AOE", sub)
         for _ = 1, 25 do -- 5 s: past the 4 s step timeout
             tick()
         end
         assert.is_false(belief("s", "AOE").up)
-        H.Hekili.Engine.Subscribe("AOE", sub)
+        H.Encore.Engine.Subscribe("AOE", sub)
         tick()
-        assert.are.equal("battle_shout", H.Hekili.Engine.Output.AOE.recs[1].actionName) -- no stale hold
+        assert.are.equal("battle_shout", H.Encore.Engine.Output.AOE.recs[1].actionName) -- no stale hold
     end)
 
     it("S10: the first member cast before the line is ever chosen: no window, step 2 not shown", function()
@@ -2217,12 +2217,12 @@ describe("named cases, part D (windows design v6 §13)", function()
     end)
 
     it("D01/D05: Primary and AOE, a line true for AOE's target count only: OPEN under AOE's key; keys only", function()
-        H.Hekili.Engine.settings.toggles.mode.value = "dual"
+        H.Encore.Engine.settings.toggles.mode.value = "dual"
         load({
             default = "actions+=/strict_sequence,name=s,if=active_enemies>1:bloodrage:berserker_stance\n"
                 .. "actions+=/defensive_stance",
         })
-        assert.is_true(H.Hekili.Engine.Subscribe("AOE", function() end))
+        assert.is_true(H.Encore.Engine.Subscribe("AOE", function() end))
         local lines = {}
         VS.SetLog({
             active = function()
@@ -2324,16 +2324,16 @@ describe("named cases, part D (windows design v6 §13)", function()
     end)
 
     it("S23: a strict sequence in precombat stays open across combat start; the hold applies in precombat", function()
-        H.Hekili.DB.profile.packs[ww.PACK].lists = {
+        H.Encore.DB.profile.packs[ww.PACK].lists = {
             precombat = parse("actions+=/strict_sequence,name=s:bloodrage:berserker_stance:defensive_stance"),
             default = parse("actions+=/battle_shout"),
         }
-        H.Hekili:LoadScripts()
-        H.Hekili:ReviewPacks()
-        H.Hekili.Scripts:ApplyWindows(ww.PACK)
+        H.Encore:LoadScripts()
+        H.Encore:ReviewPacks()
+        H.Encore.Scripts:ApplyWindows(ww.PACK)
         S:BuildWindows()
         VS.Drain(H.ctl.now)
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         local _, sent = tick()
         assert.are.same({ { key("s"), OPEN } }, sent)
         cast(BR)
@@ -2381,8 +2381,8 @@ describe("the snapshot's Windows section (windows design v6 §15; L06, R13)", fu
     -- One tick with the debug log on, its lines captured (a debugged display is not debugged again within 0.5 s, so
     -- a caller spaces these ticks by plain ones).
     local function debugTick()
-        local lines, dbg = {}, H.Hekili.Debug
-        H.Hekili.Debug = function(_, a, ...)
+        local lines, dbg = {}, H.Encore.Debug
+        H.Encore.Debug = function(_, a, ...)
             local ok, text
             if type(a) == "number" then
                 ok, text = pcall(string.format, ...)
@@ -2391,11 +2391,11 @@ describe("the snapshot's Windows section (windows design v6 §15; L06, R13)", fu
             end
             lines[#lines + 1] = ok and text or tostring(a)
         end
-        H.Hekili.Engine.settings.screenshot = false -- the snapshot's screenshot is a client call
-        H.Hekili.ActiveDebug = true
+        H.Encore.Engine.settings.screenshot = false -- the snapshot's screenshot is a client call
+        H.Encore.ActiveDebug = true
         local ok, err = pcall(tick)
-        H.Hekili.ActiveDebug = false
-        H.Hekili.Debug = dbg
+        H.Encore.ActiveDebug = false
+        H.Encore.Debug = dbg
         assert(ok, err)
         return lines
     end
@@ -2468,7 +2468,7 @@ describe("the snapshot's Windows section (windows design v6 §15; L06, R13)", fu
     end)
 
     it("a mode=wait sequence names the member it waits on; Sequences off is said for the display", function()
-        H.Hekili.Engine.settings.displays.Primary.sequences = false
+        H.Encore.Engine.settings.displays.Primary.sequences = false
         load({ default = "actions+=/sequence,name=p,mode=wait:bloodrage,if=test_fa\nactions+=/defensive_stance" })
         local lines = debugTick()
         assert.is_true(has(lines, "Windows (Primary): Sequences off."), table.concat(windowsLines(lines), "\n"))
@@ -2548,7 +2548,7 @@ describe("the strict start test's ability fields (windows design v6 §3.6, rulin
     end)
 
     local function member(fields)
-        local a = H.Hekili.Class.abilities.berserker_stance
+        local a = H.Encore.Class.abilities.berserker_stance
         for k, v in pairs(fields) do
             if type(v) == "function" then
                 setfenv(v, S)
@@ -2680,7 +2680,7 @@ describe("the strict start test's ability fields (windows design v6 §3.6, rulin
     end)
 
     it("P35: a wrong field raises at registration with the ability's name", function()
-        local kit = H.Hekili.Class.kit
+        local kit = H.Encore.Class.kit
         for _, bad in ipairs({
             { sequence_ignore = { "stance" } },
             { sequence_ignore = "form" },
@@ -2721,11 +2721,11 @@ local HS, RD, MS -- Hamstring, Rend, Mortal Strike: on-GCD members with no coold
 
 local function gcdRig()
     H.ctl.power[1] = 100
-    local a = H.Hekili.Class.abilities
+    local a = H.Encore.Class.abilities
     -- the known ranks' IDs: the client's answers (casts, cooldown flags) are the known rank's
     HS, RD, MS = VS.KnownID(a.hamstring.id), VS.KnownID(a.rend.id), VS.KnownID(a.mortal_strike.id)
-    local gnp = H.Hekili.GetNextPrediction
-    H.Hekili.GetNextPrediction = function(self, dispName, packName, slot)
+    local gnp = H.Encore.GetNextPrediction
+    H.Encore.GetNextPrediction = function(self, dispName, packName, slot)
         if dispName == "Primary" and slot.index == 1 then
             local delay = S.delay
             S.delay = 0
@@ -2864,16 +2864,16 @@ describe("member lines keyed on their position (windows design v6 §6; review I1
 
     it("compiles window.<w>.step=<K> and the own condition; no script error, no recheck from the step term", function()
         load({ default = "actions+=/sequence,name=p,mode=continue" .. REPEAT })
-        local d = H.Hekili.Scripts.appliedWindows.byName.p
+        local d = H.Encore.Scripts.appliedWindows.byName.p
         assert.are.same({ "window.p.step=1&(test_fa)", "window.p.step=2", "window.p.step=3&(! test_fa)" }, {
             d.hiddenEntries[1].criteria,
             d.hiddenEntries[2].criteria,
             d.hiddenEntries[3].criteria,
         })
         for k = 1, 3 do
-            assert.is_nil(H.Hekili.Scripts.DB[d.hiddenIDs[k]].Error, k)
+            assert.is_nil(H.Encore.Scripts.DB[d.hiddenIDs[k]].Error, k)
         end
-        assert.is_nil(H.Hekili.Scripts.DB[d.hiddenIDs[2]].RecheckScript)
+        assert.is_nil(H.Encore.Scripts.DB[d.hiddenIDs[2]].RecheckScript)
     end)
 
     it(
@@ -3063,7 +3063,7 @@ describe("the flapping warning for sequences (L1205; Fable L1286)", function()
             local codes, n = held({ default = lists })
             assert.are.same({ { OPEN, CLOSE }, { OPEN, CLOSE }, { OPEN, CLOSE } }, codes, lists)
             assert.are.equal(1, n, lists)
-            local keys = H.Hekili.ErrorKeys
+            local keys = H.Encore.ErrorKeys
             assert.is_truthy(
                 keys[#keys]:find("Priority '" .. ww.PACK .. "': sequence 'p' was closed", 1, true),
                 keys[#keys]
@@ -3167,7 +3167,7 @@ describe("the alternatives probe sends nothing (windows design v6 §5.1; review 
                 .. "actions+=/sequence,name=p,if=rage.current>=30:mortal_strike:battle_shout\n"
                 .. "actions+=/mortal_strike\nactions+=/hamstring\nactions+=/berserker_stance",
         })
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end, true, { alts = true }))
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end, true, { alts = true }))
         local probed = 0
         for _ = 1, 3 do
             local recs, sent = tick()

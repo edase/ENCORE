@@ -14,7 +14,7 @@ describe("Engine/Sim/Targets.lua under a secret unit identity", function()
     setup(function()
         H = headless.new()
         assert.are.same({}, H.loadErrors)
-        npUnits, npGUIDs = fake.strictKeys(H.Hekili.npUnits), fake.strictKeys(H.Hekili.npGUIDs)
+        npUnits, npGUIDs = fake.strictKeys(H.Encore.npUnits), fake.strictKeys(H.Encore.npGUIDs)
     end)
 
     before_each(function()
@@ -113,7 +113,7 @@ describe("the engine's identity reads under a secret identity", function()
     end)
 
     it("target.unit names an unknown target instead of concatenating its secret GUID", function()
-        local S = H.Hekili.State
+        local S = H.Encore.State
         H.ctl.guid.target = SECRET
         local ok, err = pcall(function()
             S.args.cycle_target = 1
@@ -136,12 +136,12 @@ describe("the engine's identity reads under a secret identity", function()
             H.Fire("NAME_PLATE_UNIT_ADDED", unit)
         end
         H.ctl.names.target = SECRET
-        H.Hekili.ActiveDebug, H.Hekili.TargetDebug = true, nil
+        H.Encore.ActiveDebug, H.Encore.TargetDebug = true, nil
         local ok, err = pcall(H.ns.getNumberTargets, true)
-        H.Hekili.ActiveDebug = false
+        H.Encore.ActiveDebug = false
         H.ctl.names.target = nil
         assert(ok, err)
-        assert.is_truthy(tostring(H.Hekili.TargetDebug):find("nameplate1", 1, true))
+        assert.is_truthy(tostring(H.Encore.TargetDebug):find("nameplate1", 1, true))
     end)
 end)
 
@@ -166,9 +166,9 @@ describe("Update and a snapshot in combat with every unit identity secret", func
         assert(ok, h)
         H = h
         assert.are.same({}, H.loadErrors)
-        H.Hekili.Engine.settings.screenshot = false -- the harness has no Screenshot()
-        fake.strictKeys(H.Hekili.npUnits)
-        fake.strictKeys(H.Hekili.npGUIDs)
+        H.Encore.Engine.settings.screenshot = false -- the harness has no Screenshot()
+        fake.strictKeys(H.Encore.npUnits)
+        fake.strictKeys(H.Encore.npGUIDs)
     end)
 
     it("raises nothing and stores a non-empty snapshot", function()
@@ -198,12 +198,12 @@ describe("Update and a snapshot in combat with every unit identity secret", func
             H.Fire("UNIT_FLAGS", "nameplate2")
         end
         local before = #H.ns.snapshots
-        H.Hekili:MakeSnapshot()
+        H.Encore:MakeSnapshot()
         assert.are.same({}, H.errors)
         assert.is_true(#H.ns.snapshots > before, "no snapshot stored")
         local log = H.ns.snapshots[#H.ns.snapshots].log
         assert.is_true(type(log) == "string" and #log > 100, "empty snapshot")
-        assert.are.equal(0, fake.secretsIn(H.Hekili.npUnits) + fake.secretsIn(H.Hekili.npGUIDs))
+        assert.are.equal(0, fake.secretsIn(H.Encore.npUnits) + fake.secretsIn(H.Encore.npGUIDs))
     end)
 end)
 
@@ -223,9 +223,9 @@ describe("the plate enemy count under the Map restriction (T1)", function()
         local H = Hs[w]
         if not H then
             H = mw.new(w)
-            fake.strictKeys(H.Hekili.npUnits)
-            fake.strictKeys(H.Hekili.npGUIDs)
-            fake.strictKeys(H.Hekili.npTokens)
+            fake.strictKeys(H.Encore.npUnits)
+            fake.strictKeys(H.Encore.npGUIDs)
+            fake.strictKeys(H.Encore.npTokens)
             fake.strictKeys(H.ns.dumpNameplateInfo())
             Hs[w] = H
         end
@@ -243,9 +243,9 @@ describe("the plate enemy count under the Map restriction (T1)", function()
         ctl.pvp, ctl.groupMembers, ctl.rangeLib = nil, nil, nil
         mw.platesShown(ctl, true)
         mw.target(H, nil)
-        local spec = H.Hekili.Engine.settings.specs[ww.SPEC]
+        local spec = H.Encore.Engine.settings.specs[ww.SPEC]
         spec.nameplates, spec.petbased, spec.nameplateRange = true, false, nil
-        H.Hekili.PetBasedTargetDetectionIsReady = nil
+        H.Encore.PetBasedTargetDetectionIsReady = nil
         for i = #H.errors, 1, -1 do
             H.errors[i] = nil
         end
@@ -256,7 +256,7 @@ describe("the plate enemy count under the Map restriction (T1)", function()
     local function clean(H)
         assert.are.same({}, H.errors)
         local secrets = 0
-        for _, t in ipairs({ H.Hekili.npUnits, H.Hekili.npGUIDs, H.Hekili.npTokens, H.ns.dumpNameplateInfo() }) do
+        for _, t in ipairs({ H.Encore.npUnits, H.Encore.npGUIDs, H.Encore.npTokens, H.ns.dumpNameplateInfo() }) do
             secrets = secrets + fake.secretsIn(t)
         end
         assert.are.equal(0, secrets)
@@ -281,8 +281,8 @@ describe("the plate enemy count under the Map restriction (T1)", function()
         plates(H, 3)
         mw.target(H, 2)
         assert.are.equal(3, count(H))
-        assert.is_nil(H.Hekili.npGUIDs.nameplate2)
-        assert.is_true(H.Hekili.npTokens.nameplate2)
+        assert.is_nil(H.Encore.npGUIDs.nameplate2)
+        assert.is_true(H.Encore.npTokens.nameplate2)
         mw.target(H, 0)
         assert.are.equal(4, count(H), "the target's mob has no plate")
     end)
@@ -303,11 +303,11 @@ describe("the plate enemy count under the Map restriction (T1)", function()
         ctl.friendly.nameplate3 = true
         plates(H, 3)
         mw.target(H, 1)
-        assert.is_nil(H.Hekili.npTokens.nameplate3)
+        assert.is_nil(H.Encore.npTokens.nameplate3)
         assert.are.equal(2, count(H))
         ctl.friendly.nameplate2 = true
         H.Fire("UNIT_FLAGS", "nameplate2")
-        assert.is_nil(H.Hekili.npTokens.nameplate2)
+        assert.is_nil(H.Encore.npTokens.nameplate2)
         assert.are.equal(1, count(H))
     end)
 
@@ -341,7 +341,7 @@ describe("the plate enemy count under the Map restriction (T1)", function()
         mw.target(H, 1)
         ctl.groupMembers, ctl.pvp = 2, SECRET
         spec.petbased = true
-        H.Hekili.PetBasedTargetDetectionIsReady = function()
+        H.Encore.PetBasedTargetDetectionIsReady = function()
             return true
         end
         for k = 1, 4 do
@@ -382,8 +382,8 @@ describe("the plate enemy count under the Map restriction (T1)", function()
         end
         plates(H, 4, 3)
         mw.target(H, 3)
-        assert.are.equal("Creature-p1", H.Hekili.npGUIDs.nameplate1)
-        assert.is_true(H.Hekili.npTokens.nameplate3)
+        assert.are.equal("Creature-p1", H.Encore.npGUIDs.nameplate1)
+        assert.is_true(H.Encore.npTokens.nameplate3)
         assert.are.equal(4, count(H))
     end)
 
@@ -401,13 +401,13 @@ describe("the plate enemy count under the Map restriction (T1)", function()
     it("ADDED on a token stored under an old GUID, now secret: the old GUID's entry goes, the token is kept", function()
         local H, ctl = world("A")
         plates(H, 1)
-        assert.are.equal("nameplate1", H.Hekili.npUnits["Creature-p1"])
+        assert.are.equal("nameplate1", H.Encore.npUnits["Creature-p1"])
         ctl.guid.nameplate1 = SECRET
         H.Fire("NAME_PLATE_UNIT_ADDED", "nameplate1")
         clean(H)
-        assert.is_nil(H.Hekili.npUnits["Creature-p1"])
-        assert.is_nil(H.Hekili.npGUIDs.nameplate1)
-        assert.is_true(H.Hekili.npTokens.nameplate1)
+        assert.is_nil(H.Encore.npUnits["Creature-p1"])
+        assert.is_nil(H.Encore.npGUIDs.nameplate1)
+        assert.is_true(H.Encore.npTokens.nameplate1)
     end)
 
     it("a token plate past the Enemy Range Radius is left out; unknown, secret or raising keeps it", function()

@@ -41,7 +41,7 @@ Class-colored borders will automatically change to match the class you are playi
     "classic.args.border.args.thickness.width = 1.49",
     'classic.args.border.desc = "Enable/disable or set the color for icon borders.\\\
 \\\
-You may want to disable this if you use Masque or other tools to skin your Hekili icons."',
+You may want to disable this if you use Masque or other tools to skin your Encore icons."',
     'classic.args.border.name = "Border"',
     "classic.args.border.order = 4",
     'classic.args.border.type = "group"',
@@ -764,7 +764,7 @@ Class-colored borders will automatically change to match the class you are playi
     "classic.args.border.args.thickness.width = 1.49",
     'classic.args.border.desc = "Enable/disable or set the color for icon borders.\\\
 \\\
-You may want to disable this if you use Masque or other tools to skin your Hekili icons."',
+You may want to disable this if you use Masque or other tools to skin your Encore icons."',
     'classic.args.border.name = "Border"',
     "classic.args.border.order = 4",
     'classic.args.border.type = "group"',

@@ -144,8 +144,8 @@ return {
         collector = "api",
         fn = "rows",
         headers = { "Call", "Parameters", "Offered by", "Used by" },
-        note = "Offered by: the registration object (class: Hekili:NewClass; shared: Hekili:NewShared; race: "
-            .. "Hekili:NewRace). n/a: no parameters, or no content addon calls it.",
+        note = "Offered by: the registration object (class: Encore:NewClass; shared: Encore:NewShared; race: "
+            .. "Encore:NewRace). n/a: no parameters, or no content addon calls it.",
     },
 
     -- Accuracy

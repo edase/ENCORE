@@ -28,11 +28,11 @@ local function ls(glob)
 end
 
 local ns = {}
-assert(loadfile("src/Hekili/Engine/Schema/Trees.lua"))("Hekili", ns)
+assert(loadfile("src/Encore/Engine/Schema/Trees.lua"))("Encore", ns)
 
 local function kit(class)
     local Class = class:sub(1, 1):upper() .. class:sub(2)
-    local _, _, rows = gen.parseKit(slurp(("src/Hekili_%s/%s.lua"):format(Class, Class)))
+    local _, _, rows = gen.parseKit(slurp(("src/Encore_%s/%s.lua"):format(Class, Class)))
     local reg = {} -- RegisterTalents' shape
     for _, r in ipairs(rows) do
         reg[r.name] = { r.tree, r.spell, r.max }
@@ -43,7 +43,7 @@ end
 --- Every `talent.<name>` the class's kit and shipped packs (Lua, APL text) read, { [name] = first file }.
 local function reads(Class, files)
     local out = {}
-    for _, path in ipairs(files or ls(("src/Hekili_%s/*.lua src/Hekili_%s/APLs/*"):format(Class, Class))) do
+    for _, path in ipairs(files or ls(("src/Encore_%s/*.lua src/Encore_%s/APLs/*"):format(Class, Class))) do
         for name in slurp(path):gmatch("talent%.([%a_][%w_]*)") do
             out[name] = out[name] or path
         end

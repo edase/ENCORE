@@ -2471,9 +2471,9 @@ local function swaps(c, entries, at)
             local to = ct.newTarget and ct.newTarget.type
             swapAt[j] = "changeTarget " .. tostring(to) .. ": no on-all-targets read of a cast before it in this list"
             if to == "Target" then
-                swapAt[j] = "changeTarget Target: no main target in Hekili"
+                swapAt[j] = "changeTarget Target: no main target in Encore"
             elseif to == "PreviousTarget" then -- CN24
-                swapAt[j] = "changeTarget PreviousTarget: no previous target in Hekili"
+                swapAt[j] = "changeTarget PreviousTarget: no previous target in Encore"
             end
             local vals = to == "NextTarget" and e.action.condition and flatAnd(e.action.condition, {}) or {}
             local x, ia
@@ -3391,7 +3391,7 @@ function M.render(spec, ex)
     end
     out[#out + 1] = ""
     out[#out + 1] = text
-    return ("src/Hekili_%s/APLs/%s.simc"):format(Class, r.pack), table.concat(out, "\n") .. "\n", #omitted, #toggles
+    return ("src/Encore_%s/APLs/%s.simc"):format(Class, r.pack), table.concat(out, "\n") .. "\n", #omitted, #toggles
 end
 
 --- Writes spec `spec`'s pack (M.render's text to its path) and prints its counts.

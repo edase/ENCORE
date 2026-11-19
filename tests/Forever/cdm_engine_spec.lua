@@ -63,7 +63,7 @@ local function fight(arm, seed, keys, act, content)
                 return
             end
             local now = steps[1].base + t
-            local first = H.Hekili.Engine.Output.Primary.recs[1]
+            local first = H.Encore.Engine.Output.Primary.recs[1]
             r.ours[#r.ours + 1] = first and first.actionName or false
             for i, k in ipairs(keys) do
                 local ids = I.def.auraIds[js[i]]

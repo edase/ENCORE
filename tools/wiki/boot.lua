@@ -11,7 +11,7 @@ local cache = {}
 function M.tokens()
     local out = {}
     for _, name in ipairs(addons.CONTENT) do
-        local token = name:match("^Hekili_(%a+)$"):upper()
+        local token = name:match("^Encore_(%a+)$"):upper()
         if enus.CLASSES[token] then
             out[#out + 1] = token
         end
@@ -47,7 +47,7 @@ function M.get(token)
         fake.new = new
         if ok then
             ok, H = pcall(function()
-                H.Hekili:RefreshOptions()
+                H.Encore:RefreshOptions()
                 return H
             end)
         end

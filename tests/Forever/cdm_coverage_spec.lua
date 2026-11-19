@@ -10,7 +10,7 @@ describe("Cooldown Manager coverage", function()
 
     -- the first n pack auras (sorted key) that have a spell ID of their own, each as { key, id, name }
     local function auras(n)
-        local all, keys = H.Hekili.Engine.Registry.Auras(), {}
+        local all, keys = H.Encore.Engine.Registry.Auras(), {}
         for k, a in pairs(all) do
             if a.key == k and type(a.id) == "number" and a.id > 0 then
                 keys[#keys + 1] = k
@@ -64,10 +64,10 @@ describe("Cooldown Manager coverage", function()
 
     it("the Performance tab has no coverage line (the Cooldown Manager panel shows it)", function()
         layout(3, 1)
-        H.Hekili:EmbedSpecOptions()
-        H.Hekili:EmbedPackOptions()
-        local key = H.Hekili.State.spec.key
-        local args = H.Hekili.Options.args.packs.plugins.specializations[key].args.performance.args
+        H.Encore:EmbedSpecOptions()
+        H.Encore:EmbedPackOptions()
+        local key = H.Encore.State.spec.key
+        local args = H.Encore.Options.args.packs.plugins.specializations[key].args.performance.args
         assert.is_table(args)
         assert.is_nil(args.cdmCoverage)
     end)
@@ -105,7 +105,7 @@ describe("Cooldown Manager coverage", function()
     end)
 
     it("Options code reads no belief (the border: tools/check_border.sh)", function()
-        local fh = assert(io.open("src/Hekili/Options/Options.lua"))
+        local fh = assert(io.open("src/Encore/Options/Options.lua"))
         local src = fh:read("*a")
         fh:close()
         assert.falsy(src:find("VirtualState", 1, true))

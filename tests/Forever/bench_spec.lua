@@ -50,7 +50,7 @@ describe("headless Arms per-Update cost #bench", function()
             function()
                 local L = loop.new(ww)
                 local H = L.us
-                local hk = H.Hekili
+                local hk = H.Encore
                 if mode.widen then
                     alts.widen(H.ns.VirtualState)
                 end

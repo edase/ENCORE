@@ -21,12 +21,12 @@ describe("a priority without a precombat list", function()
         H.Fire("PLAYER_TARGET_CHANGED")
         local t = H.ctl.now + 0.2
         assert(headless.cycle(H, t))
-        H.Hekili.DB.profile.packs[ww.PACK].lists = {
+        H.Encore.DB.profile.packs[ww.PACK].lists = {
             default = { { enabled = true, action = "berserker_stance" } },
         }
-        H.Hekili:LoadScripts()
-        local out = H.Hekili.Engine.Output.Primary
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        H.Encore:LoadScripts()
+        local out = H.Encore.Engine.Output.Primary
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         t = t + 0.2
         assert(headless.cycle(H, t))
         assert.are.same({}, H.errors)
@@ -46,20 +46,20 @@ describe("a priority naming another race's racial", function()
         H.Fire("PLAYER_TARGET_CHANGED")
         local t = H.ctl.now + 0.2
         assert(headless.cycle(H, t))
-        H.Hekili.DB.profile.packs[ww.PACK].lists = {
+        H.Encore.DB.profile.packs[ww.PACK].lists = {
             default = {
                 { enabled = true, action = "blood_fury" },
                 { enabled = true, action = "berserker_stance", criteria = "!action.blood_fury.known" },
             },
         }
-        H.Hekili:LoadScripts()
-        local out = H.Hekili.Engine.Output.Primary
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        H.Encore:LoadScripts()
+        local out = H.Encore.Engine.Output.Primary
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         H.Fire("PLAYER_REGEN_DISABLED")
         t = t + 0.2
         assert(headless.cycle(H, t))
         assert.are.same({}, H.errors)
-        assert.is_false(H.Hekili.Class.abilities.blood_fury.known)
+        assert.is_false(H.Encore.Class.abilities.blood_fury.known)
         assert.are.equal("berserker_stance", out.recs[1] and out.recs[1].actionName)
     end)
 end)
@@ -71,14 +71,14 @@ describe("a priority reading time to die", function()
         H.Fire("PLAYER_TARGET_CHANGED")
         local t = H.ctl.now + 0.2
         assert(headless.cycle(H, t))
-        H.Hekili.DB.profile.packs[ww.PACK].lists = {
+        H.Encore.DB.profile.packs[ww.PACK].lists = {
             default = {
                 { enabled = true, action = "berserker_stance", criteria = "fight_remains>600&target.time_to_die>600" },
             },
         }
-        H.Hekili:LoadScripts()
-        local out = H.Hekili.Engine.Output.Primary
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        H.Encore:LoadScripts()
+        local out = H.Encore.Engine.Output.Primary
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         H.Fire("PLAYER_REGEN_DISABLED")
         for _ = 1, 5 do
             t = t + 0.6
@@ -96,10 +96,10 @@ describe("a priority cancelling an aura", function()
         H.Fire("PLAYER_TARGET_CHANGED")
         local t = H.ctl.now + 0.2
         assert(headless.cycle(H, t))
-        local shout = H.Hekili.Class.auras.battle_shout
+        local shout = H.Encore.Class.auras.battle_shout
         H.ctl.auras.player.HELPFUL[1] = { spellId = shout.id, expirationTime = t + 100, applications = 0 }
         H.Fire("UNIT_AURA", "player")
-        H.Hekili.DB.profile.packs[ww.PACK].lists = {
+        H.Encore.DB.profile.packs[ww.PACK].lists = {
             default = {
                 {
                     enabled = true,
@@ -110,9 +110,9 @@ describe("a priority cancelling an aura", function()
                 { enabled = true, action = "berserker_stance" },
             },
         }
-        H.Hekili:LoadScripts()
-        local out = H.Hekili.Engine.Output.Primary
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        H.Encore:LoadScripts()
+        local out = H.Encore.Engine.Output.Primary
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         t = t + 0.2
         assert(headless.cycle(H, t))
         assert.are.same({}, H.errors)

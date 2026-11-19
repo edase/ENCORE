@@ -22,7 +22,7 @@ class Message(unittest.TestCase):
     def test_one_message_with_attachment(self):
         body = "Notes \u2014 ok.\n\n### Rogue\n- Fixed."
         meta, name, data = dn.message(rel(body + "\n"))
-        self.assertEqual(meta["content"], "**Hekili Forever v0.2.0**\n" + URL)
+        self.assertEqual(meta["content"], "**Encore v0.2.0**\n" + URL)
         self.assertEqual(meta["flags"], 4)
         self.assertEqual(meta["allowed_mentions"], {"parse": []})
         self.assertEqual(meta["attachments"], [{"id": 0, "filename": "release-notes-v0.2.0.txt"}])
@@ -35,7 +35,7 @@ class Message(unittest.TestCase):
 
     def test_empty_body_header_only(self):
         meta, name, data = dn.message(rel(None))
-        self.assertEqual(meta["content"], "**Hekili Forever v0.2.0**\n" + URL)
+        self.assertEqual(meta["content"], "**Encore v0.2.0**\n" + URL)
         self.assertNotIn("attachments", meta)
         self.assertEqual((name, data), (None, b""))
 

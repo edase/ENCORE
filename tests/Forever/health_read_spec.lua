@@ -12,17 +12,17 @@ describe("a player health read in a priority", function()
         local C = dlw.Guardian
         H = headless.new({ character = C.character(), pack = C.PACK })
         pack = C.PACK
-        local lists = H.Hekili.DB.profile.packs[pack].lists
+        local lists = H.Encore.DB.profile.packs[pack].lists
         list = next(lists)
         table.insert(lists[list], 1, { action = "frenzied_regeneration", criteria = "health.pct<50", enabled = true })
-        H.Hekili:LoadScripts()
+        H.Encore:LoadScripts()
         scriptID = pack .. ":" .. list .. ":1"
     end)
 
     local function fires(t)
         assert.is_true(headless.cycle(H, t))
-        H.Hekili.State.reset()
-        return H.Hekili.Scripts:CheckScript(scriptID)
+        H.Encore.State.reset()
+        return H.Encore.Scripts:CheckScript(scriptID)
     end
 
     -- the load-time warning (Engine/Sim/AplWarnings.lua), once: H.errors holds the format, ErrorKeys the text
@@ -34,7 +34,7 @@ describe("a player health read in a priority", function()
             "Forever: your health is hidden in combat; `health.pct` in pack `%s` list `%s` entry 1"
             .. " (frenzied_regeneration): your health reads full in combat, so a low-health check never passes there."
         ):format(pack, list)
-        assert.are.same({ text }, H.Hekili.ErrorKeys)
+        assert.are.same({ text }, H.Encore.ErrorKeys)
     end)
 
     it("the fake client hides the player's health in combat only", function()
@@ -56,7 +56,7 @@ describe("a player health read in a priority", function()
         H.ctl.combat = true
         for i = 2, 4 do
             assert.is_false(fires(H.ctl.now + 1), i)
-            assert.are.equal(100, H.Hekili.State.health.pct, i)
+            assert.are.equal(100, H.Encore.State.health.pct, i)
         end
         H.ctl.combat = false
         assert.is_true(fires(H.ctl.now + 1))

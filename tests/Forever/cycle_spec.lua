@@ -13,8 +13,8 @@ describe("target swaps (cycle_targets, option D)", function()
     local function boot(mods)
         H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
-        st = H.Hekili.State
-        rendId = H.Hekili.Class.auras.rend.id
+        st = H.Encore.State
+        rendId = H.Encore.Class.auras.rend.id
         H.ctl.inRange.target, H.ctl.level.target = true, 60
         H.ctl.power[1] = 100
         H.Fire("PLAYER_TARGET_CHANGED")
@@ -24,13 +24,13 @@ describe("target swaps (cycle_targets, option D)", function()
         for k, v in pairs(mods or {}) do
             rend[k] = v or nil
         end
-        H.Hekili.DB.profile.packs[ww.PACK].lists = {
+        H.Encore.DB.profile.packs[ww.PACK].lists = {
             default = { rend, { enabled = true, action = "battle_shout" } },
         }
-        H.Hekili:LoadScripts()
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        H.Encore:LoadScripts()
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         count, enemies, others = 1, 3, 0
-        local sunderId = H.Hekili.Class.auras.sunder_armor.id
+        local sunderId = H.Encore.Class.auras.sunder_armor.id
         H.ns.Facade.DebuffCount = function(id)
             if id == rendId then
                 return count
@@ -42,7 +42,7 @@ describe("target swaps (cycle_targets, option D)", function()
         H.ns.getNumberTargets = function()
             return enemies, enemies
         end
-        H.Hekili.Engine.settings.specs[ww.SPEC].cycle = true
+        H.Encore.Engine.settings.specs[ww.SPEC].cycle = true
     end
 
     local function rendUp(remains)
@@ -61,13 +61,13 @@ describe("target swaps (cycle_targets, option D)", function()
         t = t + 0.2
         assert(headless.cycle(H, t))
         assert.are.same({}, H.errors)
-        rec = H.Hekili.Engine.Output.Primary.recs
+        rec = H.Encore.Engine.Output.Primary.recs
         return rec[1].actionName, rec[1].indicator
     end
 
     after_each(function()
-        H.Hekili.Engine.settings.specs[ww.SPEC].cycle = false
-        H.Hekili.Engine.settings.specs[ww.SPEC].cycle_min = 6
+        H.Encore.Engine.settings.specs[ww.SPEC].cycle = false
+        H.Encore.Engine.settings.specs[ww.SPEC].cycle_min = 6
     end)
 
     it("suggests Rend on another target while fewer enemies carry it than are in combat", function()
@@ -86,11 +86,11 @@ describe("target swaps (cycle_targets, option D)", function()
     it("with the toggle off, the line reads the current target only, as without cycle_targets", function()
         boot()
         rendUp(10)
-        H.Hekili.Engine.settings.specs[ww.SPEC].cycle = false
+        H.Encore.Engine.settings.specs[ww.SPEC].cycle = false
         local on = { update() }
         boot({ cycle_targets = false })
         rendUp(10)
-        H.Hekili.Engine.settings.specs[ww.SPEC].cycle = false
+        H.Encore.Engine.settings.specs[ww.SPEC].cycle = false
         assert.are.same({ "battle_shout" }, on)
         assert.are.same(on, { update() })
     end)
@@ -127,7 +127,7 @@ describe("target swaps (cycle_targets, option D)", function()
         count, enemies = 0, 2
         assert.are.same({ "rend", "cycle" }, { update() })
         st.reset("Primary", true)
-        st.SetupCycle(H.Hekili.Class.abilities.rend, true)
+        st.SetupCycle(H.Encore.Class.abilities.rend, true)
         assert.is_true((st.IsCycling(nil, true)))
         assert.are.equal(1, st.active_dot.rend)
     end)
@@ -135,7 +135,7 @@ describe("target swaps (cycle_targets, option D)", function()
     it("excludes nobody by time to die, which Forever never knows", function()
         boot()
         rendUp(10)
-        H.Hekili.Engine.settings.specs[ww.SPEC].cycle_min = 15
+        H.Encore.Engine.settings.specs[ww.SPEC].cycle_min = 15
         st.reset("Primary", true)
         assert.are.equal(3, st.cycle_enemies)
     end)
@@ -145,13 +145,13 @@ describe("target swaps (cycle_targets, option D)", function()
         "forecasts a swapped cast as one more carrier, the current target's debuff unchanged, self-buffs applied",
         function()
             boot()
-            local ab = H.Hekili.Class.abilities.rend
+            local ab = H.Encore.Class.abilities.rend
             local handler = ab.handler
             ab.handler = function() -- a test-only self-buff on the cast
                 handler()
                 st.applyBuff("battle_shout")
             end
-            H.Hekili.DB.profile.packs[ww.PACK].lists.default = {
+            H.Encore.DB.profile.packs[ww.PACK].lists.default = {
                 { enabled = true, action = "rend", criteria = "!debuff.rend.up", cycle_targets = 1 },
                 {
                     enabled = true,
@@ -160,7 +160,7 @@ describe("target swaps (cycle_targets, option D)", function()
                 },
                 { enabled = true, action = "battle_shout" },
             }
-            H.Hekili:LoadScripts()
+            H.Encore:LoadScripts()
             rendUp(10)
             count = 2
             local first = { update() }
@@ -175,7 +175,7 @@ describe("target swaps (cycle_targets, option D)", function()
         rendUp(10)
         count = 2 -- one enemy left
         assert.are.same({ "rend", "cycle" }, { update() })
-        assert.is_true(H.Hekili.Engine.Output.Primary.count >= 2)
+        assert.is_true(H.Encore.Engine.Output.Primary.count >= 2)
         assert.are_not.same({ "rend", "cycle" }, { rec[2].actionName, rec[2].indicator })
     end)
 
@@ -184,7 +184,7 @@ describe("target swaps (cycle_targets, option D)", function()
     describe("other_target=1", function()
         local function bootOther()
             boot()
-            H.Hekili.DB.profile.packs[ww.PACK].lists.default = {
+            H.Encore.DB.profile.packs[ww.PACK].lists.default = {
                 {
                     enabled = true,
                     action = "sunder_armor",
@@ -198,12 +198,12 @@ describe("target swaps (cycle_targets, option D)", function()
                 },
                 { enabled = true, action = "battle_shout" },
             }
-            H.Hekili:LoadScripts()
+            H.Encore:LoadScripts()
         end
 
         it("is never shown with the toggle off, and never on the current target", function()
             bootOther()
-            H.Hekili.Engine.settings.specs[ww.SPEC].cycle = false
+            H.Encore.Engine.settings.specs[ww.SPEC].cycle = false
             assert.are.same({ "battle_shout" }, { update() })
         end)
 
@@ -228,7 +228,7 @@ describe("target swaps (cycle_targets, option D)", function()
 
         it("is parsed by the importer as the number 1", function()
             boot()
-            local lines = H.Hekili:ParseActionList("actions=sunder_armor,other_target=1,if=active_dot.sunder_armor=0")
+            local lines = H.Encore:ParseActionList("actions=sunder_armor,other_target=1,if=active_dot.sunder_armor=0")
             assert.are.equal(1, lines[1].other_target)
         end)
     end)

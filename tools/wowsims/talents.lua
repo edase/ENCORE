@@ -8,7 +8,7 @@
 -- the snake_case of an unmatched node's fancyName is that node under a new spell ID (the Classic id moved on Forever);
 -- any other new node is named snake_case(fancyName); a registered row absent from the tree is dropped unless M.KEEP
 -- (by class) lists its name (code reads it); its trailing comment travels with it.
-package.path = "./src/Hekili/?.lua;./tests/?.lua;./?.lua;" .. package.path
+package.path = "./src/Encore/?.lua;./tests/?.lua;./?.lua;" .. package.path
 local json = require("dkjson")
 
 local M = {}
@@ -138,7 +138,7 @@ local function main(args)
     end
     for _, class in ipairs(list) do
         local Class = class:sub(1, 1):upper() .. class:sub(2)
-        local path = ("src/Hekili_%s/%s.lua"):format(Class, Class)
+        local path = ("src/Encore_%s/%s.lua"):format(Class, Class)
         local text = slurp(path)
         local s, e, rows = M.parseKit(text)
         local out, dropped = M.build(M.trees(class, dir), rows)

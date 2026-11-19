@@ -11,7 +11,7 @@
 set -euo pipefail
 
 # Environment the check's parts read (tests/tools/test_check_stamp.py keeps it complete); LC_* are added as set.
-ENV_VARS="HEKILI_AB ACC_LIVE_ARM DETECT_WRITE HEKILI_LOOP_HOLD HEKILI_LOOP_STEADY ARMS_RECS ENUS_GOLDEN TIMING STYLE_OPTIONS CLASSIC_DRAW TIMELINE_DRAW PACK_DATE WOWSIMS WOWSIMS_CLI WOWSIMS_OUT WOWSIMS_TREES ROWFEED WOWDB HOME BUSTED BUSTED_JOBS LUA_INIT LUA_PATH LUA_CPATH WOW_DB2 LANG TZ PYTHONPATH PATH"
+ENV_VARS="ENCORE_AB ACC_LIVE_ARM DETECT_WRITE ENCORE_LOOP_HOLD ENCORE_LOOP_STEADY ARMS_RECS ENUS_GOLDEN TIMING STYLE_OPTIONS CLASSIC_DRAW TIMELINE_DRAW PACK_DATE WOWSIMS WOWSIMS_CLI WOWSIMS_OUT WOWSIMS_TREES ROWFEED WOWDB HOME BUSTED BUSTED_JOBS LUA_INIT LUA_PATH LUA_CPATH WOW_DB2 LANG TZ PYTHONPATH PATH"
 
 env_lines() {
     local n
@@ -22,7 +22,7 @@ env_lines() {
 ENV_LINES=$(env_lines) # before LC_ALL is pinned below
 
 cd "$(git rev-parse --show-toplevel)"
-STAMP="$(git rev-parse --absolute-git-dir)/hekili-check-stamp"
+STAMP="$(git rev-parse --absolute-git-dir)/encore-check-stamp"
 export LC_ALL=C
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT

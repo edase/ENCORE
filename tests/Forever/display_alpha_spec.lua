@@ -9,13 +9,13 @@ describe("the per-frame alpha check of a combat-only display", function()
     it("shows the display only in combat over a fight, changing alpha only at the combat edges", function()
         local L = loop.new(ww)
         local H = L.us
-        local vis = H.Hekili.DB.profile.displays.Primary.visibility
+        local vis = H.Encore.DB.profile.displays.Primary.visibility
         vis.advanced = true
         for key, v in pairs({ combat = 1, always = 0, target = 0, combatTarget = 0 }) do
             vis.pve[key] = v
         end
-        H.Hekili:UpdateDisplayVisibility()
-        local d = rawget(H.env, "HekiliDisplayPrimary")
+        H.Encore:UpdateDisplayVisibility()
+        local d = rawget(H.env, "EncoreDisplayPrimary")
         local checks, last, changes = 0, nil, {}
         local alpha = d.UpdateAlpha
         d.UpdateAlpha = function(self)
@@ -31,7 +31,7 @@ describe("the per-frame alpha check of a combat-only display", function()
             end
             local a = d.alpha or 0
             if a ~= last then
-                changes[#changes + 1] = { t, a, H.Hekili.Engine.Output.status.combat }
+                changes[#changes + 1] = { t, a, H.Encore.Engine.Output.status.combat }
                 last = a
             end
         end

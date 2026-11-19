@@ -7,7 +7,7 @@ describe("the state's unknown-key log", function()
     it("logs an unknown key once per script", function()
         local H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
-        local S = H.Hekili.State
+        local S = H.Encore.State
         S.scriptID = "audit:list:1"
         local before = #H.errors
         for _ = 1, 5 do

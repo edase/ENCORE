@@ -6,13 +6,13 @@ local load = require("Game.State.helpers.load")
 describe("ns.orderedPairs", function()
     it("yields no phantom key after iterating a table whose __newindex wraps assigned tables", function()
         local ns = load.module()
-        local savedHekili, savedLibStub = rawget(_G, "Hekili"), rawget(_G, "LibStub")
-        _G.Hekili = { Class = {}, State = {} }
+        local savedEncore, savedLibStub = rawget(_G, "Encore"), rawget(_G, "LibStub")
+        _G.Encore = { Class = {}, State = {} }
         _G.LibStub = function()
             return {}
         end
-        assert(loadfile("src/Hekili/Engine/Sim/Utils.lua"))("Hekili", ns)
-        _G.Hekili, _G.LibStub = savedHekili, savedLibStub
+        assert(loadfile("src/Encore/Engine/Sim/Utils.lua"))("Encore", ns)
+        _G.Encore, _G.LibStub = savedEncore, savedLibStub
 
         -- mt_talents' __newindex and mt_default_talent's __index, as State.lua has them
         local mtDefault = {

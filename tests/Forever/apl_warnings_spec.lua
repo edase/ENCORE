@@ -9,7 +9,7 @@ describe("APL secret-token scan", function()
 
     before_each(function()
         local ns = {}
-        assert(loadfile("src/Hekili/Engine/Sim/AplWarnings.lua"))("Hekili", ns)
+        assert(loadfile("src/Encore/Engine/Sim/AplWarnings.lua"))("Encore", ns)
         scan = ns.AplSecretToken
     end)
 

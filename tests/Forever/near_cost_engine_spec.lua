@@ -19,7 +19,7 @@ local function first(gap, frac, before, list, under)
     local C = mw.Fire
     local H = headless.new({ character = C.character(), pack = C.PACK })
     assert.are.same({}, H.loadErrors)
-    local cost = H.Hekili.State.action.fireball.cost
+    local cost = H.Encore.State.action.fireball.cost
     local lo = frac and math.floor(cost) - under + frac or cost - under
     local power = { est = lo + gap, lo = lo, hi = lo + gap, conf = 1 }
     local regen = { est = REGEN, lo = REGEN, hi = REGEN, conf = 1 }
@@ -34,20 +34,20 @@ local function first(gap, frac, before, list, under)
     H.Fire("PLAYER_TARGET_CHANGED")
     local t = H.ctl.now + 0.2
     assert(headless.cycle(H, t))
-    H.Hekili.DB.profile.packs[C.PACK].lists = {
+    H.Encore.DB.profile.packs[C.PACK].lists = {
         default = list or {
             { enabled = true, action = "fireball" },
             { enabled = true, action = "scorch" },
         },
     }
-    H.Hekili:LoadScripts()
-    assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+    H.Encore:LoadScripts()
+    assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
     if before then
         before(H)
     end
     assert(headless.cycle(H, t + 0.2))
     assert.are.same({}, H.errors)
-    local slot = H.Hekili.Engine.Output.Primary.recs[1]
+    local slot = H.Encore.Engine.Output.Primary.recs[1]
     assert.is_table(slot)
     return slot, cost
 end
@@ -115,8 +115,8 @@ describe("the Clash setting on a booted Mage", function()
     local function clashed(clash, key)
         key = key or "fireball"
         return function(H)
-            local S = H.Hekili.State
-            H.Hekili.Engine.settings.specs[S.spec.id].abilities[key].clash = clash
+            local S = H.Encore.State
+            H.Encore.Engine.settings.specs[S.spec.id].abilities[key].clash = clash
             assert.are.equal(clash, S:ClashOffset(key))
         end
     end
@@ -159,9 +159,9 @@ describe("the Clash setting on a booted Mage", function()
     -- L864: an item's options live in specs[spec].items (Options.lua SetItemOption), not .abilities
     it("reads an item's Clash from its item options", function()
         first(0, nil, function(H)
-            local S = H.Hekili.State
-            local spec = H.Hekili.Engine.settings.specs[S.spec.id]
-            assert.is_truthy(H.Hekili.Class.abilities.mana_gem.item)
+            local S = H.Encore.State
+            local spec = H.Encore.Engine.settings.specs[S.spec.id]
+            assert.is_truthy(H.Encore.Class.abilities.mana_gem.item)
             spec.items.mana_gem.clash = 0.4
             assert.are.equal(0.4, S:ClashOffset("mana_gem"))
             spec.items.mana_gem.clash = 0

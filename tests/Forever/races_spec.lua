@@ -8,7 +8,7 @@ local addons = require("helpers.addons")
 -- Every race file Hekili_Shared.toc lists, in its order, and the race token (UnitRace's second return) each answers to.
 local TOKEN = { Undead = "Scourge" } -- a file named otherwise than its token
 local RACES = {}
-for _, path in ipairs(addons.files("Hekili_Shared")) do
+for _, path in ipairs(addons.files("Encore_Shared")) do
     local file = path:match("/Races/(%w+)%.lua$")
     if file then
         RACES[#RACES + 1] = { file = file, token = TOKEN[file] or file }
@@ -18,7 +18,7 @@ end
 -- Runs every race file, as Hekili_Shared.toc loads them.
 local function loadRaces(rns)
     for _, r in ipairs(RACES) do
-        assert(loadfile(addons.root("Hekili_Shared") .. "Races/" .. r.file .. ".lua"))("Hekili_Shared", rns)
+        assert(loadfile(addons.root("Encore_Shared") .. "Races/" .. r.file .. ".lua"))("Encore_Shared", rns)
     end
 end
 
@@ -40,7 +40,7 @@ local OWN = {
 local AURA_OF = { read_ley_line = "energized" }
 
 describe("race packs", function()
-    local ns, hekili, state, all, saved
+    local ns, encore, state, all, saved
 
     -- Hekili's state.removeStack (State.lua:857-868), on the fake buff table.
     local function removeStack(aura, stacks)
@@ -89,10 +89,10 @@ describe("race packs", function()
             register(self.auras, key, def)
         end
         -- Engine/Schema/Spec/All.lua sets class.file before any race file runs
-        hekili = { State = state, Class = { specs = { [0] = all }, abilities = {}, file = class or "WARRIOR" } }
-        _G.Hekili = hekili
+        encore = { State = state, Class = { specs = { [0] = all }, abilities = {}, file = class or "WARRIOR" } }
+        _G.Encore = encore
         ns = {}
-        assert(loadfile("src/Hekili/Engine/Schema/Races.lua"))("Hekili", ns)
+        assert(loadfile("src/Encore/Engine/Schema/Races.lua"))("Encore", ns)
         loadRaces(ns)
     end
 
@@ -140,16 +140,16 @@ describe("race packs", function()
             end
         end
         ns.costMods.Wrap(a)
-        hekili.Class.abilities[key] = a
+        encore.Class.abilities[key] = a
         return a
     end
 
     before_each(function()
-        saved = rawget(_G, "Hekili") or false
+        saved = rawget(_G, "Encore") or false
     end)
 
     after_each(function()
-        _G.Hekili = saved or nil
+        _G.Encore = saved or nil
     end)
 
     it(
@@ -251,11 +251,11 @@ describe("race packs", function()
     end)
 
     it(
-        "loads the race files after the core's `all` (Hekili_Shared depends on Hekili), each registering only its own",
+        "loads the race files after the core's `all` (Encore_Shared depends on Encore), each registering only its own",
         function()
             -- a race entry replaces `all`'s under the same key, so it must register after Engine/Schema/Spec/All.lua; a
             -- class pack registers into its own spec, and SpecializationChanged's ns.applyRace orders the two
-            assert.are.equal("Hekili", addons.meta("Hekili_Shared").Dependencies)
+            assert.are.equal("Encore", addons.meta("Encore_Shared").Dependencies)
             local files, want = {}, {}
             for _, r in ipairs(RACES) do
                 files[#files + 1] = r.file
@@ -268,7 +268,7 @@ describe("race packs", function()
                 end
                 table.sort(keys)
                 local own = OWN[r.file] or {}
-                local mods = hekili.RaceMods -- the table read in game (Engine/Schema/Races.lua)
+                local mods = encore.RaceMods -- the table read in game (Engine/Schema/Races.lua)
                 assert.are.same(own, { keys, #mods.maxMods, #mods.costMods }, r.file)
             end
             for file in pairs(OWN) do
@@ -394,7 +394,7 @@ describe("race packs in VirtualState's now context", function()
 
     before_each(function()
         saved = {}
-        for _, k in ipairs({ "Hekili", "GetTime", "UnitGUID", "CreateFrame", "issecretvalue", "debugprofilestop" }) do
+        for _, k in ipairs({ "Encore", "GetTime", "UnitGUID", "CreateFrame", "issecretvalue", "debugprofilestop" }) do
             saved[k] = rawget(_G, k) or false
         end
     end)
@@ -415,9 +415,9 @@ describe("race packs in VirtualState's now context", function()
         function all:RegisterAura(key, def)
             self.auras[key] = def
         end
-        _G.Hekili = { State = { race_token = token }, Class = { specs = { [0] = all }, file = "WARRIOR" } }
+        _G.Encore = { State = { race_token = token }, Class = { specs = { [0] = all }, file = "WARRIOR" } }
         local rns = {}
-        assert(loadfile("src/Hekili/Engine/Schema/Races.lua"))("Hekili", rns)
+        assert(loadfile("src/Encore/Engine/Schema/Races.lua"))("Encore", rns)
         loadRaces(rns)
         return all
     end
@@ -485,7 +485,7 @@ describe("race packs in VirtualState's now context", function()
     end
 
     it(
-        "gives every channelled racial a `start` and no `handler` (Hekili's simulation runs a channel's `start`)",
+        "gives every channelled racial a `start` and no `handler` (Encore's simulation runs a channel's `start`)",
         function()
             for _, r in ipairs(RACES) do
                 for key, a in pairs(registrations(r.token).abilities) do
@@ -522,10 +522,10 @@ describe("the Dwarf's Stoneform through the engine", function()
         c.race = "Dwarf"
         local H = headless.new({ character = c, pack = "Protection (wowsims.com)" })
         assert.are.same({}, H.loadErrors)
-        local a = H.Hekili.Class.abilities.stoneform
+        local a = H.Encore.Class.abilities.stoneform
         assert.is_table(a)
         assert.is_string(a.buff) -- the ability's `buff` function reads each aura it gates on
-        for _, k in ipairs(H.Hekili.ErrorKeys) do
+        for _, k in ipairs(H.Encore.ErrorKeys) do
             assert.is_nil(k:find("Unknown buff", 1, true), k)
         end
     end)
@@ -542,9 +542,9 @@ describe("the Troll's Berserking through the engine", function()
         c.race = "Troll"
         local H = headless.new({ character = c, pack = mw.Frost.PACK })
         assert.are.same({}, H.loadErrors)
-        local aura = H.Hekili.Class.auras.berserking
+        local aura = H.Encore.Class.auras.berserking
         assert.are.same({ 1.1, 1.1 }, { aura.spellHaste, aura.swingHaste })
-        local st = H.Hekili.State
+        local st = H.Encore.State
         H.ctl.spellHaste = 5 -- the out-of-combat read
         H.Fire("UNIT_SPELL_HASTE", "player")
         local t = H.ctl.now + 1

@@ -8,7 +8,7 @@ local text = require("tools.wiki.text")
 
 local M = {}
 
-M.STATE = "src/Hekili/Engine/Sim/State.lua"
+M.STATE = "src/Encore/Engine/Sim/State.lua"
 M.DATA = "docs/wiki/data/expressions.lua"
 M.N = "40" -- what a <N> in a key stands for when it is evaluated
 
@@ -42,7 +42,7 @@ end
 -- The value of `key` in state H.Hekili.State, `<resource>` read as `resource`, <N> as M.N.
 local function value(H, key, resource)
     local path = key:gsub("<resource>", resource):gsub("<N>", M.N)
-    local v = H.Hekili.State
+    local v = H.Encore.State
     for part in path:gmatch("[^%.]+") do
         if type(v) ~= "table" then
             return nil, path .. ": " .. part .. " of a " .. type(v)
@@ -63,14 +63,14 @@ end
 local function aResource(H)
     local mt = H.ns.metatables.mt_resource
     local names = {}
-    for k, v in pairs(H.Hekili.State) do
+    for k, v in pairs(H.Encore.State) do
         if type(k) == "string" and type(v) == "table" and getmetatable(v) == mt then
             names[#names + 1] = k
         end
     end
     table.sort(names)
     for _, k in ipairs(names) do
-        if rawget(H.Hekili.State[k], "actual_lo") ~= nil then
+        if rawget(H.Encore.State[k], "actual_lo") ~= nil then
             return k
         end
     end
@@ -109,7 +109,7 @@ function M.problems(def, H, scanned, d)
                 -- an example names one class's resource: it must compile and run in at least one class's boot
                 local err
                 for _, token in ipairs(boot.tokens()) do
-                    local s = boot.get(token).Hekili.Scripts
+                    local s = boot.get(token).Encore.Scripts
                         .ConvertScript({ action = "wait", criteria = e.example }, false, "wiki:" .. k)
                     err = s.Error
                     if not err then

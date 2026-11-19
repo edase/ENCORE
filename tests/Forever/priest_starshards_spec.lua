@@ -19,7 +19,7 @@ local function shown(race, on)
         kit = race == "NightElf" and { "starshards" } or {},
     })
     local L = loop.new(C)
-    local specs = L.us.Hekili.Engine.settings.specs
+    local specs = L.us.Encore.Engine.settings.specs
     specs[100053].settings.prefer_starshards = on -- Shadow's spec ID
     local keys = {}
     loop.run(L, 1, {
@@ -37,14 +37,14 @@ end
 
 describe("Shadow's prefer_starshards option", function()
     it("is a toggle, off by default, with no harness default", function()
-        local cls = ld.load(nil, "src/Hekili_Priest/Priest.lua", "PRIEST")
+        local cls = ld.load(nil, "src/Encore_Priest/Priest.lua", "PRIEST")
         local s = cls.settings.prefer_starshards
         assert.is_table(s)
         assert.are.same({ false, nil }, { s.default, s.option.sim })
     end)
 
     it("adds one Starshards line before Mind Flay, reading the option and Mind Blast's cooldown", function()
-        local f = assert(io.open("src/Hekili_Priest/APLs/Shadow (wowsims.com).simc"))
+        local f = assert(io.open("src/Encore_Priest/APLs/Shadow (wowsims.com).simc"))
         local text = f:read("*a")
         f:close()
         local line =

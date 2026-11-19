@@ -9,7 +9,7 @@ describe("the loop's truth instance", function()
     local C = setmetatable({
         resolve = function(key, H)
             seen.resolve[H] = true
-            local S = H.Hekili.State
+            local S = H.Encore.State
             seen.ahead = math.max(seen.ahead or 0, S.query_time - S.now, S.offset) -- a lookahead left by Update
             return ww.resolve(key, H)
         end,

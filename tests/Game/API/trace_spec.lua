@@ -7,7 +7,7 @@ local alloc = require("Game.State.helpers.alloc")
 local fs = require("Game.State.helpers.fake_spec")
 
 describe("the facade trace", function()
-    local api, ctl, ns, Facade, lines, hekili, saved
+    local api, ctl, ns, Facade, lines, encore, saved
 
     before_each(function()
         api, ctl = fake.new()
@@ -42,16 +42,16 @@ describe("the facade trace", function()
         ns = load.module()
         Facade = ns.Facade
         lines = {}
-        hekili = { ActiveDebug = false }
-        function hekili:Debug(fmt, ...)
+        encore = { ActiveDebug = false }
+        function encore:Debug(fmt, ...)
             lines[#lines + 1] = string.format(fmt, ...)
         end
         ns.VirtualState.SetLog({
             active = function()
-                return hekili.ActiveDebug
+                return encore.ActiveDebug
             end,
             write = function(...)
-                hekili:Debug(...)
+                encore:Debug(...)
             end,
         })
         ns.VirtualStateInternal.Build(fs.def(fs.new(9)), 1)
@@ -86,14 +86,14 @@ describe("the facade trace", function()
         assert.are.equal("[vs] snapshot failed: snap boom", lines[2])
     end)
 
-    it("writes nothing while Hekili is not debugging", function()
+    it("writes nothing while Encore is not debugging", function()
         Facade.UnitClass("player")
         ctl.Fire("PLAYER_TARGET_CHANGED")
         assert.are.same({}, lines)
     end)
 
     it("writes one line per read naming the class, with a secret shown as S and counted", function()
-        hekili.ActiveDebug = true
+        encore.ActiveDebug = true
         Facade.UnitClass("player")
         Facade.UnitClass("target")
         Facade.GetHaste()
@@ -110,7 +110,7 @@ describe("the facade trace", function()
     end)
 
     it("counts a hybrid's secret raw answer (UnitExists of another unit), and not the pet's plain one", function()
-        hekili.ActiveDebug = true
+        encore.ActiveDebug = true
         Facade.UnitExists("target")
         assert.is_false(Facade.UnitExists("pet"))
         assert.are.same({
@@ -121,17 +121,17 @@ describe("the facade trace", function()
     end)
 
     it("writes a table result's secret fields as S, and keeps tracing after a raising Debug", function()
-        hekili.ActiveDebug = true
+        encore.ActiveDebug = true
         Facade.GetInstanceInfo()
         assert.are.same({ "[vs] passthrough GetInstanceInfo(nil, nil) -> aura:S/5/nil, cd:S/1, nil, nil #2" }, lines)
-        local debug = hekili.Debug
-        hekili.Debug = function()
+        local debug = encore.Debug
+        encore.Debug = function()
             error("boom")
         end
         assert.has_no.errors(function()
             Facade.UnitClass("player")
         end)
-        hekili.Debug = debug
+        encore.Debug = debug
         Facade.UnitClass("player")
         assert.are.equal("[vs] passthrough UnitClass(player, nil) -> Me, nil, nil, nil #1", lines[#lines])
     end)
@@ -140,7 +140,7 @@ describe("the facade trace", function()
         local f = ns.VirtualStateInternal.Events.CreateFrame("Frame")
         f:SetScript("OnEvent", function() end)
         f:RegisterEvent("PLAYER_TARGET_CHANGED")
-        hekili.ActiveDebug = true
+        encore.ActiveDebug = true
         ctl.Fire("PLAYER_TARGET_CHANGED", fake.SECRET)
         assert.are.same({ "[vs] event PLAYER_TARGET_CHANGED(nil, nil, nil)" }, lines)
     end)

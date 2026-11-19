@@ -11,7 +11,7 @@ describe("snapshot listeners (headless Arms)", function()
     before_each(function()
         H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
-        hk = H.Hekili
+        hk = H.Encore
         hk.Engine.settings.screenshot = false -- the harness has no Screenshot()
         hk.DB.profile.toggles.mode.value = "dual" -- Primary and AOE both build, so a snapshot stores two records
         assert.is_true(hk.Engine.Subscribe("AOE", function() end))

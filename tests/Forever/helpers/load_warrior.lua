@@ -8,7 +8,7 @@ local M = {}
 -- The core's registration-time derivation of `ranks` and `effect` (Engine/Schema/Spec/Ranks.lua), run on each
 -- recorded ability as RegisterAbility runs it, so a class file declaring them reads the same fields here.
 local Ranks = {}
-assert(loadfile("src/Hekili/Engine/Schema/Spec/Ranks.lua"))("Hekili", Ranks)
+assert(loadfile("src/Encore/Engine/Schema/Spec/Ranks.lua"))("Encore", Ranks)
 
 --- Loads the class file. Returns `w`: `w.abilities`, `w.auras` (merged by key), `w.talents`, `w.resource`
 --- ({ powerType, models }), `w.hooks[name]`, `w.events[event]` (spec:RegisterEvent's handlers), `w.funcs[name]`,
@@ -42,16 +42,16 @@ function M.load()
     local w = { game = game, abilities = {}, auras = {}, hooks = {}, funcs = {}, exprs = {} }
     w.state = { main_hand = { size = 2 }, equipped = {}, timeToInterrupt = function() end }
     w.state.weapon = w.state.main_hand
-    local hekili = { State = w.state }
-    function hekili:GetLocale()
+    local encore = { State = w.state }
+    function encore:GetLocale()
         return require("helpers.english")
     end
-    function hekili:NewClass(token, def)
+    function encore:NewClass(token, def)
         w.class, w.def = token, def
         return spec
     end
     local fakes = {
-        Hekili = hekili,
+        Encore = encore,
         UnitClassBase = function()
             return "WARRIOR"
         end,
@@ -90,7 +90,7 @@ function M.load()
         saved[k] = rawget(_G, k) or false
         _G[k] = v
     end
-    hekili.Client = fakes -- the class file reads the game through Hekili.Client (Hekili.lua)
+    encore.Client = fakes -- the class file reads the game through Hekili.Client (Hekili.lua)
     -- the belief's reads, as the file's helpers call them through `state` (State.lua's names)
     function w.state.knownRank(ids) -- the belief's spellbook: the plain known reads (`game.known`)
         for i = #ids, 1, -1 do
@@ -110,7 +110,7 @@ function M.load()
     function w.state.healthMax()
         return game.healthMax
     end
-    local ok, err = pcall(assert(loadfile("src/Hekili_Warrior/Warrior.lua")))
+    local ok, err = pcall(assert(loadfile("src/Encore_Warrior/Warrior.lua")))
     for k, v in pairs(saved) do
         _G[k] = v or nil
     end

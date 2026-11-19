@@ -56,7 +56,7 @@ end
 describe("the pack auras cover the ranks the Cooldown Manager reports", function()
     local druid, war
     setup(function()
-        druid = loader.load(nil, "src/Hekili_Druid/Druid.lua", "DRUID")
+        druid = loader.load(nil, "src/Encore_Druid/Druid.lua", "DRUID")
         war = warrior.load()
     end)
 

@@ -17,7 +17,7 @@ body:
           required: true
         - label: I am not playing on a private server.
           required: true
-        - label: I checked for an [existing, open ticket](https://github.com/zmsl/hekili/issues) for this issue and was not able to find one.
+        - label: I checked for an [existing, open ticket](https://github.com/edase/encore/issues) for this issue and was not able to find one.
           required: true
         - label: I edited the title of this bug report (above) so that it describes the issue I am reporting.
           required: true
@@ -47,7 +47,7 @@ body:
       description: |        
         Please supply your character information by completing the following steps.
         * Log into your WoW character.
-        * Type `/hekili` and press Enter.
+        * Type `/encore` and press Enter.
         * Open the `Snapshots (Troubleshooting)` section (left panel).
         * Copy all of the text from the text box.
         * Paste the text to Pastebin.
@@ -55,7 +55,7 @@ body:
         
         This step is essential, as most issues are related to specific classes, specializations, gear, talent choices, or other game systems.
         If you do not provide this information, I cannot triage your problem.
-        **Note:** Some errors may prevent you from opening `/hekili`.  If that's true for you, please note that in this box instead of providing the link.
+        **Note:** Some errors may prevent you from opening `/encore`.  If that's true for you, please note that in this box instead of providing the link.
       placeholder: http://pastebin.com/AbCdEfGh
     validations:
       required: true

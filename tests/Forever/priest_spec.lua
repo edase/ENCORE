@@ -8,7 +8,7 @@
 local ld = require("Forever.helpers.load_druid")
 local headless = require("Game.harness.headless")
 
-local FILE = "src/Hekili_Priest/Priest.lua"
+local FILE = "src/Encore_Priest/Priest.lua"
 
 -- key = { spell IDs in rank order, the top rank's mana cost (no talent, no aura), cooldown, gcd }, from the DB2
 -- (`wowdb spell <name>`): the cooldown is the larger of RecoveryTime and CategoryRecoveryTime; a percent-of-base cost
@@ -87,7 +87,7 @@ describe("Forever Priest", function()
 
     -- The stat split (L971): Spirit Tap's +100% (15271: aura 137, misc 4). Divine Spirit is Hekili_Shared's
     -- (tests/Forever/shared_spec.lua: its Spirit by the aura's own spell ID).
-    it("declares Spirit Tap's x2 Spirit and leaves Divine Spirit to Hekili_Shared (L971)", function()
+    it("declares Spirit Tap's x2 Spirit and leaves Divine Spirit to Encore_Shared (L971)", function()
         assert.are.same({ [5] = 2 }, w.auras.spirit_tap.statsPct)
         assert.is_nil(w.auras.divine_spirit)
     end)
@@ -601,12 +601,12 @@ describe("Forever Priest through the engine", function()
         function()
             local H = headless.new({ character = character() })
             assert.are.same({}, H.loadErrors)
-            local specs = H.Hekili.Class.specs
+            local specs = H.Encore.Class.specs
             assert.are.same(
                 { "discipline", "holy", "shadow", true },
                 { specs[100051].key, specs[100052].key, specs[100053].key, specs[100052].unsupported }
             )
-            assert.are.equal(15473, H.Hekili.Class.auras.shadowform.id) -- the class's, over Hekili_Shared's id-less stub
+            assert.are.equal(15473, H.Encore.Class.auras.shadowform.id) -- the class's, over Hekili_Shared's id-less stub
             local _, w = character()
             local I = H.ns.VirtualStateInternal
             local runs0, t, n = I.nowRuns, H.ctl.now, 0
@@ -631,7 +631,7 @@ describe("Forever Priest through the engine", function()
             local c = character()
             c.talents = { [1326159] = rank }
             local H = headless.new({ character = c })
-            local I, VS, S = H.ns.VirtualStateInternal, H.ns.VirtualState, H.Hekili.State
+            local I, VS, S = H.ns.VirtualStateInternal, H.ns.VirtualState, H.Encore.State
             local t = H.ctl.now + 1
             assert.is_true(headless.cycle(H, t))
             VS.Drain(t)
@@ -678,7 +678,7 @@ describe("Forever Priest through the engine", function()
         "halves the Shadow costs in Shadowform and frees the spell after Inner Focus, in the belief and the sim",
         function()
             local H = headless.new({ character = character({ forms = { 15473 }, form = 1 }) })
-            local I, VS, S = H.ns.VirtualStateInternal, H.ns.VirtualState, H.Hekili.State
+            local I, VS, S = H.ns.VirtualStateInternal, H.ns.VirtualState, H.Encore.State
             local mb, smite = I.ab.bySpell[8092], I.ab.bySpell[585]
             local function at(t)
                 assert.is_true(headless.cycle(H, t))

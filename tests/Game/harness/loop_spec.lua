@@ -604,7 +604,7 @@ describe("the headless loop's replay injection (o.replay)", function()
             WORLD = { level = 60, max = 100, mobHealth = 1e9 },
         }
         local L = loop.new(stub)
-        local hk = L.us.Hekili
+        local hk = L.us.Encore
         local seen = {}
         local R = {
             pull = 3,
@@ -663,7 +663,7 @@ describe("the headless loop's bags, pet and stats (central fix 27)", function()
             duration = 12,
             on = function(run, steps)
                 for i, st in ipairs(steps) do
-                    local F, S = st.H.ns.Facade, st.H.Hekili.State
+                    local F, S = st.H.ns.Facade, st.H.Encore.State
                     seen[i] = {
                         F.C_Item.GetItemCount(ITEM),
                         F.UnitExists("pet"),

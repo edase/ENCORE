@@ -8,8 +8,8 @@ local ld = require("Forever.helpers.load_druid")
 local ws = require("Forever.helpers.wowsims")
 local headless = require("Game.harness.headless")
 
-local FILE = "src/Hekili_Hunter/Hunter.lua"
-local TOC_SHARED = "src/Hekili_Shared/Hekili_Shared.toc"
+local FILE = "src/Encore_Hunter/Hunter.lua"
+local TOC_SHARED = "src/Encore_Shared/Encore_Shared.toc"
 
 -- key = { spell IDs in rank order, the top rank's mana cost, cooldown, gcd }, from the DB2 (`wowdb spell <name>`): the
 -- cooldown is the larger of RecoveryTime and CategoryRecoveryTime; a percent-of-base-mana cost (PowerCostPct) as the
@@ -866,7 +866,7 @@ describe("Forever Hunter priorities", function()
         local racials = {}
         local toc = assert(io.open(TOC_SHARED))
         for path in toc:read("*a"):gmatch("((%a+)\\[%w_]+%.lua)") do
-            local f = assert(io.open("src/Hekili_Shared/" .. path:gsub("\\", "/")))
+            local f = assert(io.open("src/Encore_Shared/" .. path:gsub("\\", "/")))
             local text = f:read("*a")
             for key in text:gmatch('RegisterAbility%("([%w_]+)"') do
                 racials[key] = true
@@ -958,7 +958,7 @@ describe("Forever Hunter through the engine", function()
     end)
 
     it("counts the hawks our dives summon in the belief and the simulation, two at most, each for 18 s", function()
-        local VS, S = H.ns.VirtualState, H.Hekili.State
+        local VS, S = H.ns.VirtualState, H.Encore.State
         local t = H.ctl.now + 1
         for k = 1, 3 do
             H.ctl.now = t + 6 * (k - 1)
@@ -967,7 +967,7 @@ describe("Forever Hunter through the engine", function()
         end
         local now = H.ctl.now + 0.1
         -- the simulation counts them in the facade's totem slots past the client's five (RegisterPets' `cap`: slots 6-7)
-        assert.are.equal(6, H.Hekili.Class.pets.hawk.slot)
+        assert.are.equal(6, H.Encore.Class.pets.hawk.slot)
         local up, name, start, dur = H.ns.Facade.GetTotemInfo(6) -- the third dive took the oldest's slot
         assert.are.same({ true, "hawk", t + 12, 18 }, { up, name, start, dur })
         S.reset("Primary", true)
@@ -981,7 +981,7 @@ describe("Forever Hunter through the engine", function()
     -- hawk's summon also makes true; The Beast Within's -50% holds Bestial Wrath's 18 s in both layers, through an
     -- in-combat walk of our auras (the buff is the pet's: never on us).
     it("gates Bestial Wrath on the pet out alive, and halves the shots' cost for its 18 s in both layers", function()
-        local I, VS, S = H.ns.VirtualStateInternal, H.ns.VirtualState, H.Hekili.State
+        local I, VS, S = H.ns.VirtualStateInternal, H.ns.VirtualState, H.Encore.State
         local arcane = I.ab.bySpell[3044]
         local function at(t)
             assert.is_true(headless.cycle(H, t))
@@ -1029,13 +1029,13 @@ describe("Forever Hunter through the engine", function()
         H.Fire("PLAYER_TARGET_CHANGED")
         H.ctl.combat = true
         H.Fire("PLAYER_REGEN_DISABLED")
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         local t = H.ctl.now
         local function first(exists, dead)
             H.ctl.exists.pet, H.ctl.dead.pet = exists, dead
             t = t + 0.2
             assert.is_true(headless.cycle(H, t))
-            local recs = H.Hekili.Engine.Output.Primary.recs
+            local recs = H.Encore.Engine.Output.Primary.recs
             return recs[1] and recs[1].actionName
         end
         H.ctl.usable[883], H.ctl.usable[982] = { true, false }, { true, false }
@@ -1052,7 +1052,7 @@ describe("Forever Hunter through the engine", function()
     end)
 
     it("answers the ranged clock after a modelled Auto Shot in swing.ranged and swings.ranged_*", function()
-        local VS, S = H.ns.VirtualState, H.Hekili.State
+        local VS, S = H.ns.VirtualState, H.Encore.State
         local t = H.ctl.now + 1
         H.ctl.now = t
         H.ctl.combat = true -- out of combat Hekili's swing timers answer from now
@@ -1075,7 +1075,7 @@ describe("Forever Hunter through the engine", function()
     -- same paths. A `>`/`>=` on a decreasing clock fell to that fallback, negative while false; the wrap branch answers
     -- the time to the clock's wrap (0.01 past it), when the clock jumps back to its speed.
     it("forecasts the ranged clock through scripts:BuildRecheck: a `<` its time to x, a `>` its wrap", function()
-        local Sc = H.Hekili.Scripts
+        local Sc = H.Encore.Scripts
         local env = { ranged_remains = 1.2, ranged_speed = 2.9, mainhand_remains = 0.4, mainhand_speed = 2.6 }
         env.safenum = function(x)
             return type(x) == "number" and x or 0
@@ -1107,20 +1107,20 @@ describe("Forever Hunter through the engine", function()
         H.ctl.now = H.ctl.now + 1
         H.ctl.combat = true
         H.Fire("PLAYER_REGEN_DISABLED")
-        return H.Hekili.State, H.ns.Facade
+        return H.Encore.State, H.ns.Facade
     end
     local function shoot(t)
         H.ctl.now = t
         H.Fire("UNIT_SPELLCAST_SUCCEEDED", "player", "Cast-" .. t, 75)
     end
     local function lines(apl)
-        local parsed = H.Hekili:ParseActionList(apl)
+        local parsed = H.Encore:ParseActionList(apl)
         for _, l in ipairs(parsed) do
             l.enabled = true
         end
-        H.Hekili.DB.profile.packs["Beast Mastery Turret (wowsims.com)"].lists = { precombat = {}, default = parsed }
-        H.Hekili:LoadScripts()
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        H.Encore.DB.profile.packs["Beast Mastery Turret (wowsims.com)"].lists = { precombat = {}, default = parsed }
+        H.Encore:LoadScripts()
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
     end
 
     -- R17: timing only. The window opens at an Auto Shot whose next main-hand swing comes before the next shot and
@@ -1224,7 +1224,7 @@ describe("Forever Hunter through the engine", function()
 
     it('keeps Beast Mastery\'s hha open for the fight ("combat"), closed at combat end', function()
         local _, F = weaveWorld(11)
-        assert.are.equal("combat", H.Hekili.Class.windows.hha.duration)
+        assert.are.equal("combat", H.Encore.Class.windows.hha.duration)
         local t = H.ctl.now
         assert.is_true(headless.cycle(H, t + 0.1))
         assert.is_true((F.Window("hha")))
@@ -1268,7 +1268,7 @@ describe("Forever Hunter through the engine", function()
         )
         assert.is_true(headless.cycle(H, H.ctl.now + 0.1))
         assert.is_false((F.Window("weave")))
-        local recs = H.Hekili.Engine.Output.Primary.recs
+        local recs = H.Encore.Engine.Output.Primary.recs
         for i = 1, #recs do
             assert.are_not.equal("arcane_shot", recs[i].actionName)
         end
@@ -1295,7 +1295,7 @@ describe("Forever Hunter through the engine", function()
         assert.is_true(speed - 1.2 > 0.6, tostring(speed))
         H.ctl.now = t + speed - 1.2 -- the next shot 1.2 s ahead
         assert.is_true(headless.cycle(H, H.ctl.now))
-        local recs = H.Hekili.Engine.Output.Primary.recs
+        local recs = H.Encore.Engine.Output.Primary.recs
         assert.are.equal("arcane_shot", recs[1] and recs[1].actionName)
         assert.is_true(math.abs(recs[1].wait - 1.21) < 0.02, tostring(recs[1].wait))
         assert.are.same({}, H.errors)
@@ -1314,7 +1314,7 @@ describe("Forever Hunter through the engine", function()
             shoot(t)
             assert.is_true(headless.cycle(H, t + 0.1))
             assert.is_true((F.Window("weave")))
-            local recs = H.Hekili.Engine.Output.Primary.recs
+            local recs = H.Encore.Engine.Output.Primary.recs
             assert.are.same(
                 { "raptor_strike", "serpent_sting" },
                 { recs[1].actionName, recs[2] and recs[2].actionName }
@@ -1391,7 +1391,7 @@ describe("Forever Hunter through the engine", function()
         local c, w = character()
         c.speed = { 2.6 }
         H = headless.new({ character = c, pack = "Beast Mastery Turret (wowsims.com)" })
-        local S = H.Hekili.State
+        local S = H.Encore.State
         local ids = idsOf(w.abilities.raptor_strike)
         H.ctl.level.target, H.ctl.distance.target = 60, 3 -- in melee
         H.Fire("PLAYER_TARGET_CHANGED")
@@ -1424,7 +1424,7 @@ describe("Forever Hunter Movement (R8)", function()
     local PACK = "Survival (wowsims.com)"
 
     local function lines(key)
-        local f = assert(io.open("src/Hekili_Hunter/APLs/" .. PACK .. ".simc"))
+        local f = assert(io.open("src/Encore_Hunter/APLs/" .. PACK .. ".simc"))
         local s = f:read("*a")
         f:close()
         local out = {}
@@ -1444,24 +1444,24 @@ describe("Forever Hunter Movement (R8)", function()
         assert(headless.cycle(H, t))
         local list = {}
         for _, l in ipairs(lines(key)) do
-            local parsed = H.Hekili:ParseActionList(l)
+            local parsed = H.Encore:ParseActionList(l)
             parsed[1].enabled = true
             list[#list + 1] = parsed[1]
         end
         list[#list + 1] = { enabled = true, action = "aspect_of_the_hawk" }
-        H.Hekili.DB.profile.packs[PACK].lists = { precombat = {}, default = list }
-        H.Hekili:LoadScripts()
+        H.Encore.DB.profile.packs[PACK].lists = { precombat = {}, default = list }
+        H.Encore:LoadScripts()
         H.Fire("PLAYER_REGEN_DISABLED")
         local VS = H.ns.VirtualState
         local power, mana = VS.Power, { est = 5000, lo = 5000, hi = 5000, conf = 1 }
         VS.Power = function(pt, now)
             return pt == 0 and mana or power(pt, now)
         end
-        local out = H.Hekili.Engine.Output.Primary
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
-        assert.is_true(H.Hekili.Engine.Registry.MovementSpec(C.SPEC)) -- the options row shows (R3)
+        local out = H.Encore.Engine.Output.Primary
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
+        assert.is_true(H.Encore.Engine.Registry.MovementSpec(C.SPEC)) -- the options row shows (R3)
         return function(movement)
-            H.Hekili:FireToggle("movement", movement and "on" or "off")
+            H.Encore:FireToggle("movement", movement and "on" or "off")
             t = t + 0.2
             assert(headless.cycle(H, t))
             assert.are.same({}, H.errors)
@@ -1581,7 +1581,7 @@ describe("the Hunter talent cost cuts through the engine", function()
     it("prices Efficiency's cut on the whole cost in both layers (MM Turret Arcane Shot 166.32)", function()
         local H =
             headless.new({ character = hw.MarksmanshipTurret.character(), pack = "Marksmanship Turret (wowsims.com)" })
-        local I, VS, S = H.ns.VirtualStateInternal, H.ns.VirtualState, H.Hekili.State
+        local I, VS, S = H.ns.VirtualStateInternal, H.ns.VirtualState, H.Encore.State
         local t = H.ctl.now + 1
         assert.is_true(headless.cycle(H, t))
         VS.Drain(t)
@@ -1605,7 +1605,7 @@ describe("the Hunter talent cost cuts through the engine", function()
             local c = hw.BeastMasteryTurret.character()
             c.talents = { [19416] = rank }
             local H = headless.new({ character = c, pack = "Beast Mastery Turret (wowsims.com)" })
-            local VS, S = H.ns.VirtualState, H.Hekili.State
+            local VS, S = H.ns.VirtualState, H.Encore.State
             H.ctl.costs[3044] = { { type = 0, cost = math.floor(189 * (1 - 0.03 * rank) + 0.5) } }
             H.Fire("SPELLS_CHANGED")
             assert.are.same({ rank, 1720 }, { S.talent.efficiency.rank, VS.BasePower(0) }, "cut alone, rank " .. rank)
@@ -1622,7 +1622,7 @@ describe("the Hunter talent cost cuts through the engine", function()
         local c = hw.Survival.character()
         c.talents = { [440529] = 2, [19416] = 2 }
         local H = headless.new({ character = c, pack = "Survival (wowsims.com)" })
-        local I, VS, S = H.ns.VirtualStateInternal, H.ns.VirtualState, H.Hekili.State
+        local I, VS, S = H.ns.VirtualStateInternal, H.ns.VirtualState, H.Encore.State
         local t = H.ctl.now + 1
         assert.is_true(headless.cycle(H, t))
         VS.Drain(t)
@@ -1633,7 +1633,7 @@ describe("the Hunter talent cost cuts through the engine", function()
         assert.are.same({ 2, 2, 37.6, 37.6 }, {
             S.talent.resourcefulness.rank,
             S.talent.efficiency.rank,
-            r(I.CostOf(I.ab.bySpell[VS.KnownID(H.Hekili.Class.abilities.raptor_strike.id)])),
+            r(I.CostOf(I.ab.bySpell[VS.KnownID(H.Encore.Class.abilities.raptor_strike.id)])),
             r(S.action.raptor_strike.cost),
         })
         assert.are.same({}, H.errors)
@@ -1670,7 +1670,7 @@ describe("the retired Hunter weave packs", function()
                 end,
             })
             assert.are.same({}, H.loadErrors)
-            local p = H.Hekili.DB.profile
+            local p = H.Encore.DB.profile
             assert.is_nil(rawget(p.packs, old))
             assert.are.equal(new, p.specs[id].package)
             assert.is_nil(p.specs[id].packManual)
@@ -1680,7 +1680,7 @@ describe("the retired Hunter weave packs", function()
             assert.is_truthy(said:find("runs |cFFFFD100" .. new .. "|r", 1, true), said) -- names the replacement
             assert.is_falsy(said:find("default priority", 1, true), said)
             lines = {}
-            H.Hekili:RestoreDefaults() -- the next login: nothing retired is left to say
+            H.Encore:RestoreDefaults() -- the next login: nothing retired is left to say
             H.RunTimers(H.ctl.now + 12)
             assert.is_falsy(table.concat(lines, "\n"):find("retired", 1, true))
         end)
@@ -1708,7 +1708,7 @@ describe("the retired Hunter weave packs", function()
                 end,
             })
             assert.are.same({}, H.loadErrors)
-            assert.is_nil(rawget(H.Hekili.DB.profile.packs, old))
+            assert.is_nil(rawget(H.Encore.DB.profile.packs, old))
             H.RunTimers(H.ctl.now + 6)
             assert.is_falsy(table.concat(lines, "\n"):find("retired", 1, true))
         end)

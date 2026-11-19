@@ -166,7 +166,7 @@ describe("the wowsims.com packs' focus tiers by role", function()
     for pack, want in pairs(PACKS) do
         it(pack, function()
             local class, rest = pack:match("^(%w+)/(.*)$")
-            assert.are.same(want, flagged("src/Hekili_" .. class .. "/" .. rest .. " (wowsims.com).simc"))
+            assert.are.same(want, flagged("src/Encore_" .. class .. "/" .. rest .. " (wowsims.com).simc"))
         end)
     end
 end)

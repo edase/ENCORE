@@ -16,7 +16,7 @@ describe("the sim's resource streams (est, lo, hi) #loop", function()
         it(("keep lo <= current <= hi at every press gate: %s"):format(w[3]), function()
             local world = require(w[1])
             local L = loop.new(w[2] and world[w[2]] or world)
-            local S, class = L.us.Hekili.State, L.us.Hekili.Class
+            local S, class = L.us.Encore.State, L.us.Encore.Class
             local checks, bad = 0, nil
             local function check(k, r)
                 local cur, lo, hi = r.current, r.lo, r.hi

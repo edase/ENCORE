@@ -23,13 +23,13 @@ local function boot()
     H.ctl.inRange.target, H.ctl.level.target = true, 60
     H.Fire("PLAYER_TARGET_CHANGED")
     assert(headless.cycle(H, H.ctl.now + 0.2))
-    local conf = H.Hekili.DB.profile.displays.Primary.classic
+    local conf = H.Encore.DB.profile.displays.Primary.classic
     conf.delays.type, conf.delays.desaturate = "TEXT", true -- the delay text: the string the moving clock changes
-    return H, rawget(H.env, "HekiliDisplayPrimary")
+    return H, rawget(H.env, "EncoreDisplayPrimary")
 end
 
 local function publish(H)
-    local abilities = H.Hekili.Engine.Registry.Abilities()
+    local abilities = H.Encore.Engine.Registry.Abilities()
     local s = H.ns.Output.Begin("Primary")
     for i, e in ipairs(SET) do
         local r = s[i]
@@ -53,7 +53,7 @@ describe("the shared resolve", function()
 
     it("fills every published record's range, usable, delay, targets and glow before the draw", function()
         local H, d = boot()
-        overlayed[H.Hekili.Engine.Registry.Abilities().overpower.id] = true
+        overlayed[H.Encore.Engine.Registry.Abilities().overpower.id] = true
         publish(H)
         frame(H, d, 0.2)
         local r1, r2 = d.resolved[1], d.resolved[2]
@@ -75,7 +75,7 @@ describe("the shared resolve", function()
     -- within 7 yd is in melee, and so is an unknown range (unknown never blocks)
     it("shows the target in melee within 7 yd and while its range is unknown, out of melee past it", function()
         local H, d = boot()
-        H.Hekili.DB.profile.displays.Primary.classic.range.type = "melee"
+        H.Encore.DB.profile.displays.Primary.classic.range.type = "melee"
         local function inMelee(yd)
             H.ctl.distance.target = yd
             assert(headless.cycle(H, H.ctl.now + 0.2))
@@ -106,7 +106,7 @@ describe("the shared resolve", function()
 
     it("asks the GCD and each waiting record's cooldown once on a publish, not twice", function()
         local H, d = boot()
-        local abilities, gcd = H.Hekili.Engine.Registry.Abilities(), H.Hekili.Engine.Registry.GCD_SPELL
+        local abilities, gcd = H.Encore.Engine.Registry.Abilities(), H.Encore.Engine.Registry.GCD_SPELL
         publish(H)
         local asks, restore = countAsks(H)
         frame(H, d, 0.2) -- both records wait: Resolve asks all three, the spirals ask none
@@ -119,7 +119,7 @@ describe("the shared resolve", function()
 
     it("draws the spiral from the same answer, modRate included", function()
         local H, d = boot()
-        local abilities = H.Hekili.Engine.Registry.Abilities()
+        local abilities = H.Encore.Engine.Registry.Abilities()
         local cs, ms = H.ns.Facade.C_Spell, abilities.mortal_strike.id
         local getCd, start = cs.GetSpellCooldown, H.ctl.now
         cs.GetSpellCooldown = function(id)
@@ -146,7 +146,7 @@ describe("the shared resolve", function()
 
     it("never reuses an answer Resolve did not ask this frame: a record due now asks for itself", function()
         local H, d = boot()
-        local abilities, gcd = H.Hekili.Engine.Registry.Abilities(), H.Hekili.Engine.Registry.GCD_SPELL
+        local abilities, gcd = H.Encore.Engine.Registry.Abilities(), H.Encore.Engine.Registry.GCD_SPELL
         publish(H)
         frame(H, d, 0.2)
         SET[1][2] = 0 -- due at once: Resolve skips its cooldown

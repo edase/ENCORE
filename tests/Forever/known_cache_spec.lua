@@ -9,7 +9,7 @@ local ld = require("Forever.helpers.load_druid")
 
 -- Wraps instance H's IsKnown and IsDisabled; returns the tally { known, disabled, mismatches }.
 local function shadow(H)
-    local st, abilities, c = H.Hekili.State, H.Hekili.Class.abilities, H.ns.SpellCaches
+    local st, abilities, c = H.Encore.State, H.Encore.Class.abilities, H.ns.SpellCaches
     local tally = { known = 0, disabled = 0, mismatches = {} }
     local isKnown, isDisabled = st.IsKnown, st.IsDisabled
     st.IsKnown = function(self, sID)
@@ -147,8 +147,8 @@ describe("the per-prediction memos of IsKnown and IsDisabled", function()
             H.ctl.inRange.target, H.ctl.level.target = true, 60
             H.Fire("PLAYER_TARGET_CHANGED")
             assert(headless.cycle(H, H.ctl.now + 0.2))
-            st = H.Hekili.State
-            opt = H.Hekili.Engine.settings.specs[ww.SPEC].abilities.rend
+            st = H.Encore.State
+            opt = H.Encore.Engine.settings.specs[ww.SPEC].abilities.rend
         end)
 
         after_each(function()
@@ -168,28 +168,28 @@ describe("the per-prediction memos of IsKnown and IsDisabled", function()
         end)
 
         it("sees a toggle flipped between two predictions", function()
-            local toggles = H.Hekili.Engine.settings.toggles
-            local key = H.Hekili.Class.abilities.recklessness.toggle
+            local toggles = H.Encore.Engine.settings.toggles
+            local key = H.Encore.Class.abilities.recklessness.toggle
             assert.is_string(key)
             local was = toggles[key].value
             toggles[key].value = true
-            H.Hekili:ResetSpellCaches()
+            H.Encore:ResetSpellCaches()
             st.reset("Primary", true)
             assert.is_false((st:IsDisabled("recklessness")))
             assert.is_false((st:IsDisabled("recklessness"))) -- the cached answer
             assert.is_not_nil(H.ns.SpellCaches.disabled.recklessness)
             toggles[key].value = false
-            H.Hekili:ResetSpellCaches() -- the next prediction, as GetNextPrediction starts it
+            H.Encore:ResetSpellCaches() -- the next prediction, as GetNextPrediction starts it
             assert.is_true((st:IsDisabled("recklessness")))
             toggles[key].value = was
         end)
 
         it("never caches the prefix of an ability whose toggle has an override (a buff can flip it)", function()
-            local toggles = H.Hekili.Engine.settings.toggles
-            local key = H.Hekili.Class.abilities.recklessness.toggle
+            local toggles = H.Encore.Engine.settings.toggles
+            local key = H.Encore.Class.abilities.recklessness.toggle
             local was = toggles[key].override
             toggles[key].override = true
-            H.Hekili:ResetSpellCaches()
+            H.Encore:ResetSpellCaches()
             st.reset("Primary", true)
             st:IsDisabled("recklessness")
             assert.is_nil(H.ns.SpellCaches.disabled.recklessness)
@@ -197,14 +197,14 @@ describe("the per-prediction memos of IsKnown and IsDisabled", function()
         end)
 
         it("wipes the caches in state.reset after the display's filter is set", function()
-            local a = H.Hekili.Class.abilities.mortal_strike
+            local a = H.Encore.Class.abilities.mortal_strike
             st.reset("Primary", true)
             assert.is_false((st:IsDisabled("mortal_strike")))
             assert.is_not_nil(H.ns.SpellCaches.disabled.mortal_strike)
             assert.is_falsy(a.interrupts) -- not an interrupt: the Interrupts display's filter disables it
-            assert.is_table(H.Hekili.Engine.settings.displays.Interrupts)
+            assert.is_table(H.Encore.Engine.settings.displays.Interrupts)
             -- a read inside reset before the filter is assigned (the reset_preauras hook) caches the old filter's answer
-            local hooks = H.Hekili.Class.hooks
+            local hooks = H.Encore.Class.hooks
             local had = hooks.reset_preauras
             hooks.reset_preauras = {
                 function()
@@ -220,14 +220,14 @@ describe("the per-prediction memos of IsKnown and IsDisabled", function()
         end)
 
         it("caches the target-count check for one prediction and re-reads it in the next", function()
-            local ms = H.Hekili.Engine.settings.specs[ww.SPEC].abilities.mortal_strike
+            local ms = H.Encore.Engine.settings.specs[ww.SPEC].abilities.mortal_strike
             st.reset("Primary", true)
             assert.are.equal(1, st.active_enemies)
             ms.targetMin = 2
-            H.Hekili:ResetSpellCaches()
+            H.Encore:ResetSpellCaches()
             assert.is_true((st:IsDisabled("mortal_strike")))
             ms.targetMin = 0
-            H.Hekili:ResetSpellCaches()
+            H.Encore:ResetSpellCaches()
             assert.is_false((st:IsDisabled("mortal_strike")))
         end)
     end)

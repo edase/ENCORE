@@ -341,7 +341,7 @@ function M.new(text, H, o)
         creatureType = o.creatureType,
         notTargeted = o.notTargeted,
     }
-    local class = H.Hekili.Class
+    local class = H.Encore.Class
     -- an item's buff (the log's "Aura gained: {ItemID: n}", the line before its "Gained {"Spirit": ...}"): a class regen
     -- entry's `item` says which aura, so the belief's entry runs over the log's window
     local itemAura = {}
@@ -365,7 +365,7 @@ function M.new(text, H, o)
     -- a cooldown the kit computes (a function: talent-modified) as the booted engine answers it, or nil (an error
     -- too: the log's spacing stands in); R.world's run instance answers it again at each cast (its state there)
     local function engineCooldown(key)
-        local ok, v = pcall(readCooldown, H.Hekili.State, key)
+        local ok, v = pcall(readCooldown, H.Encore.State, key)
         return ok and tonumber(v) or nil
     end
     -- spell ID -> ability key (every rank), the key's IDs and cooldown; aura ID -> duration
@@ -480,7 +480,7 @@ function M.new(text, H, o)
         return e.id and keyOf[e.id] or (e.item and itemOf[e.item])
     end
     -- a spell outcome's school (unit-registry spec §6.1 row 6): the content's declared one; a miss is school 1 (fact 2)
-    local SCHOOL = H.Hekili.SCHOOL or {}
+    local SCHOOL = H.Encore.SCHOOL or {}
     local function schoolOf(e)
         local key = e.id and keyFor(e)
         local a = key and class.abilities[key]
@@ -653,7 +653,7 @@ function M.new(text, H, o)
     end
     R.speed = o.speed or R.speed
     -- R18: the ranged hand, when the content has a ranged auto attack and the log shoots it
-    for _, a in pairs(H.Hekili.Class.abilities) do
+    for _, a in pairs(H.Encore.Class.abilities) do
         if a.rangedSwing then
             R.shootSpell = a.id
         end
@@ -684,11 +684,11 @@ function M.new(text, H, o)
     start0, R.maxOf = M.pools(p.ev)
 
     -- the class's declared casting-share auras (a regen entry with a `share`): their ticks are not the unboosted rate
-    local shares, Class = {}, H.Hekili.Class
+    local shares, Class = {}, H.Encore.Class
     local function answer(sh) -- a rank's value: the booted character's answer (its talents set at boot)
         if type(sh) == "function" then
             local env = getfenv(sh)
-            setfenv(sh, H.Hekili.State)
+            setfenv(sh, H.Encore.State)
             local ok, v = pcall(sh)
             setfenv(sh, env)
             sh = assert(ok and tonumber(v), "replay: a casting share's function raised or answered no number")
@@ -727,7 +727,7 @@ function M.new(text, H, o)
     --- truth instance: it answers a computed cooldown at each cast; nil: the boot value).
     function R.world(wo, seed, TH)
         ci = 1
-        local TS = TH and TH.Hekili.State
+        local TS = TH and TH.Encore.State
         -- the key's cooldown at its cast: a computed one as TH answers it, reset to its now, capped at the log's spacing
         -- where the boot value was (a raw function's; the boot value stands in when TH cannot say). shortcut: TH's
         -- belief as of its last cycle (the decision's, just before the cast), not the world's entity; read the world

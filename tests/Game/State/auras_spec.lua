@@ -1561,7 +1561,7 @@ describe("auras", function()
             -- L1113: the item proven last session, its proof restored at this session's layout load (in combat here):
             -- the first missed cast closes as for a proof lit this session; "an item never lit" below is the control.
             it("a proof restored from the last session closes the session's first missed cast", function()
-                api.HekiliCDMProof =
+                api.EncoreCDMProof =
                     { v = 1, items = { [502] = { key = "spender_c", viewer = 3, unit = 2, silent = 0 } } }
                 ctl.Callback("CooldownViewerSettings.OnPendingChanges", {}, false)
                 ctl.Callback("CooldownViewerSettings.OnDataChanged")

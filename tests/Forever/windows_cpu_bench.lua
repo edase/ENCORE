@@ -17,7 +17,7 @@ local PAIRS = tonumber(os.getenv("PAIRS") or "") or 10
 local N = tonumber(os.getenv("UPDATES") or "") or 300
 
 local function parse(H, text)
-    local lines = H.Hekili:ParseActionList(text, true)
+    local lines = H.Encore:ParseActionList(text, true)
     for _, l in ipairs(lines) do
         l.enabled = true
     end
@@ -77,7 +77,7 @@ local function boot()
     H.Fire("PLAYER_TARGET_CHANGED")
     H.t = H.ctl.now + 0.2
     assert(headless.cycle(H, H.t))
-    H.Hekili.Engine.Subscribe("Primary", function() end)
+    H.Encore.Engine.Subscribe("Primary", function() end)
     return H
 end
 
@@ -119,7 +119,7 @@ describe("windows CPU bench: W09, R03, W05", function()
         it(case.id, function()
             local H = boot()
             local VSI = H.ns.VirtualStateInternal
-            local lists = H.Hekili.DB.profile.packs[ww.PACK].lists
+            local lists = H.Encore.DB.profile.packs[ww.PACK].lists
             -- both arms without the precombat list: the headless player presses nothing, so a precombat pick that stays
             -- ready in combat would end every walk before the default list (and its window lines) is reached
             lists.precombat = {}
@@ -135,8 +135,8 @@ describe("windows CPU bench: W09, R03, W05", function()
                 H.Fire("PLAYER_REGEN_ENABLED")
                 lists.windows = on and windows or nil
                 lists.default = on and with or base
-                H.Hekili:LoadScripts()
-                H.Hekili:ReviewPacks()
+                H.Encore:LoadScripts()
+                H.Encore:ReviewPacks()
                 step(H) -- out of combat: Update applies the pack's windows, the belief builds its rows at this Drain
                 step(H)
                 H.Fire("PLAYER_REGEN_DISABLED")
@@ -147,7 +147,7 @@ describe("windows CPU bench: W09, R03, W05", function()
                 local applied, dropped, refused = Q.applied, Q.dropped, Q.refused
                 local ops, walks, picks, held = 0, 0, 0, 0
                 local codes = { 0, 0, 0 }
-                local hk, op = H.Hekili, H.ns.VirtualState.WindowOp
+                local hk, op = H.Encore, H.ns.VirtualState.WindowOp
                 local gnp, apl = hk.GetNextPrediction, hk.GetPredictionFromAPL
                 H.ns.VirtualState.WindowOp = function(key, code, arg)
                     ops, codes[code] = ops + 1, codes[code] + 1
@@ -166,7 +166,7 @@ describe("windows CPU bench: W09, R03, W05", function()
                 local c = os.clock()
                 for _ = 1, N do
                     step(H)
-                    local recs = H.Hekili.Engine.Output.Primary.recs
+                    local recs = H.Encore.Engine.Output.Primary.recs
                     r1, r2 = r1 + (recs[1].restarts or 0), r2 + (recs[2] and recs[2].restarts or 0)
                     r3 = r3 + (recs[3] and recs[3].restarts or 0)
                     held = held + (tostring(recs[1].listName):sub(1, 4) == "seq:" and 1 or 0)

@@ -8,7 +8,7 @@
 local ld = require("Forever.helpers.load_druid")
 local headless = require("Game.harness.headless")
 
-local FILE = "src/Hekili_Warlock/Warlock.lua"
+local FILE = "src/Encore_Warlock/Warlock.lua"
 
 -- key = { spell IDs in rank order, the top rank's mana cost, cooldown, gcd }, from the DB2 (`wowdb spell <name>`): the
 -- cooldown is the larger of RecoveryTime and CategoryRecoveryTime; a percent-of-base cost (PowerCostPct) as the
@@ -854,7 +854,7 @@ describe("Forever Warlock through the engine", function()
         function()
             local H = headless.new({ character = character() })
             assert.are.same({}, H.loadErrors)
-            local specs = H.Hekili.Class.specs
+            local specs = H.Encore.Class.specs
             assert.are.same(
                 { "affliction", "demonology", "destruction" },
                 { specs[100091].key, specs[100092].key, specs[100093].key }
@@ -908,7 +908,7 @@ describe("Forever Warlock through the engine", function()
     -- the earlier application running with its own remains (the core's `missable` hook no longer matches it).
     it("drops a resisted first Corruption; a resisted refresh keeps the earlier application's remains", function()
         local H = headless.new({ character = character() })
-        local S, VS, ctl = H.Hekili.State, H.ns.VirtualState, H.ctl
+        local S, VS, ctl = H.Encore.State, H.ns.VirtualState, H.ctl
         ctl.inRange.target, ctl.level.target = true, 60
         H.Fire("PLAYER_TARGET_CHANGED")
         ctl.combat = true
@@ -941,8 +941,8 @@ describe("Forever Warlock through the engine", function()
     -- stamp match alone takes it down.
     it("drops a Corruption resisted or evaded by a row 0.15 s after the cast; the miss stamp is the cast's", function()
         local H = headless.new({ character = character() })
-        local S, VS, ctl = H.Hekili.State, H.ns.VirtualState, H.ctl
-        local spec = H.Hekili.Class.specs[H.Hekili.State.spec.id]
+        local S, VS, ctl = H.Encore.State, H.ns.VirtualState, H.ctl
+        local spec = H.Encore.Class.specs[H.Encore.State.spec.id]
         ctl.inRange.target, ctl.level.target = true, 60
         H.Fire("PLAYER_TARGET_CHANGED")
         ctl.combat = true
@@ -1014,20 +1014,20 @@ describe("Forever Warlock through the engine", function()
         assert.are.same({}, H.loadErrors)
         H.ctl.inRange.target, H.ctl.level.target = true, 60
         H.Fire("PLAYER_TARGET_CHANGED")
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         -- Havoc takes the GCD (wowsims e4ef929e54), so it queues behind the curse and Bane of Doom lines: fifth
-        H.Hekili.DB.profile.displays.Primary.numIcons = 8
+        H.Encore.DB.profile.displays.Primary.numIcons = 8
         H.ns.getNumberTargets = function()
             return 2, 2
         end
-        local spec = H.Hekili.Engine.settings.specs[100093]
+        local spec = H.Encore.Engine.settings.specs[100093]
         local t = H.ctl.now
         local function havoc() -- the Havoc record's indicator ("" none), or false when it is not shown
             for _ = 1, 2 do -- the update after the change, and the published set it builds
                 t = t + 0.6
                 assert.is_true(headless.cycle(H, t))
             end
-            local out = H.Hekili.Engine.Output.Primary
+            local out = H.Encore.Engine.Output.Primary
             for i = 1, out.count do
                 if out.recs[i].actionName == "bane_of_havoc" then
                     return out.recs[i].indicator or ""
@@ -1045,12 +1045,12 @@ describe("Forever Warlock through the engine", function()
         H.ctl.guid.target = "Creature-2"
         H.Fire("PLAYER_TARGET_CHANGED")
         assert.is_false(havoc(), "remembered on mob A after the tab")
-        assert.are.equal(1, H.Hekili.State.active_dot.bane_of_havoc)
+        assert.are.equal(1, H.Encore.State.active_dot.bane_of_havoc)
         -- review M1: mob B dies, no target, two enemies left: the count is unknown (saturated, never 0), no Havoc flash
         H.ctl.exists.target, H.ctl.guid.target = false, nil
         H.Fire("PLAYER_TARGET_CHANGED")
         assert.is_false(havoc(), "no target: Havoc is not shown again")
-        assert.are_not.equal(0, H.Hekili.State.active_dot.bane_of_havoc)
+        assert.are_not.equal(0, H.Encore.State.active_dot.bane_of_havoc)
         spec.cycle = false
         assert.are.same({}, H.errors)
     end)
@@ -1171,7 +1171,7 @@ describe("Forever Warlock Movement (R8)", function()
     local ww = require("Forever.helpers.warlock_world")
 
     local function line(pack)
-        local f = assert(io.open("src/Hekili_Warlock/APLs/" .. pack .. ".simc"))
+        local f = assert(io.open("src/Encore_Warlock/APLs/" .. pack .. ".simc"))
         local s = f:read("*a")
         f:close()
         -- R51 splits a move-reached line in two: the move arm at the move's position, the in-range arm in place.
@@ -1190,26 +1190,26 @@ describe("Forever Warlock Movement (R8)", function()
         H.Fire("PLAYER_TARGET_CHANGED")
         local t = H.ctl.now + 0.2
         assert(headless.cycle(H, t))
-        local lines = H.Hekili:ParseActionList(line(C.PACK))
+        local lines = H.Encore:ParseActionList(line(C.PACK))
         for _, l in ipairs(lines) do
             l.enabled = true
         end
         lines[#lines + 1] = { enabled = true, action = "life_tap" }
-        H.Hekili.DB.profile.packs[C.PACK].lists = { precombat = {}, default = lines }
-        H.Hekili.DB.profile.toggles.mode.value = "aoe" -- the Primary display counts the spec's AOE floor of enemies
-        H.Hekili.DB.profile.specs[C.SPEC].aoe = 3
-        H.Hekili:LoadScripts()
+        H.Encore.DB.profile.packs[C.PACK].lists = { precombat = {}, default = lines }
+        H.Encore.DB.profile.toggles.mode.value = "aoe" -- the Primary display counts the spec's AOE floor of enemies
+        H.Encore.DB.profile.specs[C.SPEC].aoe = 3
+        H.Encore:LoadScripts()
         H.Fire("PLAYER_REGEN_DISABLED")
         local VS = H.ns.VirtualState
         local power, mana = VS.Power, { est = 6000, lo = 6000, hi = 6000, conf = 1 }
         VS.Power = function(pt, now)
             return pt == 0 and mana or power(pt, now)
         end
-        local out = H.Hekili.Engine.Output.Primary
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
-        assert.is_true(H.Hekili.Engine.Registry.MovementSpec(C.SPEC)) -- the options row shows (R3)
+        local out = H.Encore.Engine.Output.Primary
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
+        assert.is_true(H.Encore.Engine.Registry.MovementSpec(C.SPEC)) -- the options row shows (R3)
         return function(movement)
-            H.Hekili:FireToggle("movement", movement and "on" or "off")
+            H.Encore:FireToggle("movement", movement and "on" or "off")
             t = t + 0.2
             assert(headless.cycle(H, t))
             assert.are.same({}, H.errors)
@@ -1237,7 +1237,7 @@ describe("Forever Warlock without the endgame filler", function()
     -- The pack's `actions` lines (`list`: its `actions.<list>` lines, as `actions` ones) from the last line that is
     -- `filler` alone (a `filler` ending in "," its prefix).
     local function tail(pack, filler, list)
-        local f = assert(io.open("src/Hekili_Warlock/APLs/" .. pack .. ".simc"))
+        local f = assert(io.open("src/Encore_Warlock/APLs/" .. pack .. ".simc"))
         local s = f:read("*a")
         f:close()
         local lines, from = {}, nil
@@ -1292,21 +1292,21 @@ describe("Forever Warlock without the endgame filler", function()
         H.Fire("PLAYER_TARGET_CHANGED")
         local t = H.ctl.now + 0.2
         assert(headless.cycle(H, t))
-        local lines = H.Hekili:ParseActionList(tail(C.PACK, filler, o.list))
+        local lines = H.Encore:ParseActionList(tail(C.PACK, filler, o.list))
         for _, l in ipairs(lines) do
             l.enabled = true
         end
         lines[#lines + 1] = o.after and { enabled = true, action = o.after } or nil
-        H.Hekili.DB.profile.packs[C.PACK].lists = { precombat = {}, default = lines }
-        H.Hekili:LoadScripts()
+        H.Encore.DB.profile.packs[C.PACK].lists = { precombat = {}, default = lines }
+        H.Encore:LoadScripts()
         H.Fire("PLAYER_REGEN_DISABLED")
         local VS = H.ns.VirtualState
         local power, mana = VS.Power, {}
         VS.Power = function(pt, now)
             return pt == 0 and mana or power(pt, now)
         end
-        local out = H.Hekili.Engine.Output.Primary
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        local out = H.Encore.Engine.Output.Primary
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         return function(m, dt, cast) -- `cast`: a spell ID that succeeds first; then `dt` [0.2] s on
             if cast then
                 H.ctl.now = t

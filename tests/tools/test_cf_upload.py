@@ -63,13 +63,13 @@ class Multipart(unittest.TestCase):
     def test_parses_back_into_metadata_and_file(self):
         meta = cf.metadata(release(), 3)
         data = b"PK\x03\x04\r\n--not-a-boundary\x00"
-        body = cf.multipart(meta, "Hekili-v0.2.0-forever.zip", data, "BOUNDARY123")
+        body = cf.multipart(meta, "Encore-v0.2.0-forever.zip", data, "BOUNDARY123")
         head = b"Content-Type: multipart/form-data; boundary=BOUNDARY123\r\n\r\n"
         msg = email.parser.BytesParser(policy=email.policy.HTTP).parsebytes(head + body)
         parts = list(msg.iter_parts())
         self.assertEqual([p.get_param("name", header="content-disposition") for p in parts], ["metadata", "file"])
         self.assertEqual(json.loads(parts[0].get_content()), meta)
-        self.assertEqual(parts[1].get_filename(), "Hekili-v0.2.0-forever.zip")
+        self.assertEqual(parts[1].get_filename(), "Encore-v0.2.0-forever.zip")
         self.assertEqual(parts[1].get_payload(decode=True), data)
 
 

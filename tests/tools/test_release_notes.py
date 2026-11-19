@@ -11,7 +11,7 @@ import urllib.error
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "tools"))
 import release_notes as rn  # noqa: E402
 
-CHANGELOG = """# Hekili Forever changelog
+CHANGELOG = """# Encore changelog
 
 ## Unreleased
 

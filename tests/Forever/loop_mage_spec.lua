@@ -15,7 +15,7 @@ describe("the Mage loop worlds", function()
             local H = headless.new({ character = C.character() })
             assert.are.same({}, H.loadErrors)
             local unmapped = {}
-            for key, a in pairs(H.Hekili.Class.abilities) do
+            for key, a in pairs(H.Encore.Class.abilities) do
                 if type(key) == "string" and a.key == key and a.id and H.ctl.known[a.id] and not mw.MAP[key] then
                     unmapped[#unmapped + 1] = key
                 end
@@ -32,7 +32,7 @@ describe("the Mage loop worlds", function()
                     end
                 end
             end
-            assert.are.equal(C.SPEC, H.Hekili.State.spec.id)
+            assert.are.equal(C.SPEC, H.Encore.State.spec.id)
             assert.is_false(pcall(C.resolve, "not_an_ability", H))
             -- the channels: Evocation 8 s a tick a second (no tick effect: its mana is the regen's), Arcane Missiles at
             -- its rank

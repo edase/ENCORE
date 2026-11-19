@@ -219,7 +219,7 @@ describe("the Warrior wowsims.com packs #slow #wowsims", function()
         it(case[3] .. " stops Sunder Armor at 5 stacks at level 30", function()
             local L = loop.new(content(case[1], case[2], case[3], 30, case[4]))
             local H = L.us
-            local id = H.Hekili.Class.auras.sunder_armor.id
+            local id = H.Encore.Class.auras.sunder_armor.id
             local at5, five, raised = {}, 0, 0
             loop.run(L, 1, {
                 duration = 120,

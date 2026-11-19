@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Writes src/Hekili/Textures/ActiveSpec.tga: the options tree's active-spec marker, a 256x16 rounded rectangle (near
+"""Writes src/Encore/Textures/ActiveSpec.tga: the options tree's active-spec marker, a 256x16 rounded rectangle (near
 the tree row's shape, so the corners stay round when stretched) with a vertical gradient in the Now ring's gold
 (GoldRing.tga's palette: light gold at the top, dark amber at the bottom), half transparent so the row's text stays
 readable. Stdlib only; run from the repository root."""
@@ -33,7 +33,7 @@ def main():
             rows += bytes((b, g, r, round(ALPHA * hits / SAMPLES**2)))
     # uncompressed true colour, 32 bpp, 8 alpha bits, top-left origin
     header = struct.pack("<BBBHHBHHHHBB", 0, 0, 2, 0, 0, 0, 0, 0, W, H, 32, 0x28)
-    with open("src/Hekili/Textures/ActiveSpec.tga", "wb") as f:
+    with open("src/Encore/Textures/ActiveSpec.tga", "wb") as f:
         f.write(header + rows)
 
 

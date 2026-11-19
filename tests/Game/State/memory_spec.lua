@@ -15,7 +15,7 @@ describe("the registry's and tickets' resident memory", function()
             collectgarbage("collect")
             collectgarbage("collect")
             local before = collectgarbage("count")
-            assert(loadfile(path))("Hekili", ns)
+            assert(loadfile(path))("Encore", ns)
             if mine then
                 collectgarbage("collect")
                 collectgarbage("collect")

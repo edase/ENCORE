@@ -13,7 +13,7 @@ end
 
 -- The stand-in class data: ability keys by rank IDs, aura durations.
 local H = {
-    Hekili = {
+    Encore = {
         Class = {
             abilities = {
                 strike = { key = "strike", id = 900001, cooldown = 6, gcd = "spell" },
@@ -352,7 +352,7 @@ describe("the replay world", function()
 
     it("keeps an aura whose computed duration grows the aura table while it is read (GAP AT)", function()
         local auras = {}
-        for k, a in pairs(H.Hekili.Class.auras) do
+        for k, a in pairs(H.Encore.Class.auras) do
             auras[k] = a
         end
         local n = 0
@@ -370,7 +370,7 @@ describe("the replay world", function()
         for i = 1, 3 do
             auras["computed" .. i] = setmetatable({ id = 910000 + i }, grow)
         end
-        local HG = { Hekili = { Class = { abilities = H.Hekili.Class.abilities, auras = auras } } }
+        local HG = { Encore = { Class = { abilities = H.Encore.Class.abilities, auras = auras } } }
         local R = replay.new(text(), HG, O)
         local W = at(R.world(setmetatable({ tag = "-g" }, { __index = WO }), 1), R.pull + 4.1)
         local mob = W.ents[2]
@@ -640,7 +640,7 @@ describe("the replay's move-only casts (an ability's `movesOnly`)", function()
         "[1.00] [Tester (#1)] Completed cast {SpellID: 900001}",
     }, "\n")
     local HM = {
-        Hekili = {
+        Encore = {
             Class = {
                 abilities = {
                     strike = { key = "strike", id = 900001, gcd = "spell" },
@@ -689,7 +689,7 @@ describe("the replay's casts: tags, items, pets, totems", function()
         "[3.00] [Tester (#1)] Completed cast {ItemID: 800003}",
     }, "\n")
     local HT = {
-        Hekili = {
+        Encore = {
             Class = {
                 abilities = {
                     strike = { key = "strike", id = 900001, gcd = "spell" },
@@ -749,7 +749,7 @@ describe("the replay's ranked item use", function()
         "[3.00] [Tester (#1)] Completed cast {ItemID: 800004}",
     }, "\n")
     local HR = {
-        Hekili = {
+        Encore = {
             Class = {
                 abilities = {
                     strike = { key = "strike", id = 900001, gcd = "spell" },
@@ -802,7 +802,7 @@ describe("the replay's unmapped item use", function()
             end
         end
         assert.are.same({ "cast:" .. replay.UNMAPPED_SPELL, "cast:900001", "spell:MISS" }, got)
-        assert.is_nil(H.Hekili.Class.abilities[replay.UNMAPPED_SPELL])
+        assert.is_nil(H.Encore.Class.abilities[replay.UNMAPPED_SPELL])
     end)
 end)
 
@@ -856,7 +856,7 @@ describe("an item's buff in the log", function()
     }
 
     it("applies the aura a regen entry's `item` names over the log's window, as a buff the client sees", function()
-        local R = replay.new(LOG, { Hekili = { Class = CLASS } }, {})
+        local R = replay.new(LOG, { Encore = { Class = CLASS } }, {})
         local W = R.world(WO, 1)
         local us = W.ents[1]
         assert.is_nil(at(W, R.pull + 0.5) and us.auras[900080])
@@ -893,7 +893,7 @@ describe("the replay's channels and hard casts (central fix 22, gap BC)", functi
         "[5.00] [Tester (#1)] Completed cast {SpellID: 900062}",
     }, "\n")
     local HC = {
-        Hekili = {
+        Encore = {
             Class = {
                 abilities = {
                     beam = { key = "beam", id = 900060, cast = 5, channeled = true, gcd = "spell" },
@@ -960,7 +960,7 @@ describe("the replay's cooldowns: the engine's, a shared category's, the log's",
         return 6
     end
     local HC = {
-        Hekili = {
+        Encore = {
             Class = {
                 abilities = {
                     shock_a = { key = "shock_a", id = 900050, copy = { 900051 }, cooldown = talented, gcd = "spell" },
@@ -1035,7 +1035,7 @@ describe("the replay's cooldowns: the engine's, a shared category's, the log's",
             return 0
         end
         local HF = {
-            Hekili = {
+            Encore = {
                 Class = { abilities = { gust = gust }, auras = {} },
                 State = { action = { gust = { cooldown = 0 } } },
             },
@@ -1043,7 +1043,7 @@ describe("the replay's cooldowns: the engine's, a shared category's, the log's",
         local W
         local fresh = false
         local TH = { -- the run's instance: 6 s in the world's form 1, answered only after a reset to now
-            Hekili = {
+            Encore = {
                 State = {
                     reset = function()
                         fresh = true
@@ -1094,9 +1094,9 @@ describe("the replay's cooldowns: the engine's, a shared category's, the log's",
                 return 6
             end,
         }
-        local HF = { Hekili = { Class = { abilities = { gust = gust }, auras = {} }, State = { action = {} } } }
+        local HF = { Encore = { Class = { abilities = { gust = gust }, auras = {} }, State = { action = {} } } }
         local TH = { -- answers 6 s at every cast: wowsims cast it 3 s apart, so the log's spacing wins
-            Hekili = { State = { reset = function() end, action = { gust = { cooldown = 6 } } } },
+            Encore = { State = { reset = function() end, action = { gust = { cooldown = 6 } } } },
         }
         local R = replay.new(log, HF)
         local W = at(R.world(setmetatable({ tag = "-fn3" }, { __index = WO }), 1, TH), R.pull + 2)
@@ -1211,7 +1211,7 @@ describe("the replay's mana regen (wowsims's regen lines)", function()
             line(2.2, 1.588, 2),
         }, "\n")
         local HC = {
-            Hekili = {
+            Encore = {
                 Class = {
                     abilities = {},
                     auras = { boost = { id = 77, duration = 15 } },
@@ -1249,7 +1249,7 @@ describe("the replay's mana regen (wowsims's regen lines)", function()
             line(2.2, 1.588, 2),
         }, "\n")
         local HC = {
-            Hekili = {
+            Encore = {
                 Class = {
                     abilities = {},
                     auras = { boost = { id = 77, duration = 15 } },
@@ -1282,7 +1282,7 @@ describe("the replay's mana regen (wowsims's regen lines)", function()
         local text = log({ { 0.5, 1.261, 1 }, { 0.6, 1.261, 1 } })
         local function booted(share)
             return {
-                Hekili = {
+                Encore = {
                     Class = {
                         abilities = {},
                         auras = {},
@@ -1432,10 +1432,10 @@ describe("the replay's ranged auto attack", function()
 
     it("emits each completed shot as the rangedSwing ability's cast, its speed the usual gap", function()
         local abilities = { salvo = { key = "salvo", id = 900070, gcd = "off", rangedSwing = true } }
-        for k, a in pairs(H.Hekili.Class.abilities) do
+        for k, a in pairs(H.Encore.Class.abilities) do
             abilities[k] = a
         end
-        local Hs = { Hekili = { Class = { abilities = abilities, auras = H.Hekili.Class.auras } } }
+        local Hs = { Encore = { Class = { abilities = abilities, auras = H.Encore.Class.auras } } }
         local R = replay.new(LOG, Hs, O)
         local W = at(R.world(WO, 1), R.pull + 10)
         local shots = {}

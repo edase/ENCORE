@@ -23,10 +23,10 @@ local function rig(list, lists)
     assert.are.same({}, H.loadErrors)
     lists = lists or {}
     lists.default = list
-    H.Hekili.DB.profile.packs[ww.PACK].lists = lists
-    H.Hekili:LoadScripts()
-    H.Hekili:ReviewPacks() -- marks the new lists active (a called list is walked only then)
-    assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+    H.Encore.DB.profile.packs[ww.PACK].lists = lists
+    H.Encore:LoadScripts()
+    H.Encore:ReviewPacks() -- marks the new lists active (a called list is walked only then)
+    assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
     local W = world.new(1)
     local us = W.add(entities.new({ guid = "Player-1", weapons = entities.weapons(22) }))
     local mob = W.add(entities.new({ guid = "Creature-1", kind = "mob", weapons = { { 1, 1, 2 } }, health = 1e6 }))
@@ -56,7 +56,7 @@ local function rig(list, lists)
         end
         assert(headless.cycle(H, 100 + t))
         assert.are.same({}, H.errors)
-        return H.Hekili.Engine.Output.Primary
+        return H.Encore.Engine.Output.Primary
     end
     return H, W, us, upTo
 end
@@ -83,7 +83,7 @@ describe("interrupt_global on a channel line", function()
         end
         local H, W, us, upTo = rig(list)
         if ticks then
-            H.Hekili.Class.abilities.cannibalize.tick_time = 2
+            H.Encore.Class.abilities.cannibalize.tick_time = 2
         end
         W.t = 1
         assert.is_true(
@@ -92,8 +92,8 @@ describe("interrupt_global on a channel line", function()
         W.run(20)
         local out = upTo(at or 5)
         local name, t = out.recs[1].actionName, out.recs[1].time
-        H.Hekili.State.reset("Primary", true)
-        assert.is_true(H.Hekili.State.channeling, "still channeling at the update")
+        H.Encore.State.reset("Primary", true)
+        assert.is_true(H.Encore.State.channeling, "still channeling at the update")
         return name, t
     end
 
@@ -158,7 +158,7 @@ describe("max_energy on a line", function()
         c.power = { type = 3, token = "ENERGY", max = 100, value = energy }
         local H = headless.new({ character = c, pack = DW.Feral.PACK })
         assert.are.same({}, H.loadErrors)
-        local hk = H.Hekili
+        local hk = H.Encore
         local list = { line("ferocious_bite", { max_energy = flag }) }
         for _, e in ipairs(extra or {}) do
             list[#list + 1] = e
@@ -266,7 +266,7 @@ describe("use_while_casting on a line", function()
         })
         W.t = 1
         if kind == "cast" then
-            local slam = H.Hekili.Class.abilities.slam
+            local slam = H.Encore.Class.abilities.slam
             assert.is_true(W.press(us, "slam", { spell = slam.id, gcd = 1.5, cast = 1.5 }))
         else
             assert.is_true(
@@ -277,8 +277,8 @@ describe("use_while_casting on a line", function()
         local out = upTo(kind == "cast" and 1.5 or 5)
         local name, t = out.recs[1].actionName, out.recs[1].time
         local r2 = out.recs[2]
-        H.Hekili.State.reset("Primary", true)
-        assert.is_true(H.Hekili.State.buff.casting.up, "still casting at the update")
+        H.Encore.State.reset("Primary", true)
+        assert.is_true(H.Encore.State.buff.casting.up, "still casting at the update")
         return name, t, r2
     end
 
@@ -304,14 +304,14 @@ describe("use_while_casting on a line", function()
     it("=1 on an ability with a cast time: still waits for the channel to end", function()
         local H, W, us, upTo =
             rig({ line("slam", { use_while_casting = 1 }), line("bloodrage", { use_while_casting = 1 }) })
-        H.Hekili.Class.abilities.slam.spend = 0 -- rage is secret here: free Slam, so only the channel can hold it
+        H.Encore.Class.abilities.slam.spend = 0 -- rage is secret here: free Slam, so only the channel can hold it
         W.t = 1
         assert.is_true(
             W.press(us, "cannibalize", { spell = CANNIBALIZE, gcd = 1.5, channel = { length = 10, tick = 2 } })
         )
         W.run(20)
         upTo(5)
-        local st = H.Hekili.State
+        local st = H.Encore.State
         st.reset("Primary", true)
         assert.is_true(st.channeling)
         st.scriptID = ww.PACK .. ":default:2"
@@ -331,7 +331,7 @@ describe("use_while_casting on a line", function()
                 line("cannibalize", { interrupt_global = "1" }),
                 line("battle_shout"),
             })
-            H.Hekili.Class.abilities.slam.spend = 0 -- rage is secret here: free Slam
+            H.Encore.Class.abilities.slam.spend = 0 -- rage is secret here: free Slam
             W.t = 1
             assert.is_true(
                 W.press(us, "cannibalize", { spell = CANNIBALIZE, gcd = 1.5, channel = { length = 10, tick = 2 } })
@@ -354,7 +354,7 @@ describe("use_while_casting on a line", function()
             sub = { line("bloodrage", { use_off_gcd = "1", use_while_casting = "1" }) },
         })
         W.t = 1
-        local slam = H.Hekili.Class.abilities.slam
+        local slam = H.Encore.Class.abilities.slam
         assert.is_true(W.press(us, "slam", { spell = slam.id, gcd = 1.5, cast = 1.5 }))
         W.run(20)
         local recs = upTo(1.5).recs
@@ -369,7 +369,7 @@ describe("the three options through the importer", function()
     it("survive a SimC import, the compiled line and a priority share string", function()
         local H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
-        local hk = H.Hekili
+        local hk = H.Encore
         local list = hk:ParseActionList(
             "actions+=/ferocious_bite,max_energy=1\n"
                 .. "actions+=/bloodrage,use_while_casting=1\n"

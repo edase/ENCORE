@@ -10,12 +10,12 @@ local addons = require("helpers.addons")
 
 local CLASSES, RACES, RACE_LINES = {}, {}, 0
 for _, name in ipairs(addons.CONTENT) do
-    local class = name ~= "Hekili_Shared" and name:match("^Hekili_(%w+)$") -- a class pack, not the shared addon
+    local class = name ~= "Encore_Shared" and name:match("^Encore_(%w+)$") -- a class pack, not the shared addon
     if class then
         CLASSES[#CLASSES + 1] = class:upper()
     end
 end
-for _, path in ipairs(addons.files("Hekili_Shared")) do
+for _, path in ipairs(addons.files("Encore_Shared")) do
     if path:match("/Races/") then
         RACE_LINES = RACE_LINES + 1
         local f = assert(io.open(path))
@@ -228,7 +228,7 @@ describe("the simulation's GCD by kind in energy (core edit E10)", function()
             },
         })
         assert.are.same({}, H.loadErrors)
-        local S = H.Hekili.State
+        local S = H.Encore.State
         S.this_action = "bear_form"
         assert.are.equal(1.5 * S.haste, S.gcd.execute)
         S.this_action = "shred"
@@ -249,7 +249,7 @@ describe("the simulation's GCD by kind in energy (core edit E10)", function()
             },
         })
         assert.are.same({}, H.loadErrors)
-        local S = H.Hekili.State
+        local S = H.Encore.State
         S.this_action = "faerie_fire"
         assert.are.equal(1.5 * S.haste, S.gcd.execute)
         S.applyBuff("cat_form")
@@ -280,7 +280,7 @@ describe("the simulation's GCD by kind in energy (core edit E10)", function()
                 power = { type = 3, token = "ENERGY", max = 100 },
             },
         })
-        local S = H.Hekili.State
+        local S = H.Encore.State
         S.this_action = "wrath"
         assert.are.equal(1.5 * S.haste, S.gcd.execute)
         S.applyBuff("natures_grace")

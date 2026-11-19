@@ -84,7 +84,7 @@ describe("expectation compile", function()
         assert.is_false(A.ticking[1]) -- a default type keeps today's behaviour
     end)
 
-    it("calls a function duration in Hekili's own state at the commit, not at the build", function()
+    it("calls a function duration in Encore's own state at the commit, not at the build", function()
         local n, rank = 0, 1
         local h = fs.new(9, false, false, true)
         h.Class.auras.spender_m.duration = function()

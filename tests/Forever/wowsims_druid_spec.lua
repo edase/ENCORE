@@ -162,10 +162,10 @@ describe("the Druid wowsims.com packs #slow #wowsims", function()
         assert.are.same({}, H.loadErrors)
         H.ctl.inRange.target, H.ctl.level.target = true, 60
         H.Fire("PLAYER_TARGET_CHANGED")
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         assert.is_true(headless.cycle(H, H.ctl.now + 0.2))
         assert.are.same({}, H.errors)
-        local out = H.Hekili.Engine.Output.Primary
+        local out = H.Encore.Engine.Output.Primary
         assert.are.equal("bear_form", out.recs[1] and out.recs[1].actionName)
     end)
     -- wowsims's Demoralizing Roar line (re-pin: "Attack-power reduction is covered") is behind the
@@ -180,7 +180,7 @@ describe("the Druid wowsims.com packs #slow #wowsims", function()
             c.power = { type = p.type, token = p.token, max = p.max, value = rage or 30 } -- Roar's 10 (a copy: the world's own is shared)
             local H = headless.new({ character = c, pack = "Guardian (wowsims.com)" })
             assert.are.same({}, H.loadErrors)
-            local hk = H.Hekili
+            local hk = H.Encore
             local settings = hk.DB.profile.specs[hk.State.spec.id].settings
             assert.is_false(settings.maintain_demoralizing_roar) -- the in-game default (a direct boot is in game)
             settings.maintain_demoralizing_roar = on
@@ -206,7 +206,7 @@ describe("the Druid wowsims.com packs #slow #wowsims", function()
             end
             return table.concat(names, " ")
         end
-        local f = assert(io.open("src/Hekili_Druid/APLs/Guardian (wowsims.com).simc", "rb"))
+        local f = assert(io.open("src/Encore_Druid/APLs/Guardian (wowsims.com).simc", "rb"))
         local simc = f:read("*a")
         f:close()
         assert.matches("\n# Setting maintain_demoralizing_roar %(", simc)
@@ -303,10 +303,10 @@ describe("the Druid wowsims.com packs #slow #wowsims", function()
             assert.are.same({}, H.loadErrors)
             H.ctl.inRange.target, H.ctl.level.target = true, 60
             H.Fire("PLAYER_TARGET_CHANGED")
-            assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+            assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
             assert.is_true(headless.cycle(H, H.ctl.now + 0.2))
             assert.are.same({}, H.errors)
-            local out = H.Hekili.Engine.Output.Primary
+            local out = H.Encore.Engine.Output.Primary
             return out.recs[1] and out.recs[1].actionName
         end
         assert.are.equal("moonkin_form", first(40))

@@ -7,7 +7,7 @@ local ww = require("Forever.helpers.warrior_world")
 describe("state.changes, the memoised cost's key", function()
     local s
     setup(function()
-        s = headless.new({ character = ww.character(), pack = ww.PACK }).Hekili.State
+        s = headless.new({ character = ww.character(), pack = ww.PACK }).Encore.State
     end)
 
     -- the mutator's name, then its arguments; `prep` (name, arguments) runs before the count is read

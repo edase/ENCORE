@@ -6,7 +6,7 @@
 local addons = require("helpers.addons")
 
 describe("Engine/Content.lua", function()
-    local WARRIOR = { "load Hekili_Shared", "meta Hekili_Warrior X-Hekili-ContentAPI", "load Hekili_Warrior" }
+    local WARRIOR = { "load Encore_Shared", "meta Encore_Warrior X-Encore-ContentAPI", "load Encore_Warrior" }
     local calls, notes, meta, loadResult, classToken, saved, ns
 
     -- a fresh load of Content.lua (its once-per-session flag reset), LoadContent, then ContentNotice; `again` repeats
@@ -32,12 +32,12 @@ describe("Engine/Content.lua", function()
                 },
             },
         }
-        _G.Hekili = {
+        _G.Encore = {
             Notify = function(_, text)
                 notes[#notes + 1] = text
             end,
         }
-        assert(loadfile("src/Hekili/Engine/Content.lua"))("Hekili", ns)
+        assert(loadfile("src/Encore/Engine/Content.lua"))("Encore", ns)
         for i = 1, again and 2 or 1 do
             ns.LoadContent()
             ns.ContentNotice()
@@ -48,11 +48,11 @@ describe("Engine/Content.lua", function()
     end
 
     after_each(function()
-        _G.Hekili = saved or nil
+        _G.Encore = saved or nil
     end)
 
     before_each(function()
-        saved = rawget(_G, "Hekili") or false
+        saved = rawget(_G, "Encore") or false
         meta = {}
         for _, name in ipairs(addons.CONTENT) do
             meta[name] = addons.meta(name)
@@ -63,46 +63,46 @@ describe("Engine/Content.lua", function()
         classToken = "WARRIOR"
     end)
 
-    it("loads Hekili_Warrior for a Warrior, whose TOC declares the core's content API", function()
+    it("loads Encore_Warrior for a Warrior, whose TOC declares the core's content API", function()
         run()
         assert.are.same(WARRIOR, calls)
         assert.are.same({}, notes)
         classToken = "DRUID"
         run()
-        assert.are.same({ "load Hekili_Shared", "meta Hekili_Druid X-Hekili-ContentAPI", "load Hekili_Druid" }, calls)
+        assert.are.same({ "load Encore_Shared", "meta Encore_Druid X-Encore-ContentAPI", "load Encore_Druid" }, calls)
     end)
 
     it("Notifies once for a class with no pack installed, and loads only the shared content", function()
         classToken = "NOPACK" -- a synthetic class with no content addon
         run()
-        assert.are.same({ "load Hekili_Shared", "meta Hekili_Nopack X-Hekili-ContentAPI" }, calls)
-        assert.are.same({ "no Forever pack for Nopack; install Hekili_Nopack" }, notes)
+        assert.are.same({ "load Encore_Shared", "meta Encore_Nopack X-Encore-ContentAPI" }, calls)
+        assert.are.same({ "no Forever pack for Nopack; install Encore_Nopack" }, notes)
     end)
 
     it("Notifies a content API mismatch and does not load the pack", function()
-        meta.Hekili_Warrior["X-Hekili-ContentAPI"] = "6"
+        meta.Encore_Warrior["X-Encore-ContentAPI"] = "6"
         run()
-        assert.are.same({ "load Hekili_Shared", "meta Hekili_Warrior X-Hekili-ContentAPI" }, calls)
+        assert.are.same({ "load Encore_Shared", "meta Encore_Warrior X-Encore-ContentAPI" }, calls)
         assert.are.same(1, #notes)
-        assert.is_truthy(notes[1]:find("Hekili_Warrior", 1, true))
+        assert.is_truthy(notes[1]:find("Encore_Warrior", 1, true))
         assert.is_truthy(notes[1]:find("content API 6", 1, true))
     end)
 
     it("Notifies a failed pack load, whether LoadAddOn refuses or raises", function()
         loadResult = function(name)
-            return name == "Hekili_Shared", "DISABLED"
+            return name == "Encore_Shared", "DISABLED"
         end
         run()
         assert.are.same(WARRIOR, calls)
-        assert.are.same({ "could not load Hekili_Warrior (DISABLED)" }, notes)
+        assert.are.same({ "could not load Encore_Warrior (DISABLED)" }, notes)
         loadResult = function(name)
-            if name ~= "Hekili_Shared" then
+            if name ~= "Encore_Shared" then
                 error("boom", 0)
             end
             return true
         end
         run()
-        assert.are.same({ "could not load Hekili_Warrior (boom)" }, notes)
+        assert.are.same({ "could not load Encore_Warrior (boom)" }, notes)
     end)
 
     it("Notifies a failed shared load and tries no pack (it depends on the shared content)", function()
@@ -110,18 +110,18 @@ describe("Engine/Content.lua", function()
             return false, "DISABLED"
         end
         run()
-        assert.are.same({ "load Hekili_Shared" }, calls)
-        assert.are.same({ "could not load Hekili_Shared (DISABLED)" }, notes)
+        assert.are.same({ "load Encore_Shared" }, calls)
+        assert.are.same({ "could not load Encore_Shared (DISABLED)" }, notes)
         loadResult = function()
             error("boom", 0)
         end
         run()
-        assert.are.same({ "could not load Hekili_Shared (boom)" }, notes)
+        assert.are.same({ "could not load Encore_Shared (boom)" }, notes)
     end)
 
     it("records the loaded pack's addon (its string table labels the built-in priorities)", function()
         run()
-        assert.are.equal("Hekili_Warrior", ns.PackAddon)
+        assert.are.equal("Encore_Warrior", ns.PackAddon)
         classToken = "NOPACK"
         run()
         assert.is_nil(ns.PackAddon)
@@ -132,15 +132,15 @@ describe("Engine/Content.lua", function()
         assert.are.same(WARRIOR, calls)
         classToken = "NOPACK" -- a synthetic class with no content addon
         run(true)
-        assert.are.same({ "load Hekili_Shared", "meta Hekili_Nopack X-Hekili-ContentAPI" }, calls)
-        assert.are.same({ "no Forever pack for Nopack; install Hekili_Nopack" }, notes)
+        assert.are.same({ "load Encore_Shared", "meta Encore_Nopack X-Encore-ContentAPI" }, calls)
+        assert.are.same({ "no Forever pack for Nopack; install Encore_Nopack" }, notes)
     end)
 
     it("declares one content API in every content TOC", function()
         for _, name in ipairs(addons.CONTENT) do
-            assert.are.equal("16", addons.meta(name)["X-Hekili-ContentAPI"], name)
+            assert.are.equal("16", addons.meta(name)["X-Encore-ContentAPI"], name)
         end
-        local src = assert(io.open("src/Hekili/Engine/Content.lua")):read("*a")
+        local src = assert(io.open("src/Encore/Engine/Content.lua")):read("*a")
         assert.is_truthy(src:find("\nlocal CONTENT_API = 16\n", 1, true))
     end)
 
@@ -149,7 +149,7 @@ describe("Engine/Content.lua", function()
         run(function()
             classToken = "WARRIOR"
         end)
-        assert.are.same({ "load Hekili_Shared" }, calls)
+        assert.are.same({ "load Encore_Shared" }, calls)
         assert.are.same({ "could not read your class at load; /reload" }, notes)
     end)
 end)

@@ -16,16 +16,16 @@ describe("Engine/Driver.lua through the engine frame", function()
         t = H.ctl.now + 0.2
         assert(headless.cycle(H, t))
         f = H.ns.EngineFrame
-        upd, runs = H.Hekili.Update, 0
-        H.Hekili.Update = function(...)
+        upd, runs = H.Encore.Update, 0
+        H.Encore.Update = function(...)
             runs, ran = runs + 1, coroutine.running()
             return upd(...)
         end
     end)
 
     after_each(function()
-        H.Hekili.Update = upd
-        H.Hekili.Engine.settings.specs[ww.SPEC].cycle = false
+        H.Encore.Update = upd
+        H.Encore.Engine.settings.specs[ww.SPEC].cycle = false
     end)
 
     -- The clock and the timers on, then one due refresh: frames until the Driver finishes the Update it starts.
@@ -70,15 +70,15 @@ describe("Engine/Driver.lua through the engine frame", function()
             tick()
         end
         assert.are.equal(35, runs)
-        local add, stackBytes, stackCalls = H.Hekili.AddToStack, 0, 0
+        local add, stackBytes, stackCalls = H.Encore.AddToStack, 0, 0
         local bytes = perUpdate(45, function()
-            H.Hekili.AddToStack = function(...)
+            H.Encore.AddToStack = function(...)
                 local b = collectgarbage("count")
                 add(...)
                 stackBytes, stackCalls = stackBytes + (collectgarbage("count") - b), stackCalls + 1
             end
         end)
-        H.Hekili.AddToStack = add
+        H.Encore.AddToStack = add
         assert.are.equal(81, runs)
         assert.is_true(stackCalls > 0)
         assert.are.equal(0, stackBytes * 1024)
@@ -87,18 +87,18 @@ describe("Engine/Driver.lua through the engine frame", function()
     end)
 
     it("allocates 0 B per Update with label=/label_if= and icon=/icon_if= on every default entry", function()
-        local pack = H.Hekili.Engine.Output.Primary.recs[1].pack
-        for name, list in pairs(H.Hekili.DB.profile.packs[pack].lists) do
+        local pack = H.Encore.Engine.Output.Primary.recs[1].pack
+        for name, list in pairs(H.Encore.DB.profile.packs[pack].lists) do
             for id, e in ipairs(list) do
                 e.label, e.label_if, e.icon, e.icon_if = "R6", "time>=0", "Interface/Icons/X", "time>=0"
-                H.Hekili:LoadScript(pack, name, id)
+                H.Encore:LoadScript(pack, name, id)
             end
         end
         for _ = 1, 35 do
             tick()
         end
         local bytes = perUpdate(45)
-        local r = H.Hekili.Engine.Output.Primary.recs[1]
+        local r = H.Encore.Engine.Output.Primary.recs[1]
         assert.are.equal("R6", r.label)
         assert.are.equal(134400, r.iconOverride) -- the path's file ID (the fake client's answer)
         assert.are.equal(0, bytes)
@@ -109,13 +109,13 @@ describe("Engine/Driver.lua through the engine frame", function()
     -- list: every Update opens and closes it in each slot (two restarts a slot), sends OPEN and CLOSE from slot 1
     -- (VS.WindowOp) and the next Drain replays them; nothing allocates.
     it("allocates 0 B per Update with an open and a close line on an APL window firing in every slot", function()
-        local pack = H.Hekili.Engine.Output.Primary.recs[1].pack
-        local lists = H.Hekili.DB.profile.packs[pack].lists
+        local pack = H.Encore.Engine.Output.Primary.recs[1].pack
+        local lists = H.Encore.DB.profile.packs[pack].lists
         lists.windows = { { action = "window", window_name = "aw", duration = "6", enabled = true } }
         -- precombat is walked first (out of combat its pick would end the walk before the default list)
         table.insert(lists.precombat, 1, { action = "close_window", window_name = "aw", enabled = true })
         table.insert(lists.precombat, 1, { action = "open_window", window_name = "aw", enabled = true })
-        H.Hekili:LoadScripts()
+        H.Encore:LoadScripts()
         local sent, op = 0, H.ns.VirtualState.WindowOp
         H.ns.VirtualState.WindowOp = function(...)
             sent = sent + 1
@@ -126,7 +126,7 @@ describe("Engine/Driver.lua through the engine frame", function()
         end
         local bytes = perUpdate(45)
         H.ns.VirtualState.WindowOp = op
-        assert.are.equal(2, H.Hekili.Engine.Output.Primary.recs[1].restarts)
+        assert.are.equal(2, H.Encore.Engine.Output.Primary.recs[1].restarts)
         assert.is_true(sent >= 160, tostring(sent)) -- OPEN and CLOSE per Update (Primary and AOE may both send)
         assert.are.equal(0, bytes)
         -- the flapping pair's warning (L1205), once for the session: its message is built only then
@@ -142,17 +142,17 @@ describe("Engine/Driver.lua through the engine frame", function()
     -- The given lines on top of precombat, applied as an edit; then 35 warm-up Updates and the bytes over 45 more, with
     -- the operations sent in the window counted by code (OPEN, CLOSE, STEP).
     local function sequenceRun(text)
-        local pack = H.Hekili.Engine.Output.Primary.recs[1].pack
-        local lists = H.Hekili.DB.profile.packs[pack].lists
-        local add = H.Hekili:ParseActionList(text, true)
+        local pack = H.Encore.Engine.Output.Primary.recs[1].pack
+        local lists = H.Encore.DB.profile.packs[pack].lists
+        local add = H.Encore:ParseActionList(text, true)
         for i = #add, 1, -1 do
             add[i].enabled = true
             table.insert(lists.precombat, 1, add[i])
         end
-        H.Hekili:LoadScripts()
-        H.Hekili:ReviewPacks()
-        H.Hekili.Scripts:ApplyWindows(pack)
-        H.Hekili.State:BuildWindows()
+        H.Encore:LoadScripts()
+        H.Encore:ReviewPacks()
+        H.Encore.Scripts:ApplyWindows(pack)
+        H.Encore.State:BuildWindows()
         H.ns.VirtualState.Drain(H.ctl.now)
         local codes, op = { 0, 0, 0 }, H.ns.VirtualState.WindowOp
         H.ns.VirtualState.WindowOp = function(key, code, arg)
@@ -174,13 +174,13 @@ describe("Engine/Driver.lua through the engine frame", function()
                 .. "actions+=/close_window,name=s\nactions+=/strict_sequence,name=s:bloodrage:berserker_stance\n"
         )
         assert.is_true(codes[1] >= 45 and codes[2] >= 45 and codes[3] >= 45, table.concat(codes, " "))
-        local restarts = H.Hekili.Engine.Output.Primary.recs[1].restarts
+        local restarts = H.Encore.Engine.Output.Primary.recs[1].restarts
         assert.is_true(restarts >= 3, tostring(restarts))
         assert.are.equal(0, bytes)
         -- the bare close line against the chosen OPEN: the sequence's flapping warning (Fable L1286), once
         assert.are.equal(1, #H.errors)
         assert.is_truthy(H.errors[1]:find("sequence '%s' was closed by a close_window line", 1, true), H.errors[1])
-        local keys = H.Hekili.ErrorKeys -- formatted (H.errors holds the template)
+        local keys = H.Encore.ErrorKeys -- formatted (H.errors holds the template)
         assert.is_truthy(keys[#keys]:find("sequence 's' was closed", 1, true), keys[#keys])
     end)
 
@@ -202,7 +202,7 @@ describe("Engine/Driver.lua through the engine frame", function()
             "actions+=/strict_sequence,name=s,start_on_first=1,allow_skip=1,hold_off_gcd=1"
                 .. ":bloodrage,use_off_gcd=1:defensive_stance,if=time<0:berserker_stance\n"
         )
-        local recs = H.Hekili.Engine.Output.Primary.recs
+        local recs = H.Encore.Engine.Output.Primary.recs
         assert.are.equal("bloodrage", recs[1].actionName)
         assert.are.equal("berserker_stance", recs[2].actionName)
         assert.are.equal(1, recs[2].restarts)
@@ -215,16 +215,16 @@ describe("Engine/Driver.lua through the engine frame", function()
     -- through the warm-up, so the send path itself is warm; aw sends first once the gate opens in the window.
     it("allocates 0 B per Update when a window key sends its first operation inside the measured window", function()
         local gate = false
-        H.Hekili.Class.kit:RegisterStateExpr("test_gate", function()
+        H.Encore.Class.kit:RegisterStateExpr("test_gate", function()
             return gate
         end)
-        local pack = H.Hekili.Engine.Output.Primary.recs[1].pack
-        local lists = H.Hekili.DB.profile.packs[pack].lists
+        local pack = H.Encore.Engine.Output.Primary.recs[1].pack
+        local lists = H.Encore.DB.profile.packs[pack].lists
         lists.windows = {
             { action = "window", window_name = "aw", duration = "6", enabled = true },
             { action = "window", window_name = "bw", duration = "1", enabled = true },
         }
-        local add = H.Hekili:ParseActionList(
+        local add = H.Encore:ParseActionList(
             "actions+=/open_window,name=bw\nactions+=/open_window,name=aw,if=test_gate\n",
             true
         )
@@ -232,10 +232,10 @@ describe("Engine/Driver.lua through the engine frame", function()
             add[i].enabled = true
             table.insert(lists.precombat, 1, add[i])
         end
-        H.Hekili:LoadScripts()
-        H.Hekili:ReviewPacks()
-        H.Hekili.Scripts:ApplyWindows(pack)
-        H.Hekili.State:BuildWindows()
+        H.Encore:LoadScripts()
+        H.Encore:ReviewPacks()
+        H.Encore.Scripts:ApplyWindows(pack)
+        H.Encore.State:BuildWindows()
         H.ns.VirtualState.Drain(H.ctl.now)
         local aw, bw, op = 0, 0, H.ns.VirtualState.WindowOp
         H.ns.VirtualState.WindowOp = function(key, ...)
@@ -265,16 +265,16 @@ describe("Engine/Driver.lua through the engine frame", function()
     -- count grows each refresh, the count with it (all DoTed), so text built from the counts would be new each time
     -- (an unchanged text is interned once and would read 0 here).
     it("allocates 0 B per Update with Recommend Target Swaps on and every enemy carrying the DoT", function()
-        local rendId = H.Hekili.Class.auras.rend.id
-        H.Hekili.DB.profile.packs[ww.PACK].lists = {
+        local rendId = H.Encore.Class.auras.rend.id
+        H.Encore.DB.profile.packs[ww.PACK].lists = {
             default = {
                 { enabled = true, action = "rend", criteria = "!debuff.rend.up", cycle_targets = 1 },
                 { enabled = true, action = "rend", other_target = 1 },
                 { enabled = true, action = "battle_shout" },
             },
         }
-        H.Hekili:LoadScripts()
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        H.Encore:LoadScripts()
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         H.ctl.power[1] = 100 -- the rage for Rend and Battle Shout
         local enemies = 3
         H.ns.Facade.DebuffCount = function(id)
@@ -292,25 +292,25 @@ describe("Engine/Driver.lua through the engine frame", function()
             sourceUnit = "player",
         }
         H.Fire("UNIT_AURA", "target")
-        H.Hekili.Engine.settings.specs[ww.SPEC].cycle = true
+        H.Encore.Engine.settings.specs[ww.SPEC].cycle = true
         for _ = 1, 35 do
             tick()
         end
-        local st = H.Hekili.State
-        local setup, setupFn, upd_ = 0, st.SetupCycle, H.Hekili.Update
+        local st = H.Encore.State
+        local setup, setupFn, upd_ = 0, st.SetupCycle, H.Encore.Update
         local bytes = perUpdate(45, function()
             st.SetupCycle = function(...)
                 setup = setup + 1
                 return setupFn(...)
             end
-            H.Hekili.Update = function(...)
+            H.Encore.Update = function(...)
                 enemies = enemies + 1
                 return upd_(...)
             end
         end)
         st.SetupCycle = setupFn
         assert.is_true(setup >= 90, "both swap lines set up a cycle every Update: " .. setup)
-        assert.are.equal("battle_shout", H.Hekili.Engine.Output.Primary.recs[1].actionName)
+        assert.are.equal("battle_shout", H.Encore.Engine.Output.Primary.recs[1].actionName)
         assert.are.equal(0, bytes)
         assert.are.same({}, H.errors)
     end)
@@ -320,7 +320,7 @@ describe("Engine/Driver.lua through the engine frame", function()
             tick()
         end
         local sink = {}
-        H.Hekili.Update = function(...)
+        H.Encore.Update = function(...)
             sink[runs % 2 + 1] = { 1, 2, 3, 4 } -- a table and its 4-slot array: 128 B on 64-bit Lua 5.1
             runs = runs + 1
             return upd(...)
@@ -330,7 +330,7 @@ describe("Engine/Driver.lua through the engine frame", function()
 
     it("starts a fresh thread after a snapshot drops one mid-Update, and never resumes the dropped one", function()
         tick()
-        local perf = H.Hekili.Engine.settings.performance
+        local perf = H.Encore.Engine.settings.performance
         local budget = perf.frameBudget
         perf.frameBudget = 1e-9 -- yields at every Yield site
         f.refreshTimer = 10
@@ -338,12 +338,12 @@ describe("Engine/Driver.lua through the engine frame", function()
         local stale = f.activeThread
         assert.is_true(f:IsThreadActive())
         perf.frameBudget = budget
-        H.Hekili.SaveDebugSnapshot = function()
+        H.Encore.SaveDebugSnapshot = function()
             return false
         end
-        H.Hekili:MakeSnapshot()
+        H.Encore:MakeSnapshot()
         assert.is_nil(f.activeThread)
-        local out = H.Hekili.Engine.Output.Primary
+        local out = H.Encore.Engine.Output.Primary
         local v, n = out.version, runs
         tick()
         assert.are.equal(n + 1, runs)
@@ -356,7 +356,7 @@ describe("Engine/Driver.lua through the engine frame", function()
     it("runs the next Update after one raises", function()
         tick()
         local thrown = false
-        H.Hekili.Update = function(...)
+        H.Encore.Update = function(...)
             runs = runs + 1
             if not thrown then
                 thrown = true
@@ -367,7 +367,7 @@ describe("Engine/Driver.lua through the engine frame", function()
         tick()
         assert.is_true(thrown)
         assert.is_true(#H.errors > 0)
-        local out = H.Hekili.Engine.Output.Primary
+        local out = H.Encore.Engine.Output.Primary
         local v, n = out.version, runs
         tick()
         assert.are.equal(n + 1, runs)

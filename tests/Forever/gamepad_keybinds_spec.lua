@@ -81,12 +81,12 @@ local function boot()
 end
 
 local function id(H, name)
-    return H.Hekili.Engine.Registry.Abilities()[name].id
+    return H.Encore.Engine.Registry.Abilities()[name].id
 end
 
 local function read(H)
     H.ns.ReadKeybindings()
-    return H.Hekili.KeybindInfo
+    return H.Encore.KeybindInfo
 end
 
 local function L(key, size)
@@ -234,13 +234,13 @@ describe("gamepad keybinds", function()
         world.set = nil -- right after login the game has not reported the style yet: the generic pictures
         world.actions[186] = id(H, "mortal_strike")
         read(H)
-        local conf = H.Hekili.DB.profile.displays.Primary
+        local conf = H.Encore.DB.profile.displays.Primary
         conf.classic.gamepad.size = 14
-        assert.are.equal(G("PADLTRIGGER") .. G("PADDUP"), H.Hekili:GetBindingForAction("mortal_strike", conf, 1))
+        assert.are.equal(G("PADLTRIGGER") .. G("PADDUP"), H.Encore:GetBindingForAction("mortal_strike", conf, 1))
         world.set = "Letters" -- the style arrives: the next answer schedules a re-read
-        H.Hekili:GetBindingForAction("mortal_strike", conf, 1)
+        H.Encore:GetBindingForAction("mortal_strike", conf, 1)
         H.RunTimers(H.ctl.now + 1)
-        assert.are.equal(L("PADLTRIGGER") .. L("PADDUP"), H.Hekili:GetBindingForAction("mortal_strike", conf, 1))
+        assert.are.equal(L("PADLTRIGGER") .. L("PADDUP"), H.Encore:GetBindingForAction("mortal_strike", conf, 1))
     end)
 
     it("answers the gamepad text (sized to the font) in place of keyboard text; an override still wins", function()
@@ -248,23 +248,23 @@ describe("gamepad keybinds", function()
         world.keys.ACTIONBUTTON1 = "5"
         world.actions[1], world.actions[186] = id(H, "mortal_strike"), id(H, "mortal_strike")
         read(H)
-        local conf = H.Hekili.DB.profile.displays.Primary
+        local conf = H.Encore.DB.profile.displays.Primary
         conf.classic.keybindings.fontSize = 33 -- the keyboard font does not size the pictures
         conf.classic.gamepad.size = 20
-        local text = H.Hekili:GetBindingForAction("mortal_strike", conf, 1)
+        local text = H.Encore:GetBindingForAction("mortal_strike", conf, 1)
         assert.are.equal(L("PADLTRIGGER", 20) .. L("PADDUP", 20), text)
         assert.is_true(H.ns.Gamepad.Is(text))
         assert.is_false(H.ns.Gamepad.Is("5"))
         -- without a gamepad binding: the keyboard text
         world.actions[186] = nil
         read(H)
-        assert.are.equal("5", H.Hekili:GetBindingForAction("mortal_strike", conf, 1))
+        assert.are.equal("5", H.Encore:GetBindingForAction("mortal_strike", conf, 1))
         -- a per-ability override beats both
         world.actions[186] = id(H, "mortal_strike")
         read(H)
-        local spec = H.Hekili.Engine.settings.specs[H.Hekili.State.spec.id]
+        local spec = H.Encore.Engine.settings.specs[H.Encore.State.spec.id]
         spec.abilities.mortal_strike.keybind = "F9"
-        assert.are.equal("F9", H.Hekili:GetBindingForAction("mortal_strike", conf, 1))
+        assert.are.equal("F9", H.Encore:GetBindingForAction("mortal_strike", conf, 1))
         spec.abilities.mortal_strike.keybind = nil
     end)
 end)
@@ -302,11 +302,11 @@ describe("gamepad keybinds on the icons", function()
         world.keys.ACTIONBUTTON1 = "5"
         world.actions[1] = id(H, "overpower")
         read(H)
-        local conf = H.Hekili.DB.profile.displays.Primary
+        local conf = H.Encore.DB.profile.displays.Primary
         conf.style = style
         conf.numIcons = 6
-        H.Hekili:BuildUI()
-        local d = rawget(H.env, "HekiliDisplayPrimary")
+        H.Encore:BuildUI()
+        local d = rawget(H.env, "EncoreDisplayPrimary")
         return H, d, conf
     end
 
@@ -383,8 +383,8 @@ describe("the Gamepad options tab", function()
     before_each(reset)
 
     local function tabs(H, style)
-        H.Hekili:EmbedDisplayOptions()
-        return H.Hekili.Options.args.displays.plugins.Primary.Primary.args[style].args
+        H.Encore:EmbedDisplayOptions()
+        return H.Encore.Options.args.displays.plugins.Primary.Primary.args[style].args
     end
 
     local function opt(H, style, path)
@@ -404,13 +404,13 @@ describe("the Gamepad options tab", function()
             local H = boot()
             world.actions[186] = id(H, "mortal_strike")
             read(H)
-            local conf = H.Hekili.DB.profile.displays.Primary
+            local conf = H.Encore.DB.profile.displays.Primary
             conf.classic.keybindings.separateQueueStyle, conf.classic.keybindings.queuedFontSize = true, 40
             conf.classic.gamepad.size = 18
             for i = 1, 2 do
                 assert.are.equal(
                     L("PADLTRIGGER", 18) .. L("PADDUP", 18),
-                    H.Hekili:GetBindingForAction("mortal_strike", conf, i)
+                    H.Encore:GetBindingForAction("mortal_strike", conf, i)
                 )
             end
             conf.style = "timeline"
@@ -419,7 +419,7 @@ describe("the Gamepad options tab", function()
             for i = 1, 2 do
                 assert.are.equal(
                     L("PADLTRIGGER", 25) .. L("PADDUP", 25),
-                    H.Hekili:GetBindingForAction("mortal_strike", conf, i)
+                    H.Encore:GetBindingForAction("mortal_strike", conf, i)
                 )
             end
             local kb = H.ns.UI.Styles.timeline.defaults.keybindings
@@ -454,27 +454,27 @@ describe("the Gamepad options tab", function()
 
     it("keeps the ConsolePort options on the saved values they always used", function()
         local H = boot()
-        local kb = H.Hekili.DB.profile.displays.Primary.classic.keybindings
+        local kb = H.Encore.DB.profile.displays.Primary.classic.keybindings
         kb.cPortOverride, kb.cPortZoom = false, 0.25 -- a player's saved settings
         local _, io = opt(H, "classic", { "gamepad", "cPort", "cPortOverride" })
         local _, iz = opt(H, "classic", { "gamepad", "cPort", "cPortZoom" })
-        assert.is_false(H.Hekili:GetDisplayOption(io))
-        assert.are.equal(0.25, H.Hekili:GetDisplayOption(iz))
-        H.Hekili.BuildUI = function() end
-        H.Hekili:SetDisplayOption(io, true)
-        H.Hekili:SetDisplayOption(iz, 0.9)
+        assert.is_false(H.Encore:GetDisplayOption(io))
+        assert.are.equal(0.25, H.Encore:GetDisplayOption(iz))
+        H.Encore.BuildUI = function() end
+        H.Encore:SetDisplayOption(io, true)
+        H.Encore:SetDisplayOption(iz, 0.9)
         assert.is_true(kb.cPortOverride)
         assert.are.equal(0.9, kb.cPortZoom)
-        assert.is_nil(H.Hekili.DB.profile.displays.Primary.classic.gamepad.cPortZoom)
+        assert.is_nil(H.Encore.DB.profile.displays.Primary.classic.gamepad.cPortZoom)
         -- the timeline's, too
-        local tk = H.Hekili.DB.profile.displays.Primary.timeline.keybindings
+        local tk = H.Encore.DB.profile.displays.Primary.timeline.keybindings
         local _, it = opt(H, "timeline", { "tab_now", "gamepad", "cPort", "cPortZoom" })
         tk.cPortZoom = 0.3
-        assert.are.equal(0.3, H.Hekili:GetDisplayOption(it))
+        assert.are.equal(0.3, H.Encore:GetDisplayOption(it))
         -- and the anchor lives in the gamepad group, not the keybindings'
         local _, ia = opt(H, "classic", { "gamepad", "pos", "anchor" })
-        H.Hekili:SetDisplayOption(ia, "BOTTOM")
-        assert.are.equal("BOTTOM", H.Hekili.DB.profile.displays.Primary.classic.gamepad.anchor)
+        H.Encore:SetDisplayOption(ia, "BOTTOM")
+        assert.are.equal("BOTTOM", H.Encore.DB.profile.displays.Primary.classic.gamepad.anchor)
         assert.are.equal("TOPRIGHT", kb.anchor)
     end)
 end)
@@ -529,7 +529,7 @@ describe("ConsolePort gamepad bars", function()
         return "CLICK ConsolePortGamepadBar" .. n .. "Slot" .. i .. ":LeftButton"
     end
     local function shown(H, name)
-        return H.Hekili:GetBindingForAction(name, H.Hekili.DB.profile.displays.Primary, 1)
+        return H.Encore:GetBindingForAction(name, H.Encore.DB.profile.displays.Primary, 1)
     end
 
     it("shows the controller button for a spell on a ConsolePort gamepad bar, following the paged bar", function()

@@ -7,7 +7,7 @@ describe("a shared aura", function()
     it("reads a shared target debuff from the target, cast by another player (GAP AJ)", function()
         local H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
-        local aura = H.Hekili.Class.auras.thunder_clap
+        local aura = H.Encore.Class.auras.thunder_clap
         assert.are.equal("target", aura.shared)
         local t = H.ctl.now + 0.2
         H.ctl.auras.target.HARMFUL[1] = {
@@ -20,16 +20,16 @@ describe("a shared aura", function()
         }
         H.Fire("UNIT_AURA", "target")
         assert(headless.cycle(H, t))
-        local st = H.Hekili.State
+        local st = H.Encore.State
         st.reset("Primary", true)
         assert.is_true(st.debuff.thunder_clap.up)
     end)
 
     it("registers Thunderfury's slow (27648, 12 s) and the Protection priority reads it (S1)", function()
         local H = headless.new({ character = ww.character(), pack = ww.PACK })
-        local aura = H.Hekili.Class.auras.thunderfury
+        local aura = H.Encore.Class.auras.thunderfury
         assert.are.same({ 27648, 12 }, { aura.id, aura.duration })
-        local f = assert(io.open("src/Hekili_Warrior/APLs/Protection (wowsims.com).simc"))
+        local f = assert(io.open("src/Encore_Warrior/APLs/Protection (wowsims.com).simc"))
         local simc = f:read("*a")
         f:close()
         assert.is_truthy(simc:find("!debuff.thunderfury.up&", 1, true))

@@ -29,8 +29,8 @@ describe("the reset's regen tail (border batch 2)", function()
             VS.TakenRate = function()
                 return 0.4
             end
-            H.Hekili.State.reset("Primary", true)
-            local res = H.Hekili.Class.resources[w[3]].state
+            H.Encore.State.reset("Primary", true)
+            local res = H.Encore.Class.resources[w[3]].state
             assert.are.same(
                 { w[4], 7, 0.4 },
                 { rawget(res, "fsr_until"), rawget(res, "decay_anchor"), rawget(res, "taken_rate") }

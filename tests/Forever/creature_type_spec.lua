@@ -13,7 +13,7 @@ describe("the target's creature type", function()
         t = t + 0.2
         H.ctl.now = t
         assert(headless.cycle(H, t))
-        return H.Hekili.State
+        return H.Encore.State
     end
 
     before_each(function()
@@ -25,8 +25,8 @@ describe("the target's creature type", function()
     end)
 
     after_each(function()
-        H.Hekili.Class.abilities.hamstring.usable_on = nil
-        H.Hekili.Class.abilities.hamstring.funcs.usable_on = nil
+        H.Encore.Class.abilities.hamstring.usable_on = nil
+        H.Encore.Class.abilities.hamstring.funcs.usable_on = nil
     end)
 
     it("reads the client's type ID as a key: undead, demon, unknown when secret or unlisted", function()
@@ -69,7 +69,7 @@ describe("the target's creature type", function()
     it(
         "usable_on: usable on a listed type, not on another; unknown, a plain range answer confirms; no field, any",
         function()
-            local hamstring = H.Hekili.Class.abilities.hamstring
+            local hamstring = H.Encore.Class.abilities.hamstring
             assert.is_true(cycle("beast"):IsUsable("hamstring"))
             hamstring.usable_on = { "undead", "demon" }
             assert.is_true(cycle("undead"):IsUsable("hamstring"))
@@ -93,7 +93,7 @@ describe("the target's creature type", function()
         local MISS = { false, "target's creature type not in usable_on" }
 
         before_each(function()
-            hamstring = H.Hekili.Class.abilities.hamstring
+            hamstring = H.Encore.Class.abilities.hamstring
             id = H.ns.VirtualState.KnownID(hamstring.id) -- the rank the facade asks the client by
             hamstring.usable_on = { "undead", "demon" }
             H.ctl.distance.target = 3
@@ -311,7 +311,7 @@ describe("the target's creature type", function()
 
     it("usable_on as a function: its list applies, its nil means any target", function()
         local list
-        H.Hekili.Class.abilities.hamstring.funcs.usable_on = function()
+        H.Encore.Class.abilities.hamstring.funcs.usable_on = function()
             return list
         end
         list = { "undead" }
@@ -333,7 +333,7 @@ describe("the harness world's creature type", function()
         local run = loop.run(L, 1, {
             duration = 2,
             on = function()
-                seen = L.us.Hekili.State.target.creature_type
+                seen = L.us.Encore.State.target.creature_type
             end,
         }, { { H = L.us } })
         assert.are.equal("undead", run.us.target.creatureType)

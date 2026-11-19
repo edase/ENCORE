@@ -14,10 +14,10 @@ local function boot(saved)
 end
 
 local function defaults(H)
-    local t = H.Hekili.DB.profile.toggles
+    local t = H.Encore.DB.profile.toggles
     assert.is_true(t.movement.value)
     assert.are.equal("", t.movement.key)
-    assert.is_true(H.Hekili.State.toggle.movement)
+    assert.is_true(H.Encore.State.toggle.movement)
 end
 
 describe("the Movement toggle", function()
@@ -29,12 +29,12 @@ describe("the Movement toggle", function()
         defaults(boot({ profiles = { Default = { toggles = { potions = { key = "", value = true } } } } }))
     end)
 
-    it("flips with FireToggle and is set by /hekili set movement on", function()
+    it("flips with FireToggle and is set by /encore set movement on", function()
         local H = boot()
-        H.Hekili:FireToggle("movement")
-        assert.is_false(H.Hekili.State.toggle.movement)
-        H.Hekili:CmdLine("set movement on")
-        assert.is_true(H.Hekili.State.toggle.movement)
+        H.Encore:FireToggle("movement")
+        assert.is_false(H.Encore.State.toggle.movement)
+        H.Encore:CmdLine("set movement on")
+        assert.is_true(H.Encore.State.toggle.movement)
         assert.are.same({}, H.errors)
     end)
 
@@ -45,18 +45,18 @@ describe("the Movement toggle", function()
         local t = H.ctl.now + 0.2
         assert(headless.cycle(H, t))
         -- a free line (Bloodrage), so only the toggle decides it, never the belief's rage band
-        local lines = H.Hekili:ParseActionList("actions+=/bloodrage,if=toggle.movement")
+        local lines = H.Encore:ParseActionList("actions+=/bloodrage,if=toggle.movement")
         lines[1].enabled = true
         lines[2] = { enabled = true, action = "berserker_stance" }
-        H.Hekili.DB.profile.packs[ww.PACK].lists = { precombat = {}, default = lines }
-        H.Hekili:LoadScripts()
+        H.Encore.DB.profile.packs[ww.PACK].lists = { precombat = {}, default = lines }
+        H.Encore:LoadScripts()
         H.Fire("PLAYER_REGEN_DISABLED")
-        local out = H.Hekili.Engine.Output.Primary
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        local out = H.Encore.Engine.Output.Primary
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         t = t + 0.2
         assert(headless.cycle(H, t))
         assert.are.equal("bloodrage", out.recs[1] and out.recs[1].actionName)
-        H.Hekili:FireToggle("movement", "off")
+        H.Encore:FireToggle("movement", "off")
         t = t + 0.2
         assert(headless.cycle(H, t))
         assert.are.equal("berserker_stance", out.recs[1] and out.recs[1].actionName)
@@ -65,13 +65,13 @@ describe("the Movement toggle", function()
 
     it("answers per spec: an opted-in spec is true, the class's other specs stay false (R3)", function()
         local H = boot()
-        local Registry = H.Hekili.Engine.Registry
+        local Registry = H.Encore.Engine.Registry
         assert.is_false(Registry.MovementSpec(ww.SPEC))
         Registry.Specs()[ww.SPEC].options.movement = true
         assert.is_true(Registry.MovementSpec(ww.SPEC))
         assert.is_false(Registry.MovementSpec(0)) -- no such spec
         -- a NewClass entry's `movement` reaches only its own spec, even when the kit registers options for every tree
-        local kit = H.Hekili:NewClass("WARRIOR", { specs = { { key = "a", movement = true }, { key = "b" } } })
+        local kit = H.Encore:NewClass("WARRIOR", { specs = { { key = "a", movement = true }, { key = "b" } } })
         kit:RegisterOptions({ enabled = true })
         assert.is_true(Registry.MovementSpec(kit.trees[1].id))
         assert.is_false(Registry.MovementSpec(kit.trees[2].id))
@@ -79,17 +79,17 @@ describe("the Movement toggle", function()
 
     it("shows its options row only for an opted-in spec, and keeps its value across a spec switch", function()
         local H = boot()
-        H.Hekili:EmbedToggleOptions(H.Hekili.Options)
-        local row = H.Hekili.Options.args.toggles.args.movement
+        H.Encore:EmbedToggleOptions(H.Encore.Options)
+        local row = H.Encore.Options.args.toggles.args.movement
         assert.is_true(row.hidden())
-        H.Hekili.Engine.Registry.Specs()[ww.SPEC].options.movement = true
+        H.Encore.Engine.Registry.Specs()[ww.SPEC].options.movement = true
         assert.is_false(row.hidden())
-        H.Hekili:FireToggle("movement", "off")
-        assert.is_truthy(H.Hekili:SetSpecChoice("fury"))
-        H.Hekili:SpecializationChanged()
-        assert.are.equal(FURY, H.Hekili.State.spec.id)
+        H.Encore:FireToggle("movement", "off")
+        assert.is_truthy(H.Encore:SetSpecChoice("fury"))
+        H.Encore:SpecializationChanged()
+        assert.are.equal(FURY, H.Encore.State.spec.id)
         assert.is_true(row.hidden()) -- Fury did not opt in
-        assert.is_false(H.Hekili.DB.profile.toggles.movement.value)
+        assert.is_false(H.Encore.DB.profile.toggles.movement.value)
         assert.are.same({}, H.errors)
     end)
 end)
@@ -107,10 +107,10 @@ describe("the Movement toggle in a headless run", function()
         function R.next()
             return false
         end
-        L.us.Hekili.DB.profile.toggles.movement.value = false
+        L.us.Encore.DB.profile.toggles.movement.value = false
         loop.replay(L, R)
-        assert.is_true(L.us.Hekili.State.toggle.movement)
+        assert.is_true(L.us.Encore.State.toggle.movement)
         loop.run(L, 2, { duration = 1 }, { { H = L.us } })
-        assert.is_false(L.us.Hekili.State.toggle.movement)
+        assert.is_false(L.us.Encore.State.toggle.movement)
     end)
 end)

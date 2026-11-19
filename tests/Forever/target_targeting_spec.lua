@@ -12,7 +12,7 @@ describe("the target's is_targeting_player", function()
         t = t + 0.2
         H.ctl.now = t
         assert(headless.cycle(H, t))
-        return H.Hekili.State.target.is_targeting_player
+        return H.Encore.State.target.is_targeting_player
     end
 
     before_each(function()

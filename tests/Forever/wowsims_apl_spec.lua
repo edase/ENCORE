@@ -1734,7 +1734,7 @@ describe("the wowsims APL translator", function()
     )
 
     it("opens the Rogue Combat recipe with Blood Fury, then Adrenaline Rush once it is cast (rule 14)", function()
-        local f = assert(io.open("src/Hekili_Rogue/APLs/Combat (wowsims.com).simc", "rb"))
+        local f = assert(io.open("src/Encore_Rogue/APLs/Combat (wowsims.com).simc", "rb"))
         local simc = f:read("*a")
         f:close()
         local bf, ar = simc:match( -- consecutive lines
@@ -1762,16 +1762,16 @@ describe("the wowsims APL translator", function()
         H.Fire("PLAYER_TARGET_CHANGED")
         local t = H.ctl.now + 0.2
         assert(headless.cycle(H, t))
-        local out = H.Hekili.Engine.Output.Primary
+        local out = H.Encore.Engine.Output.Primary
         local function recs(after) -- bloodrage, then battle_shout listed first behind `prev.1.<after>`
-            H.Hekili.DB.profile.packs[ww.PACK].lists = {
+            H.Encore.DB.profile.packs[ww.PACK].lists = {
                 default = {
                     { enabled = true, action = "battle_shout", criteria = "prev.1." .. after },
                     { enabled = true, action = "bloodrage" },
                 },
             }
-            H.Hekili:LoadScripts()
-            assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+            H.Encore:LoadScripts()
+            assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
             t = t + 0.2
             assert(headless.cycle(H, t))
             assert.are.same({}, H.errors)
@@ -2900,12 +2900,12 @@ describe("a wowsims division", function()
         local t = H.ctl.now + 0.2
         assert(headless.cycle(H, t))
         local cond = apl.translate({ priorityList = { cast(100, div) } }, ctx({})):match(",if=(.*)$")
-        H.Hekili.DB.profile.packs[ww.PACK].lists = {
+        H.Encore.DB.profile.packs[ww.PACK].lists = {
             default = { { enabled = true, action = "berserker_stance", criteria = cond } },
         }
-        H.Hekili:LoadScripts()
-        local out = H.Hekili.Engine.Output.Primary
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        H.Encore:LoadScripts()
+        local out = H.Encore.Engine.Output.Primary
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         assert(headless.cycle(H, t + 0.2))
         assert.are.same({}, H.errors)
         assert.are.equal("berserker_stance", out.recs[1] and out.recs[1].actionName)
@@ -3477,7 +3477,7 @@ describe("the wowsims APL translator's target swaps (option D)", function()
             "default #1: " .. next,
             "default #3: " .. next,
             "default #4: " .. next,
-            "default #5: changeTarget Target: no main target in Hekili",
+            "default #5: changeTarget Target: no main target in Encore",
         }, omitted)
     end)
 
@@ -3525,7 +3525,7 @@ describe("the wowsims APL translator's target swaps (option D)", function()
                 "default #1: " .. other,
                 "default #2: " .. other,
                 "default #3: changeTarget NextTarget: no on-all-targets read of a cast before it in this list",
-                "default #4: changeTarget PreviousTarget: no previous target in Hekili",
+                "default #4: changeTarget PreviousTarget: no previous target in Encore",
                 "default #5: " .. fight,
                 "default #6: " .. fight,
             }, omitted)
@@ -4053,11 +4053,11 @@ describe("the wowsims APL translator's sequence lines (recipe sequences = true)"
         end
         local lists = {}
         for name, t in pairs(byList) do
-            local parsed, warnings = H.Hekili:ParseActionList(t, true)
+            local parsed, warnings = H.Encore:ParseActionList(t, true)
             assert.are.same({}, warnings or {}, name)
             lists[name] = parsed
         end
-        local cw = H.Hekili.Scripts.CheckWindows(lists, "pk")
+        local cw = H.Encore.Scripts.CheckWindows(lists, "pk")
         assert.are.same({}, cw.errors)
         assert.is_false(cw.holdWalk) -- L1270: no window or variable line, so the hold walks no normal list
         local got = {}
@@ -4097,7 +4097,7 @@ describe("the wowsims APL translator's sequence lines (recipe sequences = true)"
             end
         end
         for name, t in pairs(byList) do
-            local parsed, warnings = H.Hekili:ParseActionList(t, true)
+            local parsed, warnings = H.Encore:ParseActionList(t, true)
             for _, w in ipairs(warnings or {}) do
                 warn[#warn + 1] = name .. ": " .. w
             end
@@ -4139,7 +4139,7 @@ describe("the wowsims APL translator's sequence lines (recipe sequences = true)"
         table.sort(back)
         assert.are.same(lines, back) -- every line written back byte for byte
         local H = headless.new({ character = ww.character(), pack = ww.PACK })
-        local cw = H.Hekili.Scripts.CheckWindows(payload.lists, "pk")
+        local cw = H.Encore.Scripts.CheckWindows(payload.lists, "pk")
         assert.are.same({}, cw.errors)
         local got = {}
         for _, decl in ipairs(cw.decls) do
@@ -4174,7 +4174,7 @@ describe("the wowsims APL translator's sequence lines (recipe sequences = true)"
             local lists, warn = engineLists(H, sequenced(case[1]))
             assert.are.same({}, warn)
             local errs = {}
-            for _, x in ipairs(H.Hekili.Scripts.CheckWindows(lists, "pk").errors) do
+            for _, x in ipairs(H.Encore.Scripts.CheckWindows(lists, "pk").errors) do
                 errs[#errs + 1] = x.code .. " " .. x.text
             end
             table.sort(errs)

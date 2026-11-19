@@ -15,7 +15,7 @@ local function record()
     local L = loop.new(ww)
     local out = { changes = {}, updates = {} }
     for name, H in pairs({ us = L.us, oracle = L.oracle }) do
-        local hk, n, last = H.Hekili, 0, nil
+        local hk, n, last = H.Encore, 0, nil
         local upd = hk.Update
         hk.Update = function(...)
             local r = upd(...)

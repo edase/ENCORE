@@ -400,9 +400,9 @@ local function classData(H)
     if cache[H] then
         return cache[H]
     end
-    local X = { aura = {}, talent = H.Hekili.State.talent }
+    local X = { aura = {}, talent = H.Encore.State.talent }
     cache[H] = X
-    for key, a in pairs(H.Hekili.Class.auras) do
+    for key, a in pairs(H.Encore.Class.auras) do
         if type(key) == "string" and type(a) == "table" and a.id then
             X.aura[key] = { id = a.id, duration = a.duration, max_stack = a.max_stack }
         end
@@ -410,7 +410,7 @@ local function classData(H)
     local w = loadWarrior.load()
     w.game.known = H.ctl.known
     local env = loadWarrior.env(w)
-    env.talent, env.rage.current = H.Hekili.State.talent, 100
+    env.talent, env.rage.current = H.Encore.State.talent, 100
     env.swap_stance("battle_stance")
     X.keep = 100 - (env.spent[1] or 0)
     return X
@@ -451,18 +451,18 @@ function M.resolve(key, H)
         error("unmapped key " .. tostring(key), 2)
     end
     assert(next(M.IDS), "M.character() fills M.IDS before a press resolves")
-    local a = H.Hekili.Class.abilities[key]
+    local a = H.Encore.Class.abilities[key]
     local X = classData(H)
     local p = {
         spell = H.ns.VirtualState.KnownID(a.id), -- the rank the client casts: the highest known
         ids = ranks(key, a),
-        cost = H.Hekili.State.action[key].cost or 0,
+        cost = H.Encore.State.action[key].cost or 0,
         cooldown = tonumber(a.cooldown) or 0,
         gcd = type(a.gcdTime) == "number" and a.gcdTime or 1.5, -- Reckless Swings' 1 s (Slam's, a function, keeps 1.5)
         offGcd = a.gcd == "off",
         cast = tonumber(a.cast) or 0,
         onNextSwing = a.onNextSwing or a.nextSwing,
-        refund = world.refundOf(H.Hekili.Class, key), -- an avoid gives back the kit's share (W.hit)
+        refund = world.refundOf(H.Encore.Class, key), -- an avoid gives back the kit's share (W.hit)
         outcomes = M.OUTCOMES[key], -- nil: the special melee tables
     }
     if m.amount then
@@ -493,14 +493,14 @@ function M.usable(H)
     local out = {}
     local X = classData(H)
     for key, m in pairs(M.MAP) do
-        local a = H.Hekili.Class.abilities[key]
+        local a = H.Encore.Class.abilities[key]
         local ids = a and ranks(key, a)
         local known = ids and M.IDS[key] ~= nil
         for _, id in ipairs(ids or {}) do
             known = known or H.ctl.known[id] ~= nil
         end
         if known then
-            local cost = H.Hekili.State.action[key].cost or 0
+            local cost = H.Encore.State.action[key].cost or 0
             local function answer(W, e, power)
                 if not stanceOk(a, e) or (m.requires and not m.requires(W, e, X)) then
                     return false, false
@@ -599,7 +599,7 @@ M.Protection = setmetatable({
 function M.uptime(H)
     local out = {}
     for _, key in ipairs({ "sunder_armor", "demoralizing_shout" }) do
-        out[#out + 1] = { key, H.Hekili.Class.auras[key].id }
+        out[#out + 1] = { key, H.Encore.Class.auras[key].id }
     end
     return out
 end

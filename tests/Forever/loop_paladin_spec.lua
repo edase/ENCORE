@@ -19,9 +19,9 @@ describe("the Paladin loop worlds", function()
             local H = headless.new({ character = C.character(), pack = C.PACK })
             assert.are.same({}, H.loadErrors)
             local unmapped = {}
-            for _, list in pairs(H.Hekili.DB.profile.packs[C.PACK].lists) do
+            for _, list in pairs(H.Encore.DB.profile.packs[C.PACK].lists) do
                 for _, entry in ipairs(list) do
-                    local a = entry.action and H.Hekili.Class.abilities[entry.action]
+                    local a = entry.action and H.Encore.Class.abilities[entry.action]
                     if a and a.id and H.ctl.known[a.id] and not pw.MAP[entry.action] then
                         unmapped[#unmapped + 1] = entry.action
                     end
@@ -39,7 +39,7 @@ describe("the Paladin world's Judgement", function()
         local c = C.character()
         c.talents = { [1310735] = 1, [20101] = 5, [1311074] = 3 } -- Twist of Light, Benediction 5/5, Sanctified 3/3
         local H = headless.new({ character = c, pack = C.PACK })
-        local seal = H.Hekili.Class.auras.seal_of_command.id
+        local seal = H.Encore.Class.auras.seal_of_command.id
         local e, gained = { auras = { [seal] = { stacks = 1 } } }, {}
         local W = { t = 0, emit = function() end, hit = function() end }
         function W.gain(_, n)

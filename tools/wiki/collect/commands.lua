@@ -18,13 +18,13 @@ function M.load()
     local problems = {}
     for name in pairs(cc.handlers) do
         if not d.public[name] and not d.internal[name] then
-            problems[#problems + 1] = "command /hekili " .. name .. " is neither public nor internal in " .. M.DATA
+            problems[#problems + 1] = "command /encore " .. name .. " is neither public nor internal in " .. M.DATA
         end
     end
     for _, list in ipairs({ "public", "internal" }) do
         for name in pairs(d[list]) do
             if not cc.handlers[name] and not (d.builtin or {})[name] then
-                problems[#problems + 1] = ("%s lists /hekili %s as %s, but there is no such command"):format(
+                problems[#problems + 1] = ("%s lists /encore %s as %s, but there is no such command"):format(
                     M.DATA,
                     name,
                     list
@@ -72,12 +72,12 @@ function M.rows()
         local aliases = {}
         for alias, word in pairs(cc.aliases[1]) do
             if word == name then
-                aliases[#aliases + 1] = "`/hekili " .. alias .. "`"
+                aliases[#aliases + 1] = "`/encore " .. alias .. "`"
             end
         end
         table.sort(aliases)
         rows[#rows + 1] = {
-            "`/hekili " .. (d.public[name].usage or name) .. "`",
+            "`/encore " .. (d.public[name].usage or name) .. "`",
             #aliases > 0 and table.concat(aliases, ", ") or "n/a",
             d.public[name].does,
         }

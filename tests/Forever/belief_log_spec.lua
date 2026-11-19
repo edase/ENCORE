@@ -13,9 +13,9 @@ describe("the belief's logger", function()
     end)
 
     it(
-        "Hekili:SetupDebug opens a display's log with the belief's Snapshot() while debugging, never otherwise",
+        "Encore:SetupDebug opens a display's log with the belief's Snapshot() while debugging, never otherwise",
         function()
-            local hk, lines = H.Hekili, {}
+            local hk, lines = H.Encore, {}
             local debug = hk.Debug
             hk.Debug = function(_, fmt, ...)
                 lines[#lines + 1] = string.format(fmt, ...)
@@ -38,7 +38,7 @@ describe("the belief's logger", function()
     )
 
     it("the facade's trace writes through the injected logger only while debugging", function()
-        local hk, lines = H.Hekili, {}
+        local hk, lines = H.Encore, {}
         hk.Debug = function(_, fmt, ...)
             lines[#lines + 1] = string.format(fmt, ...)
         end
@@ -51,8 +51,8 @@ describe("the belief's logger", function()
         assert.is_truthy(lines[1]:find("[vs] ", 1, true))
     end)
 
-    it("Hekili.Virtual is the core's debug bridge to the belief", function()
-        local hk, ns = H.Hekili, H.ns
+    it("Encore.Virtual is the core's debug bridge to the belief", function()
+        local hk, ns = H.Encore, H.ns
         assert.are.equal(ns.VirtualState, hk.Virtual.State)
         assert.are.equal(ns.VirtualStateInternal.Events, hk.Virtual.Events)
         assert.are.equal(ns.VirtualStateInternal.Prof, hk.Virtual.Prof)

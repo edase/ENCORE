@@ -18,10 +18,10 @@
     "${3rd}/busted/library",
     "${3rd}/luassert/library"
   ],
-  "workspace.ignoreDir": ["src/Hekili/Libs", ".claude", ".git", ".lua"],
+  "workspace.ignoreDir": ["src/Encore/Libs", ".claude", ".git", ".lua"],
   "workspace.checkThirdParty": false,
   "diagnostics.globals": [
-    "LibStub", "Hekili", "ns",
+    "LibStub", "Encore", "ns",
     "INVTYPE_WEAPONMAINHAND", "LOCALIZED_CLASS_NAMES_FEMALE", "LOCALIZED_CLASS_NAMES_MALE", "AddonCompartmentFrame",
     "ToggleDropDownMenu", "INVSLOT_LAST_EQUIPPED", "COMBATLOG_OBJECT_REACTION_FRIENDLY", "DEFAULT_CHAT_FRAME",
     "ITEM_SPELL_TRIGGER_ONEQUIP", "SlashCmdList", "PET_ACTION_ATTACK", "PET_ACTION_FOLLOW", "PET_ACTION_WAIT",

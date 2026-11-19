@@ -10,8 +10,8 @@ describe("the sim's percent-of-base cost (spendBase)", function()
 
     setup(function()
         H = headless.new()
-        S = H.Hekili.State
-        class = H.Hekili.Class
+        S = H.Encore.State
+        class = H.Encore.Class
         local spec = class.specs[0]
         spec:RegisterResource(H.env.Enum.PowerType.Mana)
         rawset(S, "mana", spec.resources.mana.state)

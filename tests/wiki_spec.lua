@@ -86,8 +86,8 @@ describe("wiki-check", function()
             "",
             "## Set it",
             "",
-            "1. Set **Enemy Range Radius** in **/hekili > Priorities > *your specialization* > Targeting**.",
-            "2. Check **Count Plates Nearby** and open **/hekili > Priorities > Targetting**.",
+            "1. Set **Enemy Range Radius** in **/encore > Priorities > *your specialization* > Targeting**.",
+            "2. Check **Count Plates Nearby** and open **/encore > Priorities > Targetting**.",
             "- **On Forever:** a lead-in, never checked; nor is **a sentence-case term**.",
         }, "\n")
         assert.are.same({
@@ -123,7 +123,7 @@ describe("wiki-check", function()
     it("keeps a bold path that ends in an italic placeholder whole", function()
         local labels = { ["Priorities"] = true, ["Targeting"] = true }
         local page =
-            "## H\n\nSee **/hekili > Priorities > *your specialization***, then **/hekili > Priorities > Targetting > *x***."
+            "## H\n\nSee **/encore > Priorities > *your specialization***, then **/encore > Priorities > Targetting > *x***."
         assert.are.same(
             { "P: the path segment **Targetting** names no option" },
             check.labels({ P = page }, labels, labels)
@@ -133,8 +133,8 @@ describe("wiki-check", function()
     it("fails on a command that is not published", function()
         local words = { set = true, snap = true }
         assert.are.same(
-            { "P: `/hekili stress` is not a published command" },
-            check.commands({ P = "Type `/hekili set cd on`, `/hek snap` or `/hekili stress`." }, words)
+            { "P: `/encore stress` is not a published command" },
+            check.commands({ P = "Type `/encore set cd on`, `/enc snap` or `/encore stress`." }, words)
         )
     end)
 
@@ -156,7 +156,7 @@ describe("wiki-check", function()
     end)
 
     it("fails on local paths, hidden switches and internal IDs", function()
-        local errs = check.banned({ P = "see /home/x\nHekili.cdmOff\nper L123 and R41\nFury L60 and 0.958 are fine" })
+        local errs = check.banned({ P = "see /home/x\nEncore.cdmOff\nper L123 and R41\nFury L60 and 0.958 are fine" })
         assert.are.same({
             "P:1: a home-directory path",
             "P:2: a hidden switch",
@@ -189,7 +189,7 @@ describe("the expression check", function()
             end,
         }
         local H = {
-            Hekili = { State = { pool = setmetatable({ actual_lo = 1 }, mt) } },
+            Encore = { State = { pool = setmetatable({ actual_lo = 1 }, mt) } },
             ns = { metatables = { mt_resource = mt, mt_x = mt } },
         }
         local scanned = expressions.scan(SOURCE, "mt_x", "<resource>")
@@ -254,7 +254,7 @@ describe("make wiki-build", function()
 
     it("fills the accuracy facts from the version in accuracy.json", function()
         assert.is_true(build())
-        assert.truthy(slurp(OUT .. "/Accuracy.md"):find("| Measured on | Hekili Forever v", 1, true))
+        assert.truthy(slurp(OUT .. "/Accuracy.md"):find("| Measured on | Encore v", 1, true))
     end)
 
     it("refuses an empty, root or docs output path and leaves the source alone", function()
@@ -288,7 +288,7 @@ describe("the expression check", function()
             end,
         }
         local H = {
-            Hekili = { State = { pool = setmetatable({ actual_lo = 1 }, mt) } },
+            Encore = { State = { pool = setmetatable({ actual_lo = 1 }, mt) } },
             ns = { metatables = { mt_resource = mt, mt_x = mt } },
         }
         local scanned = expressions.scan(SOURCE, "mt_x", "<resource>")

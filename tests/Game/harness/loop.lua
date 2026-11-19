@@ -115,10 +115,10 @@ end
 M.PULL = 3 -- the world starts this long before the pull, the target selected (precombat presses)
 M.GAP = 30 -- out of combat between two fights on one boot (consecutive pulls)
 -- The display-side hold experiment (flicker.hold) on our instance's shown queue: o.hold, else this switch (off)
-M.HOLD = os.getenv("HEKILI_LOOP_HOLD") == "1"
+M.HOLD = os.getenv("ENCORE_LOOP_HOLD") == "1"
 -- The shipped steady icons (Engine/Output.lua, always on for players) on our instance: o.steady, else this switch
 -- (1, what players see, so the gates and make accuracy measure it; the oracle shadow stays plain). o.steady is true (hold 1) or the updates to hold (1 to 3); HEKILI_LOOP_STEADY=N sets the switch to N, 0 off.
-M.STEADY = tonumber(os.getenv("HEKILI_LOOP_STEADY")) or os.getenv("HEKILI_LOOP_HOLD") == "3" or 1
+M.STEADY = tonumber(os.getenv("ENCORE_LOOP_STEADY")) or os.getenv("ENCORE_LOOP_HOLD") == "3" or 1
 -- The oracle's facade rows answered by the client (§4's override): the target's health, and the debuff row Hekili's
 -- aura scan reads (raw since VirtualState counted a modelled stack on top of a plain read that arrived before the
 -- cast's drain, fixed in Auras.lua's I.AuraModel and pinned in loop_warrior_spec). The buff row stays VirtualState's: our
@@ -187,7 +187,7 @@ M.feed = feed -- a spec with its own ticks over a world (a fight past a kill: te
 -- focus entry into slot flicker.FOCUS (the display's focus: the best tier within the Timeline's 10 s horizon, then the
 -- soonest); returns how many.
 local function queue(H, q, n, res)
-    local out = H.Hekili.Engine.Output.Primary
+    local out = H.Encore.Engine.Output.Primary
     local k = math.min(n, out.count)
     for i = 1, k do
         local r = out.recs[i]
@@ -241,7 +241,7 @@ end
 -- The believed cooldown remaining of ability `x` of instance `H` into `cd` (false: untracked), once a tick.
 local function cooldown(cd, H, x, now)
     if x and cd[x] == nil then
-        local a = H.Hekili.Class.abilities[x]
+        local a = H.Encore.Class.abilities[x]
         local rec = a and type(a.id) == "number" and a.id > 0 and H.ns.VirtualState.Cooldown(a.id, now)
         cd[x] = rec and math.max(0, rec.est - now) or false
     end
@@ -281,7 +281,7 @@ end
 
 -- The first on-GCD name of an instance's Primary queue (false: none): the replay's decision-point pick.
 local function firstGcd(H)
-    local out, abilities = H.Hekili.Engine.Output.Primary, H.Hekili.Class.abilities
+    local out, abilities = H.Encore.Engine.Output.Primary, H.Encore.Class.abilities
     for i = 1, out.count do
         local a = abilities[out.recs[i].actionName]
         if a and a.gcd ~= "off" then
@@ -407,7 +407,7 @@ function M.run(L, seed, o, drivers)
         out.steady = (steady and not d.plain) and true or false -- the oracle shadow never holds
         out.hold = type(steady) == "number" and steady or 1
         -- Movement ON in a replay (wowsims's rotation moves: tested as it runs), OFF in a loop and ws.live
-        d.H.Hekili.DB.profile.toggles.movement.value = (R ~= nil)
+        d.H.Encore.DB.profile.toggles.movement.value = (R ~= nil)
         -- the A/B arm's providers, applied out of combat (no option since cdm-default Task 6): the viewer through the
         -- debug session switch Hekili.cdmOff, the driver's only (the plain oracle shadow stays the viewer-off
         -- reference); the meter, which no build selects any more, written into the build's providers (harness only)
@@ -415,8 +415,8 @@ function M.run(L, seed, o, drivers)
         local cdm = arm.viewer and not d.plain
         local first = cdm and ctl.viewer.layout == nil -- this call builds the instance's frames (scenarios.viewerLayout)
         local layout = cdm and M.viewerLayout(d.H, arm.layout, seed, wo) or nil
-        d.H.Hekili.cdmOff = not cdm
-        d.H.Hekili:ProvidersChanged()
+        d.H.Encore.cdmOff = not cdm
+        d.H.Encore:ProvidersChanged()
         local VI = d.H.ns.VirtualStateInternal
         if VI and VI.def then -- (loop_spec's fake drivers have no belief)
             VI.def.providers.outcomes = arm.outcomes
@@ -436,7 +436,7 @@ function M.run(L, seed, o, drivers)
             -- Recommend Target Swaps per the arm, the enemy plates shown and counted (the spec's default Enemy Range
             -- Radius: 30 yd for a ranged spec; past 10 yd only plates in combat count, L644), and the observer's
             -- nameplate1..N existing
-            local sp = d.H.Hekili.Engine.settings.specs[d.H.Hekili.State.spec.id]
+            local sp = d.H.Encore.Engine.settings.specs[d.H.Encore.State.spec.id]
             sp.cycle = aw.cycle or false
             ctl.cvars.nameplateShowEnemies = aw.plates and "1" or nil
             ctl.cvars.nameplateShowAll = aw.plates and "1" or nil
@@ -560,7 +560,7 @@ function M.run(L, seed, o, drivers)
     run.bytes, run.sampled = 0, 0
     if o.trace then -- the facade's trace (§5.1): Hekili's own debug pass, its lines counted and dropped
         for i, st in ipairs(steps) do
-            local hk = st.H.Hekili
+            local hk = st.H.Encore
             traced[i] = { hk.Debug, hk.SaveDebugSnapshot }
             hk.Debug = function() end
             hk.SaveDebugSnapshot = function()
@@ -573,7 +573,7 @@ function M.run(L, seed, o, drivers)
     -- unknown (3600 s, gap AN). Restored with the trace hooks at the run's end.
     local ttd = {}
     for i, st in ipairs(R and steps or {}) do
-        local hk, ctl, endAt = st.H.Hekili, st.H.ctl, st.base + R.pull + R.duration
+        local hk, ctl, endAt = st.H.Encore, st.H.ctl, st.base + R.pull + R.duration
         ttd[i] = hk.GetGreatestTTD
         hk.GetGreatestTTD = function()
             return endAt - ctl.now
@@ -604,7 +604,7 @@ function M.run(L, seed, o, drivers)
                 end
             end
             feed(st.H, st.obs, tc, st.base, st.sink)
-            st.H.Hekili.ActiveDebug = o.trace or false
+            st.H.Encore.ActiveDebug = o.trace or false
             local counted = i == 1 and not o.trace -- the traced fight's debug pass is not runtime cost
             -- the seed turns the phase: a fight's first cycle, the most expensive, must not be every fight's first sample
             if counted and #run.cpu % M.CAL_EVERY == 0 then -- outside the tick's time and its sampled bytes
@@ -625,7 +625,7 @@ function M.run(L, seed, o, drivers)
                 run.bytes, run.sampled = run.bytes + (collectgarbage("count") - b0) * 1024, run.sampled + 1
                 collectgarbage("restart")
             end
-            st.H.Hekili.ActiveDebug = false
+            st.H.Encore.ActiveDebug = false
             if not ok then
                 run.raises = run.raises + 1
             end
@@ -752,10 +752,10 @@ function M.run(L, seed, o, drivers)
             us.target, back = mob1, false
             W.emit({ kind = "target", relist = true })
         end
-        local rec1 = follow and steps[1].H.Hekili.Engine.Output.Primary.recs[1]
+        local rec1 = follow and steps[1].H.Encore.Engine.Output.Primary.recs[1]
         if press and rec1 and rec1.indicator == "cycle" and rec1.actionName == key then
-            local ab_ = truth.Hekili.Class.abilities[key]
-            local aura = truth.Hekili.Class.auras[ab_.cycle or ab_.aura or key]
+            local ab_ = truth.Encore.Class.abilities[key]
+            local aura = truth.Encore.Class.auras[ab_.cycle or ab_.aura or key]
             local ids = { aura and aura.id }
             for _, id in ipairs(aura and type(aura.copy) == "table" and aura.copy or {}) do
                 ids[#ids + 1] = id
@@ -769,7 +769,7 @@ function M.run(L, seed, o, drivers)
             run.cyclePresses = run.cyclePresses + 1
         end
         if press then
-            truth.Hekili.State.reset("Primary", true) -- Update leaves its last prediction (a predicted buff, query_time ahead of now)
+            truth.Encore.State.reset("Primary", true) -- Update leaves its last prediction (a predicted buff, query_time ahead of now)
             local p = content.resolve(key, truth, us) -- the world's us: its auras price the press (L1233)
             local pre = W.res(us, p.pt)
             local n0 = #W.truth
@@ -821,7 +821,7 @@ function M.run(L, seed, o, drivers)
                 run.up[u[1]] = (run.up[u[1]] or 0) + ((tgt and tgt.auras[u[2]]) and 1 or 0)
             end
             run.ours[n] = steps[1].q.name[1]
-            local out = steps[1].H.Hekili.Engine.Output.Primary
+            local out = steps[1].H.Encore.Engine.Output.Primary
             if out.count > 0 and out.recs[1].focus then
                 run.focus = run.focus + 1
             end
@@ -883,10 +883,10 @@ function M.run(L, seed, o, drivers)
             M.verdictTruth(vt, run, us, tEnd)
         end
         if traced[i] then
-            st.H.Hekili.Debug, st.H.Hekili.SaveDebugSnapshot = traced[i][1], traced[i][2]
+            st.H.Encore.Debug, st.H.Encore.SaveDebugSnapshot = traced[i][1], traced[i][2]
         end
         if ttd[i] then
-            st.H.Hekili.GetGreatestTTD = ttd[i]
+            st.H.Encore.GetGreatestTTD = ttd[i]
         end
         for name, n in pairs(st.H.ns.Facade.secrets) do
             run.secrets[name] = (run.secrets[name] or 0) + n
@@ -894,7 +894,7 @@ function M.run(L, seed, o, drivers)
         if st.layout then -- a viewer arm: the layout's coverage at the fight's end, a line in the arm's .ab file
             local VI = st.H.ns.VirtualStateInternal
             local ctl, Q, P = st.H.ctl, VI.PRESENCE.viewer, VI.presence
-            local who = tostring(ctl.class) .. " " .. tostring(st.H.Hekili.State.spec.key)
+            local who = tostring(ctl.class) .. " " .. tostring(st.H.Encore.State.spec.key)
             -- the fight's CDM audit (Sources/Auras.lua's snapshot counters, per fight) as player/target sums (Task 9)
             local function sum(c)
                 local p, tg = 0, 0
@@ -978,7 +978,7 @@ end
 --- no fixture runs viewer-fixture with no item and says so once in the arm's .ab file.
 function M.viewerLayout(H, preset, seed, wo)
     local ctl, I = H.ctl, H.ns.VirtualStateInternal
-    local who = tostring(ctl.class) .. " " .. tostring(H.Hekili.State.spec.key)
+    local who = tostring(ctl.class) .. " " .. tostring(H.Encore.State.spec.key)
     local fixture
     if preset == "fixture" then
         local f = loadfile("tools/data/cooldownviewer/" .. tostring(ctl.class):upper() .. ".lua")

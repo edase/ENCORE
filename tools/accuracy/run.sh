@@ -20,7 +20,7 @@ for pass in full live; do
     {
         grep -l 'solo(' tests/Forever/loop_*_spec.lua | sed 's/^/loop /'
         grep -l 'ws\.gate' tests/Forever/wowsims_*_spec.lua | sed 's/^/wow /'
-    } | LOOPTAGS=$LOOPTAGS BUSTED=$BUSTED OUT=$out HEKILI_AB=$arm xargs -P "$jobs" -L 1 sh -c '
+    } | LOOPTAGS=$LOOPTAGS BUSTED=$BUSTED OUT=$out ENCORE_AB=$arm xargs -P "$jobs" -L 1 sh -c '
         case $0 in loop) tags=$LOOPTAGS ;; *) tags=wowsims ;; esac
         timeout 3000 "$BUSTED" --helper=tools/accuracy/wrap.lua --tags="$tags" "$1" > "$OUT/$0.$(basename "$1" _spec.lua).txt" 2>&1'
 done

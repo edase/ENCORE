@@ -32,7 +32,7 @@ local function boot()
 end
 
 local function id(H, name)
-    return H.Hekili.Engine.Registry.Abilities()[name].id
+    return H.Encore.Engine.Registry.Abilities()[name].id
 end
 
 local function button(action)
@@ -61,7 +61,7 @@ describe("Dominos keybinding discovery", function()
         assert.has_no.errors(function()
             H.ns.ReadKeybindings()
         end)
-        local info = H.Hekili.KeybindInfo
+        local info = H.Encore.KeybindInfo
         assert.are.equal("S5", info.mortal_strike.upper[3]) -- Dominos' own binding, on Dominos' bar
         assert.is_nil(info.mortal_strike.upper[1]) -- slot 5 is claimed: no default-bar copy
         assert.are.equal("S2", info.overpower.upper[1]) -- slot 2 is not claimed: the default bar's binding

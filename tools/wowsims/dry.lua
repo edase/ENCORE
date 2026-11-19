@@ -6,7 +6,7 @@
 -- lines, the bracket N by the omit reason's node kind (its first word; `resetSequence`, `never`, `hidden` ... are
 -- other). A spec whose build or translation raises prints `<spec> error <message>`. Writes nothing.
 -- Loaded with no arguments it returns M (M.kinds, for tests/Forever/wowsims_dry_spec.lua).
-package.path = "./src/Hekili/?.lua;./tests/?.lua;./?.lua;" .. package.path
+package.path = "./src/Encore/?.lua;./tests/?.lua;./?.lua;" .. package.path
 
 local M = {}
 M.KINDS = { "sequence", "wait", "waitUntil", "move" }

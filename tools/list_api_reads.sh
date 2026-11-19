@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Lists the game API names the loaded Hekili files read: bare globals (via luacheck W113, which ignores strings and
+# Lists the game API names the loaded Encore files read: bare globals (via luacheck W113, which ignores strings and
 # comments), C_* and AuraUtil namespace members (via grep), _G.Name reads, and Facade.Name / Facade.ns.Name reads
-# (the secret or absent names Hekili reads through ns.Facade, Game/API/Facade.lua).
+# (the secret or absent names Encore reads through ns.Facade, Game/API/Facade.lua).
 # Usage: tools/list_api_reads.sh [file ...]   (default: every .lua the addon TOCs list, tests/helpers/addons.lua)
 set -euo pipefail
 cd "$(dirname "$0")/.."

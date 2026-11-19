@@ -63,7 +63,7 @@ describe("the packs' declared outcomes", function()
     for class, list in pairs(DECLARED) do
         it(class .. ": each declaration is the spec's and well formed", function()
             local w = class == "Warrior" and require("Forever.helpers.load_warrior").load()
-                or loader.load(nil, "src/Hekili_" .. class .. "/" .. class .. ".lua", class:upper())
+                or loader.load(nil, "src/Encore_" .. class .. "/" .. class .. ".lua", class:upper())
             for key, want in pairs(list) do
                 local d = assert(w.abilities[key], key)
                 assert.are.same(want, { d.expects, d.velocity, d.school }, key)
@@ -80,7 +80,7 @@ describe("the packs' declared outcomes", function()
     it("leaves the melee packs on their default types but for the declared debuffs", function()
         local packs = { -- the Warrior's own recording loader; the Rogue's through the Druid's
             Warrior = require("Forever.helpers.load_warrior").load(),
-            Rogue = loader.load(nil, "src/Hekili_Rogue/Rogue.lua", "ROGUE"),
+            Rogue = loader.load(nil, "src/Encore_Rogue/Rogue.lua", "ROGUE"),
         }
         for class, w in pairs(packs) do
             for key, d in pairs(w.abilities) do

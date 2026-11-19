@@ -258,7 +258,7 @@ describe("the Hunter replay characters", function()
             local C = content(p[1], W[p[2]], p[3], 60, p[8] or REPLAY_EXTRA)
             local H = headless.new({ character = C.character(), pack = C.PACK })
             out[p[1]] = {
-                ("%.2f"):format(H.Hekili.State.action.serpent_sting.cost),
+                ("%.2f"):format(H.Encore.State.action.serpent_sting.cost),
                 H.ctl.known[25295] or false,
                 H.ctl.known[25296] or false,
             }
@@ -295,7 +295,7 @@ describe("the Hunter replay at 20 yd #slow #wowsims", function()
                 if not seen and t >= R.pull and t < R.pull + 0.5 then -- the log's first move is 0.71 s in
                     seen = {
                         H.ns.VirtualState.TargetRange().basis ~= "unknown",
-                        H.Hekili.State.action.raptor_strike.in_range,
+                        H.Encore.State.action.raptor_strike.in_range,
                     }
                 end
             end,

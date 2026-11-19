@@ -9,7 +9,7 @@ describe("the snapshot on a non-English client (headless Arms)", function()
     before_each(function()
         H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
-        hk = H.Hekili
+        hk = H.Encore
         hk.Engine.settings.screenshot = false -- the harness has no Screenshot()
         assert(headless.cycle(H, H.ctl.now + 0.2))
     end)

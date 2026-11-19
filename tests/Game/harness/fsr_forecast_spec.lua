@@ -6,12 +6,12 @@ describe("the sim's five-second-rule forecast", function()
     local H, S, r
     setup(function()
         H = headless.new()
-        S = H.Hekili.State
+        S = H.Encore.State
         rawset(S, "gcd", { remains = 0 }) -- no character booted: no GCD ability to read
     end)
 
     before_each(function()
-        local spec = H.Hekili.Class.specs[0]
+        local spec = H.Encore.Class.specs[0]
         spec:RegisterResource(H.env.Enum.PowerType.Mana)
         r = spec.resources.mana.state
         rawset(S, "mana", r)
@@ -64,7 +64,7 @@ describe("the sim's five-second-rule forecast", function()
         end
     )
 
-    it("pads time_to_X by the tick a ticked pool waits for, as Hekili's energy (0.1 s by default)", function()
+    it("pads time_to_X by the tick a ticked pool waits for, as Encore's energy (0.1 s by default)", function()
         r.tick_rate, r.last_tick = 0.1, 100.05 -- a tick 0.05 s before the next: now is mid-tick
         S.forecastResources("mana")
         local t = S:TimeToResource(r, 23) -- 23 / 22 s of continuous regen, from the next tick (0.05 s on)
@@ -125,13 +125,13 @@ describe("the sim's five-second-rule forecast", function()
     describe("advancing the clock", function()
         local resources, handle
         before_each(function()
-            local class = H.Hekili.Class
+            local class = H.Encore.Class
             resources, handle = class.resources, rawget(S, "HandleEvent")
-            class.resources = { mana = H.Hekili.Class.specs[0].resources.mana }
+            class.resources = { mana = H.Encore.Class.specs[0].resources.mana }
             r.actual, r.fsr_until, S.offset = 1000, 105, 3 -- t=3, the window ends at 5
         end)
         after_each(function()
-            H.Hekili.Class.resources = resources
+            H.Encore.Class.resources = resources
             rawset(S, "HandleEvent", handle)
             local q = S:GetQueue()
             for i = #q, 1, -1 do

@@ -258,9 +258,9 @@ describe("the simulation's pet reads", function()
     it("answers pet.up from the modelled summon and pet.<key>.count from the guardians", function()
         local H = headless.new()
         local VS, I = H.ns.VirtualState, H.ns.VirtualStateInternal
-        H.Hekili.Class.pets.guardian_a = { token = "guardian_a", cap = 2, duration = 18, slot = 6 }
+        H.Encore.Class.pets.guardian_a = { token = "guardian_a", cap = 2, duration = 18, slot = 6 }
         H.ns.BuildTracked()
-        local t, S = H.ctl.now, H.Hekili.State
+        local t, S = H.ctl.now, H.Encore.State
         S.reset("AOE") -- partial: a class-neutral boot has no spec, whose state tables a full reset walks
         assert.is_false(S.pet.up)
         assert.are.equal(0, S.pet.guardian_a.count)
@@ -276,7 +276,7 @@ describe("the simulation's pet reads", function()
 
     it("answers pet.<resource> with the pet's power through the facade (a wowsims Pet resource read)", function()
         local H = headless.new()
-        local S = H.Hekili.State
+        local S = H.Encore.State
         H.ctl.exists.pet, H.ctl.petPower = true, 420
         H.ns.BuildTracked()
         S.reset("AOE") -- partial: a class-neutral boot has no spec, whose state tables a full reset walks

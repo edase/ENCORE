@@ -1,4 +1,4 @@
-options	name	Hekili Forever Dev-<BUILD> (<DATE>)
+options	name	Encore Dev-<BUILD> (<DATE>)
 options.abilities	desc	Edit specific abilities, such as disabling, assigning to a toggle, overriding the keybind text or icon and more.
 options.abilities	name	Abilities
 options.abilities.abolish_disease	name	Spell 552
@@ -12690,7 +12690,7 @@ options.abilities.wrath.toggle	values.none	None
 options.abilities.wrath.toggle	values.potions	Potions
 options.cdm	name	Cooldown Manager
 options.cdm.combat	name	Changes apply after combat.
-options.cdm.intro	name	Hekili reads the Cooldown Manager to see when your buffs and debuffs are up. Turn a switch off and Hekili ignores that aura's items there. |cffffd100Gold|r: on a bar. |cff808080Grey|r: not on a bar; its switch applies when you add it.
+options.cdm.intro	name	Encore reads the Cooldown Manager to see when your buffs and debuffs are up. Turn a switch off and Encore ignores that aura's items there. |cffffd100Gold|r: on a bar. |cff808080Grey|r: not on a bar; its switch applies when you add it.
 options.cdm.reset	name	Reset
 options.displays	name	Displays
 options.displays.AOE	name	|cFF00B4FFAOE|r
@@ -12705,7 +12705,7 @@ options.displays.AOE.MultiModInterrupts	name	voicechat-icon-speaker-mute |cFFFF0
 options.displays.AOE.MultiModPrimary	desc	Changes |cFF00FF00will|r be applied to the Primary display.
 options.displays.AOE.MultiModPrimary	name	|cFF00FF00Primary|r
 options.displays.AOE.classic	name	Style
-options.displays.AOE.classic.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Hekili icons.
+options.displays.AOE.classic.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Encore icons.
 options.displays.AOE.classic.border	name	Border
 options.displays.AOE.classic.border.break01	name	\032
 options.displays.AOE.classic.border.color	desc	When borders are enabled and the Coloring Mode is set to |cFFFFD100Custom Color|r, the border will use this color.
@@ -13229,7 +13229,7 @@ options.displays.AOE.timeline.tab_next.nextSize	desc	The size of the next box (w
 options.displays.AOE.timeline.tab_next.nextSize	name	Size
 options.displays.AOE.timeline.tab_now	desc	The now circle: a focus ability coming up.
 options.displays.AOE.timeline.tab_now	name	Now
-options.displays.AOE.timeline.tab_now.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Hekili icons.
+options.displays.AOE.timeline.tab_now.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Encore icons.
 options.displays.AOE.timeline.tab_now.border	name	Border
 options.displays.AOE.timeline.tab_now.border.break01	name	\032
 options.displays.AOE.timeline.tab_now.border.color	desc	When borders are enabled and the Coloring Mode is set to |cFFFFD100Custom Color|r, the border will use this color.
@@ -13550,8 +13550,8 @@ options.displays.AOE.truth.edge	desc	Grey an icon as soon as the game says the a
 options.displays.AOE.truth.edge	name	Grey When Not Usable
 options.displays.AOE.truth.enabled	desc	Turn the Modern overlays on for this display. Turn it off to go back to the plain style.
 options.displays.AOE.truth.enabled	name	Modern (game truth)
-options.displays.AOE.truth.info	name	Experimental. Keeps this display's style and settings, and adds the game's own cooldown swipes, an immediate grey when the game says an ability cannot be used yet, and a gold glow on the next ability when the game lights its proc. Hekili still decides what to show.
-options.displays.AOE.truth.swipes	desc	Show the game's own cooldown on an icon while it runs, instead of Hekili's estimate.
+options.displays.AOE.truth.info	name	Experimental. Keeps this display's style and settings, and adds the game's own cooldown swipes, an immediate grey when the game says an ability cannot be used yet, and a gold glow on the next ability when the game lights its proc. Encore still decides what to show.
+options.displays.AOE.truth.swipes	desc	Show the game's own cooldown on an icon while it runs, instead of Encore's estimate.
 options.displays.AOE.truth.swipes	name	Real Cooldown Swipes
 options.displays.AOE.visibility	desc	Visibility and transparency settings in PvE / PvP.
 options.displays.AOE.visibility	name	Visibility
@@ -13597,7 +13597,7 @@ options.displays.Cooldowns.MultiModInterrupts	name	voicechat-icon-speaker-mute |
 options.displays.Cooldowns.MultiModPrimary	desc	Changes |cFF00FF00will|r be applied to the Primary display.
 options.displays.Cooldowns.MultiModPrimary	name	|cFF00FF00Primary|r
 options.displays.Cooldowns.classic	name	Style
-options.displays.Cooldowns.classic.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Hekili icons.
+options.displays.Cooldowns.classic.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Encore icons.
 options.displays.Cooldowns.classic.border	name	Border
 options.displays.Cooldowns.classic.border.break01	name	\032
 options.displays.Cooldowns.classic.border.color	desc	When borders are enabled and the Coloring Mode is set to |cFFFFD100Custom Color|r, the border will use this color.
@@ -14119,7 +14119,7 @@ options.displays.Cooldowns.timeline.tab_next.nextSize	desc	The size of the next 
 options.displays.Cooldowns.timeline.tab_next.nextSize	name	Size
 options.displays.Cooldowns.timeline.tab_now	desc	The now circle: a focus ability coming up.
 options.displays.Cooldowns.timeline.tab_now	name	Now
-options.displays.Cooldowns.timeline.tab_now.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Hekili icons.
+options.displays.Cooldowns.timeline.tab_now.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Encore icons.
 options.displays.Cooldowns.timeline.tab_now.border	name	Border
 options.displays.Cooldowns.timeline.tab_now.border.break01	name	\032
 options.displays.Cooldowns.timeline.tab_now.border.color	desc	When borders are enabled and the Coloring Mode is set to |cFFFFD100Custom Color|r, the border will use this color.
@@ -14440,8 +14440,8 @@ options.displays.Cooldowns.truth.edge	desc	Grey an icon as soon as the game says
 options.displays.Cooldowns.truth.edge	name	Grey When Not Usable
 options.displays.Cooldowns.truth.enabled	desc	Turn the Modern overlays on for this display. Turn it off to go back to the plain style.
 options.displays.Cooldowns.truth.enabled	name	Modern (game truth)
-options.displays.Cooldowns.truth.info	name	Experimental. Keeps this display's style and settings, and adds the game's own cooldown swipes, an immediate grey when the game says an ability cannot be used yet, and a gold glow on the next ability when the game lights its proc. Hekili still decides what to show.
-options.displays.Cooldowns.truth.swipes	desc	Show the game's own cooldown on an icon while it runs, instead of Hekili's estimate.
+options.displays.Cooldowns.truth.info	name	Experimental. Keeps this display's style and settings, and adds the game's own cooldown swipes, an immediate grey when the game says an ability cannot be used yet, and a gold glow on the next ability when the game lights its proc. Encore still decides what to show.
+options.displays.Cooldowns.truth.swipes	desc	Show the game's own cooldown on an icon while it runs, instead of Encore's estimate.
 options.displays.Cooldowns.truth.swipes	name	Real Cooldown Swipes
 options.displays.Cooldowns.visibility	desc	Visibility and transparency settings in PvE / PvP.
 options.displays.Cooldowns.visibility	name	Visibility
@@ -14487,7 +14487,7 @@ options.displays.Defensives.MultiModInterrupts	name	voicechat-icon-speaker-mute 
 options.displays.Defensives.MultiModPrimary	desc	Changes |cFF00FF00will|r be applied to the Primary display.
 options.displays.Defensives.MultiModPrimary	name	|cFF00FF00Primary|r
 options.displays.Defensives.classic	name	Style
-options.displays.Defensives.classic.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Hekili icons.
+options.displays.Defensives.classic.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Encore icons.
 options.displays.Defensives.classic.border	name	Border
 options.displays.Defensives.classic.border.break01	name	\032
 options.displays.Defensives.classic.border.color	desc	When borders are enabled and the Coloring Mode is set to |cFFFFD100Custom Color|r, the border will use this color.
@@ -15009,7 +15009,7 @@ options.displays.Defensives.timeline.tab_next.nextSize	desc	The size of the next
 options.displays.Defensives.timeline.tab_next.nextSize	name	Size
 options.displays.Defensives.timeline.tab_now	desc	The now circle: a focus ability coming up.
 options.displays.Defensives.timeline.tab_now	name	Now
-options.displays.Defensives.timeline.tab_now.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Hekili icons.
+options.displays.Defensives.timeline.tab_now.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Encore icons.
 options.displays.Defensives.timeline.tab_now.border	name	Border
 options.displays.Defensives.timeline.tab_now.border.break01	name	\032
 options.displays.Defensives.timeline.tab_now.border.color	desc	When borders are enabled and the Coloring Mode is set to |cFFFFD100Custom Color|r, the border will use this color.
@@ -15330,8 +15330,8 @@ options.displays.Defensives.truth.edge	desc	Grey an icon as soon as the game say
 options.displays.Defensives.truth.edge	name	Grey When Not Usable
 options.displays.Defensives.truth.enabled	desc	Turn the Modern overlays on for this display. Turn it off to go back to the plain style.
 options.displays.Defensives.truth.enabled	name	Modern (game truth)
-options.displays.Defensives.truth.info	name	Experimental. Keeps this display's style and settings, and adds the game's own cooldown swipes, an immediate grey when the game says an ability cannot be used yet, and a gold glow on the next ability when the game lights its proc. Hekili still decides what to show.
-options.displays.Defensives.truth.swipes	desc	Show the game's own cooldown on an icon while it runs, instead of Hekili's estimate.
+options.displays.Defensives.truth.info	name	Experimental. Keeps this display's style and settings, and adds the game's own cooldown swipes, an immediate grey when the game says an ability cannot be used yet, and a gold glow on the next ability when the game lights its proc. Encore still decides what to show.
+options.displays.Defensives.truth.swipes	desc	Show the game's own cooldown on an icon while it runs, instead of Encore's estimate.
 options.displays.Defensives.truth.swipes	name	Real Cooldown Swipes
 options.displays.Defensives.visibility	desc	Visibility and transparency settings in PvE / PvP.
 options.displays.Defensives.visibility	name	Visibility
@@ -15377,7 +15377,7 @@ options.displays.Interrupts.MultiModInterrupts	name	voicechat-icon-speaker-mute 
 options.displays.Interrupts.MultiModPrimary	desc	Changes |cFF00FF00will|r be applied to the Primary display.
 options.displays.Interrupts.MultiModPrimary	name	|cFF00FF00Primary|r
 options.displays.Interrupts.classic	name	Style
-options.displays.Interrupts.classic.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Hekili icons.
+options.displays.Interrupts.classic.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Encore icons.
 options.displays.Interrupts.classic.border	name	Border
 options.displays.Interrupts.classic.border.break01	name	\032
 options.displays.Interrupts.classic.border.color	desc	When borders are enabled and the Coloring Mode is set to |cFFFFD100Custom Color|r, the border will use this color.
@@ -15899,7 +15899,7 @@ options.displays.Interrupts.timeline.tab_next.nextSize	desc	The size of the next
 options.displays.Interrupts.timeline.tab_next.nextSize	name	Size
 options.displays.Interrupts.timeline.tab_now	desc	The now circle: a focus ability coming up.
 options.displays.Interrupts.timeline.tab_now	name	Now
-options.displays.Interrupts.timeline.tab_now.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Hekili icons.
+options.displays.Interrupts.timeline.tab_now.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Encore icons.
 options.displays.Interrupts.timeline.tab_now.border	name	Border
 options.displays.Interrupts.timeline.tab_now.border.break01	name	\032
 options.displays.Interrupts.timeline.tab_now.border.color	desc	When borders are enabled and the Coloring Mode is set to |cFFFFD100Custom Color|r, the border will use this color.
@@ -16220,8 +16220,8 @@ options.displays.Interrupts.truth.edge	desc	Grey an icon as soon as the game say
 options.displays.Interrupts.truth.edge	name	Grey When Not Usable
 options.displays.Interrupts.truth.enabled	desc	Turn the Modern overlays on for this display. Turn it off to go back to the plain style.
 options.displays.Interrupts.truth.enabled	name	Modern (game truth)
-options.displays.Interrupts.truth.info	name	Experimental. Keeps this display's style and settings, and adds the game's own cooldown swipes, an immediate grey when the game says an ability cannot be used yet, and a gold glow on the next ability when the game lights its proc. Hekili still decides what to show.
-options.displays.Interrupts.truth.swipes	desc	Show the game's own cooldown on an icon while it runs, instead of Hekili's estimate.
+options.displays.Interrupts.truth.info	name	Experimental. Keeps this display's style and settings, and adds the game's own cooldown swipes, an immediate grey when the game says an ability cannot be used yet, and a gold glow on the next ability when the game lights its proc. Encore still decides what to show.
+options.displays.Interrupts.truth.swipes	desc	Show the game's own cooldown on an icon while it runs, instead of Encore's estimate.
 options.displays.Interrupts.truth.swipes	name	Real Cooldown Swipes
 options.displays.Interrupts.visibility	desc	Visibility and transparency settings in PvE / PvP.
 options.displays.Interrupts.visibility	name	Visibility
@@ -16268,7 +16268,7 @@ options.displays.Multi.MultiModInterrupts	name	voicechat-icon-speaker-mute |cFFF
 options.displays.Multi.MultiModPrimary	desc	Changes |cFF00FF00will|r be applied to the Primary display.
 options.displays.Multi.MultiModPrimary	name	|cFF00FF00Primary|r
 options.displays.Multi.classic	name	Style
-options.displays.Multi.classic.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Hekili icons.
+options.displays.Multi.classic.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Encore icons.
 options.displays.Multi.classic.border	name	Border
 options.displays.Multi.classic.border.break01	name	\032
 options.displays.Multi.classic.border.color	desc	When borders are enabled and the Coloring Mode is set to |cFFFFD100Custom Color|r, the border will use this color.\n\n|cFF00B4FFPrimary:|r |A:WhiteCircle-RaidBlips:16:16:0:0:0:0:0|a |cFFFFD100#000000|r\n|cFF00B4FFAOE:|r |A:WhiteCircle-RaidBlips:16:16:0:0:0:0:0|a |cFFFFD100#000000|r\n|cFF00B4FFCooldowns:|r |A:WhiteCircle-RaidBlips:16:16:0:0:0:0:0|a |cFFFFD100#000000|r\n|cFF00B4FFDefensives:|r |A:WhiteCircle-RaidBlips:16:16:0:0:0:0:0|a |cFFFFD100#000000|r\n|cFF00B4FFInterrupts:|r |A:WhiteCircle-RaidBlips:16:16:0:0:0:0:0|a |cFFFFD100#000000|r
@@ -16850,7 +16850,7 @@ options.displays.Multi.timeline.tab_next.nextSize	desc	The size of the next box 
 options.displays.Multi.timeline.tab_next.nextSize	name	Size
 options.displays.Multi.timeline.tab_now	desc	The now circle: a focus ability coming up.
 options.displays.Multi.timeline.tab_now	name	Now
-options.displays.Multi.timeline.tab_now.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Hekili icons.
+options.displays.Multi.timeline.tab_now.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Encore icons.
 options.displays.Multi.timeline.tab_now.border	name	Border
 options.displays.Multi.timeline.tab_now.border.break01	name	\032
 options.displays.Multi.timeline.tab_now.border.color	desc	When borders are enabled and the Coloring Mode is set to |cFFFFD100Custom Color|r, the border will use this color.\n\n|cFF00B4FFPrimary:|r |A:WhiteCircle-RaidBlips:16:16:0:0:0:0:0|a |cFFFFD100#000000|r\n|cFF00B4FFAOE:|r |A:WhiteCircle-RaidBlips:16:16:0:0:0:0:0|a |cFFFFD100#000000|r\n|cFF00B4FFCooldowns:|r |A:WhiteCircle-RaidBlips:16:16:0:0:0:0:0|a |cFFFFD100#000000|r\n|cFF00B4FFDefensives:|r |A:WhiteCircle-RaidBlips:16:16:0:0:0:0:0|a |cFFFFD100#000000|r\n|cFF00B4FFInterrupts:|r |A:WhiteCircle-RaidBlips:16:16:0:0:0:0:0|a |cFFFFD100#000000|r
@@ -17202,8 +17202,8 @@ options.displays.Multi.truth.edge	desc	Grey an icon as soon as the game says the
 options.displays.Multi.truth.edge	name	Grey When Not Usable
 options.displays.Multi.truth.enabled	desc	Turn the Modern overlays on for this display. Turn it off to go back to the plain style.\n\n|cFF00B4FFPrimary:|r |cFFFF0000Unchecked|r\n|cFF00B4FFAOE:|r |cFFFF0000Unchecked|r\n|cFF00B4FFCooldowns:|r |cFFFF0000Unchecked|r\n|cFF00B4FFDefensives:|r |cFFFF0000Unchecked|r\n|cFF00B4FFInterrupts:|r |cFFFF0000Unchecked|r
 options.displays.Multi.truth.enabled	name	Modern (game truth)
-options.displays.Multi.truth.info	name	Experimental. Keeps this display's style and settings, and adds the game's own cooldown swipes, an immediate grey when the game says an ability cannot be used yet, and a gold glow on the next ability when the game lights its proc. Hekili still decides what to show.
-options.displays.Multi.truth.swipes	desc	Show the game's own cooldown on an icon while it runs, instead of Hekili's estimate.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
+options.displays.Multi.truth.info	name	Experimental. Keeps this display's style and settings, and adds the game's own cooldown swipes, an immediate grey when the game says an ability cannot be used yet, and a gold glow on the next ability when the game lights its proc. Encore still decides what to show.
+options.displays.Multi.truth.swipes	desc	Show the game's own cooldown on an icon while it runs, instead of Encore's estimate.\n\n|cFF00B4FFPrimary:|r |cFF00FF00Checked|r\n|cFF00B4FFAOE:|r |cFF00FF00Checked|r\n|cFF00B4FFCooldowns:|r |cFF00FF00Checked|r\n|cFF00B4FFDefensives:|r |cFF00FF00Checked|r\n|cFF00B4FFInterrupts:|r |cFF00FF00Checked|r
 options.displays.Multi.truth.swipes	name	Real Cooldown Swipes
 options.displays.Multi.visibility	desc	Visibility and transparency settings in PvE / PvP.
 options.displays.Multi.visibility	name	Visibility
@@ -17249,7 +17249,7 @@ options.displays.Primary.MultiModInterrupts	name	voicechat-icon-speaker-mute |cF
 options.displays.Primary.MultiModPrimary	desc	Changes |cFF00FF00will|r be applied to the Primary display.
 options.displays.Primary.MultiModPrimary	name	|cFF00FF00Primary|r
 options.displays.Primary.classic	name	Style
-options.displays.Primary.classic.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Hekili icons.
+options.displays.Primary.classic.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Encore icons.
 options.displays.Primary.classic.border	name	Border
 options.displays.Primary.classic.border.break01	name	\032
 options.displays.Primary.classic.border.color	desc	When borders are enabled and the Coloring Mode is set to |cFFFFD100Custom Color|r, the border will use this color.
@@ -17773,7 +17773,7 @@ options.displays.Primary.timeline.tab_next.nextSize	desc	The size of the next bo
 options.displays.Primary.timeline.tab_next.nextSize	name	Size
 options.displays.Primary.timeline.tab_now	desc	The now circle: a focus ability coming up.
 options.displays.Primary.timeline.tab_now	name	Now
-options.displays.Primary.timeline.tab_now.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Hekili icons.
+options.displays.Primary.timeline.tab_now.border	desc	Enable/disable or set the color for icon borders.\n\nYou may want to disable this if you use Masque or other tools to skin your Encore icons.
 options.displays.Primary.timeline.tab_now.border	name	Border
 options.displays.Primary.timeline.tab_now.border.break01	name	\032
 options.displays.Primary.timeline.tab_now.border.color	desc	When borders are enabled and the Coloring Mode is set to |cFFFFD100Custom Color|r, the border will use this color.
@@ -18094,8 +18094,8 @@ options.displays.Primary.truth.edge	desc	Grey an icon as soon as the game says t
 options.displays.Primary.truth.edge	name	Grey When Not Usable
 options.displays.Primary.truth.enabled	desc	Turn the Modern overlays on for this display. Turn it off to go back to the plain style.
 options.displays.Primary.truth.enabled	name	Modern (game truth)
-options.displays.Primary.truth.info	name	Experimental. Keeps this display's style and settings, and adds the game's own cooldown swipes, an immediate grey when the game says an ability cannot be used yet, and a gold glow on the next ability when the game lights its proc. Hekili still decides what to show.
-options.displays.Primary.truth.swipes	desc	Show the game's own cooldown on an icon while it runs, instead of Hekili's estimate.
+options.displays.Primary.truth.info	name	Experimental. Keeps this display's style and settings, and adds the game's own cooldown swipes, an immediate grey when the game says an ability cannot be used yet, and a gold glow on the next ability when the game lights its proc. Encore still decides what to show.
+options.displays.Primary.truth.swipes	desc	Show the game's own cooldown on an icon while it runs, instead of Encore's estimate.
 options.displays.Primary.truth.swipes	name	Real Cooldown Swipes
 options.displays.Primary.visibility	desc	Visibility and transparency settings in PvE / PvP.
 options.displays.Primary.visibility	name	Visibility
@@ -18182,7 +18182,7 @@ options.displays.fontStyle	values.NONE	None
 options.displays.fontStyle	values.OUTLINE	Outline
 options.displays.fontStyle	values.THICKOUTLINE	Thick Outline
 options.displays.fontWarn	name	Changing the font below will modify |cFFFF0000ALL|r text on all displays.\nTo modify one bit of text individually, select the Display (at left) and select the appropriate text.
-options.displays.header	name	Hekili Forever has up to five built-in displays (identified in blue) that can display different kinds of recommendations.  The addon's recommendations are based upon the Priorities that are generally (but not exclusively) based on SimulationCraft profiles so that you can compare your performance to the results of your simulations.
+options.displays.header	name	Encore has up to five built-in displays (identified in blue) that can display different kinds of recommendations.  The addon's recommendations are based upon the Priorities that are generally (but not exclusively) based on SimulationCraft profiles so that you can compare your performance to the results of your simulations.
 options.displays.nPanel	desc	The Notification Panel provides brief updates when settings are changed or toggled while in combat.
 options.displays.nPanel	name	|cFF1EFF00Notification Panel|r
 options.displays.nPanel.enabled	name	Enabled
@@ -18253,14 +18253,14 @@ options.displays.shareHeader	name	Sharing
 options.errors	name	Warnings
 options.errors.errName	name	Warning Identifier
 options.errors.errorInfo	name	Warning Information
-options.general	desc	Welcome to Hekili Forever; includes general information and essential links.
+options.general	desc	Welcome to Encore; includes general information and essential links.
 options.general	name	General
 options.general.curse	desc	Find Hekili Forever updates on CurseForge.
 options.general.curse	name	CurseForge
 options.general.enabled	desc	Enables or disables the addon.
 options.general.enabled	name	Enabled
 options.general.forkNotice	name	|cFF00CCFFHekili Forever|r is a fork of the original |cFFFFD100Hekili|r project, made with the explicit permission of its original author. It is based on the original work by Hekili and its maintainers, modified for WoW Forever by defzach from October 2026, and it is |cffff0000not|r the original project: please report problems on the Hekili Forever GitHub page below, never to the original Hekili authors.\n\nHekili Forever is free software under the GNU General Public License version 3 or (at your option) any later version; the full text is in the LICENSE file in the addon folder.\n\nSee the |cFFFFD100Snapshots (Troubleshooting)|r section for how to report a bug.\n\n
-options.general.github	desc	Find Hekili Forever updates on GitHub.
+options.general.github	desc	Find Encore updates on GitHub.
 options.general.github	name	GitHub
 options.general.link	name	Report Issue
 options.general.minimapIcon	desc	If checked, the minimap icon will be hidden.
@@ -18272,12 +18272,12 @@ options.general.updaterSpace	name	\032
 options.gettingStarted	desc	This section serves as a quick tutorial and explanation of the addon.
 options.gettingStarted	name	Getting Started
 options.gettingStarted.gettingStarted_displays	name	Setting up your displays
-options.gettingStarted.gettingStarted_displays.gettingStarted_displays_info	name	|cFFFFD100Displays|r are where Hekili Forever shows you the recommended spells and items to cast, with the |cFF00CCFFPrimary|r display being your DPS priority. When this options window is open, all displays are visible.\n\n|cFFFFD100Displays|r can be moved by:\n• Clicking and Dragging them\n  - You can move this window out of the way by clicking the |cFFFFD100Hekili Forever Dev-<BUILD> (<DATE>) |rtitle at the very top and dragging it out of the way.\n  - Or, you can type |cFFFFD100/hek move|r to allow displays to be moved, but without opening the options. Type it again to lock the displays.\n• Setting precise X/Y positioning in the |cFFFFD100Displays|r section, on each display's |cFFFFD100Icon|r tab.\n\nBy default, the addon uses |cFFFFD100Automatic|r Mode, which decides whether to do a |cFF00CCFFSingle-Target|r or |cFF00CCFFAoE (Multi-Target)|r rotation based on the number of targets detected. You can enable other types of displays in the |cFFFFD100Toggles|r > |cFFFFD100Display Control|r section. There are also other types of displays you can use, with options to display them separately from your |cFF00CCFFPrimary|r display.\n\nAdditional Displays:\n• |cFF00CCFFCooldowns|r\n• |cFF00CCFFInterrupts|r\n• |cFF00CCFFDefensives|r\n\n
+options.gettingStarted.gettingStarted_displays.gettingStarted_displays_info	name	|cFFFFD100Displays|r are where Encore shows you the recommended spells and items to cast, with the |cFF00CCFFPrimary|r display being your DPS priority. When this options window is open, all displays are visible.\n\n|cFFFFD100Displays|r can be moved by:\n• Clicking and Dragging them\n  - You can move this window out of the way by clicking the |cFFFFD100Encore Dev-<BUILD> (<DATE>) |rtitle at the very top and dragging it out of the way.\n  - Or, you can type |cFFFFD100/enc move|r to allow displays to be moved, but without opening the options. Type it again to lock the displays.\n• Setting precise X/Y positioning in the |cFFFFD100Displays|r section, on each display's |cFFFFD100Icon|r tab.\n\nBy default, the addon uses |cFFFFD100Automatic|r Mode, which decides whether to do a |cFF00CCFFSingle-Target|r or |cFF00CCFFAoE (Multi-Target)|r rotation based on the number of targets detected. You can enable other types of displays in the |cFFFFD100Toggles|r > |cFFFFD100Display Control|r section. There are also other types of displays you can use, with options to display them separately from your |cFF00CCFFPrimary|r display.\n\nAdditional Displays:\n• |cFF00CCFFCooldowns|r\n• |cFF00CCFFInterrupts|r\n• |cFF00CCFFDefensives|r\n\n
 options.gettingStarted.gettingStarted_faqs	name	Common questions and problems
 options.gettingStarted.gettingStarted_faqs.gettingStarted_toggles_info	name	Top 3 questions/problems\n\n1. My keybinds aren't showing up right\n- |cFF00CCFFThis can happen with macros or stealth bars sometimes. You can manually tell the addon what keybind to use in the|r |cFFFFD100Abilities|r |cFF00CCFFsection. Find the spell from the dropdown and use the|r |cFFFFD100Override Keybind|r |cFF00CCFFbox. Same can be done with trinkets under|r |cFFFFD100Gear and Items|r.\n\n2. I don't recognize this spell! What is it?\n- |cFF00CCFFIt's probably a trinket. You can press |cFFFFD100alt-shift-p|r to pause the addon and hover over the icon to see what it is!|r\n\n3. How do I disable a certain ability or trinket?\n- |cFF00CCFFHead over to |cFFFFD100Abilities|r or |cFFFFD100Gear and Items|r, find it in the dropdown list, and disable it.\n\n|r\nI made it to the bottom but I still have an issue!\n- |cFF00CCFFHead on over to|r |cFFFFD100Snapshots (Troubleshooting)|r |cFF00CCFFfor more detailed instructions.
 options.gettingStarted.gettingStarted_toggles	name	How To Use Toggles
 options.gettingStarted.gettingStarted_toggles.gettingStarted_toggles_info	name	The addon has several |cFFFFD100Toggles|r available that help you control the type of recommendations you receive while in combat, which can be toggled via hotkeys.  See the |cFFFFD100Toggles|r section for specifics.\n\n|cFFFFD100Damage Cooldowns|r:  Your major DPS cooldowns are assigned to the |cFF00CCFFCooldowns|r toggle.  This allows you to enable/disable these abilities in combat by using a keybind, which can prevent the addon from recommending your important cooldowns in some undesireable scenarios such as: \n• At the end of a dungeon pack\n• During a raid boss invulnerability phase, or right before a bonus damage phase\n\nYou can add/remove abilities from these toggles in the |cFFFFD100Abilities|r or |cFFFFD100Gear and Items|r sections. \n\n|cFF00CCFFLearning to use the Cooldowns toggle while playing can greatly increase your dps!|r\n\n
-options.gettingStarted.gettingStarted_welcome_header	name	Welcome to Hekili Forever\n
+options.gettingStarted.gettingStarted_welcome_header	name	Welcome to Encore\n
 options.gettingStarted.gettingStarted_welcome_info	name	This section is a quick overview of the addon basics. At the end, you will also find answers to a few of the most common questions we get on GitHub. \n\n|cFF00CCFFTaking a couple minutes to read it is highly encouraged to improve your experience!|r\n\n
 options.items	desc	Edit specific items, such as disabling, assigning to a toggle, overriding the keybind text and more.
 options.items	name	Gear and Items
@@ -18828,7 +18828,7 @@ options.packs.affliction.Affliction (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.affliction.Affliction (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.affliction.Affliction (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.affliction.Affliction (wowsims.com).pack.desc	name	Description
-options.packs.affliction.Affliction (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.affliction.Affliction (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.affliction.Affliction (wowsims.com).pack.packName	name	Priority Name
 options.packs.affliction.Affliction (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.affliction.Affliction (wowsims.com).pack.spec	name	Specialization
@@ -19137,7 +19137,7 @@ options.packs.affliction.SM Ruin (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.affliction.SM Ruin (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.affliction.SM Ruin (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.affliction.SM Ruin (wowsims.com).pack.desc	name	Description
-options.packs.affliction.SM Ruin (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.affliction.SM Ruin (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.affliction.SM Ruin (wowsims.com).pack.packName	name	Priority Name
 options.packs.affliction.SM Ruin (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.affliction.SM Ruin (wowsims.com).pack.spec	name	Specialization
@@ -19165,7 +19165,7 @@ options.packs.affliction.SM Ruin (wowsims.com).profile.signature.source	name	Sou
 options.packs.affliction.SM Ruin (wowsims.com).profile.warnings	name	Import Log
 options.packs.affliction.core	desc	Core features and specialization options for |W|T136145:0::::64:64:4:60:4:60|t Affliction|w.
 options.packs.affliction.core	name	Specialization Settings
-options.packs.affliction.core.activate	desc	Recommend for Affliction from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.affliction.core.activate	desc	Recommend for Affliction from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.affliction.core.activate	name	Activate Affliction
 options.packs.affliction.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.affliction.core.assigned_curse	desc	The curse the wowsims.com priority keeps on the target (wowsims's Curses option). No Curse: none.\n\nThe wowsims gate runs this as Curse of the Elements.
@@ -19200,8 +19200,8 @@ options.packs.affliction.targets	desc	Settings related to how enemies are identi
 options.packs.affliction.targets	name	Targeting
 options.packs.affliction.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.affliction.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.affliction.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.affliction.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.affliction.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.affliction.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.affliction.targets.cycleGroup	name	Secondary Targets
 options.packs.affliction.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.affliction.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -19487,7 +19487,7 @@ options.packs.arcane.Arcane (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.arcane.Arcane (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.arcane.Arcane (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.arcane.Arcane (wowsims.com).pack.desc	name	Description
-options.packs.arcane.Arcane (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.arcane.Arcane (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.arcane.Arcane (wowsims.com).pack.packName	name	Priority Name
 options.packs.arcane.Arcane (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.arcane.Arcane (wowsims.com).pack.spec	name	Specialization
@@ -19515,7 +19515,7 @@ options.packs.arcane.Arcane (wowsims.com).profile.signature.source	name	Source
 options.packs.arcane.Arcane (wowsims.com).profile.warnings	name	Import Log
 options.packs.arcane.core	desc	Core features and specialization options for |W|T135932:0::::64:64:4:60:4:60|t Arcane|w.
 options.packs.arcane.core	name	Specialization Settings
-options.packs.arcane.core.activate	desc	Recommend for Arcane from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.arcane.core.activate	desc	Recommend for Arcane from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.arcane.core.activate	name	Activate Arcane
 options.packs.arcane.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.arcane.core.disableSpacer	name	\032
@@ -19541,8 +19541,8 @@ options.packs.arcane.targets	desc	Settings related to how enemies are identified
 options.packs.arcane.targets	name	Targeting
 options.packs.arcane.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.arcane.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.arcane.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.arcane.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.arcane.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.arcane.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.arcane.targets.cycleGroup	name	Secondary Targets
 options.packs.arcane.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.arcane.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -19872,7 +19872,7 @@ options.packs.arms.Arms (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.arms.Arms (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.arms.Arms (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.arms.Arms (wowsims.com).pack.desc	name	Description
-options.packs.arms.Arms (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.arms.Arms (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.arms.Arms (wowsims.com).pack.packName	name	Priority Name
 options.packs.arms.Arms (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.arms.Arms (wowsims.com).pack.spec	name	Specialization
@@ -19900,7 +19900,7 @@ options.packs.arms.Arms (wowsims.com).profile.signature.source	name	Source
 options.packs.arms.Arms (wowsims.com).profile.warnings	name	Import Log
 options.packs.arms.core	desc	Core features and specialization options for |W|T132292:0::::64:64:4:60:4:60|t Arms|w.
 options.packs.arms.core	name	Specialization Settings
-options.packs.arms.core.activate	desc	Recommend for Arms from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.arms.core.activate	desc	Recommend for Arms from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.arms.core.activate	name	Activate Arms
 options.packs.arms.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.arms.core.disableSpacer	name	\032
@@ -19934,8 +19934,8 @@ options.packs.arms.targets	desc	Settings related to how enemies are identified a
 options.packs.arms.targets	name	Targeting
 options.packs.arms.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.arms.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.arms.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.arms.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.arms.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.arms.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.arms.targets.cycleGroup	name	Secondary Targets
 options.packs.arms.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.arms.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -20225,7 +20225,7 @@ options.packs.assassination.Assassination (wowsims.com).pack	name	|cFF00B4FFSumm
 options.packs.assassination.Assassination (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.assassination.Assassination (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.assassination.Assassination (wowsims.com).pack.desc	name	Description
-options.packs.assassination.Assassination (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.assassination.Assassination (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.assassination.Assassination (wowsims.com).pack.packName	name	Priority Name
 options.packs.assassination.Assassination (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.assassination.Assassination (wowsims.com).pack.spec	name	Specialization
@@ -20253,7 +20253,7 @@ options.packs.assassination.Assassination (wowsims.com).profile.signature.source
 options.packs.assassination.Assassination (wowsims.com).profile.warnings	name	Import Log
 options.packs.assassination.core	desc	Core features and specialization options for |W|T132292:0::::64:64:4:60:4:60|t Assassination|w.
 options.packs.assassination.core	name	Specialization Settings
-options.packs.assassination.core.activate	desc	Recommend for Assassination from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.assassination.core.activate	desc	Recommend for Assassination from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.assassination.core.activate	name	Activate Assassination
 options.packs.assassination.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.assassination.core.disableSpacer	name	\032
@@ -20279,8 +20279,8 @@ options.packs.assassination.targets	desc	Settings related to how enemies are ide
 options.packs.assassination.targets	name	Targeting
 options.packs.assassination.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.assassination.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.assassination.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.assassination.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.assassination.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.assassination.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.assassination.targets.cycleGroup	name	Secondary Targets
 options.packs.assassination.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.assassination.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -20613,7 +20613,7 @@ options.packs.balance.Balance (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.balance.Balance (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.balance.Balance (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.balance.Balance (wowsims.com).pack.desc	name	Description
-options.packs.balance.Balance (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.balance.Balance (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.balance.Balance (wowsims.com).pack.packName	name	Priority Name
 options.packs.balance.Balance (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.balance.Balance (wowsims.com).pack.spec	name	Specialization
@@ -20641,10 +20641,10 @@ options.packs.balance.Balance (wowsims.com).profile.signature.source	name	Source
 options.packs.balance.Balance (wowsims.com).profile.warnings	name	Import Log
 options.packs.balance.core	desc	Core features and specialization options for |W|T136096:0::::64:64:4:60:4:60|t Balance|w.
 options.packs.balance.core	name	Specialization Settings
-options.packs.balance.core.activate	desc	Recommend for Balance from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.balance.core.activate	desc	Recommend for Balance from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.balance.core.activate	name	Activate Balance
 options.packs.balance.core.activeMarker	name	|cFFFFD100Active|r
-options.packs.balance.core.behind	desc	Hekili assumes you are always behind the target. Below 2 ranks of Shredding Attacks, Claw is still preferred unless Clearcasting makes Shred free.
+options.packs.balance.core.behind	desc	Encore assumes you are always behind the target. Below 2 ranks of Shredding Attacks, Claw is still preferred unless Clearcasting makes Shred free.
 options.packs.balance.core.behind	name	Always Behind
 options.packs.balance.core.disableSpacer	name	\032
 options.packs.balance.core.enabled	desc	No recommendations while this specialization is active.
@@ -20671,8 +20671,8 @@ options.packs.balance.targets	desc	Settings related to how enemies are identifie
 options.packs.balance.targets	name	Targeting
 options.packs.balance.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.balance.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.balance.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.balance.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.balance.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.balance.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.balance.targets.cycleGroup	name	Secondary Targets
 options.packs.balance.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.balance.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -20982,7 +20982,7 @@ options.packs.beast_mastery.Beast Mastery Turret (wowsims.com).pack	name	|cFF00B
 options.packs.beast_mastery.Beast Mastery Turret (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.beast_mastery.Beast Mastery Turret (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.beast_mastery.Beast Mastery Turret (wowsims.com).pack.desc	name	Description
-options.packs.beast_mastery.Beast Mastery Turret (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.beast_mastery.Beast Mastery Turret (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.beast_mastery.Beast Mastery Turret (wowsims.com).pack.packName	name	Priority Name
 options.packs.beast_mastery.Beast Mastery Turret (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.beast_mastery.Beast Mastery Turret (wowsims.com).pack.spec	name	Specialization
@@ -21010,7 +21010,7 @@ options.packs.beast_mastery.Beast Mastery Turret (wowsims.com).profile.signature
 options.packs.beast_mastery.Beast Mastery Turret (wowsims.com).profile.warnings	name	Import Log
 options.packs.beast_mastery.core	desc	Core features and specialization options for |W|T132164:0::::64:64:4:60:4:60|t Beast Mastery|w.
 options.packs.beast_mastery.core	name	Specialization Settings
-options.packs.beast_mastery.core.activate	desc	Recommend for Beast Mastery from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.beast_mastery.core.activate	desc	Recommend for Beast Mastery from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.beast_mastery.core.activate	name	Activate Beast Mastery
 options.packs.beast_mastery.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.beast_mastery.core.disableSpacer	name	\032
@@ -21036,8 +21036,8 @@ options.packs.beast_mastery.targets	desc	Settings related to how enemies are ide
 options.packs.beast_mastery.targets	name	Targeting
 options.packs.beast_mastery.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.beast_mastery.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.beast_mastery.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.beast_mastery.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.beast_mastery.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.beast_mastery.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.beast_mastery.targets.cycleGroup	name	Secondary Targets
 options.packs.beast_mastery.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.beast_mastery.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -21328,7 +21328,7 @@ options.packs.combat.Combat (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.combat.Combat (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.combat.Combat (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.combat.Combat (wowsims.com).pack.desc	name	Description
-options.packs.combat.Combat (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.combat.Combat (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.combat.Combat (wowsims.com).pack.packName	name	Priority Name
 options.packs.combat.Combat (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.combat.Combat (wowsims.com).pack.spec	name	Specialization
@@ -21356,7 +21356,7 @@ options.packs.combat.Combat (wowsims.com).profile.signature.source	name	Source
 options.packs.combat.Combat (wowsims.com).profile.warnings	name	Import Log
 options.packs.combat.core	desc	Core features and specialization options for |W|T132090:0::::64:64:4:60:4:60|t Combat|w.
 options.packs.combat.core	name	Specialization Settings
-options.packs.combat.core.activate	desc	Recommend for Combat from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.combat.core.activate	desc	Recommend for Combat from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.combat.core.activate	name	Activate Combat
 options.packs.combat.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.combat.core.disableSpacer	name	\032
@@ -21382,8 +21382,8 @@ options.packs.combat.targets	desc	Settings related to how enemies are identified
 options.packs.combat.targets	name	Targeting
 options.packs.combat.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.combat.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.combat.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.combat.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.combat.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.combat.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.combat.targets.cycleGroup	name	Secondary Targets
 options.packs.combat.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.combat.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -21709,7 +21709,7 @@ options.packs.demonology.Demonology (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.demonology.Demonology (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.demonology.Demonology (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.demonology.Demonology (wowsims.com).pack.desc	name	Description
-options.packs.demonology.Demonology (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.demonology.Demonology (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.demonology.Demonology (wowsims.com).pack.packName	name	Priority Name
 options.packs.demonology.Demonology (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.demonology.Demonology (wowsims.com).pack.spec	name	Specialization
@@ -22028,7 +22028,7 @@ options.packs.demonology.Shadow Brand (wowsims.com).pack	name	|cFF00B4FFSummary|
 options.packs.demonology.Shadow Brand (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.demonology.Shadow Brand (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.demonology.Shadow Brand (wowsims.com).pack.desc	name	Description
-options.packs.demonology.Shadow Brand (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.demonology.Shadow Brand (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.demonology.Shadow Brand (wowsims.com).pack.packName	name	Priority Name
 options.packs.demonology.Shadow Brand (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.demonology.Shadow Brand (wowsims.com).pack.spec	name	Specialization
@@ -22056,7 +22056,7 @@ options.packs.demonology.Shadow Brand (wowsims.com).profile.signature.source	nam
 options.packs.demonology.Shadow Brand (wowsims.com).profile.warnings	name	Import Log
 options.packs.demonology.core	desc	Core features and specialization options for |W|T136172:0::::64:64:4:60:4:60|t Demonology|w.
 options.packs.demonology.core	name	Specialization Settings
-options.packs.demonology.core.activate	desc	Recommend for Demonology from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.demonology.core.activate	desc	Recommend for Demonology from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.demonology.core.activate	name	Activate Demonology
 options.packs.demonology.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.demonology.core.assigned_curse	desc	The curse the wowsims.com priority keeps on the target (wowsims's Curses option). No Curse: none.\n\nThe wowsims gate runs this as Curse of the Elements.
@@ -22091,8 +22091,8 @@ options.packs.demonology.targets	desc	Settings related to how enemies are identi
 options.packs.demonology.targets	name	Targeting
 options.packs.demonology.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.demonology.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.demonology.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.demonology.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.demonology.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.demonology.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.demonology.targets.cycleGroup	name	Secondary Targets
 options.packs.demonology.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.demonology.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -22420,7 +22420,7 @@ options.packs.destruction.Destruction (wowsims.com).pack	name	|cFF00B4FFSummary|
 options.packs.destruction.Destruction (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.destruction.Destruction (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.destruction.Destruction (wowsims.com).pack.desc	name	Description
-options.packs.destruction.Destruction (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.destruction.Destruction (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.destruction.Destruction (wowsims.com).pack.packName	name	Priority Name
 options.packs.destruction.Destruction (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.destruction.Destruction (wowsims.com).pack.spec	name	Specialization
@@ -22448,7 +22448,7 @@ options.packs.destruction.Destruction (wowsims.com).profile.signature.source	nam
 options.packs.destruction.Destruction (wowsims.com).profile.warnings	name	Import Log
 options.packs.destruction.core	desc	Core features and specialization options for |W|T136186:0::::64:64:4:60:4:60|t Destruction|w.
 options.packs.destruction.core	name	Specialization Settings
-options.packs.destruction.core.activate	desc	Recommend for Destruction from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.destruction.core.activate	desc	Recommend for Destruction from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.destruction.core.activate	name	Activate Destruction
 options.packs.destruction.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.destruction.core.assigned_curse	desc	The curse the wowsims.com priority keeps on the target (wowsims's Curses option). No Curse: none.\n\nThe wowsims gate runs this as Curse of the Elements.
@@ -22482,8 +22482,8 @@ options.packs.destruction.targets	desc	Settings related to how enemies are ident
 options.packs.destruction.targets	name	Targeting
 options.packs.destruction.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.destruction.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.destruction.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.destruction.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.destruction.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.destruction.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.destruction.targets.cycleGroup	name	Secondary Targets
 options.packs.destruction.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.destruction.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -22784,7 +22784,7 @@ options.packs.discipline.Smite (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.discipline.Smite (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.discipline.Smite (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.discipline.Smite (wowsims.com).pack.desc	name	Description
-options.packs.discipline.Smite (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.discipline.Smite (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.discipline.Smite (wowsims.com).pack.packName	name	Priority Name
 options.packs.discipline.Smite (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.discipline.Smite (wowsims.com).pack.spec	name	Specialization
@@ -22811,7 +22811,7 @@ options.packs.discipline.Smite (wowsims.com).profile.signature.source	name	Sourc
 options.packs.discipline.Smite (wowsims.com).profile.warnings	name	Import Log
 options.packs.discipline.core	desc	Core features and specialization options for |W|T135987:0::::64:64:4:60:4:60|t Discipline|w.
 options.packs.discipline.core	name	Specialization Settings
-options.packs.discipline.core.activate	desc	Recommend for Discipline from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.discipline.core.activate	desc	Recommend for Discipline from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.discipline.core.activate	name	Activate Discipline
 options.packs.discipline.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.discipline.core.disableSpacer	name	\032
@@ -22837,8 +22837,8 @@ options.packs.discipline.targets	desc	Settings related to how enemies are identi
 options.packs.discipline.targets	name	Targeting
 options.packs.discipline.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.discipline.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.discipline.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.discipline.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.discipline.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.discipline.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.discipline.targets.cycleGroup	name	Secondary Targets
 options.packs.discipline.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.discipline.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -23138,7 +23138,7 @@ options.packs.elemental.Elemental (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.elemental.Elemental (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.elemental.Elemental (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.elemental.Elemental (wowsims.com).pack.desc	name	Description
-options.packs.elemental.Elemental (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.elemental.Elemental (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.elemental.Elemental (wowsims.com).pack.packName	name	Priority Name
 options.packs.elemental.Elemental (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.elemental.Elemental (wowsims.com).pack.spec	name	Specialization
@@ -23165,7 +23165,7 @@ options.packs.elemental.Elemental (wowsims.com).profile.signature.source	name	So
 options.packs.elemental.Elemental (wowsims.com).profile.warnings	name	Import Log
 options.packs.elemental.core	desc	Core features and specialization options for |W|T136048:0::::64:64:4:60:4:60|t Elemental|w.
 options.packs.elemental.core	name	Specialization Settings
-options.packs.elemental.core.activate	desc	Recommend for Elemental from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.elemental.core.activate	desc	Recommend for Elemental from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.elemental.core.activate	name	Activate Elemental
 options.packs.elemental.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.elemental.core.disableSpacer	name	\032
@@ -23191,8 +23191,8 @@ options.packs.elemental.targets	desc	Settings related to how enemies are identif
 options.packs.elemental.targets	name	Targeting
 options.packs.elemental.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.elemental.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.elemental.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.elemental.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.elemental.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.elemental.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.elemental.targets.cycleGroup	name	Secondary Targets
 options.packs.elemental.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.elemental.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -23496,7 +23496,7 @@ options.packs.enhancement.Enhancement (wowsims.com).pack	name	|cFF00B4FFSummary|
 options.packs.enhancement.Enhancement (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.enhancement.Enhancement (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.enhancement.Enhancement (wowsims.com).pack.desc	name	Description
-options.packs.enhancement.Enhancement (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.enhancement.Enhancement (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.enhancement.Enhancement (wowsims.com).pack.packName	name	Priority Name
 options.packs.enhancement.Enhancement (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.enhancement.Enhancement (wowsims.com).pack.spec	name	Specialization
@@ -23523,7 +23523,7 @@ options.packs.enhancement.Enhancement (wowsims.com).profile.signature.source	nam
 options.packs.enhancement.Enhancement (wowsims.com).profile.warnings	name	Import Log
 options.packs.enhancement.core	desc	Core features and specialization options for |W|T136051:0::::64:64:4:60:4:60|t Enhancement|w.
 options.packs.enhancement.core	name	Specialization Settings
-options.packs.enhancement.core.activate	desc	Recommend for Enhancement from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.enhancement.core.activate	desc	Recommend for Enhancement from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.enhancement.core.activate	name	Activate Enhancement
 options.packs.enhancement.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.enhancement.core.disableSpacer	name	\032
@@ -23549,8 +23549,8 @@ options.packs.enhancement.targets	desc	Settings related to how enemies are ident
 options.packs.enhancement.targets	name	Targeting
 options.packs.enhancement.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.enhancement.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.enhancement.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.enhancement.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.enhancement.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.enhancement.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.enhancement.targets.cycleGroup	name	Secondary Targets
 options.packs.enhancement.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.enhancement.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -23896,7 +23896,7 @@ options.packs.feral.Feral (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.feral.Feral (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.feral.Feral (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.feral.Feral (wowsims.com).pack.desc	name	Description
-options.packs.feral.Feral (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.feral.Feral (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.feral.Feral (wowsims.com).pack.packName	name	Priority Name
 options.packs.feral.Feral (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.feral.Feral (wowsims.com).pack.spec	name	Specialization
@@ -23924,10 +23924,10 @@ options.packs.feral.Feral (wowsims.com).profile.signature.source	name	Source
 options.packs.feral.Feral (wowsims.com).profile.warnings	name	Import Log
 options.packs.feral.core	desc	Core features and specialization options for |W|T132115:0::::64:64:4:60:4:60|t Feral|w.
 options.packs.feral.core	name	Specialization Settings
-options.packs.feral.core.activate	desc	Recommend for Feral from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.feral.core.activate	desc	Recommend for Feral from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.feral.core.activate	name	Activate Feral
 options.packs.feral.core.activeMarker	name	|cFFFFD100Active|r
-options.packs.feral.core.behind	desc	Hekili assumes you are always behind the target. Below 2 ranks of Shredding Attacks, Claw is still preferred unless Clearcasting makes Shred free.
+options.packs.feral.core.behind	desc	Encore assumes you are always behind the target. Below 2 ranks of Shredding Attacks, Claw is still preferred unless Clearcasting makes Shred free.
 options.packs.feral.core.behind	name	Always Behind
 options.packs.feral.core.disableSpacer	name	\032
 options.packs.feral.core.enabled	desc	No recommendations while this specialization is active.
@@ -23958,8 +23958,8 @@ options.packs.feral.targets	desc	Settings related to how enemies are identified 
 options.packs.feral.targets	name	Targeting
 options.packs.feral.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.feral.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.feral.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.feral.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.feral.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.feral.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.feral.targets.cycleGroup	name	Secondary Targets
 options.packs.feral.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.feral.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -24245,7 +24245,7 @@ options.packs.fire.Fire (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.fire.Fire (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.fire.Fire (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.fire.Fire (wowsims.com).pack.desc	name	Description
-options.packs.fire.Fire (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.fire.Fire (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.fire.Fire (wowsims.com).pack.packName	name	Priority Name
 options.packs.fire.Fire (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.fire.Fire (wowsims.com).pack.spec	name	Specialization
@@ -24522,7 +24522,7 @@ options.packs.fire.Frostfire (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.fire.Frostfire (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.fire.Frostfire (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.fire.Frostfire (wowsims.com).pack.desc	name	Description
-options.packs.fire.Frostfire (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.fire.Frostfire (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.fire.Frostfire (wowsims.com).pack.packName	name	Priority Name
 options.packs.fire.Frostfire (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.fire.Frostfire (wowsims.com).pack.spec	name	Specialization
@@ -24550,7 +24550,7 @@ options.packs.fire.Frostfire (wowsims.com).profile.signature.source	name	Source
 options.packs.fire.Frostfire (wowsims.com).profile.warnings	name	Import Log
 options.packs.fire.core	desc	Core features and specialization options for |W|T135810:0::::64:64:4:60:4:60|t Fire|w.
 options.packs.fire.core	name	Specialization Settings
-options.packs.fire.core.activate	desc	Recommend for Fire from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.fire.core.activate	desc	Recommend for Fire from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.fire.core.activate	name	Activate Fire
 options.packs.fire.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.fire.core.disableSpacer	name	\032
@@ -24577,8 +24577,8 @@ options.packs.fire.targets	desc	Settings related to how enemies are identified a
 options.packs.fire.targets	name	Targeting
 options.packs.fire.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.fire.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.fire.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.fire.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.fire.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.fire.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.fire.targets.cycleGroup	name	Secondary Targets
 options.packs.fire.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.fire.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -24864,7 +24864,7 @@ options.packs.frost.Frost (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.frost.Frost (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.frost.Frost (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.frost.Frost (wowsims.com).pack.desc	name	Description
-options.packs.frost.Frost (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.frost.Frost (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.frost.Frost (wowsims.com).pack.packName	name	Priority Name
 options.packs.frost.Frost (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.frost.Frost (wowsims.com).pack.spec	name	Specialization
@@ -24892,7 +24892,7 @@ options.packs.frost.Frost (wowsims.com).profile.signature.source	name	Source
 options.packs.frost.Frost (wowsims.com).profile.warnings	name	Import Log
 options.packs.frost.core	desc	Core features and specialization options for |W|T135846:0::::64:64:4:60:4:60|t Frost|w.
 options.packs.frost.core	name	Specialization Settings
-options.packs.frost.core.activate	desc	Recommend for Frost from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.frost.core.activate	desc	Recommend for Frost from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.frost.core.activate	name	Activate Frost
 options.packs.frost.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.frost.core.disableSpacer	name	\032
@@ -24918,8 +24918,8 @@ options.packs.frost.targets	desc	Settings related to how enemies are identified 
 options.packs.frost.targets	name	Targeting
 options.packs.frost.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.frost.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.frost.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.frost.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.frost.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.frost.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.frost.targets.cycleGroup	name	Secondary Targets
 options.packs.frost.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.frost.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -25241,7 +25241,7 @@ options.packs.fury.Fury (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.fury.Fury (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.fury.Fury (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.fury.Fury (wowsims.com).pack.desc	name	Description
-options.packs.fury.Fury (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.fury.Fury (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.fury.Fury (wowsims.com).pack.packName	name	Priority Name
 options.packs.fury.Fury (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.fury.Fury (wowsims.com).pack.spec	name	Specialization
@@ -25269,7 +25269,7 @@ options.packs.fury.Fury (wowsims.com).profile.signature.source	name	Source
 options.packs.fury.Fury (wowsims.com).profile.warnings	name	Import Log
 options.packs.fury.core	desc	Core features and specialization options for |W|T132347:0::::64:64:4:60:4:60|t Fury|w.
 options.packs.fury.core	name	Specialization Settings
-options.packs.fury.core.activate	desc	Recommend for Fury from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.fury.core.activate	desc	Recommend for Fury from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.fury.core.activate	name	Activate Fury
 options.packs.fury.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.fury.core.disableSpacer	name	\032
@@ -25301,8 +25301,8 @@ options.packs.fury.targets	desc	Settings related to how enemies are identified a
 options.packs.fury.targets	name	Targeting
 options.packs.fury.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.fury.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.fury.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.fury.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.fury.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.fury.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.fury.targets.cycleGroup	name	Secondary Targets
 options.packs.fury.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.fury.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -25643,7 +25643,7 @@ options.packs.guardian.Guardian (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.guardian.Guardian (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.guardian.Guardian (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.guardian.Guardian (wowsims.com).pack.desc	name	Description
-options.packs.guardian.Guardian (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.guardian.Guardian (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.guardian.Guardian (wowsims.com).pack.packName	name	Priority Name
 options.packs.guardian.Guardian (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.guardian.Guardian (wowsims.com).pack.spec	name	Specialization
@@ -25671,10 +25671,10 @@ options.packs.guardian.Guardian (wowsims.com).profile.signature.source	name	Sour
 options.packs.guardian.Guardian (wowsims.com).profile.warnings	name	Import Log
 options.packs.guardian.core	desc	Core features and specialization options for |W|T132276:0::::64:64:4:60:4:60|t Guardian|w.
 options.packs.guardian.core	name	Specialization Settings
-options.packs.guardian.core.activate	desc	Recommend for Guardian from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.guardian.core.activate	desc	Recommend for Guardian from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.guardian.core.activate	name	Activate Guardian
 options.packs.guardian.core.activeMarker	name	|cFFFFD100Active|r
-options.packs.guardian.core.behind	desc	Hekili assumes you are always behind the target. Below 2 ranks of Shredding Attacks, Claw is still preferred unless Clearcasting makes Shred free.
+options.packs.guardian.core.behind	desc	Encore assumes you are always behind the target. Below 2 ranks of Shredding Attacks, Claw is still preferred unless Clearcasting makes Shred free.
 options.packs.guardian.core.behind	name	Always Behind
 options.packs.guardian.core.disableSpacer	name	\032
 options.packs.guardian.core.enabled	desc	No recommendations while this specialization is active.
@@ -25705,8 +25705,8 @@ options.packs.guardian.targets	desc	Settings related to how enemies are identifi
 options.packs.guardian.targets	name	Targeting
 options.packs.guardian.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.guardian.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.guardian.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.guardian.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.guardian.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.guardian.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.guardian.targets.cycleGroup	name	Secondary Targets
 options.packs.guardian.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.guardian.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -25739,10 +25739,10 @@ options.packs.guardian.targets.yourTarget	desc	Your actual target is always coun
 options.packs.guardian.targets.yourTarget	name	Your Target
 options.packs.holy	name	Holy
 options.packs.holy.core	name	Specialization Settings
-options.packs.holy.core.activate	desc	Recommend for Holy from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.holy.core.activate	desc	Recommend for Holy from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.holy.core.activate	name	Activate Holy
 options.packs.holy.core.activeMarker	name	|cFFFFD100Active|r
-options.packs.holy.core.notice	name	No priorities on Forever for Holy: Hekili Forever recommends nothing while this specialization is active.
+options.packs.holy.core.notice	name	No priorities on Forever for Holy: Encore recommends nothing while this specialization is active.
 options.packs.marksmanship	name	Marksmanship
 options.packs.marksmanship.Marksmanship Turret (wowsims.com)	name	|cFF00B4FFMarksmanship Turret (wowsims.com)|r
 options.packs.marksmanship.Marksmanship Turret (wowsims.com).export	name	Export
@@ -26020,7 +26020,7 @@ options.packs.marksmanship.Marksmanship Turret (wowsims.com).pack	name	|cFF00B4F
 options.packs.marksmanship.Marksmanship Turret (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.marksmanship.Marksmanship Turret (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.marksmanship.Marksmanship Turret (wowsims.com).pack.desc	name	Description
-options.packs.marksmanship.Marksmanship Turret (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.marksmanship.Marksmanship Turret (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.marksmanship.Marksmanship Turret (wowsims.com).pack.packName	name	Priority Name
 options.packs.marksmanship.Marksmanship Turret (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.marksmanship.Marksmanship Turret (wowsims.com).pack.spec	name	Specialization
@@ -26048,7 +26048,7 @@ options.packs.marksmanship.Marksmanship Turret (wowsims.com).profile.signature.s
 options.packs.marksmanship.Marksmanship Turret (wowsims.com).profile.warnings	name	Import Log
 options.packs.marksmanship.core	desc	Core features and specialization options for |W|T132222:0::::64:64:4:60:4:60|t Marksmanship|w.
 options.packs.marksmanship.core	name	Specialization Settings
-options.packs.marksmanship.core.activate	desc	Recommend for Marksmanship from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.marksmanship.core.activate	desc	Recommend for Marksmanship from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.marksmanship.core.activate	name	Activate Marksmanship
 options.packs.marksmanship.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.marksmanship.core.disableSpacer	name	\032
@@ -26074,8 +26074,8 @@ options.packs.marksmanship.targets	desc	Settings related to how enemies are iden
 options.packs.marksmanship.targets	name	Targeting
 options.packs.marksmanship.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.marksmanship.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.marksmanship.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.marksmanship.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.marksmanship.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.marksmanship.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.marksmanship.targets.cycleGroup	name	Secondary Targets
 options.packs.marksmanship.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.marksmanship.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -26541,7 +26541,7 @@ options.packs.protection.Protection (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.protection.Protection (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.protection.Protection (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.protection.Protection (wowsims.com).pack.desc	name	Description
-options.packs.protection.Protection (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.protection.Protection (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.protection.Protection (wowsims.com).pack.packName	name	Priority Name
 options.packs.protection.Protection (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.protection.Protection (wowsims.com).pack.spec	name	Specialization
@@ -26574,7 +26574,7 @@ options.packs.protection.Protection (wowsims.com).profile.warnings	name	Import L
 options.packs.protection.core	desc	Core features and specialization options for |W|T134952:0::::64:64:4:60:4:60|t Protection|w.
 options.packs.protection.core	desc	Core features and specialization options for |W|T135893:0::::64:64:4:60:4:60|t Protection|w.
 options.packs.protection.core	name	Specialization Settings
-options.packs.protection.core.activate	desc	Recommend for Protection from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.protection.core.activate	desc	Recommend for Protection from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.protection.core.activate	name	Activate Protection
 options.packs.protection.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.protection.core.disableSpacer	name	\032
@@ -26605,8 +26605,8 @@ options.packs.protection.targets	desc	Settings related to how enemies are identi
 options.packs.protection.targets	name	Targeting
 options.packs.protection.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.protection.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.protection.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.protection.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.protection.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.protection.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.protection.targets.cycleGroup	name	Secondary Targets
 options.packs.protection.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.protection.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -26639,10 +26639,10 @@ options.packs.protection.targets.yourTarget	desc	Your actual target is always co
 options.packs.protection.targets.yourTarget	name	Your Target
 options.packs.restoration	name	Restoration
 options.packs.restoration.core	name	Specialization Settings
-options.packs.restoration.core.activate	desc	Recommend for Restoration from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.restoration.core.activate	desc	Recommend for Restoration from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.restoration.core.activate	name	Activate Restoration
 options.packs.restoration.core.activeMarker	name	|cFFFFD100Active|r
-options.packs.restoration.core.notice	name	No priorities on Forever for Restoration: Hekili Forever recommends nothing while this specialization is active.
+options.packs.restoration.core.notice	name	No priorities on Forever for Restoration: Encore recommends nothing while this specialization is active.
 options.packs.retribution	name	Retribution
 options.packs.retribution.Holy Shock (wowsims.com)	name	|cFF00B4FFHoly Shock (wowsims.com)|r
 options.packs.retribution.Holy Shock (wowsims.com).export	name	Export
@@ -26916,7 +26916,7 @@ options.packs.retribution.Holy Shock (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.retribution.Holy Shock (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.retribution.Holy Shock (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.retribution.Holy Shock (wowsims.com).pack.desc	name	Description
-options.packs.retribution.Holy Shock (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.retribution.Holy Shock (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.retribution.Holy Shock (wowsims.com).pack.packName	name	Priority Name
 options.packs.retribution.Holy Shock (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.retribution.Holy Shock (wowsims.com).pack.spec	name	Specialization
@@ -27221,7 +27221,7 @@ options.packs.retribution.Retribution (wowsims.com).pack	name	|cFF00B4FFSummary|
 options.packs.retribution.Retribution (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.retribution.Retribution (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.retribution.Retribution (wowsims.com).pack.desc	name	Description
-options.packs.retribution.Retribution (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.retribution.Retribution (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.retribution.Retribution (wowsims.com).pack.packName	name	Priority Name
 options.packs.retribution.Retribution (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.retribution.Retribution (wowsims.com).pack.spec	name	Specialization
@@ -27248,7 +27248,7 @@ options.packs.retribution.Retribution (wowsims.com).profile.signature.source	nam
 options.packs.retribution.Retribution (wowsims.com).profile.warnings	name	Import Log
 options.packs.retribution.core	desc	Core features and specialization options for |W|T135873:0::::64:64:4:60:4:60|t Retribution|w.
 options.packs.retribution.core	name	Specialization Settings
-options.packs.retribution.core.activate	desc	Recommend for Retribution from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.retribution.core.activate	desc	Recommend for Retribution from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.retribution.core.activate	name	Activate Retribution
 options.packs.retribution.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.retribution.core.disableSpacer	name	\032
@@ -27275,8 +27275,8 @@ options.packs.retribution.targets	desc	Settings related to how enemies are ident
 options.packs.retribution.targets	name	Targeting
 options.packs.retribution.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.retribution.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.retribution.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.retribution.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.retribution.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.retribution.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.retribution.targets.cycleGroup	name	Secondary Targets
 options.packs.retribution.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.retribution.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -27586,7 +27586,7 @@ options.packs.shadow.Shadow (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.shadow.Shadow (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.shadow.Shadow (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.shadow.Shadow (wowsims.com).pack.desc	name	Description
-options.packs.shadow.Shadow (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.shadow.Shadow (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.shadow.Shadow (wowsims.com).pack.packName	name	Priority Name
 options.packs.shadow.Shadow (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.shadow.Shadow (wowsims.com).pack.spec	name	Specialization
@@ -27613,7 +27613,7 @@ options.packs.shadow.Shadow (wowsims.com).profile.signature.source	name	Source
 options.packs.shadow.Shadow (wowsims.com).profile.warnings	name	Import Log
 options.packs.shadow.core	desc	Core features and specialization options for |W|T136207:0::::64:64:4:60:4:60|t Shadow|w.
 options.packs.shadow.core	name	Specialization Settings
-options.packs.shadow.core.activate	desc	Recommend for Shadow from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.shadow.core.activate	desc	Recommend for Shadow from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.shadow.core.activate	name	Activate Shadow
 options.packs.shadow.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.shadow.core.disableSpacer	name	\032
@@ -27643,8 +27643,8 @@ options.packs.shadow.targets	desc	Settings related to how enemies are identified
 options.packs.shadow.targets	name	Targeting
 options.packs.shadow.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.shadow.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.shadow.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.shadow.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.shadow.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.shadow.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.shadow.targets.cycleGroup	name	Secondary Targets
 options.packs.shadow.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.shadow.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -27987,7 +27987,7 @@ options.packs.subtlety.Subtlety (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.subtlety.Subtlety (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.subtlety.Subtlety (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.subtlety.Subtlety (wowsims.com).pack.desc	name	Description
-options.packs.subtlety.Subtlety (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.subtlety.Subtlety (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.subtlety.Subtlety (wowsims.com).pack.packName	name	Priority Name
 options.packs.subtlety.Subtlety (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.subtlety.Subtlety (wowsims.com).pack.spec	name	Specialization
@@ -28015,7 +28015,7 @@ options.packs.subtlety.Subtlety (wowsims.com).profile.signature.source	name	Sour
 options.packs.subtlety.Subtlety (wowsims.com).profile.warnings	name	Import Log
 options.packs.subtlety.core	desc	Core features and specialization options for |W|T132320:0::::64:64:4:60:4:60|t Subtlety|w.
 options.packs.subtlety.core	name	Specialization Settings
-options.packs.subtlety.core.activate	desc	Recommend for Subtlety from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.subtlety.core.activate	desc	Recommend for Subtlety from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.subtlety.core.activate	name	Activate Subtlety
 options.packs.subtlety.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.subtlety.core.disableSpacer	name	\032
@@ -28041,8 +28041,8 @@ options.packs.subtlety.targets	desc	Settings related to how enemies are identifi
 options.packs.subtlety.targets	name	Targeting
 options.packs.subtlety.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.subtlety.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.subtlety.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.subtlety.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.subtlety.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.subtlety.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.subtlety.targets.cycleGroup	name	Secondary Targets
 options.packs.subtlety.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.subtlety.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -28377,7 +28377,7 @@ options.packs.survival.Survival (wowsims.com).pack	name	|cFF00B4FFSummary|r
 options.packs.survival.Survival (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.survival.Survival (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.survival.Survival (wowsims.com).pack.desc	name	Description
-options.packs.survival.Survival (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.survival.Survival (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.survival.Survival (wowsims.com).pack.packName	name	Priority Name
 options.packs.survival.Survival (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.survival.Survival (wowsims.com).pack.spec	name	Specialization
@@ -28689,7 +28689,7 @@ options.packs.survival.Survival Melee (wowsims.com).pack	name	|cFF00B4FFSummary|
 options.packs.survival.Survival Melee (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.survival.Survival Melee (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.survival.Survival Melee (wowsims.com).pack.desc	name	Description
-options.packs.survival.Survival Melee (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.survival.Survival Melee (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.survival.Survival Melee (wowsims.com).pack.packName	name	Priority Name
 options.packs.survival.Survival Melee (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.survival.Survival Melee (wowsims.com).pack.spec	name	Specialization
@@ -28991,7 +28991,7 @@ options.packs.survival.Survival Turret (wowsims.com).pack	name	|cFF00B4FFSummary
 options.packs.survival.Survival Turret (wowsims.com).pack.copyPack	desc	Copy Priority
 options.packs.survival.Survival Turret (wowsims.com).pack.deletePack	desc	Delete Priority
 options.packs.survival.Survival Turret (wowsims.com).pack.desc	name	Description
-options.packs.survival.Survival Turret (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Hekili\\Textures\\WhiteCopy:0|t.|r
+options.packs.survival.Survival Turret (wowsims.com).pack.isBuiltIn	name	|cFF00B4FFThis is a default priority package.  It will be automatically updated when the addon is updated.  If you want to customize this priority, make a copy by clicking |TInterface\\Addons\\Encore\\Textures\\WhiteCopy:0|t.|r
 options.packs.survival.Survival Turret (wowsims.com).pack.packName	name	Priority Name
 options.packs.survival.Survival Turret (wowsims.com).pack.reloadPack	desc	Reload Priority
 options.packs.survival.Survival Turret (wowsims.com).pack.spec	name	Specialization
@@ -29019,7 +29019,7 @@ options.packs.survival.Survival Turret (wowsims.com).profile.signature.source	na
 options.packs.survival.Survival Turret (wowsims.com).profile.warnings	name	Import Log
 options.packs.survival.core	desc	Core features and specialization options for |W|T132215:0::::64:64:4:60:4:60|t Survival|w.
 options.packs.survival.core	name	Specialization Settings
-options.packs.survival.core.activate	desc	Recommend for Survival from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/hekili spec name|r).
+options.packs.survival.core.activate	desc	Recommend for Survival from now on. The choice is kept for your current talent tree: a talent swap to another tree activates the specialization chosen for that one (also |cFFFFD100/encore spec name|r).
 options.packs.survival.core.activate	name	Activate Survival
 options.packs.survival.core.activeMarker	name	|cFFFFD100Active|r
 options.packs.survival.core.disableSpacer	name	\032
@@ -29047,8 +29047,8 @@ options.packs.survival.targets	desc	Settings related to how enemies are identifi
 options.packs.survival.targets	name	Targeting
 options.packs.survival.targets.aoe	desc	When the AOE display is shown (or AOE mode is active), its recommendations will assume that there are at least this many targets available. \n\nThis can be useful with the Dual display mode to guarantee your AOE priority is shown if it doesn't normally change until, for example, 5 targets. \n\nUsing a setting of 5 would make sure the right priority is followed for "AOE" mode. Different values may be optimal different specializations and builds.
 options.packs.survival.targets.aoe	name	Minimum Targets for Dedicated AOE Recommendations
-options.packs.survival.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
-options.packs.survival.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Hekili\\Textures\\Cycle:0|t
+options.packs.survival.targets.cycle	desc	When target swapping is enabled, an icon (|TInterface\\Addons\\Encore\\Textures\\Cycle:0|t) may be shown when you should use an ability on a different target.\n\nThis works well for some specs that simply want to apply a debuff to another target, but can be less-effective for specializations that are concerned with maintaining dots/debuffs based on their durations.\n\nThis feature is targeted for improvement in a future update.
+options.packs.survival.targets.cycle	name	Allow Target Swaps |TInterface\\Addons\\Encore\\Textures\\Cycle:0|t
 options.packs.survival.targets.cycleGroup	name	Secondary Targets
 options.packs.survival.targets.cycleGroup.cycle_min	desc	When |cffffd100Recommend Target Swaps|r is checked, this value determines which targets are counted for target swapping purposes.  If set to 5, target swapping will not be recommended if no other target will live 5 seconds or longer.  This can be beneficial to avoid applying damage-over-time effects to a target that will die too quickly to be damaged by them.\n\nSet to 0 to count all detected targets.
 options.packs.survival.targets.cycleGroup.cycle_min	name	Filter by Time-to-Die
@@ -29116,7 +29116,7 @@ options.snapshots.issueReporting_snapshot_how.issueReporting_snapshot_how_info	n
 options.snapshots.issueReporting_snapshot_next	name	How to Submit
 options.snapshots.issueReporting_snapshot_next.issueReporting_snapshot_next_info	name	With the Snapshot Data copied to your clipboard, navigate to Pastebin.
 options.snapshots.issueReporting_snapshot_next.issueReporting_snapshot_next_info_2	name	Pastebin
-options.snapshots.issueReporting_snapshot_next.issueReporting_snapshot_next_info_3	name	Paste the Snapshot Data in the large textbox ( |cFFFFD100CTRL+V|r ), then click |cFFFFD100Create New Paste|r.\n\nCopy the link address from your browser and provide it in a GitHub issue report on the Hekili Forever page.
+options.snapshots.issueReporting_snapshot_next.issueReporting_snapshot_next_info_3	name	Paste the Snapshot Data in the large textbox ( |cFFFFD100CTRL+V|r ), then click |cFFFFD100Create New Paste|r.\n\nCopy the link address from your browser and provide it in a GitHub issue report on the Encore page.
 options.snapshots.issueReporting_snapshot_next.issueReporting_snapshot_next_info_5	name	GitHub Issues
 options.snapshots.prefHeader	name	Snapshots
 options.snapshots.screenshot	desc	If checked, the addon will take a screenshot when you manually create a snapshot.\n\nSubmitting both with your issue tickets will provide useful information for investigation purposes.
@@ -29217,114 +29217,114 @@ options.toggles.troubleshooting.pause.key	name	Pause
 options.toggles.troubleshooting.pause.value	name	Pause
 options.toggles.troubleshooting.snapshot.key	desc	Set a key to make a snapshot (without pausing) that can be viewed on the Snapshots tab.  This can be useful information for testing and debugging.
 options.toggles.troubleshooting.snapshot.key	name	Snapshot
-~message	/hekili bogus	Invalid command. Type '/hekili help' to see the available commands.
-~message	/hekili disable	Addon disabled.
-~message	/hekili enable	Addon enabled.
-~message	/hekili fix toggles	All standard toggles have been fixed (enabled), except 'mode' (unchanged).
-~message	/hekili fix toggles	Custom #1: ON
-~message	/hekili fix toggles	Custom #2: ON
-~message	/hekili fix toggles	Defensives: ON
-~message	/hekili fix toggles	Interrupts: ON
-~message	/hekili fix toggles	Major Cooldowns: ON
-~message	/hekili fix toggles	Minor Cooldowns: ON
-~message	/hekili fix toggles	Movement: ON
-~message	/hekili fix toggles	Potions: ON
-~message	/hekili help	Display Mode Control (currently |cFFFFD100automatic|r):\n - Toggle Mode: |cFFFFD100/hek set mode|r\n - Set specific mode:\n   - |cFFFFD100/hek set mode automatic|r\n   - |cFFFFD100/hek set mode single|r\n   - |cFFFFD100/hek set mode aoe|r\n   - |cFFFFD100/hek set mode dual|r\n   - |cFFFFD100/hek set mode reactive|r\n\n
-~message	/hekili help	Other available commands:\n - |cFFFFD100/hekili priority|r - View or change priority settings\n - |cFFFFD100/hekili profile|r - View or change profiles\n - |cFFFFD100/hekili move|r - Unlock or lock the UI for positioning\n - |cFFFFD100/hekili enable|r or |cFFFFD100/hekili disable|r - Enable or disable the addon\n
-~message	/hekili help	Specialization Settings for Affliction:\n - |cFFFFD100assigned_curse|r = |cFF00B4FFelements|r, one of: \n\n
-~message	/hekili help	Specialization Settings for Arcane:\n\n
-~message	/hekili help	Specialization Settings for Arms:\n - |cFFFFD100wowsims_recklessness|r = |cFFFF0000OFF|r (Recklessness (wowsims.com))\n - |cFFFFD100wowsims_stance_dance|r = |cFFFF0000OFF|r (Stance Dance (wowsims.com))\n - |cFFFFD100maintain_thunder_clap|r = |cFFFF0000OFF|r (Maintain Thunder Clap)\n\nExample commands for toggling specialization settings:\n - Toggle On/Off: |cFFFFD100/hek set spec maintain_thunder_clap|r\n - Enable: |cFFFFD100/hek set spec maintain_thunder_clap on|r\n - Disable: |cFFFFD100/hek set spec maintain_thunder_clap off|r\n\n
-~message	/hekili help	Specialization Settings for Assassination:\n\n
-~message	/hekili help	Specialization Settings for Balance:\n - |cFFFFD100behind|r = |cFFFF0000OFF|r (Always Behind)\n\nExample commands for toggling specialization settings:\n - Toggle On/Off: |cFFFFD100/hek set spec behind|r\n - Enable: |cFFFFD100/hek set spec behind on|r\n - Disable: |cFFFFD100/hek set spec behind off|r\n\n
-~message	/hekili help	Specialization Settings for Beast Mastery:\n\n
-~message	/hekili help	Specialization Settings for Discipline:\n\n
-~message	/hekili help	Specialization Settings for Elemental:\n\n
-~message	/hekili help	Specialization Settings for Protection:\n\n
-~message	/hekili help	Target Swap Setting:\n - Toggle Target Swap: |cFFFFD100/hek set cycle|r\n - Set minimum time to die for target swaps: |cFFFFD100/hek set cycle #|r (0-20)\n - Enable: |cFFFFD100/hek set cycle on|r\n - Disable: |cFFFFD100/hek set cycle off|r\n\n
-~message	/hekili help	Toggle Options:\n - |cFFFFD100cooldowns|r, |cFFFFD100potions|r, |cFFFFD100interrupts|r, |cFFFFD100movement|r, etc.\n - Example commands:\n   - Enable Cooldowns: |cFFFFD100/hek set cooldowns on|r\n   - Disable Interrupts: |cFFFFD100/hek set interrupts off|r\n   - Toggle Defensives: |cFFFFD100/hek set defensives|r\n\n
-~message	/hekili help	Use |cFFFFD100/hekili set|r to adjust toggles, display modes, and specialization settings via chat commands or macros.\n\n
-~message	/hekili lock	UI locked.
-~message	/hekili priority	Use |cFFFFD100/hekili priority name|r to change your current specialization's priority via command-line or macro.\nValid priority |cFFFFD100name|rs are:\n - |cFFFFD100Affliction (wowsims.com)|r |cFF00FF00(current)|r\n - |cFFFFD100SM Ruin (wowsims.com)|r \n\nTo create a new priority, see |cFFFFD100/hekili|r > |cFFFFD100Priorities|r.
-~message	/hekili priority	Use |cFFFFD100/hekili priority name|r to change your current specialization's priority via command-line or macro.\n\n|cFFFF0000You must have multiple priorities for your specialization to use this feature.|r\n\nTo create a new priority, see |cFFFFD100/hekili|r > |cFFFFD100Priorities|r.
-~message	/hekili priority Nope	No match found for priority 'nope'.\nValid options are: |cFFFFD100Affliction (wowsims.com)|r, |cFFFFD100SM Ruin (wowsims.com)|r.
-~message	/hekili priority Nope	No match found for priority 'nope'.\nValid options are: |cFFFFD100Arcane (wowsims.com)|r.
-~message	/hekili priority Nope	No match found for priority 'nope'.\nValid options are: |cFFFFD100Arms (wowsims.com)|r.
-~message	/hekili priority Nope	No match found for priority 'nope'.\nValid options are: |cFFFFD100Assassination (wowsims.com)|r.
-~message	/hekili priority Nope	No match found for priority 'nope'.\nValid options are: |cFFFFD100Balance (wowsims.com)|r.
-~message	/hekili priority Nope	No match found for priority 'nope'.\nValid options are: |cFFFFD100Beast Mastery Turret (wowsims.com)|r.
-~message	/hekili priority Nope	No match found for priority 'nope'.\nValid options are: |cFFFFD100Elemental (wowsims.com)|r.
-~message	/hekili priority Nope	No match found for priority 'nope'.\nValid options are: |cFFFFD100Protection (wowsims.com)|r.
-~message	/hekili priority Nope	No match found for priority 'nope'.\nValid options are: |cFFFFD100Smite (wowsims.com)|r.
-~message	/hekili profile	Use |cFFFFD100/hekili profile name|r to swap profiles. Valid profile names are:\n - |cFFFFD100Default|r |cFF00FF00(current)|r
-~message	/hekili profile Nope	Invalid profile name. Please choose a valid profile.
-~message	/hekili set	Display Mode Control (currently |cFFFFD100automatic|r):\n - Toggle Mode: |cFFFFD100/hek set mode|r\n - Set specific mode:\n   - |cFFFFD100/hek set mode automatic|r\n   - |cFFFFD100/hek set mode single|r\n   - |cFFFFD100/hek set mode aoe|r\n   - |cFFFFD100/hek set mode dual|r\n   - |cFFFFD100/hek set mode reactive|r\n\n
-~message	/hekili set	Other available commands:\n - |cFFFFD100/hekili priority|r - View or change priority settings\n - |cFFFFD100/hekili profile|r - View or change profiles\n - |cFFFFD100/hekili move|r - Unlock or lock the UI for positioning\n - |cFFFFD100/hekili enable|r or |cFFFFD100/hekili disable|r - Enable or disable the addon\n
-~message	/hekili set	Specialization Settings for Affliction:\n - |cFFFFD100assigned_curse|r = |cFF00B4FFelements|r, one of: \n\n
-~message	/hekili set	Specialization Settings for Arcane:\n\n
-~message	/hekili set	Specialization Settings for Arms:\n - |cFFFFD100wowsims_recklessness|r = |cFFFF0000OFF|r (Recklessness (wowsims.com))\n - |cFFFFD100wowsims_stance_dance|r = |cFFFF0000OFF|r (Stance Dance (wowsims.com))\n - |cFFFFD100maintain_thunder_clap|r = |cFFFF0000OFF|r (Maintain Thunder Clap)\n\nExample commands for toggling specialization settings:\n - Toggle On/Off: |cFFFFD100/hek set spec maintain_thunder_clap|r\n - Enable: |cFFFFD100/hek set spec maintain_thunder_clap on|r\n - Disable: |cFFFFD100/hek set spec maintain_thunder_clap off|r\n\n
-~message	/hekili set	Specialization Settings for Assassination:\n\n
-~message	/hekili set	Specialization Settings for Balance:\n - |cFFFFD100behind|r = |cFFFF0000OFF|r (Always Behind)\n\nExample commands for toggling specialization settings:\n - Toggle On/Off: |cFFFFD100/hek set spec behind|r\n - Enable: |cFFFFD100/hek set spec behind on|r\n - Disable: |cFFFFD100/hek set spec behind off|r\n\n
-~message	/hekili set	Specialization Settings for Beast Mastery:\n\n
-~message	/hekili set	Specialization Settings for Discipline:\n\n
-~message	/hekili set	Specialization Settings for Elemental:\n\n
-~message	/hekili set	Specialization Settings for Protection:\n\n
-~message	/hekili set	Target Swap Setting:\n - Toggle Target Swap: |cFFFFD100/hek set cycle|r\n - Set minimum time to die for target swaps: |cFFFFD100/hek set cycle #|r (0-20)\n - Enable: |cFFFFD100/hek set cycle on|r\n - Disable: |cFFFFD100/hek set cycle off|r\n\n
-~message	/hekili set	Toggle Options:\n - |cFFFFD100cooldowns|r, |cFFFFD100potions|r, |cFFFFD100interrupts|r, |cFFFFD100movement|r, etc.\n - Example commands:\n   - Enable Cooldowns: |cFFFFD100/hek set cooldowns on|r\n   - Disable Interrupts: |cFFFFD100/hek set interrupts off|r\n   - Toggle Defensives: |cFFFFD100/hek set defensives|r\n\n
-~message	/hekili set	Use |cFFFFD100/hekili set|r to adjust toggles, display modes, and specialization settings via chat commands or macros.\n\n
-~message	/hekili set cooldowns	Major Cooldowns: OFF
-~message	/hekili set cooldowns	|cFFFFD100cooldowns|r is now |cFFFF0000OFF|r.
-~message	/hekili set cooldowns off	Major Cooldowns: OFF
-~message	/hekili set cooldowns on	Major Cooldowns: ON
-~message	/hekili set cycle	Target Swap toggle set to |cFF00FF00ON|r.
-~message	/hekili set cycle 5	Target Swap minimum time to die set to 5 seconds.
-~message	/hekili set cycle nope	Invalid input for 'cycle'. Use 'on', 'off', leave blank to toggle, or provide a whole number from 0 to 20 to set the minimum time to die.
-~message	/hekili set cycle on	Target Swap toggle set to |cFF00FF00ON|r.
-~message	/hekili set mode	Mode: Single-Target
-~message	/hekili set mode aoe	Mode: AOE (Multi-Target)
-~message	/hekili set nope	Invalid toggle or setting specified.
-~message	/hekili set spec	Invalid spec setting specified.
-~message	/hekili set spec assigned_curse	Invalid value for assigned_curse. Use one of: .
-~message	/hekili set spec behind	behind set to |cFF00FF00ON|r.
-~message	/hekili set spec maintain_thunder_clap	maintain_thunder_clap set to |cFF00FF00ON|r.
-~message	/hekili set spec nope	Invalid spec setting specified.
-~message	/hekili set spec wowsims_recklessness	wowsims_recklessness set to |cFF00FF00ON|r.
-~message	/hekili set spec wowsims_stance_dance	wowsims_stance_dance set to |cFF00FF00ON|r.
-~message	/hekili spec	Use |cFFFFD100/hekili spec name|r to choose your specialization. They are:\n - |cFFFFD100affliction|r |cFF00FF00(current)|r\n - |cFFFFD100demonology|r\n - |cFFFFD100destruction|r
-~message	/hekili spec	Use |cFFFFD100/hekili spec name|r to choose your specialization. They are:\n - |cFFFFD100arcane|r |cFF00FF00(current)|r\n - |cFFFFD100fire|r\n - |cFFFFD100frost|r
-~message	/hekili spec	Use |cFFFFD100/hekili spec name|r to choose your specialization. They are:\n - |cFFFFD100arms|r |cFF00FF00(current)|r\n - |cFFFFD100fury|r\n - |cFFFFD100protection|r
-~message	/hekili spec	Use |cFFFFD100/hekili spec name|r to choose your specialization. They are:\n - |cFFFFD100assassination|r |cFF00FF00(current)|r\n - |cFFFFD100combat|r\n - |cFFFFD100subtlety|r
-~message	/hekili spec	Use |cFFFFD100/hekili spec name|r to choose your specialization. They are:\n - |cFFFFD100balance|r |cFF00FF00(current)|r\n - |cFFFFD100feral|r\n - |cFFFFD100guardian|r\n - |cFFFFD100restoration|r (no priorities on Forever)
-~message	/hekili spec	Use |cFFFFD100/hekili spec name|r to choose your specialization. They are:\n - |cFFFFD100beast_mastery|r |cFF00FF00(current)|r\n - |cFFFFD100marksmanship|r\n - |cFFFFD100survival|r
-~message	/hekili spec	Use |cFFFFD100/hekili spec name|r to choose your specialization. They are:\n - |cFFFFD100discipline|r |cFF00FF00(current)|r\n - |cFFFFD100holy|r (no priorities on Forever)\n - |cFFFFD100shadow|r
-~message	/hekili spec	Use |cFFFFD100/hekili spec name|r to choose your specialization. They are:\n - |cFFFFD100elemental|r |cFF00FF00(current)|r\n - |cFFFFD100enhancement|r\n - |cFFFFD100restoration|r (no priorities on Forever)
-~message	/hekili spec	Use |cFFFFD100/hekili spec name|r to choose your specialization. They are:\n - |cFFFFD100holy|r (no priorities on Forever)\n - |cFFFFD100protection|r |cFF00FF00(current)|r\n - |cFFFFD100retribution|r
-~message	/hekili spec nope	No single specialization matches 'nope'.
-~message	/hekili spec nope	Use |cFFFFD100/hekili spec name|r to choose your specialization. They are:\n - |cFFFFD100affliction|r |cFF00FF00(current)|r\n - |cFFFFD100demonology|r\n - |cFFFFD100destruction|r
-~message	/hekili spec nope	Use |cFFFFD100/hekili spec name|r to choose your specialization. They are:\n - |cFFFFD100arcane|r |cFF00FF00(current)|r\n - |cFFFFD100fire|r\n - |cFFFFD100frost|r
-~message	/hekili spec nope	Use |cFFFFD100/hekili spec name|r to choose your specialization. They are:\n - |cFFFFD100arms|r |cFF00FF00(current)|r\n - |cFFFFD100fury|r\n - |cFFFFD100protection|r
-~message	/hekili spec nope	Use |cFFFFD100/hekili spec name|r to choose your specialization. They are:\n - |cFFFFD100assassination|r |cFF00FF00(current)|r\n - |cFFFFD100combat|r\n - |cFFFFD100subtlety|r
-~message	/hekili spec nope	Use |cFFFFD100/hekili spec name|r to choose your specialization. They are:\n - |cFFFFD100balance|r |cFF00FF00(current)|r\n - |cFFFFD100feral|r\n - |cFFFFD100guardian|r\n - |cFFFFD100restoration|r (no priorities on Forever)
-~message	/hekili spec nope	Use |cFFFFD100/hekili spec name|r to choose your specialization. They are:\n - |cFFFFD100beast_mastery|r |cFF00FF00(current)|r\n - |cFFFFD100marksmanship|r\n - |cFFFFD100survival|r
-~message	/hekili spec nope	Use |cFFFFD100/hekili spec name|r to choose your specialization. They are:\n - |cFFFFD100discipline|r |cFF00FF00(current)|r\n - |cFFFFD100holy|r (no priorities on Forever)\n - |cFFFFD100shadow|r
-~message	/hekili spec nope	Use |cFFFFD100/hekili spec name|r to choose your specialization. They are:\n - |cFFFFD100elemental|r |cFF00FF00(current)|r\n - |cFFFFD100enhancement|r\n - |cFFFFD100restoration|r (no priorities on Forever)
-~message	/hekili spec nope	Use |cFFFFD100/hekili spec name|r to choose your specialization. They are:\n - |cFFFFD100holy|r (no priorities on Forever)\n - |cFFFFD100protection|r |cFF00FF00(current)|r\n - |cFFFFD100retribution|r
-~message	/hekili unlock	UI unlocked for movement.
-~message	build warning	|cFFFF0000WARNING|r: This version of Hekili Forever is for a newer WoW Forever client; you should reinstall for 1.60.1.
-~message	cast warnings	DRUID does not have any Hekili Forever modules loaded (yet).\nWatch for updates.
-~message	cast warnings	HUNTER does not have any Hekili Forever modules loaded (yet).\nWatch for updates.
-~message	cast warnings	Hekili Forever is designed for level 60 content.\nIt may not work as expected below level 60.
-~message	cast warnings	MAGE does not have any Hekili Forever modules loaded (yet).\nWatch for updates.
-~message	cast warnings	PALADIN does not have any Hekili Forever modules loaded (yet).\nWatch for updates.
-~message	cast warnings	PRIEST does not have any Hekili Forever modules loaded (yet).\nWatch for updates.
-~message	cast warnings	ROGUE does not have any Hekili Forever modules loaded (yet).\nWatch for updates.
-~message	cast warnings	SHAMAN does not have any Hekili Forever modules loaded (yet).\nWatch for updates.
-~message	cast warnings	WARLOCK does not have any Hekili Forever modules loaded (yet).\nWatch for updates.
-~message	cast warnings	WARRIOR does not have any Hekili Forever modules loaded (yet).\nWatch for updates.
+~message	/encore bogus	Invalid command. Type '/encore help' to see the available commands.
+~message	/encore disable	Addon disabled.
+~message	/encore enable	Addon enabled.
+~message	/encore fix toggles	All standard toggles have been fixed (enabled), except 'mode' (unchanged).
+~message	/encore fix toggles	Custom #1: ON
+~message	/encore fix toggles	Custom #2: ON
+~message	/encore fix toggles	Defensives: ON
+~message	/encore fix toggles	Interrupts: ON
+~message	/encore fix toggles	Major Cooldowns: ON
+~message	/encore fix toggles	Minor Cooldowns: ON
+~message	/encore fix toggles	Movement: ON
+~message	/encore fix toggles	Potions: ON
+~message	/encore help	Display Mode Control (currently |cFFFFD100automatic|r):\n - Toggle Mode: |cFFFFD100/enc set mode|r\n - Set specific mode:\n   - |cFFFFD100/enc set mode automatic|r\n   - |cFFFFD100/enc set mode single|r\n   - |cFFFFD100/enc set mode aoe|r\n   - |cFFFFD100/enc set mode dual|r\n   - |cFFFFD100/enc set mode reactive|r\n\n
+~message	/encore help	Other available commands:\n - |cFFFFD100/encore priority|r - View or change priority settings\n - |cFFFFD100/encore profile|r - View or change profiles\n - |cFFFFD100/encore move|r - Unlock or lock the UI for positioning\n - |cFFFFD100/encore enable|r or |cFFFFD100/encore disable|r - Enable or disable the addon\n
+~message	/encore help	Specialization Settings for Affliction:\n - |cFFFFD100assigned_curse|r = |cFF00B4FFelements|r, one of: \n\n
+~message	/encore help	Specialization Settings for Arcane:\n\n
+~message	/encore help	Specialization Settings for Arms:\n - |cFFFFD100wowsims_recklessness|r = |cFFFF0000OFF|r (Recklessness (wowsims.com))\n - |cFFFFD100wowsims_stance_dance|r = |cFFFF0000OFF|r (Stance Dance (wowsims.com))\n - |cFFFFD100maintain_thunder_clap|r = |cFFFF0000OFF|r (Maintain Thunder Clap)\n\nExample commands for toggling specialization settings:\n - Toggle On/Off: |cFFFFD100/enc set spec maintain_thunder_clap|r\n - Enable: |cFFFFD100/enc set spec maintain_thunder_clap on|r\n - Disable: |cFFFFD100/enc set spec maintain_thunder_clap off|r\n\n
+~message	/encore help	Specialization Settings for Assassination:\n\n
+~message	/encore help	Specialization Settings for Balance:\n - |cFFFFD100behind|r = |cFFFF0000OFF|r (Always Behind)\n\nExample commands for toggling specialization settings:\n - Toggle On/Off: |cFFFFD100/enc set spec behind|r\n - Enable: |cFFFFD100/enc set spec behind on|r\n - Disable: |cFFFFD100/enc set spec behind off|r\n\n
+~message	/encore help	Specialization Settings for Beast Mastery:\n\n
+~message	/encore help	Specialization Settings for Discipline:\n\n
+~message	/encore help	Specialization Settings for Elemental:\n\n
+~message	/encore help	Specialization Settings for Protection:\n\n
+~message	/encore help	Target Swap Setting:\n - Toggle Target Swap: |cFFFFD100/enc set cycle|r\n - Set minimum time to die for target swaps: |cFFFFD100/enc set cycle #|r (0-20)\n - Enable: |cFFFFD100/enc set cycle on|r\n - Disable: |cFFFFD100/enc set cycle off|r\n\n
+~message	/encore help	Toggle Options:\n - |cFFFFD100cooldowns|r, |cFFFFD100potions|r, |cFFFFD100interrupts|r, |cFFFFD100movement|r, etc.\n - Example commands:\n   - Enable Cooldowns: |cFFFFD100/enc set cooldowns on|r\n   - Disable Interrupts: |cFFFFD100/enc set interrupts off|r\n   - Toggle Defensives: |cFFFFD100/enc set defensives|r\n\n
+~message	/encore help	Use |cFFFFD100/encore set|r to adjust toggles, display modes, and specialization settings via chat commands or macros.\n\n
+~message	/encore lock	UI locked.
+~message	/encore priority	Use |cFFFFD100/encore priority name|r to change your current specialization's priority via command-line or macro.\nValid priority |cFFFFD100name|rs are:\n - |cFFFFD100Affliction (wowsims.com)|r |cFF00FF00(current)|r\n - |cFFFFD100SM Ruin (wowsims.com)|r \n\nTo create a new priority, see |cFFFFD100/encore|r > |cFFFFD100Priorities|r.
+~message	/encore priority	Use |cFFFFD100/encore priority name|r to change your current specialization's priority via command-line or macro.\n\n|cFFFF0000You must have multiple priorities for your specialization to use this feature.|r\n\nTo create a new priority, see |cFFFFD100/encore|r > |cFFFFD100Priorities|r.
+~message	/encore priority Nope	No match found for priority 'nope'.\nValid options are: |cFFFFD100Affliction (wowsims.com)|r, |cFFFFD100SM Ruin (wowsims.com)|r.
+~message	/encore priority Nope	No match found for priority 'nope'.\nValid options are: |cFFFFD100Arcane (wowsims.com)|r.
+~message	/encore priority Nope	No match found for priority 'nope'.\nValid options are: |cFFFFD100Arms (wowsims.com)|r.
+~message	/encore priority Nope	No match found for priority 'nope'.\nValid options are: |cFFFFD100Assassination (wowsims.com)|r.
+~message	/encore priority Nope	No match found for priority 'nope'.\nValid options are: |cFFFFD100Balance (wowsims.com)|r.
+~message	/encore priority Nope	No match found for priority 'nope'.\nValid options are: |cFFFFD100Beast Mastery Turret (wowsims.com)|r.
+~message	/encore priority Nope	No match found for priority 'nope'.\nValid options are: |cFFFFD100Elemental (wowsims.com)|r.
+~message	/encore priority Nope	No match found for priority 'nope'.\nValid options are: |cFFFFD100Protection (wowsims.com)|r.
+~message	/encore priority Nope	No match found for priority 'nope'.\nValid options are: |cFFFFD100Smite (wowsims.com)|r.
+~message	/encore profile	Use |cFFFFD100/encore profile name|r to swap profiles. Valid profile names are:\n - |cFFFFD100Default|r |cFF00FF00(current)|r
+~message	/encore profile Nope	Invalid profile name. Please choose a valid profile.
+~message	/encore set	Display Mode Control (currently |cFFFFD100automatic|r):\n - Toggle Mode: |cFFFFD100/enc set mode|r\n - Set specific mode:\n   - |cFFFFD100/enc set mode automatic|r\n   - |cFFFFD100/enc set mode single|r\n   - |cFFFFD100/enc set mode aoe|r\n   - |cFFFFD100/enc set mode dual|r\n   - |cFFFFD100/enc set mode reactive|r\n\n
+~message	/encore set	Other available commands:\n - |cFFFFD100/encore priority|r - View or change priority settings\n - |cFFFFD100/encore profile|r - View or change profiles\n - |cFFFFD100/encore move|r - Unlock or lock the UI for positioning\n - |cFFFFD100/encore enable|r or |cFFFFD100/encore disable|r - Enable or disable the addon\n
+~message	/encore set	Specialization Settings for Affliction:\n - |cFFFFD100assigned_curse|r = |cFF00B4FFelements|r, one of: \n\n
+~message	/encore set	Specialization Settings for Arcane:\n\n
+~message	/encore set	Specialization Settings for Arms:\n - |cFFFFD100wowsims_recklessness|r = |cFFFF0000OFF|r (Recklessness (wowsims.com))\n - |cFFFFD100wowsims_stance_dance|r = |cFFFF0000OFF|r (Stance Dance (wowsims.com))\n - |cFFFFD100maintain_thunder_clap|r = |cFFFF0000OFF|r (Maintain Thunder Clap)\n\nExample commands for toggling specialization settings:\n - Toggle On/Off: |cFFFFD100/enc set spec maintain_thunder_clap|r\n - Enable: |cFFFFD100/enc set spec maintain_thunder_clap on|r\n - Disable: |cFFFFD100/enc set spec maintain_thunder_clap off|r\n\n
+~message	/encore set	Specialization Settings for Assassination:\n\n
+~message	/encore set	Specialization Settings for Balance:\n - |cFFFFD100behind|r = |cFFFF0000OFF|r (Always Behind)\n\nExample commands for toggling specialization settings:\n - Toggle On/Off: |cFFFFD100/enc set spec behind|r\n - Enable: |cFFFFD100/enc set spec behind on|r\n - Disable: |cFFFFD100/enc set spec behind off|r\n\n
+~message	/encore set	Specialization Settings for Beast Mastery:\n\n
+~message	/encore set	Specialization Settings for Discipline:\n\n
+~message	/encore set	Specialization Settings for Elemental:\n\n
+~message	/encore set	Specialization Settings for Protection:\n\n
+~message	/encore set	Target Swap Setting:\n - Toggle Target Swap: |cFFFFD100/enc set cycle|r\n - Set minimum time to die for target swaps: |cFFFFD100/enc set cycle #|r (0-20)\n - Enable: |cFFFFD100/enc set cycle on|r\n - Disable: |cFFFFD100/enc set cycle off|r\n\n
+~message	/encore set	Toggle Options:\n - |cFFFFD100cooldowns|r, |cFFFFD100potions|r, |cFFFFD100interrupts|r, |cFFFFD100movement|r, etc.\n - Example commands:\n   - Enable Cooldowns: |cFFFFD100/enc set cooldowns on|r\n   - Disable Interrupts: |cFFFFD100/enc set interrupts off|r\n   - Toggle Defensives: |cFFFFD100/enc set defensives|r\n\n
+~message	/encore set	Use |cFFFFD100/encore set|r to adjust toggles, display modes, and specialization settings via chat commands or macros.\n\n
+~message	/encore set cooldowns	Major Cooldowns: OFF
+~message	/encore set cooldowns	|cFFFFD100cooldowns|r is now |cFFFF0000OFF|r.
+~message	/encore set cooldowns off	Major Cooldowns: OFF
+~message	/encore set cooldowns on	Major Cooldowns: ON
+~message	/encore set cycle	Target Swap toggle set to |cFF00FF00ON|r.
+~message	/encore set cycle 5	Target Swap minimum time to die set to 5 seconds.
+~message	/encore set cycle nope	Invalid input for 'cycle'. Use 'on', 'off', leave blank to toggle, or provide a whole number from 0 to 20 to set the minimum time to die.
+~message	/encore set cycle on	Target Swap toggle set to |cFF00FF00ON|r.
+~message	/encore set mode	Mode: Single-Target
+~message	/encore set mode aoe	Mode: AOE (Multi-Target)
+~message	/encore set nope	Invalid toggle or setting specified.
+~message	/encore set spec	Invalid spec setting specified.
+~message	/encore set spec assigned_curse	Invalid value for assigned_curse. Use one of: .
+~message	/encore set spec behind	behind set to |cFF00FF00ON|r.
+~message	/encore set spec maintain_thunder_clap	maintain_thunder_clap set to |cFF00FF00ON|r.
+~message	/encore set spec nope	Invalid spec setting specified.
+~message	/encore set spec wowsims_recklessness	wowsims_recklessness set to |cFF00FF00ON|r.
+~message	/encore set spec wowsims_stance_dance	wowsims_stance_dance set to |cFF00FF00ON|r.
+~message	/encore spec	Use |cFFFFD100/encore spec name|r to choose your specialization. They are:\n - |cFFFFD100affliction|r |cFF00FF00(current)|r\n - |cFFFFD100demonology|r\n - |cFFFFD100destruction|r
+~message	/encore spec	Use |cFFFFD100/encore spec name|r to choose your specialization. They are:\n - |cFFFFD100arcane|r |cFF00FF00(current)|r\n - |cFFFFD100fire|r\n - |cFFFFD100frost|r
+~message	/encore spec	Use |cFFFFD100/encore spec name|r to choose your specialization. They are:\n - |cFFFFD100arms|r |cFF00FF00(current)|r\n - |cFFFFD100fury|r\n - |cFFFFD100protection|r
+~message	/encore spec	Use |cFFFFD100/encore spec name|r to choose your specialization. They are:\n - |cFFFFD100assassination|r |cFF00FF00(current)|r\n - |cFFFFD100combat|r\n - |cFFFFD100subtlety|r
+~message	/encore spec	Use |cFFFFD100/encore spec name|r to choose your specialization. They are:\n - |cFFFFD100balance|r |cFF00FF00(current)|r\n - |cFFFFD100feral|r\n - |cFFFFD100guardian|r\n - |cFFFFD100restoration|r (no priorities on Forever)
+~message	/encore spec	Use |cFFFFD100/encore spec name|r to choose your specialization. They are:\n - |cFFFFD100beast_mastery|r |cFF00FF00(current)|r\n - |cFFFFD100marksmanship|r\n - |cFFFFD100survival|r
+~message	/encore spec	Use |cFFFFD100/encore spec name|r to choose your specialization. They are:\n - |cFFFFD100discipline|r |cFF00FF00(current)|r\n - |cFFFFD100holy|r (no priorities on Forever)\n - |cFFFFD100shadow|r
+~message	/encore spec	Use |cFFFFD100/encore spec name|r to choose your specialization. They are:\n - |cFFFFD100elemental|r |cFF00FF00(current)|r\n - |cFFFFD100enhancement|r\n - |cFFFFD100restoration|r (no priorities on Forever)
+~message	/encore spec	Use |cFFFFD100/encore spec name|r to choose your specialization. They are:\n - |cFFFFD100holy|r (no priorities on Forever)\n - |cFFFFD100protection|r |cFF00FF00(current)|r\n - |cFFFFD100retribution|r
+~message	/encore spec nope	No single specialization matches 'nope'.
+~message	/encore spec nope	Use |cFFFFD100/encore spec name|r to choose your specialization. They are:\n - |cFFFFD100affliction|r |cFF00FF00(current)|r\n - |cFFFFD100demonology|r\n - |cFFFFD100destruction|r
+~message	/encore spec nope	Use |cFFFFD100/encore spec name|r to choose your specialization. They are:\n - |cFFFFD100arcane|r |cFF00FF00(current)|r\n - |cFFFFD100fire|r\n - |cFFFFD100frost|r
+~message	/encore spec nope	Use |cFFFFD100/encore spec name|r to choose your specialization. They are:\n - |cFFFFD100arms|r |cFF00FF00(current)|r\n - |cFFFFD100fury|r\n - |cFFFFD100protection|r
+~message	/encore spec nope	Use |cFFFFD100/encore spec name|r to choose your specialization. They are:\n - |cFFFFD100assassination|r |cFF00FF00(current)|r\n - |cFFFFD100combat|r\n - |cFFFFD100subtlety|r
+~message	/encore spec nope	Use |cFFFFD100/encore spec name|r to choose your specialization. They are:\n - |cFFFFD100balance|r |cFF00FF00(current)|r\n - |cFFFFD100feral|r\n - |cFFFFD100guardian|r\n - |cFFFFD100restoration|r (no priorities on Forever)
+~message	/encore spec nope	Use |cFFFFD100/encore spec name|r to choose your specialization. They are:\n - |cFFFFD100beast_mastery|r |cFF00FF00(current)|r\n - |cFFFFD100marksmanship|r\n - |cFFFFD100survival|r
+~message	/encore spec nope	Use |cFFFFD100/encore spec name|r to choose your specialization. They are:\n - |cFFFFD100discipline|r |cFF00FF00(current)|r\n - |cFFFFD100holy|r (no priorities on Forever)\n - |cFFFFD100shadow|r
+~message	/encore spec nope	Use |cFFFFD100/encore spec name|r to choose your specialization. They are:\n - |cFFFFD100elemental|r |cFF00FF00(current)|r\n - |cFFFFD100enhancement|r\n - |cFFFFD100restoration|r (no priorities on Forever)
+~message	/encore spec nope	Use |cFFFFD100/encore spec name|r to choose your specialization. They are:\n - |cFFFFD100holy|r (no priorities on Forever)\n - |cFFFFD100protection|r |cFF00FF00(current)|r\n - |cFFFFD100retribution|r
+~message	/encore unlock	UI unlocked for movement.
+~message	build warning	|cFFFF0000WARNING|r: This version of Encore is for a newer WoW Forever client; you should reinstall for 1.60.1.
+~message	cast warnings	DRUID does not have any Encore modules loaded (yet).\nWatch for updates.
+~message	cast warnings	HUNTER does not have any Encore modules loaded (yet).\nWatch for updates.
+~message	cast warnings	Encore is designed for level 60 content.\nIt may not work as expected below level 60.
+~message	cast warnings	MAGE does not have any Encore modules loaded (yet).\nWatch for updates.
+~message	cast warnings	PALADIN does not have any Encore modules loaded (yet).\nWatch for updates.
+~message	cast warnings	PRIEST does not have any Encore modules loaded (yet).\nWatch for updates.
+~message	cast warnings	ROGUE does not have any Encore modules loaded (yet).\nWatch for updates.
+~message	cast warnings	SHAMAN does not have any Encore modules loaded (yet).\nWatch for updates.
+~message	cast warnings	WARLOCK does not have any Encore modules loaded (yet).\nWatch for updates.
+~message	cast warnings	WARRIOR does not have any Encore modules loaded (yet).\nWatch for updates.
 ~message	content no class	could not read your class at load; /reload
-~message	content no pack	no Forever pack for Warrior; install Hekili_Warrior
-~message	content other api	Hekili_Warrior is for content API 8, this Hekili Forever for <CONTENT_API>; update the older one
-~message	content shared fails	could not load Hekili_Shared (MISSING)
-~message	content shared raises	could not load Hekili_Shared (boom)
+~message	content no pack	no Forever pack for Warrior; install Encore_Warrior
+~message	content other api	Encore_Warrior is for content API 8, this Encore for <CONTENT_API>; update the older one
+~message	content shared fails	could not load Encore_Shared (MISSING)
+~message	content shared raises	could not load Encore_Shared (boom)
 ~message	hold	Potion hold removed.
 ~message	hold	Potion placed on hold until end of combat.
 ~message	hold	Potion placed on hold.
@@ -29350,7 +29350,7 @@ options.toggles.troubleshooting.snapshot.key	name	Snapshot
 ~message	reverted 2	The |cFFFFD100Alpha|r and |cFFFFD100Beta|r priorities were reverted.
 ~message	reverted 3	The |cFFFFD100Beta|r, |cFFFFD100Alpha|r, and |cFFFFD100Gamma|r priorities were reverted.
 ~message	snapshot	Snapshots saved:  Primary.
-~message	styles	Display style 'enus_test' targets style API -1, this Hekili Forever has 1; not registered.
+~message	styles	Display style 'enus_test' targets style API -1, this Encore has 1; not registered.
 ~message	styles	Display style 'queue' not registered: the name is a core display setting.
 ~message	unknown style	Display Primary: unknown style 'enus_nope', drawn as classic.
 ~message	updated 1	The |cFFFFD100Alpha|r priority was updated.

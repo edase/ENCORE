@@ -189,18 +189,18 @@ function M.new(swingValue, kinds, ranged, expect)
             state.rage.actual = math.max(0, state.rage.actual - a.spend)
         end
     end
-    local hekili = { State = state, Class = class, forced = {} }
-    function hekili:ForceUpdate(event)
+    local encore = { State = state, Class = class, forced = {} }
+    function encore:ForceUpdate(event)
         self.forced[#self.forced + 1] = event
     end
-    return hekili
+    return encore
 end
 
 --- The tracked-set definition the core would build from M.new()'s class (Engine/Schema/Tracked.lua, for family
 --- specs without it).
-function M.def(hekili)
+function M.def(encore)
     local load = require("Game.State.helpers.load")
-    local class = hekili.Class
+    local class = encore.Class
     local rage = class.resources.rage
     local mh = rage.state.regenModel.mainhand
     local def = {

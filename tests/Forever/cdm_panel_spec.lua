@@ -10,7 +10,7 @@ describe("the Cooldown Manager switches", function()
     local H, ctl, picked
 
     local function auras(n)
-        local all, keys = H.Hekili.Engine.Registry.Auras(), {}
+        local all, keys = H.Encore.Engine.Registry.Auras(), {}
         for k, a in pairs(all) do
             if a.key == k and type(a.id) == "number" and a.id > 0 then
                 keys[#keys + 1] = k
@@ -58,7 +58,7 @@ describe("the Cooldown Manager switches", function()
     end
 
     local function spec()
-        local sp = H.Hekili.DB.profile.specs[H.Hekili.State.spec.id]
+        local sp = H.Encore.DB.profile.specs[H.Encore.State.spec.id]
         sp.cdm = sp.cdm or {}
         return sp
     end
@@ -79,17 +79,17 @@ describe("the Cooldown Manager switches", function()
         local k1, k2 = picked[1].key, picked[2].key
         assert.is_nil(I().def.auras[jOf(k1)].cdm) -- absent: on
         spec().cdm[k1] = false
-        H.Hekili:CdmSwitchChanged()
+        H.Encore:CdmSwitchChanged()
         assert.are.equal(false, I().def.auras[jOf(k1)].cdm)
         spec().cdm[k1] = true
-        H.Hekili:CdmSwitchChanged()
+        H.Encore:CdmSwitchChanged()
         assert.are.equal(true, I().def.auras[jOf(k1)].cdm)
         -- a pack's `cdm = false`: off until the profile says otherwise
-        rawset(H.Hekili.Class.auras[k2], "cdm", false)
-        H.Hekili:CdmSwitchChanged()
+        rawset(H.Encore.Class.auras[k2], "cdm", false)
+        H.Encore:CdmSwitchChanged()
         assert.are.equal(false, I().def.auras[jOf(k2)].cdm)
         spec().cdm[k2] = true
-        H.Hekili:CdmSwitchChanged()
+        H.Encore:CdmSwitchChanged()
         assert.are.equal(true, I().def.auras[jOf(k2)].cdm)
         -- a full build reads the same
         spec().cdm[k1] = false
@@ -107,7 +107,7 @@ describe("the Cooldown Manager switches", function()
         assert.are.equal(j1, Q.map[901])
         assert.are.equal(I().UP, R.Presence(j1, 1))
         spec().cdm[picked[1].key] = false
-        H.Hekili:CdmSwitchChanged()
+        H.Encore:CdmSwitchChanged()
         assert.are.same({ 2, 2 }, covered())
         assert.is_nil(Q.map[901])
         assert.is_false(Q.Mappable(j1))
@@ -116,7 +116,7 @@ describe("the Cooldown Manager switches", function()
         -- the others keep their facts
         assert.are.equal(I().UP, R.Presence(jOf(picked[2].key), 1))
         spec().cdm[picked[1].key] = nil -- back on
-        H.Hekili:CdmSwitchChanged()
+        H.Encore:CdmSwitchChanged()
         assert.are.same({ 3, 3 }, covered())
         assert.are.equal(j1, Q.map[901])
     end)
@@ -128,7 +128,7 @@ describe("the Cooldown Manager switches", function()
         ctl.combat = true
         H.Fire("PLAYER_REGEN_DISABLED")
         spec().cdm[picked[1].key] = false
-        H.Hekili:CdmSwitchChanged()
+        H.Encore:CdmSwitchChanged()
         assert.are.same({ 2, 2 }, covered())
         assert.are.equal(jOf(picked[1].key), I().PRESENCE.viewer.map[901])
         ctl.combat = false
@@ -147,15 +147,15 @@ describe("the Cooldown Manager switches", function()
         covered()
         assert.is_true(I().PRESENCE.viewer.map[cd] < 0)
         spec().cdm[picked[1].key] = false
-        H.Hekili:CdmSwitchChanged()
+        H.Encore:CdmSwitchChanged()
         covered()
         assert.is_true(I().PRESENCE.viewer.map[cd] < 0) -- the off aura's ID is untracked now: still ambiguous
     end)
 
     describe("the panel", function()
         local function panel()
-            H.Hekili:EmbedCdmOptions()
-            return H.Hekili.Options.args.cdm.args
+            H.Encore:EmbedCdmOptions()
+            return H.Encore.Options.args.cdm.args
         end
         -- AceConfig's own validator (the vendored file behind a stub LibStub): what AceConfigDialog:Open runs on the
         -- whole options table. A key it does not know on a card ("imageWidth" on a toggle) raises and no window opens.
@@ -178,7 +178,7 @@ describe("the Cooldown Manager switches", function()
                 end,
             })
             local chunk =
-                assert(loadfile("src/Hekili/Libs/AceConfig-3.0/AceConfigRegistry-3.0/AceConfigRegistry-3.0.lua"))
+                assert(loadfile("src/Encore/Libs/AceConfig-3.0/AceConfigRegistry-3.0/AceConfigRegistry-3.0.lua"))
             setfenv(chunk, setmetatable({ LibStub = stub }, { __index = _G }))
             chunk()
             libs["AceConfigRegistry-3.0"]:ValidateOptionsTable(options, "cdm")
@@ -244,18 +244,18 @@ describe("the Cooldown Manager switches", function()
             assert.are.equal("", args.state.name)
             -- (batch review Must 1) the panel with its cards passes AceConfig's validation: the options can open
             assert.has_no.errors(function()
-                aceValidate(H.Hekili.Options.args.cdm)
+                aceValidate(H.Encore.Options.args.cdm)
             end)
             -- (in game 2026-11-10) opening the panel: the grid's `hidden` is inherited by each card (info.option = the
             -- card, which has no args); it must not raise, and the cards and the grid show
             local hidden
             assert.has_no.errors(function()
-                hidden = aceInherited(H.Hekili.Options.args.cdm, "hidden")
+                hidden = aceInherited(H.Encore.Options.args.cdm, "hidden")
             end)
             assert.is_false(hidden["cdm.items"])
             assert.is_false(hidden["cdm.items." .. k(1)])
             assert.has_no.errors(function()
-                aceInherited(H.Hekili.Options.args.cdm, "disabled")
+                aceInherited(H.Encore.Options.args.cdm, "disabled")
             end)
 
             -- the switch: default on, a write goes to the profile by key and reaches the def

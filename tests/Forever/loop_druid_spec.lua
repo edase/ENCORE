@@ -29,9 +29,9 @@ describe("the Druid loop worlds", function()
             local H = headless.new({ character = C.character(), pack = C.PACK })
             assert.are.same({}, H.loadErrors)
             local unmapped = {}
-            for _, list in pairs(H.Hekili.DB.profile.packs[C.PACK].lists) do
+            for _, list in pairs(H.Encore.DB.profile.packs[C.PACK].lists) do
                 for _, entry in ipairs(list) do
-                    local a = entry.action and H.Hekili.Class.abilities[entry.action]
+                    local a = entry.action and H.Encore.Class.abilities[entry.action]
                     if a and a.id and H.ctl.known[a.id] and not dlw.MAP[entry.action] then
                         unmapped[#unmapped + 1] = entry.action
                     end
@@ -41,7 +41,7 @@ describe("the Druid loop worlds", function()
             assert.is_false(pcall(C.resolve, "not_an_ability", H))
             if name == "Feral" then -- wowsims's Furor 3/5 in the character and in the world's Cat entry (60% kept)
                 local enter = C.resolve("cat_form", H).shift.onEnter[require("Forever.helpers.druid_world").ENERGY]
-                assert.are.same({ 3, 30 }, { H.Hekili.State.talent.furor.rank, enter(nil, nil, nil, 50) })
+                assert.are.same({ 3, 30 }, { H.Encore.State.talent.furor.rank, enter(nil, nil, nil, 50) })
             end
         end)
     end
@@ -60,7 +60,7 @@ describe("the Feral loop world's press", function()
                 H.ctl.form = form
                 H.Fire("UPDATE_SHAPESHIFT_FORM")
                 headless.cycle(H, H.ctl.now + 0.2)
-                H.Hekili.State.reset("Primary", true)
+                H.Encore.State.reset("Primary", true)
                 got[#got + 1] = C.resolve("faerie_fire", H).gcd
             end
             local dw = require("Forever.helpers.druid_world")
@@ -130,7 +130,7 @@ describe("the Guardian loop world's press", function()
     it("pays a Maul in full at its swing and raises its own Clearcasting after the strike", function()
         local C = dlw.Guardian
         local H = headless.new({ character = C.character(), pack = C.PACK })
-        local cc = H.Hekili.Class.auras.clearcasting.id
+        local cc = H.Encore.Class.auras.clearcasting.id
         local p = C.resolve("maul", H)
         local W = scenarios.world(setmetatable({ power = 60, form = C.character().form }, { __index = C.WORLD }), 1)
         local us = W.ents[1]
@@ -186,7 +186,7 @@ describe("the Balance loop world's Clearcasting", function()
     it("procs at the cast's success; the next hard cast pays at its landing, free; Wrath keeps it", function()
         local C = dlw.Balance
         local H = headless.new({ character = C.character(), pack = C.PACK })
-        local cc = H.Hekili.Class.auras.clearcasting.id
+        local cc = H.Encore.Class.auras.clearcasting.id
         local W = scenarios.world(setmetatable({ form = C.character().form }, { __index = C.WORLD }), 1)
         local us = W.ents[1]
         local omen = dlw.OMEN

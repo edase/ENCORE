@@ -197,7 +197,7 @@ for _, name in ipairs(M.VERDICT) do -- each with the verdict off (`novd`: loop.l
 end
 
 function M.arm()
-    local a = os.getenv("HEKILI_AB")
+    local a = os.getenv("ENCORE_AB")
     return (a and M.ARMS[a]) and a or "default"
 end
 

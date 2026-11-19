@@ -11,7 +11,7 @@ describe("the rage forecast of a pending swing (GAP AK)", function()
         H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
         assert(headless.cycle(H, H.ctl.now + 0.2))
-        st = H.Hekili.State
+        st = H.Encore.State
         st.reset("Primary", true)
     end)
 
@@ -209,7 +209,7 @@ describe("the off hand's opener anchor once its first swing row lands (review R3
         H = headless.new({ character = ww.Fury.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
         assert(headless.cycle(H, H.ctl.now + 0.2))
-        st, VS = H.Hekili.State, H.ns.VirtualState
+        st, VS = H.Encore.State, H.ns.VirtualState
         pending0, pull0 = VS.SwingPending, VS.SwingPull
         VS.SwingPull = function()
             return 0, 0

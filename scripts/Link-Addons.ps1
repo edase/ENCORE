@@ -5,7 +5,7 @@
 .DESCRIPTION
     Run from Windows PowerShell against the repository's WSL path, for example:
 
-        powershell -ExecutionPolicy Bypass -File "\\wsl.localhost\personal\home\zack\src\hekili\scripts\Link-Addons.ps1" -WowPath "C:\Program Files (x86)\World of Warcraft\_classic_beta_"
+        powershell -ExecutionPolicy Bypass -File "\\wsl.localhost\personal\home\zack\src\encore\scripts\Link-Addons.ps1" -WowPath "C:\Program Files (x86)\World of Warcraft\_classic_beta_"
 
     -WowPath may be the client folder (the one holding Wow.exe or WowB.exe) or its Interface\AddOns folder.
     Each src\<Addon> folder that contains <Addon>.toc gets a directory symbolic link at Interface\AddOns\<Addon>.

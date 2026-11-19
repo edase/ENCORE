@@ -4,7 +4,7 @@
 -- of a cost modifier on abilities built as RegisterAbility builds them. The real race files: tests/Forever/races_spec.lua.
 
 describe("Engine/Schema/Races.lua", function()
-    local ns, hekili, state, all, saved
+    local ns, encore, state, all, saved
 
     -- Hekili's state.removeStack (State.lua:857-868), on the fake buff table.
     local function removeStack(aura, stacks)
@@ -55,11 +55,11 @@ describe("Engine/Schema/Races.lua", function()
         function all:RegisterAura(key, def)
             register(self.auras, key, def)
         end
-        hekili = { State = state, Class = { specs = { [0] = all }, abilities = {}, file = "CLASS_A" } }
-        _G.Hekili = hekili
+        encore = { State = state, Class = { specs = { [0] = all }, abilities = {}, file = "CLASS_A" } }
+        _G.Encore = encore
         ns = {}
-        assert(loadfile("src/Hekili/Engine/Schema/Races.lua"))("Hekili", ns)
-        local race = hekili:NewRace("Fake")
+        assert(loadfile("src/Encore/Engine/Schema/Races.lua"))("Encore", ns)
+        local race = encore:NewRace("Fake")
         race:RegisterAbility("racial_a", { id = 1001, copy = { 1002 }, cooldown = 120 })
         race:RegisterAura("racial_a", { id = 1001, copy = { 1002 }, duration = 15, max_stack = 3 })
         race:RegisterResourceMod({ max = 0.05 })
@@ -85,28 +85,28 @@ describe("Engine/Schema/Races.lua", function()
             end
         end
         ns.costMods.Wrap(a)
-        hekili.Class.abilities[key] = a
+        encore.Class.abilities[key] = a
         return a
     end
 
     before_each(function()
-        saved = rawget(_G, "Hekili") or false
+        saved = rawget(_G, "Encore") or false
     end)
 
     after_each(function()
-        _G.Hekili = saved or nil
+        _G.Encore = saved or nil
     end)
 
     it("goes live by race ID (UnitRace's third return) whatever the token, and only for that ID", function()
         load("Other")
         state.race_id = 95
-        local race = hekili:NewRace("Unconfirmed", 95)
+        local race = encore:NewRace("Unconfirmed", 95)
         race:RegisterRegenMod({ resource = "pool_a", aura = "racial_a", mult = 2 })
         race:RegisterRegenMod({ aura = "racial_a", mult = 2 }) -- no resource key: dropped
         assert.is_true(race.live)
         assert.are.same({ { resource = "pool_a", aura = "racial_a", mult = 2 } }, ns.raceMods.regenMods)
-        assert.is_false(hekili:NewRace("Unconfirmed", 96).live) -- another race's ID
-        assert.is_false(hekili:NewRace("Unconfirmed").live) -- no ID, another token
+        assert.is_false(encore:NewRace("Unconfirmed", 96).live) -- another race's ID
+        assert.is_false(encore:NewRace("Unconfirmed").live) -- no ID, another token
     end)
 
     it("registers another race's ability unknown and unlisted, its aura, no modifier", function()
@@ -118,7 +118,7 @@ describe("Engine/Schema/Races.lua", function()
         ns.applyRace(class) -- nothing owned: the class keeps its own
         assert.are.same({ abilities = {}, auras = {} }, class)
         assert.are.same({ maxMods = {}, costMods = {}, regenMods = {}, gcdMods = {} }, ns.raceMods)
-        assert.are.equal(ns.raceMods, hekili.RaceMods) -- the table read in game
+        assert.are.equal(ns.raceMods, encore.RaceMods) -- the table read in game
     end)
 
     it(
@@ -273,7 +273,7 @@ describe("Engine/Schema/Races.lua", function()
                 local held = { aura = "racial_a", pct = -0.10, charges = 3, spells = { 1011 }, unless = "proc_b" }
                 local other = { aura = "proc_b", pct = -0.5, charges = 1, spells = { 1011 } }
                 load("Fake", nil, first and held or other)
-                hekili:NewRace("Fake"):RegisterCostMod(first and other or held)
+                encore:NewRace("Fake"):RegisterCostMod(first and other or held)
                 local a = ability("spender_a", { id = 1011, spend = 15, spendType = "resource_a" })
                 state.buff.racial_a = { up = true, count = 3 }
                 assert.are.equal(13.5, a.spend)
@@ -291,7 +291,7 @@ describe("Engine/Schema/Races.lua", function()
     it("takes a class file's spec:RegisterCostMod (Engine/Schema/Spec.lua) into the same list, for any race", function()
         load("Other")
         -- the mixin's entry as Engine/Schema/Spec.lua declares it, compiled with this `ns` as its upvalue
-        local src = assert(io.open("src/Hekili/Engine/Schema/Spec.lua")):read("*a")
+        local src = assert(io.open("src/Encore/Engine/Schema/Spec.lua")):read("*a")
         local entry = assert(src:match("\n(    RegisterCostMod = function%( self, def %).-\n    end,)\n"))
         local mixin = assert(loadstring("local ns = ...\nreturn {\n" .. entry .. "\n}"))(ns)
         local def = { aura = "proc_a", pct = -1, charges = 1, spells = { 1021 } }
@@ -343,7 +343,7 @@ describe("Engine/Schema/Races.lua", function()
         rawset(state.buff, "racial_a", timedAura(10)) -- a mutation that bypasses the counter: the memo is stale
         assert.has_error(function()
             return a.spend
-        end, "Hekili: stale memoised cost of spender_a at 1: 15 nil held, 13.5 nil now")
+        end, "Encore: stale memoised cost of spender_a at 1: 15 nil held, 13.5 nil now")
         assert.are.equal(2, ns.costMods.shadowHits)
         ns.costMods.shadow = false
         assert.are.equal(15, a.spend) -- off: the hit answers from the memo, unchecked

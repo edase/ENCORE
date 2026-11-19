@@ -1026,7 +1026,7 @@ describe("the synthesized combat log", function()
     end)
 
     it("leaves no hand-written combat-log row outside CombatLog.lua", function()
-        for _, f in ipairs({ "src/Hekili/Game/Events/Rows.lua", "src/Hekili/Game/Events/Attackers.lua" }) do
+        for _, f in ipairs({ "src/Encore/Game/Events/Rows.lua", "src/Encore/Game/Events/Attackers.lua" }) do
             local src = assert(io.open(f)):read("*a")
             assert.is_nil(src:find("L.Emit(", 1, true), f)
         end

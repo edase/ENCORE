@@ -17,19 +17,19 @@ local function world(yd)
     H.Fire("PLAYER_TARGET_CHANGED")
     local t = H.ctl.now + 0.2
     assert(headless.cycle(H, t))
-    local lines = H.Hekili:ParseActionList(LINE)
+    local lines = H.Encore:ParseActionList(LINE)
     lines[1].enabled = true
     lines[2] = { enabled = true, action = "berserker_stance" }
-    H.Hekili.DB.profile.packs[ww.PACK].lists = { precombat = {}, default = lines }
-    H.Hekili:LoadScripts()
+    H.Encore.DB.profile.packs[ww.PACK].lists = { precombat = {}, default = lines }
+    H.Encore:LoadScripts()
     H.Fire("PLAYER_REGEN_DISABLED")
     local VS = H.ns.VirtualState
     local power, rage = VS.Power, { est = 60, lo = 60, hi = 60, conf = 1 }
     VS.Power = function(pt, now)
         return pt == 1 and rage or power(pt, now)
     end
-    local out = H.Hekili.Engine.Output.Primary
-    assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+    local out = H.Encore.Engine.Output.Primary
+    assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
     return H,
         function()
             t = t + 0.2
@@ -41,9 +41,9 @@ end
 
 local function both(H, pick)
     local on = pick()
-    H.Hekili:FireToggle("movement", "off")
+    H.Encore:FireToggle("movement", "off")
     local off = pick()
-    H.Hekili:FireToggle("movement", "on")
+    H.Encore:FireToggle("movement", "on")
     return on, off
 end
 
@@ -68,13 +68,13 @@ describe("a move-reached line's gate (rule 19)", function()
 
     it("on a fresh target before its first plain range answer shows either way (Review Focus 1, R8)", function()
         local H, pick = world(20)
-        H.Hekili:FireToggle("movement", "off")
+        H.Encore:FireToggle("movement", "off")
         assert.are.equal("berserker_stance", pick()) -- the 20 yd bracket is known
         H.ctl.distance.target = SECRET -- the new target's range reads stay secret: no plain answer yet
         H.ctl.guid.target = "Creature-0-0-0-0-2-0"
         H.Fire("PLAYER_TARGET_CHANGED")
         assert.are.equal("mortal_strike", pick())
-        H.Hekili:FireToggle("movement", "on")
+        H.Encore:FireToggle("movement", "on")
         assert.are.equal("mortal_strike", pick())
     end)
 end)

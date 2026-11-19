@@ -331,9 +331,9 @@ describe("every pack line within the engine's limits (CN25) #slow", function()
     end
 
     it("in every built pack", function()
-        local pipe = assert(io.popen("ls -d src/Hekili_*/APLs"))
+        local pipe = assert(io.popen("ls -d src/Encore_*/APLs"))
         for dir in pipe:lines() do
-            for _, p in ipairs(mp.load(dir:match("Hekili_(%a+)"):lower())) do
+            for _, p in ipairs(mp.load(dir:match("Encore_(%a+)"):lower())) do
                 worst(p.name, p.simc)
             end
         end
@@ -377,7 +377,7 @@ describe("every pack line within the engine's limits (CN25) #slow", function()
     local function built(idols)
         local root = os.tmpname()
         os.remove(root)
-        assert(os.execute("mkdir -p " .. root .. " && cp src/Hekili_Druid/APLs/* " .. root .. "/") == 0)
+        assert(os.execute("mkdir -p " .. root .. " && cp src/Encore_Druid/APLs/* " .. root .. "/") == 0)
         local f = assert(io.open(root .. "/Feral (wowsims.com).simc", "wb"))
         f:write(target("druid_feral", idols))
         f:close()
@@ -412,10 +412,10 @@ describe("every pack line within the engine's limits (CN25) #slow", function()
         H.ctl.unitIs.targettarget = o.tt
         H.Fire("PLAYER_TARGET_CHANGED")
         local lists = mp.parse(packs[name])
-        H.Hekili.DB.profile.packs[name].lists = lists
-        H.Hekili:LoadScripts()
-        H.Hekili:ReviewPacks() -- the new lists and entries active
-        local Sc = H.Hekili.Scripts
+        H.Encore.DB.profile.packs[name].lists = lists
+        H.Encore:LoadScripts()
+        H.Encore:ReviewPacks() -- the new lists and entries active
+        local Sc = H.Encore.Scripts
         local info, vars = Sc.PackInfo[name], 0
         local nerr = #H.errors
         for _, list in pairs(lists) do
@@ -442,14 +442,14 @@ describe("every pack line within the engine's limits (CN25) #slow", function()
         VS.Power = function(pt, now)
             return pt == 3 and fixed or power(pt, now)
         end
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         assert(headless.cycle(H, H.ctl.now + 0.2))
         local picks = {}
         for j = 1, 3 do
-            local r = H.Hekili.Engine.Output.Primary.recs[j]
+            local r = H.Encore.Engine.Output.Primary.recs[j]
             picks[j] = tostring(r and r.actionName)
         end
-        assert.is_nil(next(H.Hekili.State.varDB)) -- pure: read in place, never registered
+        assert.is_nil(next(H.Encore.State.varDB)) -- pure: read in place, never registered
         for _, e in ipairs(H.errors) do -- every line's debug print and recheck generate, and nothing raises
             assert.is_truthy(o.allow and e:find(o.allow), e)
         end

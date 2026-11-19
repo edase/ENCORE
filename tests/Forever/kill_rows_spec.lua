@@ -67,12 +67,12 @@ local function run(seed)
         W.run(t)
         loop.feed(H, obs, t, base, sink)
         assert(headless.cycle(H, base + t))
-        counts[i] = { t = t, n = H.Hekili:GetNumTargets() }
+        counts[i] = { t = t, n = H.Encore:GetNumTargets() }
     end
     return W, counts
 end
 
-describe("a kill reaches Hekili's enemy count #slow", function()
+describe("a kill reaches Encore's enemy count #slow", function()
     it("drops the count within two ticks of the add's death (not at the damage grace)", function()
         local W, counts = run(1)
         local killAt = W.killAt

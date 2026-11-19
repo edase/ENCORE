@@ -4,8 +4,8 @@
 
 local function trees()
     local ns = {}
-    assert(loadfile("src/Hekili/Engine/Schema/Trees.lua"))("Hekili", ns)
-    assert(loadfile("src/Hekili/Engine/Schema/Selectors.lua"))("Hekili", ns)
+    assert(loadfile("src/Encore/Engine/Schema/Trees.lua"))("Encore", ns)
+    assert(loadfile("src/Encore/Engine/Schema/Selectors.lua"))("Encore", ns)
     return ns
 end
 
@@ -197,7 +197,7 @@ describe("Trees.lua", function()
     end)
 end)
 
-describe("Hekili:NewClass (the engine headless)", function()
+describe("Encore:NewClass (the engine headless)", function()
     local engine = require("Forever.helpers.engine")
     local DEF = {
         specs = {
@@ -216,7 +216,7 @@ describe("Hekili:NewClass (the engine headless)", function()
 
     it("registers the kit at slot 0 and a spec per entry, each spec reading the kit's registrations", function()
         local env = engine.load("WARRIOR")
-        local kit = env.Hekili:NewClass("WARRIOR", DEF)
+        local kit = env.Encore:NewClass("WARRIOR", DEF)
         assert.are.equal(100010, kit.id)
         assert.are.equal(kit, env.class.kit)
         local one, two, heal = kit.specs.one, kit.specs.two, kit.specs.heal
@@ -233,12 +233,12 @@ describe("Hekili:NewClass (the engine headless)", function()
         assert.is_false(heal.options.enabled)
         assert.is_nil(one.options.enabled)
         assert.are.equal(100012, env.class.specByShare["WARRIOR:two"])
-        assert.is_nil(env.Hekili:NewClass("DRUID", DEF)) -- not the player's class
+        assert.is_nil(env.Encore:NewClass("DRUID", DEF)) -- not the player's class
     end)
 
     it("fans a kit setting out to the supported specs or the named ones, each with its own option table", function()
         local env = engine.load("WARRIOR")
-        local kit = env.Hekili:NewClass("WARRIOR", DEF)
+        local kit = env.Encore:NewClass("WARRIOR", DEF)
         local opt = { type = "range", name = "N", min = 0, max = 9 }
         kit:RegisterSetting("n_shared", 3, opt)
         kit:RegisterSetting("n_two", 4, { type = "toggle", name = "T" }, "two")
@@ -255,7 +255,7 @@ describe("Hekili:NewClass (the engine headless)", function()
 
     it("applies kit options to every spec but keeps each spec's package", function()
         local env = engine.load("WARRIOR")
-        local kit = env.Hekili:NewClass("WARRIOR", DEF)
+        local kit = env.Encore:NewClass("WARRIOR", DEF)
         kit:RegisterOptions({ potion = "p", package = "Other" })
         assert.are.same({ "p", "One" }, { kit.specs.one.options.potion, kit.specs.one.options.package })
         assert.is_nil(kit.specs.heal.options.package)
@@ -265,7 +265,7 @@ describe("Hekili:NewClass (the engine headless)", function()
     -- is 10, the radius Targets.lua counts with, so the slider shows what the engine uses
     it("defaults a ranged tree's nameplateRange to 30, keeps a pack's own and gives a melee tree 10", function()
         local env = engine.load("WARRIOR")
-        local kit = env.Hekili:NewClass("WARRIOR", {
+        local kit = env.Encore:NewClass("WARRIOR", {
             specs = {
                 { key = "one", name = "One", tree = 1, role = "attack" },
                 { key = "two", name = "Two", tree = 2, role = "attack", ranged = true },
@@ -284,11 +284,11 @@ describe("Hekili:NewClass (the engine headless)", function()
         local saved = { profiles = { Default = { specs = { [C.SPEC] = { nameplateRange = 15 } } } } }
         local H = headless.new({ character = C.character(), pack = C.PACK, saved = saved })
         assert.are.same({}, H.loadErrors)
-        local specs = H.Hekili.DB.profile.specs
+        local specs = H.Encore.DB.profile.specs
         assert.are.equal(15, specs[C.SPEC].nameplateRange)
         local others = 0
-        for id, s in pairs(H.Hekili.Class.specs) do
-            if id ~= C.SPEC and id > 0 and not s.melee and s.kit == H.Hekili.Class.kit then
+        for id, s in pairs(H.Encore.Class.specs) do
+            if id ~= C.SPEC and id > 0 and not s.melee and s.kit == H.Encore.Class.kit then
                 assert.are.equal(30, specs[id].nameplateRange, id)
                 others = others + 1
             end

@@ -6,7 +6,7 @@
 local ld = require("Forever.helpers.load_druid")
 local headless = require("Game.harness.headless")
 
-local FILE = "src/Hekili_Paladin/Paladin.lua"
+local FILE = "src/Encore_Paladin/Paladin.lua"
 
 -- key = { spell IDs in rank order, the top rank's mana cost (a fraction: of the maximum) with every talent at rank 0,
 -- cooldown, gcd }, from the DB2 (`wowdb spell <name>`): the cooldown is the larger of RecoveryTime and
@@ -1015,12 +1015,12 @@ describe("Forever Paladin through the engine", function()
     it("reads mana.pct full on a fresh boot and keeps the bound full over a rest out of combat", function()
         local t0 = H.ctl.now
         assert.is_true(headless.cycle(H, t0 + 1))
-        assert.is_true(H.Hekili.State.mana.pct > 90)
+        assert.is_true(H.Encore.State.mana.pct > 90)
         for t = t0 + 2, t0 + 60 do
             assert.is_true(headless.cycle(H, t))
         end
-        assert.are.equal(5000, H.Hekili.Client.UnitPower("player", 0)) -- the facade's answer: the bound, full
-        assert.is_true(H.Hekili.State.mana.pct > 90) -- the state's, as of Hekili's last state reset
+        assert.are.equal(5000, H.Encore.Client.UnitPower("player", 0)) -- the facade's answer: the bound, full
+        assert.is_true(H.Encore.State.mana.pct > 90) -- the state's, as of Hekili's last state reset
         assert.are.same({}, H.errors)
     end)
 end)
@@ -1044,8 +1044,8 @@ describe("Retribution (wowsims.com) below Seal of Command", function()
         })
         assert.are.same({}, H.loadErrors)
         H.ctl.spellHaste = haste
-        local out = H.Hekili.Engine.Output.Primary
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        local out = H.Encore.Engine.Output.Primary
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         H.ctl.inRange.target, H.ctl.level.target = true, 10
         H.Fire("PLAYER_TARGET_CHANGED")
         H.Fire("PLAYER_REGEN_DISABLED")
@@ -1054,7 +1054,7 @@ describe("Retribution (wowsims.com) below Seal of Command", function()
         H.Fire("UNIT_SPELLCAST_SUCCEEDED", "player", "Cast-1", 20154)
         assert.is_true(headless.cycle(H, t0 + 0.1))
         assert.is_true(headless.cycle(H, t0 + 30 - after))
-        local gm = H.Hekili.State.gcd.max
+        local gm = H.Encore.State.gcd.max
         assert.is_true(math.abs(gm - gcdMax) < 1e-6 or error("gcd.max " .. tostring(gm)))
         local r = out.recs[1]
         assert.is_false(r ~= nil and r.actionName == "seal_of_righteousness" and (r.wait or 0) == 0)
@@ -1122,8 +1122,8 @@ describe("Retribution (wowsims.com)'s opener and the Movement toggle", function(
         t = t + 1
         H.ctl.now, H.ctl.combat = t, true
         H.Fire("PLAYER_REGEN_DISABLED")
-        local out = H.Hekili.Engine.Output.Primary
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        local out = H.Encore.Engine.Output.Primary
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         return H,
             function()
                 t = math.max(t, H.ctl.now) + 0.2
@@ -1142,9 +1142,9 @@ describe("Retribution (wowsims.com)'s opener and the Movement toggle", function(
 
     local function both(H, pick)
         local on = pick()
-        H.Hekili:FireToggle("movement", "off")
+        H.Encore:FireToggle("movement", "off")
         local off = pick()
-        H.Hekili:FireToggle("movement", "on")
+        H.Encore:FireToggle("movement", "on")
         return on, off
     end
 
@@ -1229,7 +1229,7 @@ describe("Exorcism's 879 ranks with the creature type hidden", function()
             t = t + 0.2
             H.ctl.now = t
             assert.is_true(headless.cycle(H, t))
-            return { H.Hekili.State:IsUsable("exorcism") }
+            return { H.Encore.State:IsUsable("exorcism") }
         end
         assert.are.same({ false, "creature type unknown; range nil: wrong target type" }, usable())
         H.ctl.creature.target = "undead"
@@ -1267,7 +1267,7 @@ describe("Exorcism's 879 ranks with the creature type hidden", function()
                 t = t + 0.2
                 H.ctl.now = t
                 assert.is_true(headless.cycle(H, t))
-                return { H.Hekili.State:IsUsable("holy_wrath") }
+                return { H.Encore.State:IsUsable("holy_wrath") }
             end
     end
     local UNDEAD_RANKS = { 879, 5614, 5615, 10312, 10313, 10314, 10318 }
@@ -1282,7 +1282,7 @@ describe("Exorcism's 879 ranks with the creature type hidden", function()
         H.Fire("PLAYER_REGEN_DISABLED")
         H.ctl.exists.target = false
         assert.are.same({ false, "usable_on: no attackable target" }, usable("unknown"))
-        assert.is_true(H.Hekili.State.combat > 0)
+        assert.is_true(H.Encore.State.combat > 0)
         assert.are.same({}, H.errors)
     end)
 
@@ -1291,7 +1291,7 @@ describe("Exorcism's 879 ranks with the creature type hidden", function()
             local H, usable = paladin(c[1])
             H.ctl.guid.target, H.ctl.ranges[10314] = SECRET, c[2]
             usable(SECRET)
-            local st = H.Hekili.State
+            local st = H.Encore.State
             st:IsUsable("holy_wrath")
             collectgarbage("collect")
             collectgarbage("stop")
@@ -1343,7 +1343,7 @@ describe("Exorcism's 879 ranks with the creature type hidden", function()
         local H, usable = paladin({ 879, 10314, 415068, 415073 })
         local function exorcism(creature)
             usable(creature)
-            return { H.Hekili.State:IsUsable("exorcism") }
+            return { H.Encore.State:IsUsable("exorcism") }
         end
         local NO_TARGET = { false, "usable_on: no attackable target" }
         H.ctl.ranges[415073] = { 0, 30 }
@@ -1366,6 +1366,6 @@ describe("Exorcism's 879 ranks with the creature type hidden", function()
 
     it("Holy Wrath's range is its 20 yd radius", function()
         local H = paladin(UNDEAD_RANKS)
-        assert.are.equal(20, H.Hekili.Class.abilities.holy_wrath.range)
+        assert.are.equal(20, H.Encore.Class.abilities.holy_wrath.range)
     end)
 end)

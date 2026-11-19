@@ -25,7 +25,7 @@ def message(release):
     """(payload_json, filename, bytes): one message, the notes attached as a .txt; no attachment for an empty body."""
     tag = release["tag_name"]
     meta = {
-        "content": "**Hekili Forever %s**\n%s" % (tag, release["html_url"]),
+        "content": "**Encore %s**\n%s" % (tag, release["html_url"]),
         "flags": NO_EMBEDS,
         "allowed_mentions": NO_MENTIONS,
     }
@@ -40,11 +40,11 @@ def message(release):
 def request(meta, name, body, url):
     if not name:
         return urllib.request.Request(
-            url, json.dumps(meta).encode(), {"Content-Type": "application/json", "User-Agent": "hekili-release"}
+            url, json.dumps(meta).encode(), {"Content-Type": "application/json", "User-Agent": "encore-release"}
         )
     boundary = uuid.uuid4().hex
     data = cf_upload.multipart(meta, name, body, boundary, "payload_json", "files[0]", "text/plain")
-    headers = {"Content-Type": "multipart/form-data; boundary=" + boundary, "User-Agent": "hekili-release"}
+    headers = {"Content-Type": "multipart/form-data; boundary=" + boundary, "User-Agent": "encore-release"}
     return urllib.request.Request(url, data, headers)
 
 

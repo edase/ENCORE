@@ -4,14 +4,14 @@
 local headless = require("Game.harness.headless")
 local ww = require("Forever.helpers.warrior_world")
 
-describe("parry haste in Hekili's swing state", function()
+describe("parry haste in Encore's swing state", function()
     local H, st, VS, pull0, pending0
 
     before_each(function()
         H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
         assert(headless.cycle(H, H.ctl.now + 0.2))
-        st, VS = H.Hekili.State, H.ns.VirtualState
+        st, VS = H.Encore.State, H.ns.VirtualState
         pull0, pending0 = VS.SwingPull, VS.SwingPending
         VS.SwingPending = function()
             return 0

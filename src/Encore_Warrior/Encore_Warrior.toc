@@ -1,0 +1,16 @@
+## Interface: 16001
+## Version: @project-version@
+## Title: Encore - Warrior
+## Author: Chad (edase), from Hekili Forever by defzach
+## IconTexture: Interface\AddOns\Encore\Textures\Encore
+## Notes: Encore's Warrior: the class kit and its default priorities, loaded by Encore. From Hekili Forever by defzach, based on the original work by Hekili; priorities translated from wowsims/forever (MIT).
+## X-Website: https://github.com/edase/encore
+## Dependencies: Encore, Encore_Shared
+## Group: Encore
+## LoadOnDemand: 1
+## X-Encore-ContentAPI: 16
+
+Locales\enUS.lua
+Locales\zhCN.lua
+
+Warrior.lua

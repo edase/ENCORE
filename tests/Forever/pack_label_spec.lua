@@ -21,9 +21,9 @@ describe("priority labels (headless Arms)", function()
     before_each(function()
         H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
-        hk = H.Hekili
+        hk = H.Encore
         Registry = hk.Engine.Registry
-        labels = H.env.LibStub("AceLocale-3.0"):GetLocale("Hekili_Warrior")
+        labels = H.env.LibStub("AceLocale-3.0"):GetLocale("Encore_Warrior")
     end)
 
     it("shows a built-in priority's label from its pack's table, the name itself otherwise", function()

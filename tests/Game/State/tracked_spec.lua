@@ -109,7 +109,7 @@ describe("the tracked set", function()
         assert.are.same({}, I.def.gear) -- a class without gear: an empty list, wiped each build
     end)
 
-    it("reads each ability's GCD kind and a declared gcdTime from Hekili's ability table as it is", function()
+    it("reads each ability's GCD kind and a declared gcdTime from Encore's ability table as it is", function()
         h.Class.abilities.spender_t = { key = "spender_t", id = fs.SPENDER_T, gcd = "totem", funcs = {} }
         h.Class.abilities.spender_u = { key = "spender_u", id = fs.SPENDER_U, gcdTime = 0.8, funcs = {} }
         ns.BuildTracked()
@@ -382,7 +382,7 @@ describe("the tracked set", function()
         return log
     end
 
-    it("never resets or replays Hekili's state in the drain, and delivers a moved unit's believed delta", function()
+    it("never resets or replays Encore's state in the drain, and delivers a moved unit's believed delta", function()
         local log = auraSubscriber()
         ctl.now = 3
         VS.Drain(3)

@@ -5,7 +5,7 @@ local fake = require("Game.State.helpers.fake_api")
 local headless = require("Game.harness.headless")
 local wl = require("Forever.helpers.warlock_world")
 
-local KEY = "Enemy nameplates are off, so in this instance Hekili Forever counts only your target. "
+local KEY = "Enemy nameplates are off, so in this instance Encore counts only your target. "
     .. "Turn on Show Enemy Nameplates and Show All Nameplates."
 
 describe("the plates-off warning in an instance", function()
@@ -33,7 +33,7 @@ describe("the plates-off warning in an instance", function()
         H = res
         assert.are.same({}, H.loadErrors)
         notes = 0
-        H.Hekili.Notify = function()
+        H.Encore.Notify = function()
             notes = notes + 1
         end
         H.ctl.inRange.target, H.ctl.level.target = true, 60
@@ -48,7 +48,7 @@ describe("the plates-off warning in an instance", function()
     end
 
     local function warned()
-        local e = H.Hekili.ErrorDB[KEY]
+        local e = H.Encore.ErrorDB[KEY]
         return e and e.n or 0
     end
 
@@ -72,7 +72,7 @@ describe("the plates-off warning in an instance", function()
     end)
 
     it("does not warn when the spec does not count nameplates", function()
-        H.Hekili.DB.profile.specs[wl.Destruction.SPEC].nameplates = false
+        H.Encore.DB.profile.specs[wl.Destruction.SPEC].nameplates = false
         counts(3)
         assert.are.equal(0, notes)
         assert.are.equal(0, warned())

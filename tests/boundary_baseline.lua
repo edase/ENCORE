@@ -2,7 +2,7 @@
 -- count). Regenerate only when removing an inherited leak; never to admit one
 -- (except a pack's pseudo-spec Constants row).
 return {
-    ["src/Hekili/Engine/Sim/Constants.lua"] = {
+    ["src/Encore/Engine/Sim/Constants.lua"] = {
         ["25297"] = 1,
         ["5740"] = 1,
         ["71"] = 1,
@@ -32,7 +32,7 @@ return {
         ["subtlety"] = 1,
         ["warrior"] = 1,
     },
-    ["src/Hekili/Engine/Sim/Core.lua"] = {
+    ["src/Encore/Engine/Sim/Core.lua"] = {
         ["99"] = 1,
         ["UseItems"] = 2,
         ["execute"] = 1,
@@ -41,7 +41,7 @@ return {
         ["trinket2"] = 1,
         ["use_items"] = 5,
     },
-    ["src/Hekili/Engine/Sim/Events.lua"] = {
+    ["src/Encore/Engine/Sim/Events.lua"] = {
         ["132"] = 2, -- an action-bar slot number, which a Detect Invisibility aura id now matches
         ["72"] = 6,
         ["DRUID"] = 3,
@@ -66,7 +66,7 @@ return {
         ["trinket1"] = 6,
         ["trinket2"] = 6,
     },
-    ["src/Hekili/Engine/Sim/Scripts.lua"] = {
+    ["src/Encore/Engine/Sim/Scripts.lua"] = {
         ["UpdateUseItems"] = 1,
         ["UseItems"] = 2,
         ["ambush"] = 1,
@@ -80,7 +80,7 @@ return {
         ["trinket2"] = 2,
         ["vanish"] = 1,
     },
-    ["src/Hekili/Engine/Sim/State.lua"] = {
+    ["src/Encore/Engine/Sim/State.lua"] = {
         ["active_flame_shock"] = 1,
         ["bloodlust"] = 1,
         ["cat_form"] = 1,
@@ -96,9 +96,9 @@ return {
         ["travel_time"] = 4,
         ["voidbinding"] = 2,
     },
-    ["src/Hekili/Engine/Sim/Targets.lua"] = {
+    ["src/Encore/Engine/Sim/Targets.lua"] = {
         ["HUNTER"] = 1,
         ["WARLOCK"] = 1,
     },
-    ["src/Hekili/Engine/Sim/Utils.lua"] = {},
+    ["src/Encore/Engine/Sim/Utils.lua"] = {},
 }

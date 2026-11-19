@@ -9,12 +9,12 @@ local ww = require("Forever.helpers.warrior_world")
 
 -- A fresh Output.lua: returns Hekili.Engine (public) and ns.Output (private).
 local function load()
-    local env = setmetatable({ Hekili = { Engine = {} } }, { __index = _G })
-    local f = assert(loadfile("src/Hekili/Engine/Output.lua"))
+    local env = setmetatable({ Encore = { Engine = {} } }, { __index = _G })
+    local f = assert(loadfile("src/Encore/Engine/Output.lua"))
     setfenv(f, env)
     local ns = { READY = 0.05, UPDATE_INTERVAL = 0.2 } -- Engine/Sim/Constants.lua's, which loads first in game
-    f("Hekili", ns)
-    return env.Hekili.Engine, ns.Output
+    f("Encore", ns)
+    return env.Encore.Engine, ns.Output
 end
 
 -- One build of `n` records into `name`, published.
@@ -265,7 +265,7 @@ describe("Engine.Output (pure)", function()
         end
     end)
 
-    it("an outside caller gets 4 slots per display and never the ones Hekili's own subscribers use", function()
+    it("an outside caller gets 4 slots per display and never the ones Encore's own subscribers use", function()
         local outside = {}
         for i = 1, 4 do
             outside[i] = function() end
@@ -519,7 +519,7 @@ describe("Engine.Output (headless Arms)", function()
         H.Fire("PLAYER_TARGET_CHANGED")
         t = H.ctl.now + 0.2
         assert(headless.cycle(H, t))
-        out = H.Hekili.Engine.Output.Primary
+        out = H.Encore.Engine.Output.Primary
         assert.is_true(out.count >= 2) -- Arms (wowsims.com) before the pull: Bloodrage, Battle Shout
     end
 
@@ -536,7 +536,7 @@ describe("Engine.Output (headless Arms)", function()
     local function complete()
         for i = 1, out.count do
             local r = out.recs[i]
-            assert.is_table(H.Hekili.Class.abilities[r.actionName], tostring(r.actionName))
+            assert.is_table(H.Encore.Class.abilities[r.actionName], tostring(r.actionName))
             assert.is_number(r.time)
             assert.is_number(r.exact_time)
         end
@@ -544,10 +544,10 @@ describe("Engine.Output (headless Arms)", function()
 
     -- Update in a coroutine that yields at every Yield site.
     local function suspendable()
-        H.Hekili.maxFrameTime, H.Hekili.activeFrameStart = 0.001, -math.huge
+        H.Encore.maxFrameTime, H.Encore.activeFrameStart = 0.001, -math.huge
         t = t + 0.2
         H.ctl.now = t
-        return coroutine.create(H.Hekili.Update)
+        return coroutine.create(H.Encore.Update)
     end
 
     before_each(boot)
@@ -556,14 +556,14 @@ describe("Engine.Output (headless Arms)", function()
     -- the harness's press threshold and poll model; Output, the Timeline and the driver read the engine's.
     it("publishes the ready margin and the update interval the harness models", function()
         local loop = require("Game.harness.loop")
-        assert.are.equal(loop.REACT, H.Hekili.Engine.READY)
-        assert.are.equal(loop.TICK, H.Hekili.Engine.UPDATE_INTERVAL)
+        assert.are.equal(loop.REACT, H.Encore.Engine.READY)
+        assert.are.equal(loop.TICK, H.Encore.Engine.UPDATE_INTERVAL)
     end)
 
     it("steady icons: always on, hold 1, whatever an old profile saved; our casts bridged", function()
-        local id = H.Hekili.State.spec.id
-        H.Hekili.DB.profile.specs[id].steadyIcons = false -- an old profile's saved toggle: ignored, never raises
-        H.Hekili.DB.profile.specs[id].steadyHold = 3
+        local id = H.Encore.State.spec.id
+        H.Encore.DB.profile.specs[id].steadyIcons = false -- an old profile's saved toggle: ignored, never raises
+        H.Encore.DB.profile.specs[id].steadyHold = 3
         t = t + 0.2
         assert(headless.cycle(H, t))
         assert.is_true(H.ns.Output.steady)
@@ -631,7 +631,7 @@ describe("Engine.Output (headless Arms)", function()
                 complete()
             end
         end
-        H.Hekili.maxFrameTime = 0
+        H.Encore.maxFrameTime = 0
         assert.is_true(yields > 20, "yields: " .. yields)
         assert.are.equal(v0 + 1, out.version)
         complete()
@@ -644,15 +644,15 @@ describe("Engine.Output (headless Arms)", function()
         H.ns.EngineFrame.activeThread = co
         repeat
             assert(coroutine.resume(co))
-        until H.Hekili.State.display == "Primary" or coroutine.status(co) == "dead"
+        until H.Encore.State.display == "Primary" or coroutine.status(co) == "dead"
         assert.are.equal("suspended", coroutine.status(co))
         assert.are.equal(v0, out.version)
-        H.Hekili.maxFrameTime = 0
+        H.Encore.maxFrameTime = 0
         -- the snapshot's report (GenerateProfile) trips on a harness talent stub; the run and the thread drop are the point
-        H.Hekili.SaveDebugSnapshot = function()
+        H.Encore.SaveDebugSnapshot = function()
             return false
         end
-        H.Hekili:MakeSnapshot()
+        H.Encore:MakeSnapshot()
         assert.is_nil(H.ns.EngineFrame.activeThread)
         assert.are.equal(v0 + 1, out.version)
         local recs, after = out.recs, names(out.count)
@@ -669,7 +669,7 @@ describe("Engine.Output (headless Arms)", function()
     end)
 
     it("bumps the status version on a combat flip and not otherwise", function()
-        local st = H.Hekili.Engine.Output.status
+        local st = H.Encore.Engine.Output.status
         assert.are.equal(ww.SPEC, st.specID)
         assert.is_false(st.combat)
         local v = st.version
@@ -688,8 +688,8 @@ describe("Engine.Output (headless Arms)", function()
     end)
 
     it("records carry texture (the spec's icon override first), item, offGCD and name", function()
-        local abilities = H.Hekili.Class.abilities
-        local opts = H.Hekili:GetActiveSpecOption("abilities")
+        local abilities = H.Encore.Class.abilities
+        local opts = H.Encore:GetActiveSpecOption("abilities")
         local first = out.recs[1].actionName
         opts[first].icon = 4242
         t = t + 0.2
@@ -709,7 +709,7 @@ describe("Engine.Output (headless Arms)", function()
 
     it("records carry the entry's focus flag, and a reused record drops it when the entry has none", function()
         local r = out.recs[1]
-        local entry = H.Hekili.DB.profile.packs[r.pack].lists[r.list][r.action]
+        local entry = H.Encore.DB.profile.packs[r.pack].lists[r.list][r.action]
         assert.are.equal(r.actionName, entry.action)
         assert.is_nil(r.focus)
         entry.focus = 1
@@ -718,7 +718,7 @@ describe("Engine.Output (headless Arms)", function()
         local flagged = 0
         for i = 1, out.count do
             local ri = out.recs[i]
-            local e = H.Hekili.DB.profile.packs[ri.pack].lists[ri.list][ri.action]
+            local e = H.Encore.DB.profile.packs[ri.pack].lists[ri.list][ri.action]
             assert.are.equal(e.focus, ri.focus, ri.actionName)
             flagged = flagged + (ri.focus or 0)
         end
@@ -735,7 +735,7 @@ describe("Engine.Output (headless Arms)", function()
     end)
 
     it("the in-game importer stores focus=1 as the number 1, and only when the line sets it", function()
-        local out1 = H.Hekili:ParseActionList("actions=mortal_strike,focus=1,if=rage>30\nactions+=/slam\n")
+        local out1 = H.Encore:ParseActionList("actions=mortal_strike,focus=1,if=rage>30\nactions+=/slam\n")
         assert.are.equal("mortal_strike", out1[1].action)
         assert.are.equal(1, out1[1].focus)
         assert.is_nil(out1[2].focus)
@@ -749,11 +749,11 @@ describe("Engine.Output (headless Arms)", function()
         if entry then
             pack, list, id = entry.__pack, entry.__list, entry.__id
         end
-        entry = H.Hekili.DB.profile.packs[pack].lists[list][id]
+        entry = H.Encore.DB.profile.packs[pack].lists[list][id]
         for k, v in pairs(fields) do
             entry[k] = v
         end
-        H.Hekili:LoadScript(pack, list, id)
+        H.Encore:LoadScript(pack, list, id)
         for _ = 1, 2 do
             t = t + 0.2
             assert(headless.cycle(H, t))
@@ -779,14 +779,14 @@ describe("Engine.Output (headless Arms)", function()
                 seen = seen or o.recs[i].label
             end
         end
-        H.Hekili.Engine.Subscribe("Primary", sub, true)
+        H.Encore.Engine.Subscribe("Primary", sub, true)
         local _, hits = marked({ label = "R6" })
         for _, ri in ipairs(hits) do
             assert.are.equal("R6", ri.label, ri.actionName)
             assert.is_nil(ri.iconOverride, ri.actionName)
         end
         assert.are.equal("R6", seen)
-        H.Hekili.Engine.Unsubscribe("Primary", sub)
+        H.Encore.Engine.Unsubscribe("Primary", sub)
         assert.are.same({}, H.errors)
     end)
 
@@ -804,10 +804,10 @@ describe("Engine.Output (headless Arms)", function()
 
     it("label_if and icon_if are read in each pick's own slot state: true at record 1, false at later ones", function()
         local pack = out.recs[1].pack
-        for list, entries in pairs(H.Hekili.DB.profile.packs[pack].lists) do
+        for list, entries in pairs(H.Encore.DB.profile.packs[pack].lists) do
             for id, e in ipairs(entries) do -- every line the same condition on the queue slot (state.index)
                 e.label, e.label_if, e.icon, e.icon_if = "R1", "index=1", "136006", "index=1"
-                H.Hekili:LoadScript(pack, list, id)
+                H.Encore:LoadScript(pack, list, id)
             end
         end
         for _ = 1, 2 do
@@ -828,7 +828,7 @@ describe("Engine.Output (headless Arms)", function()
     it(
         "icon= with icon_if true sets iconOverride (a path's file ID) and leaves texture alone; icon_if false none",
         function()
-            local abilities = H.Hekili.Class.abilities
+            local abilities = H.Encore.Class.abilities
             local key, hits = marked({ icon = "Interface\\Icons\\Spell_Nature_StarFall", icon_if = "time>=0" })
             for _, ri in ipairs(hits) do
                 assert.are.equal(134400, ri.iconOverride, ri.actionName) -- the fake client's file ID for any path
@@ -871,7 +871,7 @@ describe("Engine.Output (headless Arms)", function()
                 assert.is_nil(hits[1].iconOverride)
                 local line = key.__pack .. ":" .. key.__list .. ":" .. key.__id
                 local found = 0
-                for _, w in ipairs(H.Hekili.ErrorKeys) do
+                for _, w in ipairs(H.Encore.ErrorKeys) do
                     if w:find("icon=" .. path, 1, true) then
                         found = found + 1
                         assert.truthy(w:find(line, 1, true), w)
@@ -886,7 +886,7 @@ describe("Engine.Output (headless Arms)", function()
 
     it("a label, label_if, icon or icon_if that raises gives nil, never an error", function()
         marked({ label = "R6", icon = "Interface/Icons/X", icon_if = "time>=0" })
-        local mods = H.Hekili.Scripts.DB[out.recs[1].script].Modifiers
+        local mods = H.Encore.Scripts.DB[out.recs[1].script].Modifiers
         local function boom()
             error("injected")
         end
@@ -912,7 +912,7 @@ describe("Engine.Output (headless Arms)", function()
     end)
 
     it("the in-game importer keeps label=, label_if=, icon= and icon_if= on the entry", function()
-        local e = H.Hekili:ParseActionList(
+        local e = H.Encore:ParseActionList(
             "actions=mortal_strike,label=R6,label_if=rage>30,icon=Interface/Icons/X,icon_if=rage>50,if=rage>10\n"
         )[1]
         assert.are.equal("mortal_strike", e.action)
@@ -921,7 +921,7 @@ describe("Engine.Output (headless Arms)", function()
         assert.are.equal("Interface/Icons/X", e.icon)
         assert.are.equal("rage > 50", e.icon_if)
         assert.are.equal("rage > 10", e.criteria)
-        assert.is_nil(H.Hekili:ParseActionList("actions=slam,label=,label_if=,icon=,icon_if=\n")[1].label_if)
+        assert.is_nil(H.Encore:ParseActionList("actions=slam,label=,label_if=,icon=,icon_if=\n")[1].label_if)
     end)
 
     it("alts is empty on every record when no subscriber declares the need", function()
@@ -936,7 +936,7 @@ describe("Engine.Output (headless Arms)", function()
     end)
 
     it("records carry cost (the spend of resource_type, 0 when none) and busy (GCD, or cast if longer)", function()
-        local abilities = H.Hekili.Class.abilities
+        local abilities = H.Encore.Class.abilities
         local spent = 0
         for i = 1, out.count do
             local r = out.recs[i]
@@ -981,7 +981,7 @@ describe("Engine.Output (headless Arms)", function()
             assert.is_table(c, "no Primary scan")
             local p = out.payload
             assert.are.equal(6, c.n)
-            assert.are.equal("HEKILI_RECOMMENDATION_UPDATE", c[1])
+            assert.are.equal("ENCORE_RECOMMENDATION_UPDATE", c[1])
             assert.are.equal(out.recs[1].actionID, c[3])
             assert.are.equal(out.recs[1].indicator, c[4])
             assert.is_nil(c[5])

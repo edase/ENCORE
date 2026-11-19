@@ -10,7 +10,7 @@ local PATTERNS = {
     { "pairs%(%s*set_bonus", "pairs(set_bonus)" },
 }
 local function files()
-    local out, p = {}, assert(io.popen("find src -path 'src/Hekili_*' -name '*.lua' | sort"))
+    local out, p = {}, assert(io.popen("find src -path 'src/Encore_*' -name '*.lua' | sort"))
     for path in p:lines() do
         out[#out + 1] = path
     end
@@ -36,7 +36,7 @@ describe("the packs' gear reads", function()
             end
         end
     end
-    local shared = declared.Hekili_Shared or {}
+    local shared = declared.Encore_Shared or {}
     it("reads only declared keys", function()
         local bad = {}
         for _, f in ipairs(all) do

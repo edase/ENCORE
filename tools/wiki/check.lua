@@ -196,9 +196,9 @@ function M.labels(pages, labels, enus, lib)
                 local at, span, after = b[1], b[2], b[3]
                 local title = first and at < firstHeading
                 first = false
-                if span:match("^/hekili >") then
+                if span:match("^/encore >") then
                     for seg in (span .. " >"):gmatch("%s*(.-)%s*>") do
-                        if seg ~= "/hekili" and not seg:match("^%*.*%*$") then
+                        if seg ~= "/encore" and not seg:match("^%*.*%*$") then
                             check(name, seg, "the path segment")
                         end
                     end

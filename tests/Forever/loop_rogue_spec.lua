@@ -16,9 +16,9 @@ describe("the Rogue loop worlds", function()
             local H = headless.new({ character = C.character(), pack = C.PACK })
             assert.are.same({}, H.loadErrors)
             local unmapped = {}
-            for _, list in pairs(H.Hekili.DB.profile.packs[C.PACK].lists) do
+            for _, list in pairs(H.Encore.DB.profile.packs[C.PACK].lists) do
                 for _, entry in ipairs(list) do
-                    local a = entry.action and H.Hekili.Class.abilities[entry.action]
+                    local a = entry.action and H.Encore.Class.abilities[entry.action]
                     if a and a.id and H.ctl.known[a.id] and not rw.MAP[entry.action] then
                         unmapped[#unmapped + 1] = entry.action
                     end

@@ -109,7 +109,7 @@ end
 
 -- Calls fn(record) with Hekili:Print and Hekili:Notify recorded as `tag<TAB>text` lines.
 local function capture(H, tag, out, fn)
-    local hk = H.Hekili
+    local hk = H.Encore
     local print, notify = rawget(hk, "Print"), rawget(hk, "Notify")
     local function rec(_, s)
         out["~message\t" .. tag .. "\t" .. esc(tostring(s))] = true
@@ -168,7 +168,7 @@ local function contentNotices(out)
             "8",
         },
     }
-    local saved = rawget(_G, "Hekili")
+    local saved = rawget(_G, "Encore")
     for _, c in ipairs(cases) do
         local ns = {
             L = identity,
@@ -184,23 +184,23 @@ local function contentNotices(out)
                 },
             },
         }
-        _G.Hekili = {
+        _G.Encore = {
             Notify = function(_, s)
                 -- the core's content API is a number, not text: its bump (spec §3) is no English change
-                s = s:gsub("this Hekili Forever for %d+;", "this Hekili Forever for <CONTENT_API>;")
+                s = s:gsub("this Encore for %d+;", "this Encore for <CONTENT_API>;")
                 out["~message\tcontent " .. c[1] .. "\t" .. esc(s)] = true
             end,
         }
-        assert(loadfile("src/Hekili/Engine/Content.lua"))("Hekili", ns)
+        assert(loadfile("src/Encore/Engine/Content.lua"))("Encore", ns)
         ns.LoadContent()
         ns.ContentNotice()
     end
-    _G.Hekili = saved
+    _G.Encore = saved
 end
 
 -- Spec/Packs.lua's RestoreDefaults notices for `kind` (updated, reverted, retired) at 1, 2 and 3 names.
 local function restoreNotices(H, out)
-    local hk, class = H.Hekili, H.Hekili.Class
+    local hk, class = H.Encore, H.Encore.Class
     local p = hk.DB.profile
     local any
     for _, v in pairs(class.packs) do
@@ -247,7 +247,7 @@ end
 
 -- The launcher text (UI.lua's GetDataText) for each mode, with and without the minor-cooldowns override.
 local function launcher(H, out)
-    local p = H.Hekili.DB.profile
+    local p = H.Encore.DB.profile
     local mm = H.ns.UI.Minimap
     if not mm then
         return
@@ -295,34 +295,34 @@ M.COMMANDS = {
 -- Every message the refactor restructured (spec §8), into `out`.
 local function messages(H, out)
     for _, cmd in ipairs(M.COMMANDS) do
-        capture(H, "/hekili " .. cmd, out, function()
-            H.Hekili:CmdLine(cmd)
+        capture(H, "/encore " .. cmd, out, function()
+            H.Encore:CmdLine(cmd)
         end)
     end
     -- every spec setting through /hekili set spec <key>
-    for id, spec in pairs(H.Hekili.Engine.Registry.Specs()) do
-        if id == H.Hekili.State.spec.id then
+    for id, spec in pairs(H.Encore.Engine.Registry.Specs()) do
+        if id == H.Encore.State.spec.id then
             for _, s in ipairs(spec.settings or {}) do
-                capture(H, "/hekili set spec " .. s.name, out, function()
-                    H.Hekili:CmdLine("set spec " .. s.name)
+                capture(H, "/encore set spec " .. s.name, out, function()
+                    H.Encore:CmdLine("set spec " .. s.name)
                 end)
             end
         end
     end
     capture(H, "hold", out, function()
-        H.Hekili:PlaceHold("potion", true, true)
-        H.Hekili:RemoveHold("potion", true)
-        H.Hekili:PlaceHold("potion", false, true)
-        H.Hekili:RemoveHold("potion", true)
+        H.Encore:PlaceHold("potion", true, true)
+        H.Encore:RemoveHold("potion", true)
+        H.Encore:PlaceHold("potion", false, true)
+        H.Encore:RemoveHold("potion", true)
     end)
     capture(H, "build warning", out, function()
-        local cur = H.Hekili.CurrentBuild
-        H.Hekili.CurrentBuild = 1
-        H.Hekili:OnEnable()
-        H.Hekili.CurrentBuild = cur
+        local cur = H.Encore.CurrentBuild
+        H.Encore.CurrentBuild = 1
+        H.Encore:OnEnable()
+        H.Encore.CurrentBuild = cur
     end)
     capture(H, "cast warnings", out, function()
-        local class = H.Hekili.Class
+        local class = H.Encore.Class
         class.initialized = false
         H.Fire("UNIT_SPELLCAST_SUCCEEDED", "player", "cast-1", 1)
         class.initialized = true
@@ -332,17 +332,17 @@ local function messages(H, out)
         H.ctl.level.player = level
     end)
     capture(H, "styles", out, function()
-        H.Hekili:RegisterDisplayStyle("enus_test", { api = -1 })
-        H.Hekili:RegisterDisplayStyle("queue", { api = H.Hekili.DisplayStyleAPI })
+        H.Encore:RegisterDisplayStyle("enus_test", { api = -1 })
+        H.Encore:RegisterDisplayStyle("queue", { api = H.Encore.DisplayStyleAPI })
     end)
     capture(H, "unknown style", out, function()
-        H.Hekili.DB.profile.displays.Primary.style = "enus_nope"
-        H.Hekili:BuildUI()
-        H.Hekili.DB.profile.displays.Primary.style = "classic"
+        H.Encore.DB.profile.displays.Primary.style = "enus_nope"
+        H.Encore:BuildUI()
+        H.Encore.DB.profile.displays.Primary.style = "classic"
     end)
     capture(H, "snapshot", out, function()
-        H.Hekili.Engine.settings.screenshot = false -- the harness has no Screenshot()
-        H.Hekili:MakeSnapshot()
+        H.Encore.Engine.settings.screenshot = false -- the harness has no Screenshot()
+        H.Encore:MakeSnapshot()
     end)
     restoreNotices(H, out)
     launcher(H, out)
@@ -352,11 +352,11 @@ end
 function M.dump()
     local out = {}
     for _, name in ipairs(addons.CONTENT) do
-        local token = name:match("^Hekili_(%a+)$"):upper()
+        local token = name:match("^Encore_(%a+)$"):upper()
         if CLASSES[token] then
             local H = boot(token)
-            H.Hekili:RefreshOptions()
-            walk(H.Hekili.Options, "options", {}, out, {})
+            H.Encore:RefreshOptions()
+            walk(H.Encore.Options, "options", {}, out, {})
             messages(H, out)
         end
     end

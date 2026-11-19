@@ -224,7 +224,7 @@ function M.content(base, o)
             end
         end
         local function answer(key, req)
-            local cost = H.Hekili.State.action[key].cost or 0
+            local cost = H.Encore.State.action[key].cost or 0
             return function(W, e, power)
                 local ok = not req or req(W, e)
                 return ok and power >= cost, ok and power < cost
@@ -766,7 +766,7 @@ end
 --- returned: the predicted and believed opens ({ name, time }).
 function M.windowGuard(H, poll)
     poll = poll or 0.2
-    local S, F = H.Hekili.State, H.ns.Facade
+    local S, F = H.Encore.State, H.ns.Facade
     local predicted, believed, lastAt, zero = {}, {}, {}, 0
     local open = S.openWindow
     S.openWindow = function(name, ...)
@@ -780,7 +780,7 @@ function M.windowGuard(H, poll)
     end
     local function tick(base)
         zero = base or 0
-        for name in pairs(H.Hekili.Class.windows) do
+        for name in pairs(H.Encore.Class.windows) do
             local up, at = F.Window(name)
             if up and at ~= lastAt[name] then
                 lastAt[name] = at
@@ -849,13 +849,13 @@ function M.live(label, C, limit, fights, stat)
     for _, id in ipairs(c.known) do
         known[id] = true
     end
-    local abilities = L.oracle.Hekili.Class.abilities
+    local abilities = L.oracle.Encore.Class.abilities
     local worst, presses, errors = 0, 0, 0
     local worsts = {} -- per fight (median)
     for seed = 1, fights or 1 do
         if median and seed > 1 then
             L = loop.new(C)
-            abilities = L.oracle.Hekili.Class.abilities
+            abilities = L.oracle.Encore.Class.abilities
         end
         local streak, last, fightWorst = 0, 0, 0
         local run = loop.run(L, seed, {

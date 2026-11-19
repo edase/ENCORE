@@ -458,8 +458,8 @@ describe("Forever Druid", function()
     )
 
     it("reads only registered talent keys, in the class file and every race file", function()
-        local files = { "src/Hekili_Druid/Druid.lua" }
-        local ls = assert(io.popen("ls src/Hekili_Shared/Races/*.lua"))
+        local files = { "src/Encore_Druid/Druid.lua" }
+        local ls = assert(io.popen("ls src/Encore_Shared/Races/*.lua"))
         for f in ls:lines() do
             files[#files + 1] = f
         end
@@ -1026,7 +1026,7 @@ describe("Forever Druid", function()
         for _, id in ipairs(m.spells) do
             assert.is_true(first[id], tostring(id)) -- each is the rank-1 ID of a registered ability
         end
-        local src = assert(io.open("src/Hekili_Druid/Druid.lua")):read("*a")
+        local src = assert(io.open("src/Encore_Druid/Druid.lua")):read("*a")
         assert.is_nil(src:find("buff%.clearcasting")) -- the modifier, not each `spend`, prices it
     end)
 
@@ -1071,7 +1071,7 @@ describe("Forever Druid", function()
             printed[#printed + 1] = { line:match("^(%d+) (.+)$") }
         end
         pipe:close()
-        local manifest = dofile("src/Hekili_Druid/APLs/packs.lua")
+        local manifest = dofile("src/Encore_Druid/APLs/packs.lua")
         local names = manifest.packs
         assert.are.equal(#names, #w.packs)
         for i, name in ipairs(names) do
@@ -1083,7 +1083,7 @@ describe("Forever Druid", function()
     it("writes priorities that name only registered abilities, auras, talents, settings and lists", function()
         local packs = assert(loadfile("tools/make_pack.lua"))("lists", "druid")
         local scanNs = {}
-        assert(loadfile("src/Hekili/Engine/Sim/AplWarnings.lua"))("Hekili", scanNs)
+        assert(loadfile("src/Encore/Engine/Sim/AplWarnings.lua"))("Encore", scanNs)
         local secretToken = scanNs.AplSecretToken
         -- Hekili's `all`: Hekili_Shared/Shared/Items.lua's use_items; Hekili_Shared/Races' Night Elf racial and the
         -- Skyborne racial's aura (energized); the core's cancel_buff (tests/Forever/apl_entry_spec.lua), its buff_name a
@@ -1703,7 +1703,7 @@ describe("Forever Druid Movement (R8)", function()
 
     -- The pack's `key` lines of list `group` (nil: the default list).
     local function lines(key, pack, group)
-        local f = assert(io.open("src/Hekili_Druid/APLs/" .. (pack or PACK) .. ".simc"))
+        local f = assert(io.open("src/Encore_Druid/APLs/" .. (pack or PACK) .. ".simc"))
         local s = f:read("*a")
         f:close()
         local out = {}
@@ -1715,7 +1715,7 @@ describe("Forever Druid Movement (R8)", function()
     end
 
     local function parse(H, l)
-        local parsed = H.Hekili:ParseActionList(l)
+        local parsed = H.Encore:ParseActionList(l)
         parsed[1].enabled = true
         return parsed[1]
     end
@@ -1748,19 +1748,19 @@ describe("Forever Druid Movement (R8)", function()
                 vars[#vars + 1] = e
             end
         end
-        H.Hekili.DB.profile.packs[pack].lists = lists
-        H.Hekili:LoadScripts()
+        H.Encore.DB.profile.packs[pack].lists = lists
+        H.Encore:LoadScripts()
         H.Fire("PLAYER_REGEN_DISABLED")
         local VS = H.ns.VirtualState
         local power, full = VS.Power, { est = 100, lo = 100, hi = 100, conf = 1 }
         VS.Power = function(pt, now)
             return pt == ptype and full or power(pt, now)
         end
-        local out = H.Hekili.Engine.Output.Primary
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
-        assert.is_true(H.Hekili.Engine.Registry.MovementSpec(C.SPEC)) -- the options row shows (R3)
+        local out = H.Encore.Engine.Output.Primary
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
+        assert.is_true(H.Encore.Engine.Registry.MovementSpec(C.SPEC)) -- the options row shows (R3)
         return function(movement)
-            H.Hekili:FireToggle("movement", movement and "on" or "off")
+            H.Encore:FireToggle("movement", movement and "on" or "off")
             t = t + 0.2
             assert(headless.cycle(H, t))
             assert.are.same({}, H.errors)
@@ -1843,11 +1843,11 @@ describe("Forever Druid Ravage opener (R69)", function()
         else
             t = t + 0.2
         end
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         assert(headless.cycle(H, t))
         assert.are.same({}, H.errors)
         local names = {}
-        for i, r in ipairs(H.Hekili.Engine.Output.Primary.recs) do
+        for i, r in ipairs(H.Encore.Engine.Output.Primary.recs) do
             names[i] = r.actionName
         end
         return names, H
@@ -1880,13 +1880,13 @@ describe("Forever Druid Ravage opener (R69)", function()
     it("drops the believed Prowl when IsStealthed reads false in combat; a secret answer leaves it", function()
         local list, H = recs(5, true, 0.2, false)
         none(list, "ravage")
-        local S = H.Hekili.State
+        local S = H.Encore.State
         S.reset("Primary", true)
         assert.are.same({ false, false, false }, { S.buff.prowl.up, (S:IsUsable("ravage")), (S:IsUsable("pounce")) })
         list, H = recs(5, true, 0.2, SECRET)
         assert.are.equal("ravage", list[1], table.concat(list, " "))
-        H.Hekili.State.reset("Primary", true)
-        assert.is_true(H.Hekili.State.buff.prowl.up)
+        H.Encore.State.reset("Primary", true)
+        assert.is_true(H.Encore.State.buff.prowl.up)
     end)
 end)
 
@@ -1916,11 +1916,11 @@ describe("Forever Druid 2-3 enemies (wowsims #1087)", function()
         local t = H.ctl.now + 0.2
         assert(headless.cycle(H, t))
         H.Fire("PLAYER_REGEN_DISABLED")
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         assert(headless.cycle(H, t + 1))
         assert.are.same({}, H.errors)
         local names = {}
-        for i, r in ipairs(H.Hekili.Engine.Output.Primary.recs) do
+        for i, r in ipairs(H.Encore.Engine.Output.Primary.recs) do
             names[i] = r.actionName
         end
         return table.concat(names, " ")
@@ -1928,7 +1928,7 @@ describe("Forever Druid 2-3 enemies (wowsims #1087)", function()
 
     it("calls no action list in Feral or Guardian and reads no enemy count", function()
         for _, p in ipairs({ PACK, "Guardian (wowsims.com)" }) do
-            local f = assert(io.open("src/Hekili_Druid/APLs/" .. p .. ".simc"))
+            local f = assert(io.open("src/Encore_Druid/APLs/" .. p .. ".simc"))
             local s = f:read("*a")
             f:close()
             assert.is_nil(s:find("call_action_list", 1, true), p)
@@ -1956,7 +1956,7 @@ describe("Forever Druid Claw vs Shred (L602)", function()
 
     -- re-pin ab0f00e4fc (wowsims #1087): the Shred and Claw lines sit in the one default list
     local function lines(key)
-        local f = assert(io.open("src/Hekili_Druid/APLs/" .. PACK .. ".simc"))
+        local f = assert(io.open("src/Encore_Druid/APLs/" .. PACK .. ".simc"))
         local s = f:read("*a")
         f:close()
         local out = {}
@@ -1984,14 +1984,14 @@ describe("Forever Druid Claw vs Shred (L602)", function()
         local list = {}
         for _, k in ipairs({ "variable", "shred", "claw" }) do -- CN25: the pure variables the lines read first
             for _, l in ipairs(lines(k)) do
-                local parsed = H.Hekili:ParseActionList(l)
+                local parsed = H.Encore:ParseActionList(l)
                 parsed[1].enabled = true
                 list[#list + 1] = parsed[1]
             end
         end
-        H.Hekili.DB.profile.packs[PACK].lists = { precombat = {}, default = list }
-        H.Hekili.DB.profile.specs[dlw.Feral.SPEC].settings.behind = o.behind or false
-        H.Hekili:LoadScripts()
+        H.Encore.DB.profile.packs[PACK].lists = { precombat = {}, default = list }
+        H.Encore.DB.profile.specs[dlw.Feral.SPEC].settings.behind = o.behind or false
+        H.Encore:LoadScripts()
         H.Fire("PLAYER_REGEN_DISABLED")
         local VS = H.ns.VirtualState
         local e = o.energy or 100
@@ -1999,10 +1999,10 @@ describe("Forever Druid Claw vs Shred (L602)", function()
         VS.Power = function(pt, now)
             return pt == 3 and fixed or power(pt, now)
         end
-        assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+        assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
         assert(headless.cycle(H, H.ctl.now + 0.2))
         assert.are.same({}, H.errors)
-        local r = H.Hekili.Engine.Output.Primary.recs[1]
+        local r = H.Encore.Engine.Output.Primary.recs[1]
         return r and r.actionName, r and r.wait
     end
 
@@ -2056,7 +2056,7 @@ describe("Forever Druid Rake after an avoided recast (hotfix 0.8.6)", function()
         local C = dlw.Feral
         H = headless.new({ character = C.character(), pack = C.PACK })
         assert.are.same({}, H.loadErrors)
-        S, VS, spec = H.Hekili.State, H.ns.VirtualState, H.Hekili.Class.specs[C.SPEC]
+        S, VS, spec = H.Encore.State, H.ns.VirtualState, H.Encore.Class.specs[C.SPEC]
         H.ctl.inRange.target, H.ctl.level.target, H.ctl.power[3] = true, 60, 100
         H.Fire("PLAYER_TARGET_CHANGED")
         H.ctl.combat = true

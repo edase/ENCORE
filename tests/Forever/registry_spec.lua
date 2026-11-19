@@ -5,11 +5,11 @@ local ww = require("Forever.helpers.warrior_world")
 
 -- The pack editor's inline sequence before Task 5 (Options.lua's criteria/value/value_else/strict_if `arg`), verbatim
 -- but for its upvalues: the reference Engine.Evaluate must match.
-local function inline(Hekili, pack, list, action, mod)
-    local state, scripts = Hekili.State, Hekili.Scripts
+local function inline(Encore, pack, list, action, mod)
+    local state, scripts = Encore.State, Encore.Scripts
     local results = {}
     state.reset("Primary", true)
-    local apack = rawget(Hekili.DB.profile.packs, pack)
+    local apack = rawget(Encore.DB.profile.packs, pack)
     for name, alist in pairs(apack.lists) do
         state.this_list = name
         for i, entry in ipairs(alist) do
@@ -42,22 +42,22 @@ describe("Engine.Registry (headless Arms)", function()
     end)
 
     it("views return the engine's live tables", function()
-        local R, class = H.Hekili.Engine.Registry, H.Hekili.Class
+        local R, class = H.Encore.Engine.Registry, H.Encore.Class
         assert.are.equal(class.abilities, R.Abilities())
         assert.are.equal(class.specs, R.Specs())
         assert.are.equal(class.potionList, R.PotionList())
         assert.are.equal(class.file, R.ClassFile())
         assert.are.equal(class.specs[ww.SPEC].settings, R.Settings(ww.SPEC))
         assert.are.same({ 29515, 29515 }, { H.ns.GCD_SPELL, R.GCD_SPELL }) -- the engine's own constant (audit E15)
-        assert.are.equal(ww.SPEC, H.Hekili.Engine.Output.status.specID)
+        assert.are.equal(ww.SPEC, H.Encore.Engine.Output.status.specID)
     end)
 
     it("Evaluate returns the inline sequence's results, list and action", function()
-        local pack = rawget(H.Hekili.DB.profile.packs, ww.PACK)
+        local pack = rawget(H.Encore.DB.profile.packs, ww.PACK)
         local list, action
         for name, alist in pairs(pack.lists) do
             for i, entry in ipairs(alist) do
-                local node = H.Hekili.Scripts.DB[ww.PACK .. ":" .. name .. ":" .. i]
+                local node = H.Encore.Scripts.DB[ww.PACK .. ":" .. name .. ":" .. i]
                 if not list and entry.criteria and entry.criteria ~= "" and node and next(node.Elements) then
                     list, action = name, i
                 end
@@ -66,8 +66,8 @@ describe("Engine.Registry (headless Arms)", function()
         assert.is_string(list)
         for _, mod in ipairs({ false, "value", "value_else", "strict_if" }) do
             mod = mod or nil
-            local want, wl, wa = inline(H.Hekili, ww.PACK, list, action, mod)
-            local got, gl, ga = H.Hekili.Engine.Evaluate(ww.PACK, list, action, mod, {})
+            local want, wl, wa = inline(H.Encore, ww.PACK, list, action, mod)
+            local got, gl, ga = H.Encore.Engine.Evaluate(ww.PACK, list, action, mod, {})
             assert.are.same(want, got)
             assert.are.equal(wl, gl)
             assert.are.equal(wa, ga)

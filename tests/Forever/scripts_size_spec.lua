@@ -6,7 +6,7 @@ local headless = require("Game.harness.headless")
 describe("Scripts.lua on a long condition (CN25)", function()
     local Sc
     setup(function()
-        Sc = headless.new({}).Hekili.Scripts
+        Sc = headless.new({}).Encore.Scripts
     end)
 
     it("turns every bare ! into not, past 100 of them", function()
@@ -32,7 +32,7 @@ describe("a pure variable reads as its inlined text (CN25)", function()
         local H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
         if hoist then
-            local lists, defs = H.Hekili.DB.profile.packs[ww.PACK].lists, {}
+            local lists, defs = H.Encore.DB.profile.packs[ww.PACK].lists, {}
             for _, name in ipairs({ "precombat", "default" }) do
                 for _, e in ipairs(lists[name] or {}) do
                     if (e.criteria or "") ~= "" then
@@ -47,8 +47,8 @@ describe("a pure variable reads as its inlined text (CN25)", function()
             for i = #defs, 1, -1 do
                 table.insert(lists.default, 1, defs[i])
             end
-            H.Hekili:LoadScripts()
-            H.Hekili:ReviewPacks() -- the moved entries active (actsActive is keyed by index)
+            H.Encore:LoadScripts()
+            H.Encore:ReviewPacks() -- the moved entries active (actsActive is keyed by index)
         end
         H.ctl.inRange.target, H.ctl.level.target = true, 60
         H.Fire("PLAYER_TARGET_CHANGED")
@@ -81,15 +81,15 @@ describe("a pure variable reads as its inlined text (CN25)", function()
                 H.ctl.power[1] = (i * 17) % 100
                 headless.cycle(H, t)
             end
-            local ra, rb = A.Hekili.Engine.Output.Primary.recs, B.Hekili.Engine.Output.Primary.recs
+            local ra, rb = A.Encore.Engine.Output.Primary.recs, B.Encore.Engine.Output.Primary.recs
             for j = 1, 3 do
                 local a, b = ra[j] or {}, rb[j] or {}
                 assert.are.same({ i, j, a.actionName, a.time }, { i, j, b.actionName, b.time })
             end
         end
         assert.are.same({}, B.errors)
-        assert.is_nil(next(B.Hekili.State.varDB)) -- read in place: never registered
-        for id, s in pairs(B.Hekili.Scripts.DB) do -- a read's own time is its value's, never `safenum(variable.vN)`
+        assert.is_nil(next(B.Encore.State.varDB)) -- read in place: never registered
+        for id, s in pairs(B.Encore.Scripts.DB) do -- a read's own time is its value's, never `safenum(variable.vN)`
             assert.is_nil((s.RecheckScript or ""):find("variable", 1, true), id)
         end
         assert.are.equal(perCycle(A, t + 1, 30), perCycle(B, t + 1, 30))
@@ -103,8 +103,8 @@ describe("a pure variable reads as its inlined text (CN25)", function()
         local H = boot(true)
         local t = H.ctl.now + 0.5
         assert(headless.cycle(H, t))
-        local S, names = H.Hekili.State, {}
-        for name, id in pairs(H.Hekili.Scripts.PackInfo[ww.PACK].pure) do
+        local S, names = H.Encore.State, {}
+        for name, id in pairs(H.Encore.Scripts.PackInfo[ww.PACK].pure) do
             if id then
                 names[#names + 1] = name
             end
@@ -146,14 +146,14 @@ describe("a pure variable reads as its inlined text (CN25)", function()
                 H.ctl.power[1] = (i * 17) % 100
                 headless.cycle(H, t)
             end
-            local ra, rb = A.Hekili.Engine.Output.Primary.recs, B.Hekili.Engine.Output.Primary.recs
+            local ra, rb = A.Encore.Engine.Output.Primary.recs, B.Encore.Engine.Output.Primary.recs
             assert.are.same({ i, (ra[1] or {}).actionName }, { i, (rb[1] or {}).actionName })
         end
-        assert.is_false(B.Hekili.Scripts.PackInfo[ww.PACK].pure.v1)
-        for _, v in pairs(B.Hekili.Scripts.PackInfo[ww.PACK].pure) do
+        assert.is_false(B.Encore.Scripts.PackInfo[ww.PACK].pure.v1)
+        for _, v in pairs(B.Encore.Scripts.PackInfo[ww.PACK].pure) do
             assert.is_false(v)
         end
-        assert.is_truthy(B.Hekili.State.varDB.v1) -- registered: the stock path
+        assert.is_truthy(B.Encore.State.varDB.v1) -- registered: the stock path
         assert.are.same({}, B.errors)
     end)
 
@@ -168,7 +168,7 @@ describe("a pure variable reads as its inlined text (CN25)", function()
     }) do
         it("raises at load on a pure=1 line with " .. case[1], function()
             local H = boot(false)
-            local lists = H.Hekili.DB.profile.packs[ww.PACK].lists
+            local lists = H.Encore.DB.profile.packs[ww.PACK].lists
             local e = { action = "variable", enabled = true, var_name = "x", value = "1", pure = 1 }
             for k, v in pairs(case[2]) do
                 e[k] = v
@@ -190,8 +190,8 @@ describe("a pure variable reads as its inlined text (CN25)", function()
             if case[2].second then
                 table.insert(lists.default, 2, { action = "variable", enabled = true, var_name = "x", value = "2" })
             end
-            H.Hekili:LoadScripts()
-            local Sc = H.Hekili.Scripts
+            H.Encore:LoadScripts()
+            local Sc = H.Encore.Scripts
             assert.is_false(Sc.PackInfo[ww.PACK].pure.x)
             local found
             for _, err in ipairs(H.errors) do
@@ -212,18 +212,18 @@ describe("a pure variable reads as its inlined text (CN25)", function()
     }) do
         it("follows the editor: a call to a pure=1 line's list given " .. case[1], function()
             local H = boot(false)
-            local lists = H.Hekili.DB.profile.packs[ww.PACK].lists
+            local lists = H.Encore.DB.profile.packs[ww.PACK].lists
             lists.sub = { { action = "variable", enabled = true, var_name = "x", value = "1", pure = 1 } }
             lists.other = { { action = "variable", enabled = true, var_name = "y", value = "2" } }
             table.insert(lists.default, 1, { action = "call_action_list", enabled = true, list_name = "sub" })
-            H.Hekili:LoadScripts()
-            local Sc = H.Hekili.Scripts
+            H.Encore:LoadScripts()
+            local Sc = H.Encore.Scripts
             assert.is_truthy(Sc.PackInfo[ww.PACK].pure.x)
             assert.are.same({}, H.errors)
             for k, v in pairs(case[2]) do
                 lists.default[1][k] = v
             end
-            H.Hekili:LoadScript(ww.PACK, "default", 1)
+            H.Encore:LoadScript(ww.PACK, "default", 1)
             assert.is_false(Sc.PackInfo[ww.PACK].pure.x)
             assert.is_truthy(H.errors[1] and H.errors[1]:find(ww.PACK .. ":sub:1: its list is reached", 1, true))
         end)
@@ -232,7 +232,7 @@ describe("a pure variable reads as its inlined text (CN25)", function()
     -- A pure value edited in the editor reloads its readers: a list call's time-sensitivity reads through it.
     it("follows the editor: a pure value edited to read time reloads its readers", function()
         local H = boot(false)
-        local lists = H.Hekili.DB.profile.packs[ww.PACK].lists
+        local lists = H.Encore.DB.profile.packs[ww.PACK].lists
         local list = lists.default
         lists.sub = { { action = "heroic_strike", enabled = true } }
         table.insert(list, 1, { action = "variable", enabled = true, var_name = "a", value = "1", pure = 1 })
@@ -241,11 +241,11 @@ describe("a pure variable reads as its inlined text (CN25)", function()
             2,
             { action = "call_action_list", enabled = true, list_name = "sub", criteria = "variable.a" }
         )
-        H.Hekili:LoadScripts()
-        local Sc, at = H.Hekili.Scripts, ww.PACK .. ":default:"
+        H.Encore:LoadScripts()
+        local Sc, at = H.Encore.Scripts, ww.PACK .. ":default:"
         assert.is_falsy(Sc:IsTimeSensitive(at .. 2))
         list[1].value = "buff.battle_shout.remains<=10"
-        H.Hekili:LoadScript(ww.PACK, "default", 1)
+        H.Encore:LoadScript(ww.PACK, "default", 1)
         assert.is_truthy(Sc:IsTimeSensitive(at .. 2))
         assert.are.same({}, H.errors)
     end)
@@ -253,7 +253,7 @@ describe("a pure variable reads as its inlined text (CN25)", function()
     -- L1329: the reload also covers a sequence's generated lines (windows design v6 §6): their rechecks read purity too.
     it("follows the editor: a pure variable made stock reloads a sequence's generated lines", function()
         local H = boot(false)
-        local list = H.Hekili.DB.profile.packs[ww.PACK].lists.default
+        local list = H.Encore.DB.profile.packs[ww.PACK].lists.default
         table.insert(
             list,
             1,
@@ -265,11 +265,11 @@ describe("a pure variable reads as its inlined text (CN25)", function()
             window_name = "s",
             steps = { { action = "bloodrage", criteria = "variable.a" } },
         })
-        H.Hekili:LoadScripts()
-        local Sc, at = H.Hekili.Scripts, ww.PACK .. ":seq:s:1"
+        H.Encore:LoadScripts()
+        local Sc, at = H.Encore.Scripts, ww.PACK .. ":seq:s:1"
         assert.is_nil(Sc.DB[at].RecheckScript) -- a pure read has no recheck of its own (State.lua reads its value's)
         list[1].criteria = "active_enemies>1" -- an if= given: raised, `a` read as a stock variable
-        H.Hekili:LoadScript(ww.PACK, "default", 1)
+        H.Encore:LoadScript(ww.PACK, "default", 1)
         assert.are.equal("safenum(variable.a)", Sc.DB[at].RecheckScript)
     end)
 
@@ -277,13 +277,13 @@ describe("a pure variable reads as its inlined text (CN25)", function()
     -- every read: each such line raises at load and is a stock variable.
     it("raises at load on pure=1 lines whose values read each other in a loop", function()
         local H = boot(false)
-        local list = H.Hekili.DB.profile.packs[ww.PACK].lists.default
+        local list = H.Encore.DB.profile.packs[ww.PACK].lists.default
         table.insert(list, 1, { action = "variable", enabled = true, var_name = "p", value = "variable.q+1", pure = 1 })
         table.insert(list, 2, { action = "variable", enabled = true, var_name = "q", value = "variable.p", pure = 1 })
         table.insert(list, 3, { action = "variable", enabled = true, var_name = "s", value = "variable.s", pure = 1 })
         table.insert(list, 4, { action = "variable", enabled = true, var_name = "t", value = "variable.q", pure = 1 })
-        H.Hekili:LoadScripts()
-        local pure = H.Hekili.Scripts.PackInfo[ww.PACK].pure
+        H.Encore:LoadScripts()
+        local pure = H.Encore.Scripts.PackInfo[ww.PACK].pure
         assert.are.same({ false, false, false }, { pure.p, pure.q, pure.s })
         assert.is_truthy(pure.t) -- reads a loop's variable (now stock), but is in none itself
         local all = table.concat(H.errors, "\n")
@@ -297,16 +297,16 @@ describe("a pure variable reads as its inlined text (CN25)", function()
     -- names each pure read with its value (CN25 review M4).
     it("evaluates each value of a 4-deep pure chain a bounded number of times in a traced read", function()
         local H = boot(false)
-        local list = H.Hekili.DB.profile.packs[ww.PACK].lists.default
+        local list = H.Encore.DB.profile.packs[ww.PACK].lists.default
         for i = 4, 1, -1 do
             local value = i == 4 and "1" or ("variable.d" .. (i + 1) .. "+1")
             table.insert(list, 1, { action = "variable", enabled = true, var_name = "d" .. i, value = value, pure = 1 })
         end
-        H.Hekili:LoadScripts()
-        H.Hekili:ReviewPacks()
+        H.Encore:LoadScripts()
+        H.Encore:ReviewPacks()
         headless.cycle(H, H.ctl.now + 0.5)
         assert.are.same({}, H.errors)
-        local S, Sc, hk = H.Hekili.State, H.Hekili.Scripts, H.Hekili
+        local S, Sc, hk = H.Encore.State, H.Encore.Scripts, H.Encore
         local pure, calls, lines = Sc.PackInfo[ww.PACK].pure, {}, {}
         for i = 1, 4 do
             assert.is_truthy(pure["d" .. i], "d" .. i)
@@ -339,13 +339,13 @@ describe("a pure variable reads as its inlined text (CN25)", function()
     -- scripts:SwapScripts) or edits one option (Hekili:LoadScript); which variables are pure follows the pack as it is.
     it("follows the editor: a moved line, an if= given, a name given twice", function()
         local H = boot(false)
-        local list = H.Hekili.DB.profile.packs[ww.PACK].lists.default
+        local list = H.Encore.DB.profile.packs[ww.PACK].lists.default
         table.insert(list, 1, { action = "variable", enabled = true, var_name = "b", value = "2", pure = 1 })
         table.insert(list, 1, { action = "variable", enabled = true, var_name = "a", value = "1", pure = 1 })
-        H.Hekili:LoadScripts()
-        H.Hekili:ReviewPacks()
+        H.Encore:LoadScripts()
+        H.Encore:ReviewPacks()
         headless.cycle(H, H.ctl.now + 0.5)
-        local S, Sc, at = H.Hekili.State, H.Hekili.Scripts, ww.PACK .. ":default:"
+        local S, Sc, at = H.Encore.State, H.Encore.Scripts, ww.PACK .. ":default:"
         local function pure()
             local p = Sc.PackInfo[ww.PACK].pure
             return { a = p.a and true or false, b = p.b and true or false }
@@ -358,12 +358,12 @@ describe("a pure variable reads as its inlined text (CN25)", function()
         assert.are.same({ a = true, b = true }, pure())
 
         list[1].criteria = "active_enemies>1" -- b (now first) gets an if=: raised, read as a stock variable
-        H.Hekili:LoadScript(ww.PACK, "default", 1)
+        H.Encore:LoadScript(ww.PACK, "default", 1)
         assert.are.same({ a = true, b = false }, pure())
         assert.are.equal(1, S.variable.a)
 
         list[1].criteria, list[1].var_name = nil, "a" -- b renamed a: two lines of one name, neither pure
-        H.Hekili:LoadScript(ww.PACK, "default", 1)
+        H.Encore:LoadScript(ww.PACK, "default", 1)
         assert.are.same({ a = false, b = false }, pure())
         local all = table.concat(H.errors, "\n")
         assert.is_truthy(all:find(at .. "1: if= is set", 1, true), all)
@@ -377,19 +377,19 @@ describe("a pure variable reads as its inlined text (CN25)", function()
     it("evaluates each distinct time comparison once per recheck, across the pure variables a line reads", function()
         local H = boot(false)
         local reads = 0
-        H.Hekili.Class.stateExprs.probe_remains = function()
+        H.Encore.Class.stateExprs.probe_remains = function()
             reads = reads + 1
             return 10
         end
-        local list = H.Hekili.DB.profile.packs[ww.PACK].lists.default
+        local list = H.Encore.DB.profile.packs[ww.PACK].lists.default
         local a, b = "probe_remains<=3&probe_remains<=3&probe_remains<=4", "probe_remains<=3|probe_remains<=4"
         table.insert(list, 1, { action = "bloodrage", enabled = true, criteria = "variable.a&variable.b" })
         table.insert(list, 1, { action = "variable", enabled = true, var_name = "b", value = b, pure = 1 })
         table.insert(list, 1, { action = "variable", enabled = true, var_name = "a", value = a, pure = 1 })
-        H.Hekili:LoadScripts()
-        H.Hekili:ReviewPacks()
+        H.Encore:LoadScripts()
+        H.Encore:ReviewPacks()
         assert(headless.cycle(H, H.ctl.now + 0.5))
-        local S, Sc = H.Hekili.State, H.Hekili.Scripts
+        local S, Sc = H.Encore.State, H.Encore.Scripts
         local own = Sc.DB[ww.PACK .. ":default:1"] -- a value's own recheck: each comparison once
         reads = 0
         assert.are.same({ 7, 6 }, { own.Recheck() })
@@ -408,7 +408,7 @@ describe("a pure variable reads as its inlined text (CN25)", function()
     -- limit, about 250 values): the times are the same and nothing raises.
     it("keeps a line's recheck times when its variables' distinct times are too many to join", function()
         local H = boot(false)
-        H.Hekili.Class.stateExprs.probe_remains = function()
+        H.Encore.Class.stateExprs.probe_remains = function()
             return 10
         end
         local function value(from)
@@ -418,14 +418,14 @@ describe("a pure variable reads as its inlined text (CN25)", function()
             end
             return table.concat(t, "|")
         end
-        local list = H.Hekili.DB.profile.packs[ww.PACK].lists.default
+        local list = H.Encore.DB.profile.packs[ww.PACK].lists.default
         table.insert(list, 1, { action = "bloodrage", enabled = true, criteria = "variable.a&variable.b" })
         table.insert(list, 1, { action = "variable", enabled = true, var_name = "b", value = value(151), pure = 1 })
         table.insert(list, 1, { action = "variable", enabled = true, var_name = "a", value = value(1), pure = 1 })
-        H.Hekili:LoadScripts()
-        H.Hekili:ReviewPacks()
+        H.Encore:LoadScripts()
+        H.Encore:ReviewPacks()
         assert(headless.cycle(H, H.ctl.now + 0.5))
-        local S, Sc = H.Hekili.State, H.Hekili.Scripts
+        local S, Sc = H.Encore.State, H.Encore.Scripts
         S.system.packName, S.delayMin, S.delayMax = ww.PACK, 0, 3600
         S.recheck("bloodrage", Sc.DB[ww.PACK .. ":default:3"])
         assert.are.same({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, S.recheckTimes)
@@ -436,10 +436,10 @@ describe("a pure variable reads as its inlined text (CN25)", function()
     -- Boots with the pure variables a (<=3) and b (<=4) read by a bloodrage line whose criteria begin with `own`.
     local function joined(own, a)
         local H = boot(false)
-        H.Hekili.Class.stateExprs.probe_remains = function()
+        H.Encore.Class.stateExprs.probe_remains = function()
             return 10
         end
-        local list = H.Hekili.DB.profile.packs[ww.PACK].lists.default
+        local list = H.Encore.DB.profile.packs[ww.PACK].lists.default
         table.insert(list, 1, { action = "bloodrage", enabled = true, criteria = own .. "variable.a&variable.b" })
         table.insert(
             list,
@@ -447,12 +447,12 @@ describe("a pure variable reads as its inlined text (CN25)", function()
             { action = "variable", enabled = true, var_name = "b", value = "probe_remains<=4", pure = 1 }
         )
         table.insert(list, 1, { action = "variable", enabled = true, var_name = "a", value = a, pure = 1 })
-        H.Hekili:LoadScripts()
-        H.Hekili:ReviewPacks()
+        H.Encore:LoadScripts()
+        H.Encore:ReviewPacks()
         assert(headless.cycle(H, H.ctl.now + 0.5))
-        local S = H.Hekili.State
+        local S = H.Encore.State
         S.system.packName, S.delayMin, S.delayMax = ww.PACK, 0, 3600
-        return H, list, S, H.Hekili.Scripts.DB[ww.PACK .. ":default:3"]
+        return H, list, S, H.Encore.Scripts.DB[ww.PACK .. ":default:3"]
     end
 
     it("joins a line's own recheck times with those of the variables it reads", function()
@@ -468,9 +468,9 @@ describe("a pure variable reads as its inlined text (CN25)", function()
         S.recheck("bloodrage", line)
         assert.are.same({ 6, 7 }, S.recheckTimes)
         list[1].value = "probe_remains<=2"
-        H.Hekili:LoadScript(ww.PACK, "default", 1)
+        H.Encore:LoadScript(ww.PACK, "default", 1)
         S.system.packName, S.delayMin, S.delayMax = ww.PACK, 0, 3600
-        S.recheck("bloodrage", H.Hekili.Scripts.DB[ww.PACK .. ":default:3"])
+        S.recheck("bloodrage", H.Encore.Scripts.DB[ww.PACK .. ":default:3"])
         assert.are.same({ 6, 8 }, S.recheckTimes)
         assert.are.same({}, H.errors)
     end)

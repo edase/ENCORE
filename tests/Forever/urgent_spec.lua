@@ -6,7 +6,7 @@
 local headless = require("Game.harness.headless")
 local ww = require("Forever.helpers.warrior_world")
 
-describe("Hekili's own handlers force the cycles the urgent lane used to (E14)", function()
+describe("Encore's own handlers force the cycles the urgent lane used to (E14)", function()
     local H, f, ctl, L, id
 
     before_each(function()

@@ -15,7 +15,7 @@ local ABSENT = {
 -- Facade rows a library answers (range plan R2), served by LibStub: fake_api's double for LibRangeCheck-3.0.
 local LIBRARY = { RangeLib = "LibRangeCheck-3.0", ["LibRangeCheck.GetRange"] = "LibRangeCheck-3.0" }
 
-describe("headless Hekili", function()
+describe("headless Encore", function()
     local H
     setup(function()
         H = headless.new()
@@ -23,7 +23,7 @@ describe("headless Hekili", function()
 
     it("loads every TOC file but the listed XML and logs in (OnInitialize, OnEnable, VirtualState started)", function()
         assert.are.same({}, H.loadErrors)
-        assert.is_table(H.Hekili.DB.profile) -- AceDB's profile: OnInitialize ran
+        assert.is_table(H.Encore.DB.profile) -- AceDB's profile: OnInitialize ran
         assert.are.equal(H.env, H.ns.VirtualStateInternal.api) -- VS.Start(_G) at PLAYER_LOGIN (OnEnable)
         assert.is_true(H.env.IsLoggedIn())
     end)
@@ -40,7 +40,7 @@ describe("headless Hekili", function()
         assert.is_nil(rawget(H.env, "ChatThrottleLib"))
         assert.is_nil(H.misses.load.safeAbs)
         assert.is_nil(headless.KNOWN_LOAD_NILS.safeAbs)
-        assert.are.equal(math.abs, H.Hekili.State.abs)
+        assert.are.equal(math.abs, H.Encore.State.abs)
     end)
 
     it("runs a ticker on the fake clock and nothing before its time", function()
@@ -79,7 +79,7 @@ describe("headless Hekili", function()
     end)
 
     it("counts the simulated state's mutations in state.changes (the memoised cost's key)", function()
-        local s = H.Hekili.State
+        local s = H.Encore.State
         local n = s.changes
         local function bumps(what, fn, ...)
             fn(...)
@@ -96,11 +96,11 @@ describe("headless Hekili", function()
         bumps("advance", s.advance, 0.1)
     end)
 
-    it("counts every Hekili error path: the copy State.lua takes at load and Hekili:Error", function()
+    it("counts every Encore error path: the copy State.lua takes at load and Encore:Error", function()
         local n = #H.errors
-        H.Hekili.State.applyBuff(nil) -- State.lua's load-time `Error` copy (the nameless-aura report)
+        H.Encore.State.applyBuff(nil) -- State.lua's load-time `Error` copy (the nameless-aura report)
         assert.are.equal(n + 1, #H.errors)
-        H.Hekili:Error("probe %s", "x")
+        H.Encore:Error("probe %s", "x")
         assert.are.equal(n + 2, #H.errors)
         H.errors[n + 1], H.errors[n + 2] = nil, nil
     end)
@@ -116,7 +116,7 @@ describe("headless Hekili", function()
             end
         end
         local other = headless.new({ now = 50 })
-        assert.are_not.equal(H.Hekili, other.Hekili)
+        assert.are_not.equal(H.Encore, other.Encore)
         assert.are_not.equal(H.env.LibStub, other.env.LibStub)
         other.ctl.now = 60
         assert.are.equal(60, other.env.GetTime())
@@ -135,7 +135,7 @@ describe("headless Hekili", function()
             end
         end
         assert.are.same({}, added)
-        assert.is_nil(rawget(_G, "Hekili"))
+        assert.is_nil(rawget(_G, "Encore"))
         assert.is_nil(rawget(_G, "LibStub"))
     end)
 
@@ -191,7 +191,7 @@ describe("headless Hekili", function()
             return knownRank, swingBase, healthMax, stat -- luacheck: ignore 113 (the env names)
         end
         setup(function()
-            VS, I, S = H.ns.VirtualState, H.ns.VirtualStateInternal, H.Hekili.State
+            VS, I, S = H.ns.VirtualState, H.ns.VirtualStateInternal, H.Encore.State
         end)
 
         -- The sim's names read the client through the facade (audit E8, E10): out of combat every read is plain, so
@@ -283,14 +283,14 @@ describe("headless Hekili", function()
 
         it("answers them in a resource model function: RegisterResource binds its meta functions to `state`", function()
             local meta = { probe = probe }
-            H.Hekili.Class.specs[0]:RegisterResource(H.env.Enum.PowerType.Rage, {}, nil, meta)
+            H.Encore.Class.specs[0]:RegisterResource(H.env.Enum.PowerType.Rage, {}, nil, meta)
             facadeAnswers(meta.probe())
         end)
 
         it(
             "binds an `fsr` meta's parts to `state` and moves a `mult` regen entry out of the forecast's model",
             function()
-                local spec, meta = H.Hekili.Class.specs[0], { fsr = { spirit = probe, mp5 = 2 } }
+                local spec, meta = H.Encore.Class.specs[0], { fsr = { spirit = probe, mp5 = 2 } }
                 local entry = { aura = "rate_aura", mult = 2 }
                 spec:RegisterResource(H.env.Enum.PowerType.Focus, { surge = entry }, nil, meta)
                 assert.are.equal(S.knownRank, (meta.fsr.spirit()))
@@ -303,7 +303,7 @@ describe("headless Hekili", function()
         )
 
         it("moves an `mp5Mult`-only regen entry out of the forecast's model too", function()
-            local spec, entry = H.Hekili.Class.specs[0], { aura = "rate_aura", mp5Mult = 5 }
+            local spec, entry = H.Encore.Class.specs[0], { aura = "rate_aura", mp5Mult = 5 }
             spec:RegisterResource(H.env.Enum.PowerType.Energy, { surge = entry }, nil, {})
             local st = spec.resources.energy.state
             assert.are.same({ {}, { entry } }, { st.regenModel, st.regenMult })
@@ -322,16 +322,16 @@ describe("headless Hekili", function()
         it(
             "forwards a passive ability to the belief's tracked set at the next build and registers no ability",
             function()
-                H.Hekili.Class.specs[0]:RegisterAbility("passive_probe", { id = 999003, passive = true })
+                H.Encore.Class.specs[0]:RegisterAbility("passive_probe", { id = 999003, passive = true })
                 local out = {}
                 VS.Tracked("ability", out)
                 assert.is_nil(pos(out, 999003))
                 H.ns.BuildTracked()
                 VS.Tracked("ability", out)
                 assert.is_truthy(pos(out, 999003))
-                assert.is_nil(rawget(H.Hekili.Class.specs[0].abilities, "passive_probe"))
+                assert.is_nil(rawget(H.Encore.Class.specs[0].abilities, "passive_probe"))
                 assert.has_error(function()
-                    H.Hekili.Class.specs[0]:RegisterAbility("passive_noid", { passive = true })
+                    H.Encore.Class.specs[0]:RegisterAbility("passive_noid", { passive = true })
                 end)
             end
         )

@@ -5,20 +5,20 @@
 local headless = require("Game.harness.headless")
 local ww = require("Forever.helpers.warrior_world")
 
-describe("HEKILI_TOGGLE and GetToggleState (headless Arms)", function()
+describe("ENCORE_TOGGLE and GetToggleState (headless Arms)", function()
     local H, hk, fired
 
     before_each(function()
         H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
-        hk = H.Hekili
+        hk = H.Encore
         hk.Engine.settings.screenshot = false -- the harness has no Screenshot()
         hk.DB.profile.notifications.enabled = false
         assert(headless.cycle(H, H.ctl.now + 0.2))
         fired = {}
         H.env.WeakAuras = {
             ScanEvents = function(event, name, value)
-                if event == "HEKILI_TOGGLE" then
+                if event == "ENCORE_TOGGLE" then
                     fired[#fired + 1] = { name, value }
                 end
             end,
@@ -29,7 +29,7 @@ describe("HEKILI_TOGGLE and GetToggleState (headless Arms)", function()
         H.env.WeakAuras = nil
     end)
 
-    it("a rejected /hekili set mode fires nothing and keeps the mode; an accepted one fires the stored mode", function()
+    it("a rejected /encore set mode fires nothing and keeps the mode; an accepted one fires the stored mode", function()
         local mode = hk:GetToggleState("mode")
         hk:CmdLine("set mode bogus")
         assert.are.same({}, fired)
@@ -58,7 +58,7 @@ describe("HEKILI_TOGGLE and GetToggleState (headless Arms)", function()
         assert.is_false(hk:GetToggleState("pause"))
     end)
 
-    it("/hekili set <toggle> on|off fires the new state; a refused word fires nothing and changes nothing", function()
+    it("/encore set <toggle> on|off fires the new state; a refused word fires nothing and changes nothing", function()
         hk:CmdLine("set cooldowns off")
         assert.are.same({ { "cooldowns", false } }, fired)
         assert.is_false(hk:GetToggleState("cooldowns"))
@@ -76,7 +76,7 @@ describe("HEKILI_TOGGLE and GetToggleState (headless Arms)", function()
     end)
 
     it(
-        "/hekili set snapshot on|off is refused: no snapshot, no event, nothing written; a bare one takes one",
+        "/encore set snapshot on|off is refused: no snapshot, no event, nothing written; a bare one takes one",
         function()
             local snaps, make = 0, hk.MakeSnapshot
             hk.MakeSnapshot = function(...)
@@ -96,7 +96,7 @@ describe("HEKILI_TOGGLE and GetToggleState (headless Arms)", function()
     )
 
     it(
-        "/hekili set pause on|off sets pause to that state, fired; the state it already has is fired, not toggled",
+        "/encore set pause on|off sets pause to that state, fired; the state it already has is fired, not toggled",
         function()
             local snaps, make = 0, hk.MakeSnapshot
             hk.MakeSnapshot = function(...)

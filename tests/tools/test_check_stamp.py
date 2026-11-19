@@ -24,8 +24,8 @@ class Stamp(unittest.TestCase):
         self.tmp = tempfile.mkdtemp()
         self.repo = os.path.join(self.tmp, "repo")
         files = {
-            "src/Hekili/a.lua": "local a = 1\n",
-            "src/Hekili/Hekili.toc": "## Interface: 16001\na.lua\n",
+            "src/Encore/a.lua": "local a = 1\n",
+            "src/Encore/Encore.toc": "## Interface: 16001\na.lua\n",
             "tests/x_spec.lua": "it('x', function() end)\n",
             "README.md": "readme\n",
             "CHANGELOG.md": "changelog\n",
@@ -99,12 +99,12 @@ class Stamp(unittest.TestCase):
 
     def test_lua_edit_runs(self):
         self.stamp()
-        self.write("src/Hekili/a.lua", "local b = 2\n", "a")
+        self.write("src/Encore/a.lua", "local b = 2\n", "a")
         self.assertFalse(self.skips())
 
     def test_toc_edit_runs(self):
         self.stamp()
-        self.write("src/Hekili/Hekili.toc", "b.lua\n", "a")
+        self.write("src/Encore/Encore.toc", "b.lua\n", "a")
         self.assertFalse(self.skips())
 
     def test_test_file_edit_runs(self):
@@ -114,12 +114,12 @@ class Stamp(unittest.TestCase):
 
     def test_line_ending_edit_runs(self):  # ruling S3: raw bytes, not git's normalised blob
         self.stamp()
-        self.write("src/Hekili/a.lua", "local a = 1\r\n")
+        self.write("src/Encore/a.lua", "local a = 1\r\n")
         self.assertFalse(self.skips())
 
     def test_untracked_file_runs(self):
         self.stamp()
-        self.write("src/Hekili/b.lua", "local b = 2\n")
+        self.write("src/Encore/b.lua", "local b = 2\n")
         self.assertFalse(self.skips())
 
     def test_ignored_file_skips(self):
@@ -133,42 +133,42 @@ class Stamp(unittest.TestCase):
         self.assertFalse(self.skips())
 
     def test_nested_repo_never_hides_a_later_edit(self):  # fix round 1: a dir entry once cut every later hash
-        self.write("src/Hekili/c.lua", "local c = 3\n")
-        self.git("add", "src/Hekili/c.lua")
-        self.write("src/Hekili/b/inner.lua", "local i = 1\n")
-        self.git("init", "-q", cwd=self.path("src/Hekili/b"))
+        self.write("src/Encore/c.lua", "local c = 3\n")
+        self.git("add", "src/Encore/c.lua")
+        self.write("src/Encore/b/inner.lua", "local i = 1\n")
+        self.git("init", "-q", cwd=self.path("src/Encore/b"))
         self.stamp()
         self.assertTrue(self.skips())
-        self.write("src/Hekili/c.lua", "local d = 4\n", "a")
+        self.write("src/Encore/c.lua", "local d = 4\n", "a")
         self.assertFalse(self.skips())
-        self.write("src/Hekili/c.lua", "local c = 3\n")
+        self.write("src/Encore/c.lua", "local c = 3\n")
         self.assertTrue(self.skips())
-        self.write("src/Hekili/b/inner.lua", "local j = 2\n", "a")
+        self.write("src/Encore/b/inner.lua", "local j = 2\n", "a")
         self.assertFalse(self.skips())
 
     @unittest.skipIf(os.geteuid() == 0, "root reads a mode-000 file")
     def test_unreadable_file_runs(self):
         self.stamp()
-        self.write("src/Hekili/z.lua", "local z = 1\n")
-        os.chmod(self.path("src/Hekili/z.lua"), 0)
+        self.write("src/Encore/z.lua", "local z = 1\n")
+        os.chmod(self.path("src/Encore/z.lua"), 0)
         self.assertFalse(self.skips())
         self.assertEqual(self.last.stdout, "")
         self.assertNotEqual(self.run_script("manifest").returncode, 0)
 
     def test_deleted_file_runs(self):
         self.stamp()
-        os.remove(self.path("src/Hekili/a.lua"))
+        os.remove(self.path("src/Encore/a.lua"))
         self.assertFalse(self.skips())
 
     def test_exec_bit_runs(self):
         self.stamp()
-        os.chmod(self.path("src/Hekili/a.lua"), 0o755)
+        os.chmod(self.path("src/Encore/a.lua"), 0o755)
         self.assertFalse(self.skips())
 
     def test_staging_only_runs(self):
-        self.write("src/Hekili/a.lua", "local b = 2\n", "a")
+        self.write("src/Encore/a.lua", "local b = 2\n", "a")
         self.stamp()
-        self.git("add", "src/Hekili/a.lua")
+        self.git("add", "src/Encore/a.lua")
         self.assertFalse(self.skips())
 
     def test_env_var_runs(self):
@@ -185,7 +185,7 @@ class Stamp(unittest.TestCase):
     def test_change_during_run_writes_no_stamp(self):
         start = os.path.join(self.tmp, "start")
         self.run_script("begin", start)
-        self.write("src/Hekili/a.lua", "local b = 2\n", "a")
+        self.write("src/Encore/a.lua", "local b = 2\n", "a")
         r = self.run_script("write", start)
         self.assertEqual(r.returncode, 0)
         self.assertIn("no stamp", r.stdout)
@@ -253,7 +253,7 @@ class Stamp(unittest.TestCase):
                 self.git("checkout", "--", rel)
 
     def test_docs_in_code_dirs_run(self):
-        for rel in ("tests/notes.md", "tools/notes.md", "src/Hekili/Libs/CREDITS.md"):
+        for rel in ("tests/notes.md", "tools/notes.md", "src/Encore/Libs/CREDITS.md"):
             with self.subTest(rel=rel):
                 self.stamp()
                 self.write(rel, "notes\n")
@@ -271,7 +271,7 @@ class Stamp(unittest.TestCase):
     def test_doc_and_code_runs(self):
         self.stamp()
         self.write("docs/dev/notes.md", "more\n", "a")
-        self.write("src/Hekili/a.lua", "local b = 2\n", "a")
+        self.write("src/Encore/a.lua", "local b = 2\n", "a")
         self.assertFalse(self.skips())
 
     def test_doc_and_env_runs(self):
@@ -289,7 +289,7 @@ class Stamp(unittest.TestCase):
         out = subprocess.run(
             ["git", "rev-parse", "--absolute-git-dir"], cwd=self.repo, env=self.env(), capture_output=True, text=True
         )
-        return os.path.join(out.stdout.strip(), "hekili-check-stamp")
+        return os.path.join(out.stdout.strip(), "encore-check-stamp")
 
 
 def repo_files(*exts):
@@ -444,7 +444,7 @@ class Repository(unittest.TestCase):
                     if path in tracked:
                         named.add(path)
         self.assertTrue(
-            {"README.md", "CHANGELOG.md", "docs/publishing/README.md", "src/Hekili/Libs/CREDITS.md"} <= named, named
+            {"README.md", "CHANGELOG.md", "docs/publishing/README.md", "src/Encore/Libs/CREDITS.md"} <= named, named
         )
         docs_only = []
         for path in sorted(named):
@@ -466,7 +466,7 @@ class Repository(unittest.TestCase):
             ("docs/wiki/data/expressions.lua", 1),
             ("docs/dev/x.png", 1),
             ("docs", 1),
-            ("src/Hekili/Libs/CREDITS.md", 1),
+            ("src/Encore/Libs/CREDITS.md", 1),
             ("tests/x.md", 1),
             ('"docs/dev/\\303\\251.md"', 1),
         ]:

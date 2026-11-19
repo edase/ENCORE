@@ -55,7 +55,7 @@ local function run(need, seed, fights)
         computed[d] = 0
     end
     for name, H in pairs({ us = L.us, oracle = L.oracle }) do
-        local hk = H.Hekili
+        local hk = H.Encore
         M.widen(H.ns.VirtualState)
         local toggles = hk.DB.profile.toggles
         for _, k in ipairs({ "interrupts", "defensives", "cooldowns" }) do

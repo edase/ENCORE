@@ -12,9 +12,9 @@ local B = require("boundary_lib")
 
 -- The harness core too (GCD kinds design D7), but its captured logs (tests/Game/harness/fixtures/): their numbers
 -- are times in ms and amounts, never IDs.
-local CORE = { "src/Hekili/Game", "src/Hekili/Engine/Schema", "tests/Game/harness" }
+local CORE = { "src/Encore/Game", "src/Encore/Engine/Schema", "tests/Game/harness" }
 local SKIP = { "^tests/Game/harness/fixtures/" }
-local SIM = { "src/Hekili/Engine/Sim" }
+local SIM = { "src/Encore/Engine/Sim" }
 -- The content (restructure plan, Task 8): it reaches the engine through the public Hekili object only.
 local CONTENT = {}
 for _, name in ipairs(require("helpers.addons").CONTENT) do
@@ -30,7 +30,7 @@ local PUBLIC = {
     SCHOOL = true,
     GetLocale = true, -- the pack's string table (Hekili.lua): its setting names and descriptions
 }
-local PRIVATE = { "%f[%w_]ns%.", "ns%s*=%s*%.%.%.", "VirtualState", "Hekili%.Virtual", "Hekili%.Engine" }
+local PRIVATE = { "%f[%w_]ns%.", "ns%s*=%s*%.%.%.", "VirtualState", "Encore%.Virtual", "Encore%.Engine" }
 
 describe("core/content boundary", function()
     local c = B.content()
@@ -46,7 +46,7 @@ describe("core/content boundary", function()
         end
         assert.is_true(n > 150, n)
         assert.is_true(m > 400, m)
-        assert.are.equal("Hekili_Shared/Races/Orc.lua", c.keys.blood_fury)
+        assert.are.equal("Encore_Shared/Races/Orc.lua", c.keys.blood_fury)
         assert.is_not_nil(c.keys.bloodlust) -- Shared/Auras.lua
         assert.is_not_nil(words.cat and words.battle)
     end)
@@ -112,9 +112,9 @@ describe("core/content boundary", function()
         assert.is_true(#files >= 13)
         for _, path in ipairs(files) do
             local src = B.read(path):gsub("%[(=*)%[.-%]%1%]", "") -- a pack's share string is data
-            for name in src:gmatch("Hekili[.:]([%w_]+)") do
+            for name in src:gmatch("Encore[.:]([%w_]+)") do
                 if not PUBLIC[name] then
-                    found[#found + 1] = path .. ": Hekili." .. name
+                    found[#found + 1] = path .. ": Encore." .. name
                 end
             end
             for _, pat in ipairs(PRIVATE) do

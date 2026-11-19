@@ -20,17 +20,17 @@ local function tracked(...)
 end
 
 local TOCS = {
-    "src/Hekili/Hekili.toc",
-    "src/Hekili_Shared/Hekili_Shared.toc",
-    "src/Hekili_Druid/Hekili_Druid.toc",
-    "src/Hekili_Warrior/Hekili_Warrior.toc",
-    "src/Hekili_Rogue/Hekili_Rogue.toc",
-    "src/Hekili_Paladin/Hekili_Paladin.toc",
-    "src/Hekili_Shaman/Hekili_Shaman.toc",
-    "src/Hekili_Hunter/Hekili_Hunter.toc",
-    "src/Hekili_Mage/Hekili_Mage.toc",
-    "src/Hekili_Priest/Hekili_Priest.toc",
-    "src/Hekili_Warlock/Hekili_Warlock.toc",
+    "src/Encore/Encore.toc",
+    "src/Encore_Shared/Encore_Shared.toc",
+    "src/Encore_Druid/Encore_Druid.toc",
+    "src/Encore_Warrior/Encore_Warrior.toc",
+    "src/Encore_Rogue/Encore_Rogue.toc",
+    "src/Encore_Paladin/Encore_Paladin.toc",
+    "src/Encore_Shaman/Encore_Shaman.toc",
+    "src/Encore_Hunter/Encore_Hunter.toc",
+    "src/Encore_Mage/Encore_Mage.toc",
+    "src/Encore_Priest/Encore_Priest.toc",
+    "src/Encore_Warlock/Encore_Warlock.toc",
 }
 
 local function field(toc, key)
@@ -39,25 +39,25 @@ local function field(toc, key)
 end
 
 describe("licence", function()
-    it("ships the full GPLv3 text at the root and in src/Hekili, byte-identical", function()
+    it("ships the full GPLv3 text at the root and in src/Encore, byte-identical", function()
         local root = read("LICENSE")
         assert.truthy(root:find("GNU GENERAL PUBLIC LICENSE", 1, true))
         assert.truthy(root:find("Version 3, 29 June 2007", 1, true))
         assert.truthy(root:find("END OF TERMS AND CONDITIONS", 1, true))
-        assert.are.equal(root, read("src/Hekili/LICENSE"))
+        assert.are.equal(root, read("src/Encore/LICENSE"))
     end)
 
-    it("ships wowsims/forever's MIT notice in src/Hekili for the translated (wowsims.com) priorities", function()
-        local mit = read("src/Hekili/LICENSE-wowsims.txt")
+    it("ships wowsims/forever's MIT notice in src/Encore for the translated (wowsims.com) priorities", function()
+        local mit = read("src/Encore/LICENSE-wowsims.txt")
         assert.truthy(mit:find("Copyright (c) 2022 wowsims team", 1, true))
         assert.truthy(mit:find("The above copyright notice and this permission notice shall be included", 1, true))
-        local credits = read("src/Hekili/Libs/CREDITS.md")
+        local credits = read("src/Encore/Libs/CREDITS.md")
         assert.truthy(credits:find("LICENSE-wowsims.txt", 1, true))
         assert.truthy(credits:find("https://github.com/wowsims/forever", 1, true))
     end)
 
     it("states the modification notice in the core's header", function()
-        local head = read("src/Hekili/Hekili.lua"):sub(1, 1200)
+        local head = read("src/Encore/Encore.lua"):sub(1, 1200)
         assert.truthy(head:find("based on the original work by Hekili", 1, true))
         assert.truthy(head:find("Modified for WoW Forever by defzach", 1, true))
         assert.truthy(head:find("GNU General Public License", 1, true))
@@ -73,10 +73,10 @@ local FORBIDDEN = {
     "ko%-fi",
     "curseforge%.com/wow/addons/hekili$",
     "curseforge%.com/wow/addons/hekili[^%-]",
-    "hekili#0001",
+    "encore#0001",
 }
 local ALLOW = {
-    ["src/Hekili/Engine/Sim/Targets.lua"] = "github%.com/hekili/hekili/issues/4845",
+    ["src/Encore/Engine/Sim/Targets.lua"] = "github%.com/hekili/hekili/issues/4845",
     ["README.md"] = "discord%.gg/jac6w4pkur", -- the fork's own server, not the old project's
     ["docs/publishing/README.md"] = "discord", -- the fork's own release channel and webhook (Cutting a release)
 }
@@ -127,10 +127,10 @@ describe("upstream links", function()
     end)
 
     it("puts the fork notice on the General page", function()
-        local s = read("src/Hekili/Options/Options.lua")
+        local s = read("src/Encore/Options/Options.lua")
         assert.truthy(s:find("is a fork of the original |cFFFFD100Hekili|r project", 1, true))
         assert.truthy(s:find("explicit permission of its original author", 1, true))
-        assert.truthy(s:find('name = "Hekili Forever " .. Hekili.Version', 1, true))
+        assert.truthy(s:find('name = "Encore " .. Encore.Version', 1, true))
         assert.falsy(s:find("ns.Patrons", 1, true))
     end)
 end)
@@ -148,8 +148,8 @@ describe("readme", function()
             "based on the original work by Hekili",
             "explicit permission",
             "https://github.com/Hekili/hekili",
-            "https://github.com/zmsl/hekili/issues",
-            "https://github.com/zmsl/hekili/releases",
+            "https://github.com/edase/encore/issues",
+            "https://github.com/edase/encore/releases",
             "GNU General Public License version 3 or later",
             "Modified for WoW Forever by defzach",
             "Libs/CREDITS.md",
@@ -163,23 +163,23 @@ describe("tocs", function()
     it("name the fork, its author and the original in every TOC", function()
         for _, toc in ipairs(TOCS) do
             assert.are.equal("defzach", field(toc, "Author"), toc)
-            assert.truthy(field(toc, "Title"):find("^Hekili Forever"), toc)
+            assert.truthy(field(toc, "Title"):find("^Encore"), toc)
             assert.truthy(field(toc, "Notes"):lower():find("based on the original work by hekili", 1, true), toc)
             assert.are.equal("https://github.com/zmsl/hekili", field(toc, "X-Website"), toc)
-            assert.are.equal("Interface\\AddOns\\Hekili\\Textures\\HekiliForever", field(toc, "IconTexture"), toc)
+            assert.are.equal("Interface\\AddOns\\Encore\\Textures\\Encore", field(toc, "IconTexture"), toc)
         end
-        assert.are.equal("Hekili Forever", field(TOCS[1], "Title"))
-        assert.are.equal("Hekili Forever - Shared", field(TOCS[2], "Title"))
+        assert.are.equal("Encore", field(TOCS[1], "Title"))
+        assert.are.equal("Encore - Shared", field(TOCS[2], "Title"))
         assert.are.equal("1753387", field(TOCS[1], "X-Curse-Project-ID"))
-        assert.truthy(io.open("src/Hekili/Textures/HekiliForever.tga"))
+        assert.truthy(io.open("src/Encore/Textures/Encore.tga"))
     end)
 
     it("keep the Keep-as-is fields", function()
-        assert.are.equal("HekiliDB", field(TOCS[1], "SavedVariables"))
+        assert.are.equal("EncoreDB", field(TOCS[1], "SavedVariables"))
         for i = 2, 4 do
-            assert.truthy(field(TOCS[i], "Dependencies"):find("^Hekili"), TOCS[i])
-            assert.are.equal("Hekili", field(TOCS[i], "Group"), TOCS[i])
-            assert.truthy(field(TOCS[i], "X-Hekili-ContentAPI"), TOCS[i])
+            assert.truthy(field(TOCS[i], "Dependencies"):find("^Encore"), TOCS[i])
+            assert.are.equal("Encore", field(TOCS[i], "Group"), TOCS[i])
+            assert.truthy(field(TOCS[i], "X-Encore-ContentAPI"), TOCS[i])
         end
     end)
     it("let the packager stamp the version in every TOC", function()
@@ -192,21 +192,21 @@ end)
 describe("pkgmeta", function()
     it("moves the ten src/ folders to the zip root and ignores the dev tree", function()
         local s = read(".pkgmeta")
-        assert.truthy(s:find("\npackage%-as: Hekili\n") or s:find("^package%-as: Hekili\n"))
+        assert.truthy(s:find("\npackage%-as: Encore\n") or s:find("^package%-as: Encore\n"))
         for _, a in ipairs({
-            "Hekili",
-            "Hekili_Shared",
-            "Hekili_Druid",
-            "Hekili_Warrior",
-            "Hekili_Rogue",
-            "Hekili_Paladin",
-            "Hekili_Shaman",
-            "Hekili_Hunter",
-            "Hekili_Mage",
-            "Hekili_Priest",
-            "Hekili_Warlock",
+            "Encore",
+            "Encore_Shared",
+            "Encore_Druid",
+            "Encore_Warrior",
+            "Encore_Rogue",
+            "Encore_Paladin",
+            "Encore_Shaman",
+            "Encore_Hunter",
+            "Encore_Mage",
+            "Encore_Priest",
+            "Encore_Warlock",
         }) do
-            assert.truthy(s:find("\n    Hekili/src/" .. a .. ": " .. a .. "\n", 1, true), a)
+            assert.truthy(s:find("\n    Encore/src/" .. a .. ": " .. a .. "\n", 1, true), a)
         end
         for _, p in ipairs({
             "tests",
@@ -228,6 +228,6 @@ end)
 describe("changelog", function()
     it("is tracked and opens with the Unreleased heading", function()
         assert.are.same({ "CHANGELOG.md" }, tracked("CHANGELOG.md"))
-        assert.truthy(read("CHANGELOG.md"):find("^# Hekili Forever changelog\n\n## Unreleased\n"))
+        assert.truthy(read("CHANGELOG.md"):find("^# Encore changelog\n\n## Unreleased\n"))
     end)
 end)

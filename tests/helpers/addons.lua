@@ -5,20 +5,20 @@
 -- (file lists read from each addon's TOC).
 local M = {}
 
-M.CORE = "Hekili"
+M.CORE = "Encore"
 -- the shared content (a dependency of every class pack), then the class packs; all load-on-demand, loaded by the
 -- core's Engine/Content.lua in this order
 M.CONTENT = {
-    "Hekili_Shared",
-    "Hekili_Warrior",
-    "Hekili_Druid",
-    "Hekili_Rogue",
-    "Hekili_Paladin",
-    "Hekili_Shaman",
-    "Hekili_Hunter",
-    "Hekili_Mage",
-    "Hekili_Priest",
-    "Hekili_Warlock",
+    "Encore_Shared",
+    "Encore_Warrior",
+    "Encore_Druid",
+    "Encore_Rogue",
+    "Encore_Paladin",
+    "Encore_Shaman",
+    "Encore_Hunter",
+    "Encore_Mage",
+    "Encore_Priest",
+    "Encore_Warlock",
 }
 M.ADDONS = { M.CORE }
 for _, name in ipairs(M.CONTENT) do
@@ -27,7 +27,7 @@ end
 
 --- The class pack addon of a class ("Warrior": Hekili_Warrior) and its one file.
 function M.pack(class)
-    return "Hekili_" .. class
+    return "Encore_" .. class
 end
 function M.classFile(class)
     return M.root(M.pack(class)) .. class .. ".lua"

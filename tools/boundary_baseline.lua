@@ -2,7 +2,7 @@
 -- (tests/boundary_lib.lua's leaks) that stock Hekili's src/Hekili/Engine/Sim/** already uses, for boundary_spec's Sim
 -- check. Run from the repository root: .lua/bin/lua tools/boundary_baseline.lua
 -- Regenerate only when removing an inherited leak, never to admit one.
-package.path = "./src/Hekili/?.lua;./tests/?.lua;./?.lua;" .. package.path
+package.path = "./src/Encore/?.lua;./tests/?.lua;./?.lua;" .. package.path
 local B = require("boundary_lib")
 
 local c = B.content()
@@ -13,7 +13,7 @@ local out = {
     "-- (except a pack's pseudo-spec Constants row).",
     "return {",
 }
-for _, path in ipairs(B.coreFiles({ "src/Hekili/Engine/Sim" }, {})) do
+for _, path in ipairs(B.coreFiles({ "src/Encore/Engine/Sim" }, {})) do
     local n = B.counts(path, c, words)
     local tokens = {}
     for token in pairs(n) do

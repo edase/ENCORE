@@ -69,7 +69,7 @@ local function button(slot)
 end
 
 local function id(H, name)
-    return H.Hekili.Engine.Registry.Abilities()[name].id
+    return H.Encore.Engine.Registry.Abilities()[name].id
 end
 
 local NOW = { 1, 0.82, 0, 1 }
@@ -80,7 +80,7 @@ describe("action bar glow", function()
 
     -- Publishes records into the Primary stream the way the engine does; BarGlow is a subscriber of it.
     local function put(first, second, count)
-        local abilities = H.Hekili.Engine.Registry.Abilities()
+        local abilities = H.Encore.Engine.Registry.Abilities()
         local o = H.ns.Output.Begin("Primary")
         local list = { first, second }
         for i = 1, 2 do
@@ -96,7 +96,7 @@ describe("action bar glow", function()
 
     -- Is the glow an active (non-passive) subscriber of `name`'s stream?
     local function active(name)
-        local o = H.Hekili.Engine.Output[name]
+        local o = H.Encore.Engine.Output[name]
         for i = 1, o.subs.n do
             if o.subs[i] == BG.OnPublish then
                 return o.passive[i] == false
@@ -111,7 +111,7 @@ describe("action bar glow", function()
         BG = H.ns.UI.BarGlow
         glow = recorder()
         BG.Glower = glow
-        cfg = H.Hekili.DB.profile.barGlow
+        cfg = H.Encore.DB.profile.barGlow
         cfg.enabled, cfg.combatOnly = true, false
         BG.Apply()
     end)
@@ -281,7 +281,7 @@ describe("action bar glow", function()
     it("allocates nothing in an update when the recommendation is unchanged", function()
         bars()
         put("mortal_strike", "overpower")
-        local o = H.Hekili.Engine.Output.Primary
+        local o = H.Encore.Engine.Output.Primary
         BG.OnPublish("Primary", o.version, o)
         collectgarbage("collect")
         collectgarbage("stop")
@@ -295,7 +295,7 @@ describe("action bar glow", function()
     end)
 
     it("is one global setting: off by default, follows Primary, in combat only, the owner's colours", function()
-        local fresh = H.Hekili.GetDefaults(H.Hekili).profile.barGlow
+        local fresh = H.Encore.GetDefaults(H.Encore).profile.barGlow
         assert.is_false(fresh.enabled)
         assert.are.equal("Primary", fresh.follow)
         assert.are.same({ 1, 0.82, 0, 1 }, fresh.colorNow)
@@ -305,12 +305,12 @@ describe("action bar glow", function()
     end)
 
     it("has its own options page under Displays (owner 2026-11-11), and no style tab or style group", function()
-        H.Hekili:EmbedDisplayOptions()
-        local page = H.Hekili.Options.args.displays.args.barGlow
+        H.Encore:EmbedDisplayOptions()
+        local page = H.Encore.Options.args.displays.args.barGlow
         assert.is_table(page)
         assert.are.equal("group", page.type)
-        assert.is_nil(H.Hekili.Options.args.barGlow) -- not a top-level page any more
-        assert.is_table(H.Hekili.Options.args.displays.args.barGlowBtn) -- the overview's shortcut, like Share Styles
+        assert.is_nil(H.Encore.Options.args.barGlow) -- not a top-level page any more
+        assert.is_table(H.Encore.Options.args.displays.args.barGlowBtn) -- the overview's shortcut, like Share Styles
         for _, k in ipairs({ "enabled", "follow", "colorNow", "glowNext", "colorNext", "combatOnly" }) do
             assert.is_table(page.args[k], k)
         end
@@ -318,8 +318,8 @@ describe("action bar glow", function()
         for _, style in ipairs({ "classic", "timeline" }) do
             assert.is_nil(H.ns.UI.Styles[style].defaults.barGlow)
         end
-        H.Hekili:EmbedDisplayOptions()
-        assert.is_nil(H.Hekili.Options.args.displays.plugins.Primary.Primary.args.classic.args.barGlow)
+        H.Encore:EmbedDisplayOptions()
+        assert.is_nil(H.Encore.Options.args.displays.plugins.Primary.Primary.args.classic.args.barGlow)
     end)
 
     it("subscribes actively to the followed stream while enabled, and moves with the setting", function()
@@ -349,11 +349,11 @@ describe("action bar glow", function()
 
     it("asks the engine to compute the stream and glows with every display hidden", function()
         local e = bars()
-        local profile = H.Hekili.DB.profile
+        local profile = H.Encore.DB.profile
         for _, display in pairs(profile.displays) do
             display.enabled = false
         end
-        H.Hekili:UpdateDisplayVisibility()
+        H.Encore:UpdateDisplayVisibility()
         assert.is_true(H.ns.Output.Wanted("Primary")) -- only our active subscription wants it
         put("mortal_strike", "overpower")
         assert.are.same(NOW, (glow.on(e.ActionButton1)))
@@ -400,12 +400,12 @@ describe("action bar glow", function()
             fake.new = fakeNew
             assert.are.same({}, H2.loadErrors)
             assert(headless.cycle(H2, H2.ctl.now + 0.2))
-            local conf = H2.Hekili.DB.profile.displays.Primary
-            local dsp = rawget(H2.env, "HekiliDisplayPrimary")
+            local conf = H2.Encore.DB.profile.displays.Primary
+            local dsp = rawget(H2.env, "EncoreDisplayPrimary")
             for _, style in ipairs({ "classic", "timeline", "classic" }) do
                 conf.style = style
-                H2.Hekili:BuildUI()
-                local abilities = H2.Hekili.Engine.Registry.Abilities()
+                H2.Encore:BuildUI()
+                local abilities = H2.Encore.Engine.Registry.Abilities()
                 local o = H2.ns.Output.Begin("Primary")
                 for n, a in ipairs({ "mortal_strike", "overpower" }) do
                     o[n].actionName, o[n].actionID, o[n].texture = a, abilities[a].id, "tex" .. n
@@ -418,11 +418,11 @@ describe("action bar glow", function()
                 end
             end
             assert.are.same({}, H2.errors)
-            H2.Hekili:EmbedDisplayOptions()
-            local args = H2.Hekili.Options.args.displays.plugins.Primary.Primary.args.classic.args
+            H2.Encore:EmbedDisplayOptions()
+            local args = H2.Encore.Options.args.displays.plugins.Primary.Primary.args.classic.args
             assert.is_nil(args.flash)
             assert.is_nil(args.barGlow)
-            assert.is_false(H2.Hekili.DB.profile.barGlow.enabled) -- the per-style keys are ignored
+            assert.is_false(H2.Encore.DB.profile.barGlow.enabled) -- the per-style keys are ignored
         end
     )
 end)

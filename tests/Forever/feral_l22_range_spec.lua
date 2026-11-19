@@ -77,11 +77,11 @@ local function recs(combat, distance)
         H.Fire("PLAYER_REGEN_DISABLED")
     end
     t = t + 1
-    assert.is_true(H.Hekili.Engine.Subscribe("Primary", function() end))
+    assert.is_true(H.Encore.Engine.Subscribe("Primary", function() end))
     assert(headless.cycle(H, t))
     assert.are.same({}, H.errors)
     local names = {}
-    for i, r in ipairs(H.Hekili.Engine.Output.Primary.recs) do
+    for i, r in ipairs(H.Encore.Engine.Output.Primary.recs) do
         names[i] = r.actionName
     end
     local r = VS.TargetRange()

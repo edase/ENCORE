@@ -8,7 +8,7 @@ describe("retired built-in packs", function()
     it("are dropped from the profile and their specs return to the default priority", function()
         local H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
-        local hk = H.Hekili
+        local hk = H.Encore
         local p = hk.DB.profile
         local id = hk.State.spec.id
         p.packs["Retired Test"] = { builtIn = true, spec = id, version = 1, date = 1, lists = {}, profile = "" }
@@ -54,8 +54,8 @@ describe("retired built-in packs", function()
         })
         assert.are.same({}, H.loadErrors)
         assert.are.equal(1, calls)
-        assert.is_nil(rawget(H.Hekili.DB.profile.packs, "Arms"))
-        assert.is_not_nil(rawget(H.Hekili.DB.profile.packs, ww.PACK)) -- the one call is the one that decodes
+        assert.is_nil(rawget(H.Encore.DB.profile.packs, "Arms"))
+        assert.is_not_nil(rawget(H.Encore.DB.profile.packs, ww.PACK)) -- the one call is the one that decodes
     end)
 
     it("is a kit method the content calls", function()
@@ -76,7 +76,7 @@ describe("a spec's default priority with two built-in packs", function()
     local function fresh(order, saved)
         local H = headless.new({ character = ww.character(), pack = ww.PACK })
         assert.are.same({}, H.loadErrors)
-        local hk, p = H.Hekili, H.Hekili.DB.profile
+        local hk, p = H.Encore, H.Encore.DB.profile
         local id = hk.State.spec.id
         local def = hk.Class.specs[id].options.package
         local packs = hk.Class.packs

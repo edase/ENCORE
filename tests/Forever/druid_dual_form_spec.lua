@@ -30,7 +30,7 @@ local MANA = { type = 0, token = "MANA", max = 4000, value = 4000 }
 local function boot(c, pack, combat, setup)
     local H = headless.new({ character = c, pack = pack })
     assert.are.same({}, H.loadErrors)
-    local hk = H.Hekili
+    local hk = H.Encore
     assert.are.equal(pack, hk.DB.profile.specs[hk.State.spec.id].package)
     if setup then
         setup(H)
@@ -70,9 +70,9 @@ describe("the form-following Druid packs", function()
         local when = (combat and "in combat" or "out of combat") .. (rage and " at " .. rage .. " rage" or "")
         it("Feral (wowsims.com) in Bear Form " .. when .. " recommends what Guardian (wowsims.com) does", function()
             local H, feral = boot(bear(rage), FERAL, combat)
-            assert.are.equal("feral", H.Hekili.State.spec.key)
+            assert.are.equal("feral", H.Encore.State.spec.key)
             local G, guardian = boot(bear(rage), GUARDIAN, combat)
-            assert.are.equal("guardian", G.Hekili.State.spec.key)
+            assert.are.equal("guardian", G.Encore.State.spec.key)
             assert.is_true(#guardian > 0)
             assert.are.same(guardian, feral)
             none(feral, CAT, "a cat ability in Bear Form")
@@ -87,7 +87,7 @@ describe("the form-following Druid packs", function()
 
     it("Guardian (wowsims.com) in Cat Form recommends what Feral (wowsims.com) does", function()
         local G, guardian = boot(character(W.Feral, "cat_form", ENERGY), GUARDIAN, true)
-        assert.are.equal("guardian", G.Hekili.State.spec.key)
+        assert.are.equal("guardian", G.Encore.State.spec.key)
         local _, feral = boot(character(W.Feral, "cat_form", ENERGY), FERAL, true)
         assert.is_true(#feral > 0)
         assert.are.same(feral, guardian)
@@ -109,11 +109,11 @@ describe("the form-following Druid packs", function()
     end)
 
     it("leaves a custom priority as its lists say: a Feral-only one in Bear Form gets no bear list", function()
-        local f = assert(io.open("src/Hekili_Druid/APLs/" .. FERAL .. ".simc", "rb"))
+        local f = assert(io.open("src/Encore_Druid/APLs/" .. FERAL .. ".simc", "rb"))
         local own = f:read("*a"):gsub("#[^\n]*\n", "")
         f:close()
         local _, names = boot(bear(), FERAL, true, function(H)
-            local hk = H.Hekili
+            local hk = H.Encore
             local mine = {}
             for k, v in pairs(hk.DB.profile.packs[FERAL]) do
                 mine[k] = v
@@ -131,12 +131,12 @@ describe("the form-following Druid packs", function()
     it("reads Feral's own stored Demoralizing Roar setting in Bear Form, Guardian's untouched", function()
         local function names(on)
             local H, out = boot(bear(), FERAL, true, function(H)
-                H.Hekili.DB.profile.specs[H.Hekili.State.spec.id].settings.maintain_demoralizing_roar = on
-                H.Hekili:SettingsChanged()
+                H.Encore.DB.profile.specs[H.Encore.State.spec.id].settings.maintain_demoralizing_roar = on
+                H.Encore:SettingsChanged()
             end)
             local g
-            for id, sp in pairs(H.Hekili.Engine.Registry.Specs()) do
-                g = sp.key == "guardian" and rawget(H.Hekili.DB.profile.specs, id) or g
+            for id, sp in pairs(H.Encore.Engine.Registry.Specs()) do
+                g = sp.key == "guardian" and rawget(H.Encore.DB.profile.specs, id) or g
             end
             assert.is_not_true(g and g.settings.maintain_demoralizing_roar) -- Guardian's own value: untouched
             return table.concat(out, " ")
@@ -149,9 +149,9 @@ describe("the form-following Druid packs", function()
         local function page(key)
             local H = headless.new({ character = character(W.Feral, "cat_form", ENERGY), pack = FERAL })
             assert.are.same({}, H.loadErrors)
-            H.Hekili:EmbedSpecOptions()
-            H.Hekili:EmbedPackOptions()
-            local settings = H.Hekili.Options.args.packs.plugins.specializations[key].args.core.plugins.settings
+            H.Encore:EmbedSpecOptions()
+            H.Encore:EmbedPackOptions()
+            local settings = H.Encore.Options.args.packs.plugins.specializations[key].args.core.plugins.settings
             local rows = {}
             for name, o in pairs(settings) do
                 if o.order > 100.5 and (o.type ~= "description" or o.name ~= "") then

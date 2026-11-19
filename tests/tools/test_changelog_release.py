@@ -10,7 +10,7 @@ from unittest import mock
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "tools"))
 import changelog_release as cr  # noqa: E402
 
-AT_TAG = """# Hekili Forever changelog
+AT_TAG = """# Encore changelog
 
 ## Unreleased
 
@@ -66,7 +66,7 @@ Hunters arrive.
 class Rewrite(unittest.TestCase):
     def test_inserts_the_release_and_resets_unreleased(self):
         got = cr.rewrite(NOW, "v0.2.0", BODY, cr.unreleased(AT_TAG)[2], "2026-10-19")
-        self.assertTrue(got.startswith("# Hekili Forever changelog\n\n"))
+        self.assertTrue(got.startswith("# Encore changelog\n\n"))
         self.assertIn(FRESH, got)
         self.assertTrue(got.endswith("## v0.1.0\n\nFirst release.\n"))
 

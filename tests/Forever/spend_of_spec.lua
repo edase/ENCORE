@@ -22,7 +22,7 @@ describe("state.SpendOf", function()
             local C = require("Forever.helpers." .. w[1])[w[2]]
             local H = headless.new({ character = C.character(), pack = C.PACK })
             assert.are.same({}, H.loadErrors)
-            local S, class = H.Hekili.State, H.Hekili.Class
+            local S, class = H.Encore.State, H.Encore.Class
             assert.is_function(S.SpendOf)
             local n = 0
             for key, a in pairs(class.abilities) do

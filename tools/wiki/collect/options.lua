@@ -231,7 +231,7 @@ end
 --- default priority), at most `def.depth` groups deep (default 3), leaving out the keys in `def.exclude`.
 function M.rows(def)
     local H = boot.get(def.class)
-    local kit = H.Hekili.Class.kit
+    local kit = H.Encore.Class.kit
     local spec
     for _, s in ipairs(kit and kit.trees or {}) do
         if not s.unsupported then
@@ -250,7 +250,7 @@ function M.rows(def)
     for i, k in ipairs(def.path) do
         path[i] = resolve(k)
     end
-    local root = H.Hekili.Options
+    local root = H.Encore.Options
     local node, inherited, info = find(root, path)
     local exclude = {}
     for _, k in ipairs(def.exclude or {}) do
@@ -309,7 +309,7 @@ function M.labels()
         end
     end
     for _, token in ipairs(boot.tokens()) do
-        visit(boot.get(token).Hekili.Options, {})
+        visit(boot.get(token).Encore.Options, {})
     end
     return out
 end

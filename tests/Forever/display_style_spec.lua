@@ -100,7 +100,7 @@ local function boot(saved)
     H.ctl.inRange.target, H.ctl.level.target = true, 60
     H.Fire("PLAYER_TARGET_CHANGED")
     assert(headless.cycle(H, H.ctl.now + 0.2))
-    local d = rawget(H.env, "HekiliDisplayPrimary")
+    local d = rawget(H.env, "EncoreDisplayPrimary")
     for _, b in ipairs(d.Buttons) do
         instrument(b)
         for _, k in ipairs(REGIONS) do
@@ -110,10 +110,10 @@ local function boot(saved)
         end
     end
     -- past the defaults: captions on every button, the delay countdown, and the delay's desaturation
-    local conf = H.Hekili.DB.profile.displays.Primary.classic
+    local conf = H.Encore.DB.profile.displays.Primary.classic
     conf.captions.enabled, conf.captions.queued = true, true
     conf.delays.type, conf.delays.desaturate = "TEXT", true
-    H.Hekili:BuildUI()
+    H.Encore:BuildUI()
     return H, d
 end
 
@@ -127,7 +127,7 @@ local SET = {
 
 -- `edit( s )` changes the records before the publish.
 local function publish(H, edit)
-    local abilities = H.Hekili.Engine.Registry.Abilities()
+    local abilities = H.Encore.Engine.Registry.Abilities()
     local now = H.ctl.now
     local s = H.ns.Output.Begin("Primary")
     for i, e in ipairs(SET) do
@@ -209,7 +209,7 @@ end
 
 -- After the draw: the events a display forwards to its style, the pause overlay, Perimeter, then Deactivate.
 local function events(H, d, lines)
-    local abilities = H.Hekili.Engine.Registry.Abilities()
+    local abilities = H.Encore.Engine.Registry.Abilities()
     local ms, op = abilities.mortal_strike.id, abilities.overpower.id
     overlayed[op], overlayed[ms] = true, nil
     d:OnEvent("SPELL_ACTIVATION_OVERLAY_GLOW_SHOW", op)
@@ -219,7 +219,7 @@ local function events(H, d, lines)
     d:OnEvent("SPELLS_CHANGED") -- a keybinding event
     lines[#lines + 1] = "-- events"
     dump(d, lines)
-    H.Hekili.Pause = true
+    H.Encore.Pause = true
     H.ctl.now = H.ctl.now + 0.2
     d.__scripts.OnUpdate(d, 0.2)
     lines[#lines + 1] = "-- paused: paused=" .. v((d.styleState or d).paused)
@@ -240,9 +240,9 @@ end
 describe("the classic display style", function()
     it("draws a fixed 4-record publish over 3 frames exactly as the base commit's fixture", function()
         local H, d = boot()
-        local conf = H.Hekili.DB.profile.displays.Primary.classic
+        local conf = H.Encore.DB.profile.displays.Primary.classic
         conf.glow.enabled, conf.glow.queued = true, true
-        overlayed[H.Hekili.Engine.Registry.Abilities().mortal_strike.id] = true
+        overlayed[H.Encore.Engine.Registry.Abilities().mortal_strike.id] = true
         publish(H)
         assert.is_true(d.NewRecommendations)
         local f = d.__scripts.OnUpdate
@@ -320,7 +320,7 @@ describe("the classic display style", function()
     -- sweep showed only that and drew the strike ready. It sweeps to its record's time, and none once that has come.
     it("sweeps an on-next-swing strike to its time on any icon, none once it is due", function()
         local H, d = boot()
-        local abilities = H.Hekili.Engine.Registry.Abilities()
+        local abilities = H.Encore.Engine.Registry.Abilities()
         assert.is_true(abilities.heroic_strike.onNextSwing)
         local function strike(at, exact)
             local now = H.ctl.now
@@ -345,7 +345,7 @@ describe("the classic display style", function()
         -- a new GCD while it waits does not move the sweep's start (no per-GCD jump), and nothing is re-set
         local cs = H.ns.Facade.C_Spell
         local getCd = cs.GetSpellCooldown
-        local gcd = H.Hekili.Engine.Registry.GCD_SPELL
+        local gcd = H.Encore.Engine.Registry.GCD_SPELL
         local start0, exact, sets = rawget(cd, "__cdStart"), b.ExactTime, 0
         local set = cd.SetCooldown
         cd.SetCooldown = function(...)
@@ -397,7 +397,7 @@ end
 
 local function notifications(H)
     local said = {}
-    H.Hekili.Notify = function(_, msg)
+    H.Encore.Notify = function(_, msg)
         said[#said + 1] = msg
     end
     return said
@@ -407,18 +407,18 @@ describe("a display's style", function()
     it("takes a style's defaults into every display of a fresh profile", function()
         local H = boot()
         stub(H)
-        H.Hekili:GetDefaults()
-        H.Hekili.DB:ResetProfile()
-        assert.are.equal(1, H.Hekili.DB.profile.displays.Primary.stub.foo)
-        assert.are.equal("classic", H.Hekili.DB.profile.displays.Primary.style)
+        H.Encore:GetDefaults()
+        H.Encore.DB:ResetProfile()
+        assert.are.equal(1, H.Encore.DB.profile.displays.Primary.stub.foo)
+        assert.are.equal("classic", H.Encore.DB.profile.displays.Primary.style)
         -- a style group's path is walked through the keys its config has, so an inline section is presentational
-        assert.are.equal(1, H.Hekili:GetDisplayOption({ "displays", "Primary", "stub", "sec_now", "foo" }))
-        local classic = H.Hekili.DB.profile.displays.Primary.classic
+        assert.are.equal(1, H.Encore:GetDisplayOption({ "displays", "Primary", "stub", "sec_now", "foo" }))
+        local classic = H.Encore.DB.profile.displays.Primary.classic
         local font = { "displays", "Primary", "classic", "keybindings", "font" }
-        assert.are.equal(classic.keybindings.font, H.Hekili:GetDisplayOption(font))
-        H.Hekili:SetDisplayOption({ "displays", "Primary", "classic", "layout", "primaryIcon", "primaryWidth" }, 77)
+        assert.are.equal(classic.keybindings.font, H.Encore:GetDisplayOption(font))
+        H.Encore:SetDisplayOption({ "displays", "Primary", "classic", "layout", "primaryIcon", "primaryWidth" }, 77)
         assert.are.equal(77, classic.primaryWidth)
-        H.Hekili:SetDisplayOption({ "displays", "Primary", "classic", "keybindings", "pos", "x" }, 9)
+        H.Encore:SetDisplayOption({ "displays", "Primary", "classic", "keybindings", "pos", "x" }, 9)
         assert.are.equal(9, classic.keybindings.x)
     end)
 
@@ -427,19 +427,19 @@ describe("a display's style", function()
         function()
             local H, d = boot()
             local said = notifications(H)
-            local conf = H.Hekili.DB.profile.displays.Primary
+            local conf = H.Encore.DB.profile.displays.Primary
             conf.style = nil
-            H.Hekili:BuildUI()
+            H.Encore:BuildUI()
             assert.are.equal(H.ns.UI.Styles.classic, d.style)
             assert.are.same({}, said)
             conf.style = "nope"
-            H.Hekili:BuildUI()
+            H.Encore:BuildUI()
             assert.are.equal(H.ns.UI.Styles.classic, d.style)
             assert.are.equal(1, #said)
-            H.Hekili:BuildUI() -- once per display per unknown name, not on every rebuild
+            H.Encore:BuildUI() -- once per display per unknown name, not on every rebuild
             assert.are.equal(1, #said)
             conf.style = "nope2"
-            H.Hekili:BuildUI()
+            H.Encore:BuildUI()
             assert.are.equal(2, #said)
             assert.are.same({}, H.errors)
         end
@@ -454,8 +454,8 @@ describe("a display's style", function()
         f(d, 0.2)
         local classic = d.styleFrames.classic
         assert.is_true(classic[1]:IsShown())
-        H.Hekili:SetDisplayOption({ "displays", "Primary", "main", "style" }, "stub")
-        H.Hekili:BuildUI()
+        H.Encore:SetDisplayOption({ "displays", "Primary", "main", "style" }, "stub")
+        H.Encore:BuildUI()
         assert.are.equal(H.ns.UI.Styles.stub, d.style)
         for i, b in ipairs(classic) do
             assert.is_false(b:IsShown(), "classic button " .. i)
@@ -464,7 +464,7 @@ describe("a display's style", function()
         publish(H)
         H.ctl.now = H.ctl.now + 0.2
         f(d, 0.2)
-        assert.are.equal(H.Hekili.Engine.Output.Primary.count, log.draws[#log.draws])
+        assert.are.equal(H.Encore.Engine.Output.Primary.count, log.draws[#log.draws])
         assert.are.equal(4, log.draws[#log.draws])
         assert.are.same({}, H.errors)
     end)
@@ -473,14 +473,14 @@ describe("a display's style", function()
         local H, d = boot()
         stub(H)
         H.ns.UI.Styles.stub.needs = { alts = true }
-        local out = H.Hekili.Engine.Output.Primary
+        local out = H.Encore.Engine.Output.Primary
         assert.are.equal(0, out.needAlts)
-        H.Hekili:SetDisplayOption({ "displays", "Primary", "main", "style" }, "stub")
-        H.Hekili:BuildUI()
+        H.Encore:SetDisplayOption({ "displays", "Primary", "main", "style" }, "stub")
+        H.Encore:BuildUI()
         d:UpdateAlpha()
         assert.are.equal(1, out.needAlts)
-        H.Hekili:SetDisplayOption({ "displays", "Primary", "main", "style" }, "classic")
-        H.Hekili:BuildUI()
+        H.Encore:SetDisplayOption({ "displays", "Primary", "main", "style" }, "classic")
+        H.Encore:BuildUI()
         d:UpdateAlpha()
         assert.are.equal(0, out.needAlts)
         assert.are.same({}, H.errors)
@@ -489,14 +489,14 @@ describe("a display's style", function()
     it("rebuilds, enters and leaves config mode with a display that has no buttons", function()
         local H, d = boot()
         stub(H)
-        H.Hekili.DB.profile.displays.Primary.style = "stub"
-        H.Hekili:BuildUI()
+        H.Encore.DB.profile.displays.Primary.style = "stub"
+        H.Encore:BuildUI()
         assert.are.equal(0, #d.Buttons)
         H.ns.StartConfiguration(true) -- the movers and backdrops; without `true` it also opens the AceConfig dialog,
         -- which fails headless whatever the style (AceConfigDialog.lua:1610)
-        H.Hekili.Config = true
-        H.Hekili:BuildUI() -- rebuild in config mode: its removed-display pass, then StartConfiguration( true )
-        H.Hekili.Config = false
+        H.Encore.Config = true
+        H.Encore:BuildUI() -- rebuild in config mode: its removed-display pass, then StartConfiguration( true )
+        H.Encore.Config = false
         H.ns.StopConfiguration()
         assert.are.same({}, H.errors)
     end)
@@ -514,8 +514,8 @@ describe("a display's style", function()
                     },
                 }
             end)
-            H.Hekili:EmbedDisplayOptions()
-            local plugins = H.Hekili.Options.args.displays.plugins
+            H.Encore:EmbedDisplayOptions()
+            local plugins = H.Encore.Options.args.displays.plugins
             local primary, multi = plugins.Primary.Primary.args, plugins.Multi.Multi.args
             local style = primary.main.args.style
             assert.are.same({ classic = "Classic", stub = "Stub", timeline = "Timeline" }, style.values())
@@ -530,11 +530,11 @@ describe("a display's style", function()
             assert.is_nil(primary.main.args.primaryIcon) -- classic's size fields left the core tab
             assert.is_not_nil(primary.classic.args.layout.args.primaryIcon)
             assert.is_not_nil(primary.stub.args.lane.args.sec_now)
-            local displays = H.Hekili.DB.profile.displays
+            local displays = H.Encore.DB.profile.displays
             displays.Primary.style = "stub"
             assert.are.same({ classic = false, stub = true }, shown(primary))
             assert.are.same({ classic = false, stub = false }, shown(multi)) -- Multi edits Primary and AOE: they differ
-            H.Hekili:SetMultiDisplayOption({ "displays", "Multi", "main", "style" }, "stub")
+            H.Encore:SetMultiDisplayOption({ "displays", "Multi", "main", "style" }, "stub")
             assert.are.equal("stub", displays.AOE.style)
             assert.are.same({ classic = false, stub = true }, shown(multi))
             assert.are.same({}, H.errors)
@@ -552,8 +552,8 @@ describe("a display's style", function()
             end
             return build(...)
         end
-        H.Hekili.DB.profile.displays.Primary.style = "stub"
-        H.Hekili:BuildUI()
+        H.Encore.DB.profile.displays.Primary.style = "stub"
+        H.Encore:BuildUI()
         assert.are.same({ "boom from Build" }, H.errors) -- the original message, once
         assert.is_nil(d.Buttons)
         assert.is_nil(H.ns.UI.Buttons.Primary)
@@ -571,7 +571,7 @@ describe("a display's style", function()
         H.ns.StopConfiguration()
         assert.are.same({ "boom from Build" }, H.errors)
         broken = false
-        H.Hekili:BuildUI()
+        H.Encore:BuildUI()
         assert.is_false(d.buildFailed == true)
         assert.is_not_nil(d.Buttons)
         publish(H)
@@ -584,9 +584,9 @@ describe("a display's style", function()
     it("binds a custom display's own style", function()
         local H = boot()
         local log = stub(H)
-        H.Hekili:GetDefaults()
-        H.Hekili.DB.profile.displays.Custom1.style = "stub"
-        H.Hekili:CreateDisplay("Custom1")
+        H.Encore:GetDefaults()
+        H.Encore.DB.profile.displays.Custom1.style = "stub"
+        H.Encore:CreateDisplay("Custom1")
         assert.are.same({ "Custom1" }, log.builds)
         assert.are.equal(H.ns.UI.Styles.stub, H.ns.UI.Displays.Custom1.style)
     end)
@@ -624,7 +624,7 @@ end
 describe("classic's settings", function()
     it("move under `classic` on load when a saved profile has them flat; core fields stay", function()
         local H = boot(legacyProfile())
-        local conf = H.Hekili.DB.profile.displays.Primary
+        local conf = H.Encore.DB.profile.displays.Primary
         for k, val in pairs(LEGACY) do
             assert.is_nil(rawget(conf, k), k)
             if type(val) == "table" then
@@ -638,7 +638,7 @@ describe("classic's settings", function()
         assert.is_true(conf.classic.glow.enabled) -- Primary's own default
         assert.are.equal(5, conf.numIcons)
         assert.are.equal(12, conf.x)
-        H.Hekili:RunOneTimeFixes() -- idempotent
+        H.Encore:RunOneTimeFixes() -- idempotent
         assert.are.equal(61, conf.classic.primaryWidth)
         assert.are.equal(33, conf.classic.queue.width)
         assert.are.same({}, H.errors)
@@ -646,8 +646,8 @@ describe("classic's settings", function()
 
     it("are left alone in a profile already migrated", function()
         local H = boot({ profiles = { Default = { displays = { Primary = { classic = { primaryWidth = 70 } } } } } })
-        local conf = H.Hekili.DB.profile.displays.Primary
-        H.Hekili:RunOneTimeFixes()
+        local conf = H.Encore.DB.profile.displays.Primary
+        H.Encore:RunOneTimeFixes()
         assert.are.equal(70, conf.classic.primaryWidth)
         assert.are.equal(50, conf.classic.primaryHeight)
         assert.is_nil(rawget(conf, "primaryWidth"))
@@ -655,7 +655,7 @@ describe("classic's settings", function()
 
     it("come from the classic style's defaults in a fresh profile", function()
         local H = boot()
-        local displays = H.Hekili.DB.profile.displays
+        local displays = H.Encore.DB.profile.displays
         assert.are.same(H.ns.UI.Styles.classic.defaults.keybindings, displays.Primary.classic.keybindings)
         assert.are.equal(50, displays.Primary.classic.primaryWidth)
         assert.are.equal("autocast", displays.AOE.classic.glow.mode) -- a built-in display's own default
@@ -666,9 +666,9 @@ describe("classic's settings", function()
 
     it("keep the rest of `classic` when the recover command restores a built-in display's defaults", function()
         local H = boot()
-        local classic = H.Hekili.DB.profile.displays.Primary.classic
+        local classic = H.Encore.DB.profile.displays.Primary.classic
         classic.primaryWidth, classic.glow.mode = 70, "pixel"
-        H.Hekili:HandleRecoverCommand()
+        H.Encore:HandleRecoverCommand()
         assert.are.equal(70, classic.primaryWidth)
         assert.are.equal("autocast", classic.glow.mode)
         assert.are.same({}, H.errors)
@@ -679,8 +679,8 @@ end)
 -- OnInitialize, so the registration comes after the DB and the first BuildUI.
 local function external(H, api)
     local log = { builds = {} }
-    local ok = H.Hekili:RegisterDisplayStyle("ext", {
-        api = api or H.Hekili.DisplayStyleAPI,
+    local ok = H.Encore:RegisterDisplayStyle("ext", {
+        api = api or H.Encore.DisplayStyleAPI,
         label = "External",
         defaults = { foo = 1 },
         Build = function(d)
@@ -711,17 +711,17 @@ describe("an external display style", function()
             local said = notifications(H)
             local ok, log = external(H)
             assert.is_true(ok)
-            local displays = H.Hekili.DB.profile.displays
+            local displays = H.Encore.DB.profile.displays
             assert.are.equal(1, displays.Primary.ext.foo)
             assert.are.equal(1, displays.AOE.ext.foo)
             assert.are.equal("ext", displays.Primary.style)
-            H.Hekili:EmbedDisplayOptions()
-            local style = H.Hekili.Options.args.displays.plugins.Primary.Primary.args.main.args.style
+            H.Encore:EmbedDisplayOptions()
+            local style = H.Encore.Options.args.displays.plugins.Primary.Primary.args.main.args.style
             assert.are.equal("External", style.values().ext)
             H.RunTimers(H.ctl.now + 1) -- the queued rebuild
             assert.are.equal(H.ns.UI.Styles.ext, d.style)
             assert.are.same({ "Primary" }, log.builds)
-            H.Hekili:BuildUI()
+            H.Encore:BuildUI()
             assert.are.same({}, said)
             assert.are.same({}, H.errors)
         end
@@ -730,12 +730,12 @@ describe("an external display style", function()
     it("with another style API version is refused with one Notify and classic stays bound", function()
         local H, d = boot(namesExt())
         local said = notifications(H)
-        local ok = external(H, H.Hekili.DisplayStyleAPI + 1)
+        local ok = external(H, H.Encore.DisplayStyleAPI + 1)
         assert.is_false(ok)
         assert.are.equal(1, #said)
         assert.truthy(said[1]:find("'ext'", 1, true))
-        assert.truthy(said[1]:find(tostring(H.Hekili.DisplayStyleAPI + 1), 1, true))
-        assert.truthy(said[1]:find(tostring(H.Hekili.DisplayStyleAPI), 1, true))
+        assert.truthy(said[1]:find(tostring(H.Encore.DisplayStyleAPI + 1), 1, true))
+        assert.truthy(said[1]:find(tostring(H.Encore.DisplayStyleAPI), 1, true))
         assert.is_nil(H.ns.UI.Styles.ext)
         H.RunTimers(H.ctl.now + 1)
         assert.are.equal(H.ns.UI.Styles.classic, d.style)
@@ -760,11 +760,11 @@ describe("an external display style", function()
             "glow",
             "primaryWidth",
         }) do
-            assert.is_false(H.Hekili:RegisterDisplayStyle(taken, impl), taken)
+            assert.is_false(H.Encore:RegisterDisplayStyle(taken, impl), taken)
             assert.are.equal(i, #said, taken)
             assert.is_nil(H.ns.UI.Styles[taken], taken)
         end
-        assert.are.equal("classic", H.Hekili.DB.profile.displays.Primary.style)
+        assert.are.equal("classic", H.Encore.DB.profile.displays.Primary.style)
         assert.are.same({}, H.errors)
     end)
 end)
@@ -798,7 +798,7 @@ end
 -- the second build records Build's anchors. `setup( tl )` changes the config before it; `saved` is the saved profile.
 local function tlBoot(plain, setup, saved)
     local H, d = boot(saved)
-    local conf = H.Hekili.DB.profile.displays.Primary
+    local conf = H.Encore.DB.profile.displays.Primary
     conf.style, conf.numIcons = "timeline", 6
     local tl = conf.timeline
     tl.captions.enabled, tl.captions.queued = true, true
@@ -810,12 +810,12 @@ local function tlBoot(plain, setup, saved)
     if setup then
         setup(tl)
     end
-    H.Hekili:BuildUI()
+    H.Encore:BuildUI()
     local T = d.styleFrames.timeline
     if not plain then
         tlInstrument(T)
     end
-    H.Hekili:BuildUI()
+    H.Encore:BuildUI()
     return H, d, T
 end
 
@@ -840,7 +840,7 @@ end
 -- `focus`: the record flagged as a focus candidate (the APL entry's focus=1), if any.
 -- `edit( s )` changes the records before the publish.
 local function tlPublish(H, focus, edit)
-    local abilities = H.Hekili.Engine.Registry.Abilities()
+    local abilities = H.Encore.Engine.Registry.Abilities()
     local now = H.ctl.now
     local s = H.ns.Output.Begin("Primary")
     local prev = 0
@@ -917,7 +917,7 @@ end
 describe("the timeline display style", function()
     it("draws a fixed 6-record publish over 3 frames as its recorded fixture", function()
         local H, d, T = tlBoot()
-        overlayed[H.Hekili.Engine.Registry.Abilities().mortal_strike.id] = true
+        overlayed[H.Encore.Engine.Registry.Abilities().mortal_strike.id] = true
         tlPublish(H)
         local f = d.__scripts.OnUpdate
         for _ = 1, 3 do -- the publish's draw, a frame between pulses (lane glides), the 0.25 s pulse
@@ -926,12 +926,12 @@ describe("the timeline display style", function()
         end
         assert.are.same({}, H.errors)
         local lines = tlDump(T)
-        H.Hekili.Pause = true
+        H.Encore.Pause = true
         H.ctl.now = H.ctl.now + 0.2
         f(d, 0.2)
         lines[#lines + 1] = "-- paused"
         tlDump(T, lines)
-        H.Hekili.Pause = false
+        H.Encore.Pause = false
         local l, r, t, b = d.style.Perimeter(d)
         lines[#lines + 1] = ("-- perimeter: %s %s %s %s"):format(v(l == d), v(r == d), v(t == d), v(b == d))
         d:Deactivate()
@@ -1031,7 +1031,7 @@ describe("the timeline display style", function()
             assert.are.equal(case[4], d.styleFrames.timeline.cells[1].Action or false)
             collectgarbage("collect")
             collectgarbage("stop")
-            local status = H.Hekili.Engine.Output.status
+            local status = H.Encore.Engine.Output.status
             local function tiered(s) -- two tiered records and a focus=0 one: roles() runs inside the window
                 s[2].focus, s[4].focus, s[5].focus = 2, 1, 0
             end
@@ -1102,11 +1102,11 @@ describe("the timeline display style", function()
 
     it("draws a flagged record within the focus horizon in the now circle and the press in the next box", function()
         local H, d, T = tlBoot()
-        local abilities = H.Hekili.Engine.Registry.Abilities()
+        local abilities = H.Encore.Engine.Registry.Abilities()
         local ms, slam = abilities.mortal_strike, abilities.slam
         overlayed[ms.id] = true -- record 1 glows; glow.queued is off, so only its cell may
         H.ctl.usable[ms.actualName or ms.name] = { false, true } -- record 1 unusable: its cell tints grey
-        H.Hekili.Engine.Output.status.numTargets = 3 -- a target count to show
+        H.Encore.Engine.Output.status.numTargets = 3 -- a target count to show
         tlPublish(H, 3)
         tlFrame(H, d)
         tlFrame(H, d) -- Tick (the ETAs) runs before Draw: the publish's ETAs show on the frame after
@@ -1183,9 +1183,9 @@ describe("the timeline display style", function()
         local H, d, T = tlBoot(false, function(tl)
             tl.nowFallback = "empty"
         end)
-        local ms = H.Hekili.Engine.Registry.Abilities().mortal_strike
+        local ms = H.Encore.Engine.Registry.Abilities().mortal_strike
         overlayed[ms.id] = true
-        H.Hekili.Engine.Output.status.numTargets = 3
+        H.Encore.Engine.Output.status.numTargets = 3
         tlPublish(H)
         tlFrame(H, d)
         tlFrame(H, d)
@@ -1231,16 +1231,16 @@ describe("the timeline display style", function()
         assert.is_false(c[1]:IsShown() or c[1].Ring:IsShown())
         assert.is_true(c[2].glowing)
         -- the pause overlay is a press affordance: on the next box here
-        H.Hekili.Pause = true
+        H.Encore.Pause = true
         tlFrame(H, d)
         assert.is_true(c[2].Overlay:IsShown())
         assert.is_false(c[1].Overlay:IsShown())
-        H.Hekili.Pause = false
+        H.Encore.Pause = false
         tlFrame(H, d)
         assert.is_false(c[2].Overlay:IsShown())
         -- config mode: the mover's backdrop spans the display frame, the empty circle included
         H.ns.StartConfiguration(true)
-        local tl = H.Hekili.DB.profile.displays.Primary.timeline
+        local tl = H.Encore.DB.profile.displays.Primary.timeline
         local l, r = d.style.Perimeter(d)
         assert.is_true(l == d and r == d)
         assert.are.equal(tl.nowSize + tl.gap + tl.nextSize + tl.gap + tl.laneIconSize / 2, T.laneX0)
@@ -1264,11 +1264,11 @@ describe("the timeline display style", function()
             local H, d, T = tlBoot(false, function(tl)
                 tl.nowFallback = "empty"
             end)
-            local tl = H.Hekili.DB.profile.displays.Primary.timeline
+            local tl = H.Encore.DB.profile.displays.Primary.timeline
             assert.are.same({ 1, 1, 1, 0.35 }, tl.focusPendingColor)
-            local ms = H.Hekili.Engine.Registry.Abilities().mortal_strike
+            local ms = H.Encore.Engine.Registry.Abilities().mortal_strike
             overlayed[ms.id] = true
-            H.Hekili.Engine.Output.status.numTargets = 3
+            H.Encore.Engine.Output.status.numTargets = 3
             local c = T.cells
             rawset(c[1].Ring, "SetVertexColor", function(self, r, g, b, a)
                 rawset(self, "__color", { r, g, b, a })
@@ -1299,7 +1299,7 @@ describe("the timeline display style", function()
             assert.is_true(T.inLane[5])
 
             -- (3) record 1 flagged and due: gold and every press affordance on the now circle, record 2 plain in the next box
-            H.Hekili.Pause = true
+            H.Encore.Pause = true
             tlPublish(H, 1, due(H))
             frames()
             assert.are.same({
@@ -1325,7 +1325,7 @@ describe("the timeline display style", function()
             assert.is_false(c[2].Overlay:IsShown())
             assert.is_false(c[2].glowing)
             assert.is_nil(c[2].Targets:GetText())
-            H.Hekili.Pause = false
+            H.Encore.Pause = false
 
             -- (4) records 1 and 2 flagged: 1 in the now circle, 2 (no longer the focus) in the next box, 3 on the lane
             tlPublish(H, 1, function(s)
@@ -1372,7 +1372,7 @@ describe("the timeline display style", function()
     -- off the extend (nowFallback press) drew it ready. It sweeps to its record's time, and none once that has come.
     it("sweeps an on-next-swing strike in the next box to its time, none once it is due", function()
         local H, d, T = tlBoot()
-        local abilities = H.Hekili.Engine.Registry.Abilities()
+        local abilities = H.Encore.Engine.Registry.Abilities()
         local function strike(at)
             tlPublish(H, nil, function(s)
                 s[2].actionName, s[2].actionID = "heroic_strike", abilities.heroic_strike.id
@@ -1422,7 +1422,7 @@ describe("the timeline display style", function()
         -- a GCD in the middle of the wait does not restart it: the held start wins (review S1)
         local cs = H.ns.Facade.C_Spell
         local getCd = cs.GetSpellCooldown
-        local gcd = H.Hekili.Engine.Registry.GCD_SPELL
+        local gcd = H.Encore.Engine.Registry.GCD_SPELL
         local gStart = H.ctl.now
         cs.GetSpellCooldown = function(id)
             if id == gcd then
@@ -1448,7 +1448,7 @@ describe("the timeline display style", function()
         local H, d, T = tlBoot(false, function(tl)
             tl.nowFallback = "empty"
         end)
-        local tl = H.Hekili.DB.profile.displays.Primary.timeline
+        local tl = H.Encore.DB.profile.displays.Primary.timeline
         assert.are.equal("ring", tl.focusReadyStyle)
         tl.focusReadyStyle = "glow"
         local c = T.cells
@@ -1477,15 +1477,15 @@ describe("the timeline display style", function()
         local H, d, T = tlBoot(false, function(tl)
             tl.nowFallback = "empty"
         end)
-        local tl = H.Hekili.DB.profile.displays.Primary.timeline
+        local tl = H.Encore.DB.profile.displays.Primary.timeline
         local c = T.cells
         rawset(c[1].Ring, "SetVertexColor", function(self, r, g, b, a)
             rawset(self, "__color", { r, g, b, a })
         end)
         local cs = H.ns.Facade.C_Spell
         local getCd = cs.GetSpellCooldown
-        local gcd = H.Hekili.Engine.Registry.GCD_SPELL
-        local op = H.Hekili.Engine.Registry.Abilities().overpower.id
+        local gcd = H.Encore.Engine.Registry.GCD_SPELL
+        local op = H.Encore.Engine.Registry.Abilities().overpower.id
         local gStart = H.ctl.now - 0.3 -- a GCD running, 1.2 s left: the spell on it reads the GCD (Facade isOnGCD)
         cs.GetSpellCooldown = function(id)
             if id == gcd or id == op then
@@ -1533,7 +1533,7 @@ describe("the timeline display style", function()
             local H, d, T = tlBoot(false, function(tl)
                 tl.nowFallback = "empty"
             end)
-            local tl = H.Hekili.DB.profile.displays.Primary.timeline
+            local tl = H.Encore.DB.profile.displays.Primary.timeline
             local c = T.cells
             local anchors = {}
             for _, m in ipairs({ "RingMask", "FocusMask" }) do
@@ -1544,7 +1544,7 @@ describe("the timeline display style", function()
             rawset(c[1].Ring, "SetVertexColor", function(self, r, g, b, a)
                 rawset(self, "__color", { r, g, b, a })
             end)
-            H.Hekili:BuildUI()
+            H.Encore:BuildUI()
             assert.are.same({
                 { "RingMask", "TOPLEFT", c[1], -1, 1 },
                 { "RingMask", "BOTTOMRIGHT", c[1], 1, -1 },
@@ -1555,12 +1555,12 @@ describe("the timeline display style", function()
                 s[2].exact_time = s[2].exact_time + 1
             end)
             tlFrame(H, d)
-            H.Hekili:BuildUI() -- an option refresh: dress, then the publish redrawn
+            H.Encore:BuildUI() -- an option refresh: dress, then the publish redrawn
             tlFrame(H, d)
             assert.is_true(c[1].Ring:IsShown())
             assert.are.same(tl.focusPendingColor, rawget(c[1].Ring, "__color"))
             -- the Cooldown's own digits are off (the cells are built before any test can hook them)
-            local src = assert(io.open("src/Hekili/UI/Styles/Timeline.lua")):read("*a")
+            local src = assert(io.open("src/Encore/UI/Styles/Timeline.lua")):read("*a")
             assert.is_truthy(src:find("SetHideCountdownNumbers( true )", 1, true))
             assert.are.same({}, H.errors)
         end
@@ -1570,7 +1570,7 @@ describe("the timeline display style", function()
         local H, d, T = tlBoot(false, function(tl)
             tl.nowFallback, tl.oocPinned = "empty", true
         end)
-        H.Hekili.Engine.Output.status.combat = false
+        H.Encore.Engine.Output.status.combat = false
         local c = T.cells
         local function pub() -- the in-game case: two presses at 0, the focus 6.25 s on
             tlPublish(H, 3, function(s)
@@ -1605,10 +1605,10 @@ describe("the timeline display style", function()
         rawset(g, "SetSize", function(_, w, h)
             size = { w, h }
         end)
-        H.Hekili:BuildUI()
-        local w = 48 * H.Hekili:GetScale() / 0.737
+        H.Encore:BuildUI()
+        local w = 48 * H.Encore:GetScale() / 0.737
         assert.are.same({ w, w }, size)
-        assert.truthy(io.open("src/Hekili/Textures/GoldRing.tga")) -- the art the texture path names (set once, at creation)
+        assert.truthy(io.open("src/Encore/Textures/GoldRing.tga")) -- the art the texture path names (set once, at creation)
         tlPublish(H, 1, due(H)) -- ready
         tlFrame(H, d)
         assert.is_true(g:IsShown())
@@ -1628,7 +1628,7 @@ describe("the timeline display style", function()
 
     it("draws the Gold Frame over the next box in place of its colour border when nextFrame is gold", function()
         local H, _, T = tlBoot(false)
-        local tl = H.Hekili.DB.profile.displays.Primary.timeline
+        local tl = H.Encore.DB.profile.displays.Primary.timeline
         assert.are.equal("none", tl.nextFrame)
         local c2 = T.cells[2]
         local f = c2.Frame
@@ -1639,23 +1639,23 @@ describe("the timeline display style", function()
         rawset(f, "SetSize", function(_, w, h)
             size = { w, h }
         end)
-        H.Hekili:BuildUI()
+        H.Encore:BuildUI()
         assert.is_false(f:IsShown())
         assert.is_true(c2.Border:IsShown())
         tl.nextFrame = "gold"
-        H.Hekili:BuildUI()
+        H.Encore:BuildUI()
         assert.is_true(f:IsShown())
         assert.is_false(c2.Border:IsShown())
         assert.is_true(T.cells[1].Border:IsShown()) -- the other cells keep theirs
-        local w = 48 * H.Hekili:GetScale() / 0.691
+        local w = 48 * H.Encore:GetScale() / 0.691
         assert.are.same({ w, w }, size)
-        assert.truthy(io.open("src/Hekili/Textures/GoldFrame.tga")) -- the art the texture path names (set once, at creation)
+        assert.truthy(io.open("src/Encore/Textures/GoldFrame.tga")) -- the art the texture path names (set once, at creation)
         assert.are.same({}, H.errors)
     end)
 
     it("keeps today's layout with focus off, a flagged record 1, or a flag past the focus horizon", function()
         local H, d, T = tlBoot()
-        local tl = H.Hekili.DB.profile.displays.Primary.timeline
+        local tl = H.Encore.DB.profile.displays.Primary.timeline
         assert.is_true(tl.focusEnabled)
         assert.are.equal(10, tl.focusHorizon)
         assert.are.same({ 1, 0.8, 0.1, 1 }, tl.focusColor)
@@ -1702,7 +1702,7 @@ describe("the timeline display style", function()
         local H, d, T = tlBoot(false, function(tl)
             tl.nowFallback = "empty"
         end)
-        local tl = H.Hekili.DB.profile.displays.Primary.timeline
+        local tl = H.Encore.DB.profile.displays.Primary.timeline
         local c = T.cells
         rawset(c[1].Ring, "SetVertexColor", function(self, r, g, b, a)
             rawset(self, "__color", { r, g, b, a })
@@ -1857,8 +1857,8 @@ describe("the timeline display style", function()
         f(d, 0.2)
         local classic = d.styleFrames.classic
         assert.is_true(classic[1]:IsShown())
-        H.Hekili:SetDisplayOption({ "displays", "Primary", "main", "style" }, "timeline")
-        H.Hekili:BuildUI()
+        H.Encore:SetDisplayOption({ "displays", "Primary", "main", "style" }, "timeline")
+        H.Encore:BuildUI()
         assert.are.equal(H.ns.UI.Styles.timeline, d.style)
         for i, b in ipairs(classic) do
             assert.is_false(b:IsShown(), "classic button " .. i)
@@ -1866,13 +1866,13 @@ describe("the timeline display style", function()
         local T = d.styleFrames.timeline
         assert.are.equal(T.cells, d.Buttons)
         tlInstrument(T)
-        H.Hekili:BuildUI()
+        H.Encore:BuildUI()
         tlPublish(H)
         H.ctl.now = H.ctl.now + 0.2
         f(d, 0.2)
         assert.is_true(T.cells[2]:IsShown()) -- the press (the now circle is empty by default)
-        H.Hekili:SetDisplayOption({ "displays", "Primary", "main", "style" }, "classic")
-        H.Hekili:BuildUI()
+        H.Encore:SetDisplayOption({ "displays", "Primary", "main", "style" }, "classic")
+        H.Encore:BuildUI()
         assert.are.equal(H.ns.UI.Styles.classic, d.style)
         for n, w in ipairs(T.widgets) do
             assert.is_false(w:IsShown(), T.labels[n])
@@ -1888,11 +1888,11 @@ describe("the timeline display style", function()
         f(d, 0.2)
         local c1 = T.cells[1]
         assert.is_true(c1.Texture:IsShown() and T.base:IsShown())
-        H.Hekili.Barber = true -- alpha 0: core unsubscribes and clears the style
+        H.Encore.Barber = true -- alpha 0: core unsubscribes and clears the style
         d:UpdateAlpha()
         assert.is_false(c1.Texture:IsShown())
         assert.is_false(T.base:IsShown())
-        H.Hekili.Barber = nil
+        H.Encore.Barber = nil
         d:UpdateAlpha()
         tlPublish(H)
         H.ctl.now = H.ctl.now + 0.2
@@ -1909,23 +1909,23 @@ describe("the timeline display style", function()
 
     it("asks the engine for alternatives while it draws a display", function()
         local H, d = boot()
-        local out = H.Hekili.Engine.Output.Primary
+        local out = H.Encore.Engine.Output.Primary
         assert.are.equal(0, out.needAlts)
-        H.Hekili:SetDisplayOption({ "displays", "Primary", "main", "style" }, "timeline")
-        H.Hekili:BuildUI()
+        H.Encore:SetDisplayOption({ "displays", "Primary", "main", "style" }, "timeline")
+        H.Encore:BuildUI()
         d:UpdateAlpha()
         assert.are.equal(1, out.needAlts)
     end)
 
     it("asks for alternatives only while the display shows them", function()
         local H, d = boot()
-        local out = H.Hekili.Engine.Output.Primary
-        H.Hekili:SetDisplayOption({ "displays", "Primary", "main", "style" }, "timeline")
-        H.Hekili:BuildUI()
-        H.Hekili.DB.profile.displays.Primary.timeline.alts.enabled = false
+        local out = H.Encore.Engine.Output.Primary
+        H.Encore:SetDisplayOption({ "displays", "Primary", "main", "style" }, "timeline")
+        H.Encore:BuildUI()
+        H.Encore.DB.profile.displays.Primary.timeline.alts.enabled = false
         d:UpdateAlpha()
         assert.are.equal(0, out.needAlts)
-        H.Hekili.DB.profile.displays.Primary.timeline.alts.enabled = true
+        H.Encore.DB.profile.displays.Primary.timeline.alts.enabled = true
         d:UpdateAlpha()
         assert.are.equal(1, out.needAlts)
         assert.are.same({}, H.errors)
@@ -1933,7 +1933,7 @@ describe("the timeline display style", function()
 
     it("defaults every display's timeline subtable and serves its options from it", function()
         local H = boot()
-        local tl = H.Hekili.DB.profile.displays.Primary.timeline
+        local tl = H.Encore.DB.profile.displays.Primary.timeline
         assert.are.equal(10, tl.horizon)
         assert.are.equal(24, tl.pxPerSec)
         assert.are.equal("RIGHT", tl.direction)
@@ -1944,21 +1944,21 @@ describe("the timeline display style", function()
         assert.are.equal("both", tl.alts.zones)
         assert.are.equal(12, tl.keybindings.laneFontSize) -- the shared groups' lane zone
         local get = function(path)
-            return H.Hekili:GetDisplayOption(path)
+            return H.Encore:GetDisplayOption(path)
         end
         assert.are.equal(false, get({ "displays", "Primary", "timeline", "glow", "enabled" }))
         assert.are.equal(12, get({ "displays", "Primary", "timeline", "keybindings", "nextFontSize" }))
         assert.are.equal(16, get({ "displays", "Primary", "timeline", "tab_now", "eta", "size" }))
         assert.are.equal(2, get({ "displays", "Primary", "timeline", "tab_next", "alts", "max" }))
-        H.Hekili:SetDisplayOption({ "displays", "Primary", "timeline", "tab_timeline", "sec_lane", "horizon" }, 8)
+        H.Encore:SetDisplayOption({ "displays", "Primary", "timeline", "tab_timeline", "sec_lane", "horizon" }, 8)
         assert.are.equal(8, tl.horizon)
-        H.Hekili:SetDisplayOption({ "displays", "Primary", "timeline", "tab_timeline", "sec_focus", "focusHorizon" }, 6)
+        H.Encore:SetDisplayOption({ "displays", "Primary", "timeline", "tab_timeline", "sec_focus", "focusHorizon" }, 6)
         assert.are.equal(6, tl.focusHorizon)
         assert.are.equal("empty", tl.nowFallback)
-        H.Hekili:SetDisplayOption({ "displays", "Primary", "timeline", "tab_now", "nowFallback" }, "press")
+        H.Encore:SetDisplayOption({ "displays", "Primary", "timeline", "tab_now", "nowFallback" }, "press")
         assert.are.equal("press", tl.nowFallback)
-        H.Hekili:EmbedDisplayOptions()
-        local tabs = H.Hekili.Options.args.displays.plugins.Primary.Primary.args.timeline.args
+        H.Encore:EmbedDisplayOptions()
+        local tabs = H.Encore.Options.args.displays.plugins.Primary.Primary.args.timeline.args
         assert.is_true(tabs.tab_timeline.args.sec_focus.inline) -- Task 2's Focus section, in the Timeline tab
         local now = tabs.tab_now.args
         for _, k in ipairs({
@@ -1982,7 +1982,7 @@ end)
 -- A region's anchor (x, y) in config pixels from the display's start corner (place: x * scale, -y * scale).
 local function anchor(H, region)
     local x, y = rawget(region, "__point"):match("(%S+) (%S+)$")
-    local s = H.Hekili:GetScale()
+    local s = H.Encore:GetScale()
     return tonumber(x) / s, -tonumber(y) / s
 end
 
@@ -2053,7 +2053,7 @@ describe("the timeline's gaps", function()
         local saved =
             { profiles = { Default = { displays = { Primary = { timeline = { nextOffset = 70, nowSize = 50 } } } } } }
         local H, _, T = tlBoot(false, nil, saved)
-        local tl = H.Hekili.DB.profile.displays.Primary.timeline
+        local tl = H.Encore.DB.profile.displays.Primary.timeline
         assert.is_nil(rawget(tl, "nextOffset"))
         assert.are.equal(20, tl.gap)
         -- where the base commit's Build put them: the circle at 0, the box at nextOffset, both centred in the band
@@ -2064,7 +2064,7 @@ describe("the timeline's gaps", function()
         near((band - 50) / 2, y1, "now y")
         near(70, x2, "next x")
         near((band - 48) / 2, y2, "next y")
-        H.Hekili:RunOneTimeFixes() -- once: nothing left to derive from
+        H.Encore:RunOneTimeFixes() -- once: nothing left to derive from
         assert.are.equal(20, tl.gap)
         assert.are.same({}, H.errors)
     end)
@@ -2073,7 +2073,7 @@ end)
 describe("the timeline's ruler alpha", function()
     it("switches between its combat and out-of-combat values when status.combat flips, in Draw only", function()
         local H, d, T = tlBoot()
-        local status = H.Hekili.Engine.Output.status
+        local status = H.Encore.Engine.Output.status
         local sets, setAlpha = 0, rawget(T.base, "SetAlpha")
         rawset(T.base, "SetAlpha", function(self, a)
             sets = sets + 1
@@ -2128,7 +2128,7 @@ describe("the timeline's out-of-combat pinning", function()
         local H, d, T = tlBoot(false, function(tl)
             tl.oocPinned = true
         end)
-        local status = H.Hekili.Engine.Output.status
+        local status = H.Encore.Engine.Output.status
         status.combat = combat
         local seen = {}
         for n = 1, 4 do
@@ -2182,7 +2182,7 @@ describe("the timeline's out-of-combat pinning", function()
             local H, d, T = tlBoot(false, function(tl)
                 tl.oocPinned, tl.glide = true, 0
             end)
-            local status = H.Hekili.Engine.Output.status
+            local status = H.Encore.Engine.Output.status
             status.combat = combat
             tlPublish(H, nil, function(s)
                 s[3].time, s[3].exact_time = 0.5, s[3].exact_time - 3.5 - (combat and 1 or 0) -- before the press
@@ -2202,8 +2202,8 @@ describe("the timeline's out-of-combat pinning", function()
             local H, d, T = tlBoot(false, function(tl)
                 tl.oocPinned, tl.glide, tl.rows = true, 0, 2
             end)
-            local tl = H.Hekili.DB.profile.displays.Primary.timeline
-            H.Hekili.Engine.Output.status.combat = combat
+            local tl = H.Encore.DB.profile.displays.Primary.timeline
+            H.Encore.Engine.Output.status.combat = combat
             local now = H.ctl.now
             tlPublish(H, nil, function(s)
                 for i, rel in ipairs({ -1, 0, 0.1, 0.3 }) do -- before the press, at it, just after
@@ -2229,7 +2229,7 @@ describe("the timeline's out-of-combat pinning", function()
                 anchor(H, T.ticks[1]),
                 "the ruler's first mark under the t = 0 icon's centre"
             )
-            H.Hekili.Engine.Output.status.combat = false
+            H.Encore.Engine.Output.status.combat = false
             assert.are.same({}, H.errors)
         end
     end)
@@ -2238,7 +2238,7 @@ describe("the timeline's out-of-combat pinning", function()
         local H, d, T = tlBoot(false, function(tl)
             tl.oocPinned, tl.focusHorizon = true, 7.5
         end)
-        H.Hekili.Engine.Output.status.combat = false
+        H.Encore.Engine.Output.status.combat = false
         -- rend: 8 s out on the clock (past 7.5 s), 7 s after the press (within it)
         tlPublish(H, 4)
         for _ = 1, 2 do -- Tick (the ETAs) runs before Draw
@@ -2256,11 +2256,11 @@ describe("the timeline's out-of-combat pinning", function()
 
     it("defaults on, in the Timeline tab", function()
         local H = boot()
-        assert.is_true(H.Hekili.DB.profile.displays.Primary.timeline.oocPinned)
-        H.Hekili:SetDisplayOption({ "displays", "Primary", "timeline", "tab_timeline", "sec_lane", "oocPinned" }, false)
-        assert.is_false(H.Hekili.DB.profile.displays.Primary.timeline.oocPinned)
-        H.Hekili:EmbedDisplayOptions()
-        local tabs = H.Hekili.Options.args.displays.plugins.Primary.Primary.args.timeline.args
+        assert.is_true(H.Encore.DB.profile.displays.Primary.timeline.oocPinned)
+        H.Encore:SetDisplayOption({ "displays", "Primary", "timeline", "tab_timeline", "sec_lane", "oocPinned" }, false)
+        assert.is_false(H.Encore.DB.profile.displays.Primary.timeline.oocPinned)
+        H.Encore:EmbedDisplayOptions()
+        local tabs = H.Encore.Options.args.displays.plugins.Primary.Primary.args.timeline.args
         assert.is_table(tabs.tab_timeline.args.sec_lane.args.oocPinned)
     end)
 end)
@@ -2278,7 +2278,7 @@ describe("the timeline's out-of-combat timers", function()
             calls = calls + 1
             return set(self, ...)
         end
-        H.Hekili.Engine.Output.status.combat = combat
+        H.Encore.Engine.Output.status.combat = combat
         for _ = 1, 3 do -- three publishes, three frames each
             tlPublish(H)
             for _ = 1, 3 do
@@ -2314,19 +2314,19 @@ describe("the timeline's out-of-combat timers", function()
         assert.is_true(c[1]:IsShown() and c[3]:IsShown()) -- the icons stay
         assert.are.equal("K1", c[1].Keybinding:GetText())
         -- entering combat: the sweeps and the numbers come back on the next draw
-        H.Hekili.Engine.Output.status.combat = true
+        H.Encore.Engine.Output.status.combat = true
         H.ctl.now = H.ctl.now + 0.1
         d.__scripts.OnUpdate(d, 0.1)
         assert.is_true(c[1].Eta:IsShown() and c[2].Eta:IsShown() and c[3].Eta:IsShown())
         assert.is_true(rawget(c[1].Cooldown, "__cdDuration") > 0)
         assert.are.equal(2, calls())
-        H.Hekili.Engine.Output.status.combat = false
+        H.Encore.Engine.Output.status.combat = false
     end)
 
     it("is unchanged in combat", function()
         local H, _, T = run(true, false)
         timersShown(T)
-        H.Hekili.Engine.Output.status.combat = false
+        H.Encore.Engine.Output.status.combat = false
     end)
 
     it("keeps the sweeps and ETAs out of combat with the option on", function()
@@ -2336,11 +2336,11 @@ describe("the timeline's out-of-combat timers", function()
 
     it("defaults off, in the Timeline tab", function()
         local H = boot()
-        assert.is_false(H.Hekili.DB.profile.displays.Primary.timeline.oocTimers)
-        H.Hekili:SetDisplayOption({ "displays", "Primary", "timeline", "tab_timeline", "sec_lane", "oocTimers" }, true)
-        assert.is_true(H.Hekili.DB.profile.displays.Primary.timeline.oocTimers)
-        H.Hekili:EmbedDisplayOptions()
-        local tabs = H.Hekili.Options.args.displays.plugins.Primary.Primary.args.timeline.args
+        assert.is_false(H.Encore.DB.profile.displays.Primary.timeline.oocTimers)
+        H.Encore:SetDisplayOption({ "displays", "Primary", "timeline", "tab_timeline", "sec_lane", "oocTimers" }, true)
+        assert.is_true(H.Encore.DB.profile.displays.Primary.timeline.oocTimers)
+        H.Encore:EmbedDisplayOptions()
+        local tabs = H.Encore.Options.args.displays.plugins.Primary.Primary.args.timeline.args
         assert.is_table(tabs.tab_timeline.args.sec_lane.args.oocTimers)
     end)
 end)

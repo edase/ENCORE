@@ -156,7 +156,7 @@ describe("casts and cooldowns", function()
         assert.is_truthy(VS.Snapshot():find(line, 1, true))
     end)
 
-    it("logs a Cooldown only on a plain flag edge, and the GCD's edges; the event reaches Hekili only then", function()
+    it("logs a Cooldown only on a plain flag edge, and the GCD's edges; the event reaches Encore only then", function()
         local delivered, edges = 0, 0 -- SPELL_UPDATE_COOLDOWN's eighth slot: the edge flag (EventFacade.lua)
         local sink = I.Events.CreateFrame("Frame")
         sink:SetScript("OnEvent", function(_, _, ...)
@@ -188,7 +188,7 @@ describe("casts and cooldowns", function()
     end)
 
     it(
-        "fixes the GCD's start and duration at the rising edge, quantised so they survive Hekili's round trip",
+        "fixes the GCD's start and duration at the rising edge, quantised so they survive Encore's round trip",
         function()
             S.Direct(Obs.CastSuccess, 1000.1, REND)
             S.Direct(Obs.Cooldown, 1000.123456, 0, 1, 1)

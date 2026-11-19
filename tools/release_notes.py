@@ -24,7 +24,7 @@ MODEL = "claude-opus-5-5"
 PLANS = "docs/superpowers/plans"
 
 SYSTEM = """\
-You write the release notes players read for Hekili Forever, a World of Warcraft addon for the WoW Forever client \
+You write the release notes players read for Encore, a World of Warcraft addon for the WoW Forever client \
 that shows the next abilities to press. Players read the notes on CurseForge, GitHub and Discord.
 
 The material is written by and for developers: changelog lines, commit messages and open-issue lists that name files, \

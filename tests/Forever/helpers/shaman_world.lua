@@ -105,7 +105,7 @@ local ELEMENTAL = {
 
 local W0
 local function class()
-    W0 = W0 or ld.load(nil, "src/Hekili_Shaman/Shaman.lua", "SHAMAN")
+    W0 = W0 or ld.load(nil, "src/Encore_Shaman/Shaman.lua", "SHAMAN")
     return W0
 end
 
@@ -402,7 +402,7 @@ local function classData(H, C)
     end
     local X = { aura = {}, ids = C.IDS }
     cache[H] = X
-    for key, a in pairs(H.Hekili.Class.auras) do
+    for key, a in pairs(H.Encore.Class.auras) do
         if type(key) == "string" and type(a) == "table" and a.id then
             local d = a.duration
             X.aura[key] = { id = a.id, duration = type(d) == "number" and d or 0, max_stack = a.max_stack }
@@ -411,7 +411,7 @@ local function classData(H, C)
     -- The world's own talent rules (the booted state's talents), restated from wowdb and wowsims/forever's spell data:
     -- Reverberation -0.2 s a rank on the shocks' 6 s, Call of Flame +3 s a rank on Flame Shock's 12 s, Trial by Fire +10 s a
     -- rank on Magma Totem's 20 s.
-    local T = H.Hekili.State.talent
+    local T = H.Encore.State.talent
     X.shockCd = 6 - 0.2 * T.reverberation.rank
     X.flameShock = 12 + 3 * T.call_of_flame.rank
     X.magma = TOTEM.magma_totem[2] + 10 * T.improved_fire_nova.rank -- Trial by Fire: +10 s a rank (wowsims spell data)
@@ -532,9 +532,9 @@ local function content(name)
         if not m then
             error("unmapped key " .. tostring(key), 2)
         end
-        local a = H.Hekili.Class.abilities[key]
+        local a = H.Encore.Class.abilities[key]
         local X = classData(H, C)
-        local S = H.Hekili.State
+        local S = H.Encore.State
         local VS = H.ns.VirtualState
         local own = C.IDS[key] or { a.id } -- a racial (the content's race) is no kit key
         local ids = own
@@ -572,7 +572,7 @@ local function content(name)
             gcd = GCD[a.gcd or "spell"],
             offGcd = a.gcd == "off",
             cast = cast,
-            refund = world.refundOf(H.Hekili.Class, key), -- an avoid gives back the kit's share (W.hit)
+            refund = world.refundOf(H.Encore.Class, key), -- an avoid gives back the kit's share (W.hit)
             outcomes = M.OUTCOMES[key], -- nil: the special melee tables
         }
         p.requires = function(W, e)
@@ -594,9 +594,9 @@ local function content(name)
     function C.usable(H)
         local out = {}
         local X = classData(H, C)
-        local sf = H.Hekili.State.talent.shamanistic_focus.rank > 0 -- the build's (the booted oracle's talents)
+        local sf = H.Encore.State.talent.shamanistic_focus.rank > 0 -- the build's (the booted oracle's talents)
         for key, m in pairs(M.MAP) do
-            if H.Hekili.Class.abilities[key] and C.IDS[key] then
+            if H.Encore.Class.abilities[key] and C.IDS[key] then
                 for rank, id in ipairs(C.IDS[key]) do
                     out[#out + 1] = {
                         id,
@@ -623,7 +623,7 @@ local function content(name)
     function C.uptime(H)
         local out = {}
         for _, key in ipairs(P.uptime) do
-            out[#out + 1] = { key, H.Hekili.Class.auras[key].id }
+            out[#out + 1] = { key, H.Encore.Class.auras[key].id }
         end
         return out
     end

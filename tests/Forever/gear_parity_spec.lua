@@ -15,8 +15,8 @@ local IDOL, SET, FAKE, BONUS = 272430, { 273884, 273885, 273886, 273887 }, { 990
 -- The Druid pack declares the idol, the four shipped pieces (db.json setId 2114) and the 5-piece aura; the test adds
 -- two fake ids for the head and chest (not in the game files; test only), appended to the pack's set.
 local function declare(H)
-    H.Hekili.Class.kit:RegisterGear("grovekeeper_eclipse", FAKE[1], FAKE[2])
-    H.Hekili:SpecializationChanged() -- class.gear, def.gear, the belief rebuilt
+    H.Encore.Class.kit:RegisterGear("grovekeeper_eclipse", FAKE[1], FAKE[2])
+    H.Encore:SpecializationChanged() -- class.gear, def.gear, the belief rebuilt
 end
 
 -- luacheck: push ignore 113 (the probe reads its environment's names)
@@ -39,7 +39,7 @@ end
 -- The probe and the aura's duration, under the core's `state` and in the belief's context.
 local function both(H)
     local I = H.ns.VirtualStateInternal
-    local engine = setfenv(PROBE, H.Hekili.State)()
+    local engine = setfenv(PROBE, H.Encore.State)()
     local belief, ok = I.Eval(PROBE, H.ctl.now, true)
     assert.is_true(ok, tostring(I.nowError))
     local dur -- the record's function: the object both environments run (spec §8)
@@ -48,7 +48,7 @@ local function both(H)
     end
     assert.are.equal("function", type(dur))
     local env = getfenv(dur)
-    engine[#engine + 1] = setfenv(dur, H.Hekili.State)()
+    engine[#engine + 1] = setfenv(dur, H.Encore.State)()
     setfenv(dur, env)
     local d, dok = I.Eval(dur, H.ctl.now, true)
     assert.is_true(dok, tostring(I.nowError))
@@ -134,7 +134,7 @@ describe("gear parity between the core and the belief #slow", function()
             keys[d.key] = d.aura or #d.items
         end
         assert.are.same({ 1, 6, BONUS }, { keys.swarming_idol, keys.grovekeeper_eclipse, keys.grovekeeper_eclipse_5pc })
-        sameKeys(H.Hekili.Class, I.def, I)
+        sameKeys(H.Encore.Class, I.def, I)
     end)
 
     it("1. nothing worn", function()
@@ -179,7 +179,7 @@ describe("gear parity between the core and the belief #slow", function()
     it("7. a spec rebuild with the four pieces worn", function()
         local H = boot(nil)
         wear(H, FOUR_ITEMS)
-        H.Hekili:SpecializationChanged()
+        H.Encore:SpecializationChanged()
         settle(H)
         expect(H, FOUR)
     end)
@@ -190,7 +190,7 @@ describe("gear parity between the core and the belief #slow", function()
         H.Fire("PLAYER_EQUIPMENT_CHANGED", 1, false)
         settle(H)
         expect(H, BONUS_ROW)
-        H.Hekili:SpecializationChanged() -- no UNIT_AURA after it
+        H.Encore:SpecializationChanged() -- no UNIT_AURA after it
         settle(H)
         expect(H, BONUS_ROW)
     end)

@@ -1,8 +1,8 @@
-"""Keep Hekili's string tables and translation files in step with the code (docs/dev/architecture.md, "Localization").
+"""Keep Encore's string tables and translation files in step with the code (docs/dev/architecture.md, "Localization").
 
 Every piece of text a player sees is written L["English text"] in the addons' .lua files. Each addon is its own
-AceLocale-3.0 app named after its folder: the core's `L` is ns.L (src/Hekili/Locales/Locales.lua), a pack's is
-`local L = Hekili:GetLocale("Hekili_<Class>")`. The key is a string literal, or literals joined with `..`
+AceLocale-3.0 app named after its folder: the core's `L` is ns.L (src/Encore/Locales/Locales.lua), a pack's is
+`local L = Encore:GetLocale("Encore_<Class>")`. The key is a string literal, or literals joined with `..`
 (L["first part " .. "second part"]); never a variable, so this script can read every key. A pack's RegisterPack
 names are its keys too: the options show a built-in priority through its label (Registry.PackLabel). For each addon
 with text it writes src/<addon>/Locales/enUS.lua (the string table: every key, `L[key] = true`) and rewrites each
@@ -36,7 +36,7 @@ import sys
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 SRC = os.path.join(ROOT, "src")
-CORE = "Hekili"
+CORE = "Encore"
 SKIP = ("Locales.lua", "enUS.lua")  # files in Locales/ that are not a translation
 UNUSED_MARK = "-- No longer used"
 
@@ -55,7 +55,7 @@ NAMES = {
 
 HEADER = """\
 -- Locales/{locale}.lua
--- {name} ({locale}) translation of Hekili Forever ({app}). Written by tools/locales.py, which keeps the translations and adds
+-- {name} ({locale}) translation of Encore ({app}). Written by tools/locales.py, which keeps the translations and adds
 -- new text as it appears: only edit the L[...] lines, other changes here are lost.
 --
 -- To translate a line, remove the "-- " in front and type the translation between the empty quotes:
@@ -231,24 +231,24 @@ def toc_files(toc):
 
 
 def addon_tocs():
-    """Hekili first, then Hekili_Shared, then the class packs alphabetically."""
+    """Encore first, then Encore_Shared, then the class packs alphabetically."""
     tocs = []
     for name in sorted(os.listdir(SRC)):
         toc = os.path.join(SRC, name, name + ".toc")
         if os.path.isfile(toc):
             tocs.append(toc)
-    order = {"Hekili": 0, "Hekili_Shared": 1}
+    order = {"Encore": 0, "Encore_Shared": 1}
     return sorted(tocs, key=lambda t: (order.get(os.path.basename(os.path.dirname(t)), 2), t))
 
 
 def addons():
-    """[(addon name, its TOC)]: Hekili first, then Hekili_Shared, then the class packs alphabetically."""
+    """[(addon name, its TOC)]: Encore first, then Encore_Shared, then the class packs alphabetically."""
     return [(os.path.basename(os.path.dirname(t)), t) for t in addon_tocs()]
 
 
 # A file takes part once it names its addon's table: `local L = ns.L` (core) or
-# `local L = Hekili:GetLocale("Hekili_<Class>")` (a pack).
-USES_L = re.compile(r"""^local L = (?:ns\.L\b|Hekili:GetLocale\(\s*"\w+"\s*\))""", re.M)
+# `local L = Encore:GetLocale("Encore_<Class>")` (a pack).
+USES_L = re.compile(r"""^local L = (?:ns\.L\b|Encore:GetLocale\(\s*"\w+"\s*\))""", re.M)
 
 
 def collect(toc):
@@ -361,8 +361,8 @@ def code_problems(key, value):
 SINK_FIELDS = {"name", "desc", "text", "label", "tooltipTitle", "tooltipText", "confirmText"}
 SINK_CALLS = {"SetText": 1, "SetFormattedText": 1, "AddLine": 1, "Notify": 1, "Print": 1, "AddDoubleLine": 2}
 LINT_SKIP = re.compile(
-    r"/Libs/|/Locales/|^src/Hekili/Options/DevTools\.lua$|"
-    r"^src/Hekili/Engine/Snapshot\.lua$|^src/Hekili/Game/State/Snapshot\.lua$"
+    r"/Libs/|/Locales/|^src/Encore/Options/DevTools\.lua$|"
+    r"^src/Encore/Engine/Snapshot\.lua$|^src/Encore/Game/State/Snapshot\.lua$"
 )
 VERBATIM = "-- l10n: verbatim"
 NOT_TEXT = re.compile(r"\|c[0-9A-Fa-f]{8}|\|r|\|T[^|]*\|t|\|A[^|]*\|a|%(?:\d+\$)?[-+ #0]*\d*(?:\.\d+)?[sdifgxXcq%]")
@@ -565,7 +565,7 @@ def main(argv):
     held = {}  # [locale] = the keys some pack's file of that language holds
     for name, (grouped, _, packs) in sorted(found.items(), key=lambda f: f[0] == CORE):  # the packs first, then the core
         if not grouped:
-            continue  # an addon with no text (Hekili_Shared) has no Locales/
+            continue  # an addon with no text (Encore_Shared) has no Locales/
         keys = [k for ks in grouped.values() for k in ks]
         sync(os.path.join(locales_dir(name), "enUS.lua"), render_enus(name, grouped), check, stale)
         for locale in languages(name):
@@ -575,7 +575,7 @@ def main(argv):
                 for k in sorted(k for k in translations if k in pack_only):
                     if check:
                         problems.append(
-                            "Hekili/Locales/%s.lua: %r is a pack's key: run python3 tools/locales.py to move it" % (locale, k)
+                            "Encore/Locales/%s.lua: %r is a pack's key: run python3 tools/locales.py to move it" % (locale, k)
                         )
                     if k in held.get(locale, ()):
                         del translations[k]  # the pack's file holds it now

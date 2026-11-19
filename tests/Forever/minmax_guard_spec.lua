@@ -8,7 +8,7 @@ describe("a min / max argument guarded by a known test", function()
     it("is skipped while its ability is unlearned and read once learned", function()
         local C = dlw.Guardian
         local H = headless.new({ character = C.character(), pack = C.PACK })
-        local lists = H.Hekili.DB.profile.packs[C.PACK].lists
+        local lists = H.Encore.DB.profile.packs[C.PACK].lists
         local list = next(lists)
         local cases = { -- hurricane and starfire are unlearned for this character, maul learned
             { "action.hurricane.known", false },
@@ -22,11 +22,11 @@ describe("a min / max argument guarded by a known test", function()
         for i = #cases, 1, -1 do
             table.insert(lists[list], 1, { action = "maul", criteria = cases[i][1], enabled = true })
         end
-        H.Hekili:LoadScripts()
+        H.Encore:LoadScripts()
         assert.is_true(headless.cycle(H, H.ctl.now + 1))
-        H.Hekili.State.reset()
+        H.Encore.State.reset()
         for i, case in ipairs(cases) do
-            assert.are.equal(case[2], H.Hekili.Scripts:CheckScript(C.PACK .. ":" .. list .. ":" .. i), case[1])
+            assert.are.equal(case[2], H.Encore.Scripts:CheckScript(C.PACK .. ":" .. list .. ":" .. i), case[1])
         end
         assert.are.same({}, H.errors)
     end)

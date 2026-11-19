@@ -5,7 +5,7 @@
 -- Ported from Taco Dog Forever, tests/game/secrets_spec.lua.
 local fake = require("Game.State.helpers.fake_api")
 
-local DIR = "src/Hekili/Game/State/Sources/"
+local DIR = "src/Encore/Game/State/Sources/"
 
 local function discover()
     local out = {}
@@ -13,7 +13,7 @@ local function discover()
         io.popen(
             "find "
                 .. DIR
-                .. " src/Hekili/Game/Events/Rows.lua src/Hekili/Game/Events/Attackers.lua -name '*.lua' | sort"
+                .. " src/Encore/Game/Events/Rows.lua src/Encore/Game/Events/Attackers.lua -name '*.lua' | sort"
         )
     )
     for path in p:lines() do
@@ -191,9 +191,9 @@ describe("secret values in VirtualState's sources (spec §4.5)", function()
         -- and no source re-gates a handler argument
         local hits = {}
         for _, f in ipairs({
-            "src/Hekili/Game/Events/Attackers.lua",
-            "src/Hekili/Game/State/Sources/Player.lua",
-            "src/Hekili/Game/State/Sources/Casts.lua",
+            "src/Encore/Game/Events/Attackers.lua",
+            "src/Encore/Game/State/Sources/Player.lua",
+            "src/Encore/Game/State/Sources/Casts.lua",
         }) do
             local src = assert(io.open(f)):read("*a")
             for m in src:gmatch("Plain%(api, (%a+)%)") do

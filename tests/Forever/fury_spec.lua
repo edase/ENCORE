@@ -22,7 +22,7 @@ local function boot(stance)
     H.ctl.inRange.target, H.ctl.level.target = true, 60
     H.Fire("PLAYER_TARGET_CHANGED")
     assert(headless.cycle(H, H.ctl.now + 0.2))
-    st = H.Hekili.State
+    st = H.Encore.State
     st.reset("Primary", true) -- the now-state: the cycle's prediction may have simulated a stance return
     assert.is_true(st.buff[stance].up, stance)
 end
@@ -53,7 +53,7 @@ describe("the Fury kit", function()
         H.Fire("PLAYER_REGEN_DISABLED")
         H.ctl.auras.target.HARMFUL[1] = { -- Sunder Armor at 5: the list's Sunder lines stand aside
             name = "Sunder Armor",
-            spellId = H.Hekili.Class.auras.sunder_armor.id,
+            spellId = H.Encore.Class.auras.sunder_armor.id,
             expirationTime = H.ctl.now + 30,
             duration = 30,
             applications = 5,
@@ -62,11 +62,11 @@ describe("the Fury kit", function()
         H.Fire("UNIT_AURA", "target")
         local function first()
             assert(headless.cycle(H, H.ctl.now + 0.2))
-            local p = H.Hekili.Engine.Output.Primary
+            local p = H.Encore.Engine.Output.Primary
             local names = {} -- the on-GCD queue: an off-GCD line (Bloodrage) rides beside it
             for i = 1, p.count do
                 local n = p.recs[i].actionName
-                if H.Hekili.Class.abilities[n].gcd ~= "off" then
+                if H.Encore.Class.abilities[n].gcd ~= "off" then
                     names[#names + 1] = n
                 end
             end

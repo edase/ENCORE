@@ -6,7 +6,7 @@ max_line_length = false
 codes = true
 
 exclude_files = {
-    "src/Hekili/Libs/",
+    "src/Encore/Libs/",
     ".claude/",
     ".lua/",
     ".release/",
@@ -29,12 +29,12 @@ ignore = {
 
 -- Hekili's own globals (written and read)
 globals = {
-    "Hekili", "HekiliDB", "HekiliEngine", "HekiliDisplayPrimary", "HekiliDisplayAOE", "HekiliDisplayCooldowns",
-    "HekiliDisplayDefensives", "HekiliDisplayInterrupts", "HekiliNotification", "HekiliNotificationMover",
-    "HekiliNotificationText", "HekiliTooltip", "HekiliCustomEditorInsertLink", "Hekili_Keyhandler",
-    "Hekili_OnAddonCompartmentClick", "Hekili_OnAddonCompartmentEnter",
-    "Hekili_OnAddonCompartmentLeave", "HandleSpellData", "BlizzBlue",
-    "HekiliPopupDropdownMixin", "HekiliPopupDropdownSliderMixin",
+    "Encore", "EncoreDB", "EncoreEngine", "EncoreDisplayPrimary", "EncoreDisplayAOE", "EncoreDisplayCooldowns",
+    "EncoreDisplayDefensives", "EncoreDisplayInterrupts", "EncoreNotification", "EncoreNotificationMover",
+    "EncoreNotificationText", "EncoreTooltip", "EncoreCustomEditorInsertLink", "Encore_Keyhandler",
+    "Encore_OnAddonCompartmentClick", "Encore_OnAddonCompartmentEnter",
+    "Encore_OnAddonCompartmentLeave", "HandleSpellData", "BlizzBlue",
+    "EncorePopupDropdownMixin", "EncorePopupDropdownSliderMixin",
 }
 
 -- WoW Lua extensions, FrameXML utilities, other addons and constants that are not game-state reads.
@@ -80,19 +80,19 @@ local stateEnv = {
     -- the belief's reads content uses (State.lua, restructure plan Task 8)
     "knownRank", "stat", "swingBase", "healthMax",
 }
-files["src/Hekili/Engine/Schema/Spec.lua"] = { globals = stateEnv }
-files["src/Hekili/Engine/Schema/Spec/"] = { globals = stateEnv }
-files["src/Hekili/Engine/Sim/"] = { globals = stateEnv }
+files["src/Encore/Engine/Schema/Spec.lua"] = { globals = stateEnv }
+files["src/Encore/Engine/Schema/Spec/"] = { globals = stateEnv }
+files["src/Encore/Engine/Sim/"] = { globals = stateEnv }
 -- Options and Hekili.lua read no engine state either (Engine.Registry, the commands, Output.status); each keeps only
 -- upstream's stray global reads.
-files["src/Hekili/Options/Options.lua"] = {
+files["src/Encore/Options/Options.lua"] = {
     globals = { "actual_trinket1", "actual_trinket2", "actual_main_hand", "QueueRebuildUI" },
 }
-files["src/Hekili/Options/DevTools.lua"] = {
+files["src/Encore/Options/DevTools.lua"] = {
     globals = { "assignAuraToLastCast", "trackAuraApplication", "trackAuraRemoval" },
 }
 -- UI.lua reads no engine state (Engine.Registry, Engine.Output.status): not stateEnv, so a bare state/class fails.
-files["src/Hekili/UI/UI.lua"] = { globals = { "p" } } -- upstream's stray global read
+files["src/Encore/UI/UI.lua"] = { globals = { "p" } } -- upstream's stray global read
 -- The names a class file's `now` function reads in VirtualState's context (src/Hekili/Game/State/Families/Now.lua).
 local nowEnv = {
     "gain", "spend", "applyBuff", "applyDebuff", "removeBuff", "removeDebuff", "addStack", "removeStack", "setCooldown",
@@ -118,7 +118,7 @@ local warriorEnv = {
 for _, k in ipairs(stateEnv) do
     warriorEnv[#warriorEnv + 1] = k
 end
-files["src/Hekili_Warrior/Warrior.lua"] = { globals = warriorEnv }
+files["src/Encore_Warrior/Warrior.lua"] = { globals = warriorEnv }
 -- The Druid's further `state` names.
 local druidEnv = {
     "rage", "energy", "mana", "combo_points", "cooldown", "combat", "group", "swap_form", "addStack", "removeStack",
@@ -127,7 +127,7 @@ local druidEnv = {
 for _, k in ipairs(stateEnv) do
     druidEnv[#druidEnv + 1] = k
 end
-files["src/Hekili_Druid/Druid.lua"] = { globals = druidEnv }
+files["src/Encore_Druid/Druid.lua"] = { globals = druidEnv }
 -- The Rogue's further `state` names.
 local rogueEnv = {
     "energy", "combo_points", "cooldown", "combat", "class", "interrupt", "stealthed", "expose_due", "window", "closeWindow",
@@ -135,38 +135,38 @@ local rogueEnv = {
 for _, k in ipairs(stateEnv) do
     rogueEnv[#rogueEnv + 1] = k
 end
-files["src/Hekili_Rogue/Rogue.lua"] = { globals = rogueEnv }
+files["src/Encore_Rogue/Rogue.lua"] = { globals = rogueEnv }
 -- The Paladin's further `state` names.
 local paladinEnv = { "mana", "combat", "addStack", "seal_up", "nextMH", "mainhand_speed", "query_time", "lastSwing" }
 for _, k in ipairs(stateEnv) do
     paladinEnv[#paladinEnv + 1] = k
 end
-files["src/Hekili_Paladin/Paladin.lua"] = { globals = paladinEnv }
+files["src/Encore_Paladin/Paladin.lua"] = { globals = paladinEnv }
 -- The Shaman's further `state` names.
 local shamanEnv = { "totem", "summonTotem", "combat", "instant", "cast_start", "nextMH", "nextOH", "mainhand_speed", "offhand_speed" }
 for _, k in ipairs(stateEnv) do
     shamanEnv[#shamanEnv + 1] = k
 end
-files["src/Hekili_Shaman/Shaman.lua"] = { globals = shamanEnv }
+files["src/Encore_Shaman/Shaman.lua"] = { globals = shamanEnv }
 -- The Hunter's further `state` names.
 local hunterEnv = { "summonPet", "combat", "nextMH", "mainhand_speed", "swings", "closeWindow", "lastSwing", "stat", "openWindow", "now" }
 for _, k in ipairs(stateEnv) do
     hunterEnv[#hunterEnv + 1] = k
 end
-files["src/Hekili_Hunter/Hunter.lua"] = { globals = hunterEnv }
+files["src/Encore_Hunter/Hunter.lua"] = { globals = hunterEnv }
 -- The Mage's further `state` names.
 local mageEnv =
     { "addStack", "removeStack", "interrupt", "min", "locked_out_arcane", "locked_out_fire", "locked_out_frost" }
 for _, k in ipairs(stateEnv) do
     mageEnv[#mageEnv + 1] = k
 end
-files["src/Hekili_Mage/Mage.lua"] = { globals = mageEnv }
+files["src/Encore_Mage/Mage.lua"] = { globals = mageEnv }
 -- The Priest's further `state` names.
 local priestEnv = { "locked_out_arcane", "locked_out_holy", "locked_out_shadow" }
 for _, k in ipairs(stateEnv) do
     priestEnv[#priestEnv + 1] = k
 end
-files["src/Hekili_Priest/Priest.lua"] = { globals = priestEnv }
+files["src/Encore_Priest/Priest.lua"] = { globals = priestEnv }
 -- The Warlock's further `state` names.
 local warlockEnv = {
     "mana", "instant", "victim_channel",
@@ -175,6 +175,6 @@ local warlockEnv = {
 for _, k in ipairs(stateEnv) do
     warlockEnv[#warlockEnv + 1] = k
 end
-files["src/Hekili_Warlock/Warlock.lua"] = { globals = warlockEnv }
-files["src/Hekili_Shared/Races/"] = { globals = stateEnv }
-files["src/Hekili_Shared/Shared/"] = { globals = stateEnv }
+files["src/Encore_Warlock/Warlock.lua"] = { globals = warlockEnv }
+files["src/Encore_Shared/Races/"] = { globals = stateEnv }
+files["src/Encore_Shared/Shared/"] = { globals = stateEnv }

@@ -29,9 +29,9 @@ describe("the Hunter loop worlds", function()
             local H = headless.new({ character = C.character(), pack = C.PACK })
             assert.are.same({}, H.loadErrors)
             local unmapped = {}
-            for _, list in pairs(H.Hekili.DB.profile.packs[C.PACK].lists) do
+            for _, list in pairs(H.Encore.DB.profile.packs[C.PACK].lists) do
                 for _, entry in ipairs(list) do
-                    local a = entry.action and H.Hekili.Class.abilities[entry.action]
+                    local a = entry.action and H.Encore.Class.abilities[entry.action]
                     if a and a.id and H.ctl.known[a.id] and not hw.MAP[entry.action] then
                         unmapped[#unmapped + 1] = entry.action
                     end
@@ -49,7 +49,7 @@ describe("the Hunter loop worlds", function()
         for _, pk in ipairs(PACKS) do
             local C = hw[pk[1]]
             local H = headless.new({ character = C.character(), pack = C.PACK })
-            out[pk[1]] = { C.resolve("raptor_strike", H).cost, H.Hekili.State.action.raptor_strike.cost }
+            out[pk[1]] = { C.resolve("raptor_strike", H).cost, H.Encore.State.action.raptor_strike.cost }
         end
         assert.are.same({ Survival = { 40, 40 } }, out)
         -- every Resourcefulness-cut ability of the Survival kit: the world's price is the pack's (the client pays whole
@@ -57,7 +57,7 @@ describe("the Hunter loop worlds", function()
         local C = hw.Survival
         local H = headless.new({ character = C.character(), pack = C.PACK })
         for _, k in ipairs({ "mongoose_bite", "wing_clip", "strider_kick" }) do
-            assert.are.equal(H.Hekili.State.action[k].cost, math.floor(C.resolve(k, H).cost), k)
+            assert.are.equal(H.Encore.State.action[k].cost, math.floor(C.resolve(k, H).cost), k)
         end
     end)
 
@@ -71,7 +71,7 @@ describe("the Hunter loop worlds", function()
             local H = headless.new({ character = C.character(), pack = C.PACK })
             out[pk[1]] = {
                 ("%.2f"):format(C.resolve("serpent_sting", H).cost),
-                ("%.2f"):format(H.Hekili.State.action.serpent_sting.cost),
+                ("%.2f"):format(H.Encore.State.action.serpent_sting.cost),
                 H.ctl.known[25295] or false,
                 H.ctl.known[25296] or false,
             }
@@ -118,7 +118,7 @@ describe("the Hunter loop worlds", function()
         for _, u in ipairs(C.usable(H)) do
             by[u[1]] = u[2]
         end
-        local id = H.Hekili.Class.abilities.arcane_shot.id
+        local id = H.Encore.Class.abilities.arcane_shot.id
         local W, e = { t = 10, truth = {} }, { guid = "Player-1", auras = {} }
         local shot = C.resolve("arcane_shot", H)
         assert.are.same({ 189, 189 }, { shot.cost, shot.price(W, e) })
@@ -142,7 +142,7 @@ describe("the Hunter loop worlds", function()
         for _, u in ipairs(C.usable(H)) do
             by[u[1]] = u[2]
         end
-        local id = H.Hekili.Class.abilities.mongoose_bite.id
+        local id = H.Encore.Class.abilities.mongoose_bite.id
         local e = { guid = "Player-1" }
         local W = { t = 10, truth = {} }
         assert.is_false((by[id](W, e, 100)))
@@ -214,7 +214,7 @@ describe("the Hunter at range, then in melee", function()
                 }, { __index = base.WORLD })
                 local L = loop.new(C)
                 local H = L.us
-                local pack = H.Hekili.Engine.settings.packs[C.PACK]
+                local pack = H.Encore.Engine.settings.packs[C.PACK]
                 local gated = 0
                 for _, e in ipairs(pack.lists.default) do
                     -- the bracket is the variant's in-melee arm, its own line ending in the term (R51: the move arm,
@@ -241,10 +241,10 @@ describe("the Hunter at range, then in melee", function()
                         end
                         local phase = t < MOVE and "far"
                             or (t < SECRET and "near" or (t < SECRET + 1 and "secret" or "aged"))
-                        local tg = H.Hekili.State.target
+                        local tg = H.Encore.State.target
                         local s = seen[phase]
                         -- each read's one value over the phase ("mixed" when it changed)
-                        local S = H.Hekili.State
+                        local S = H.Encore.State
                         local ok, why = S:IsUsable("raptor_strike") -- on the next swing: the bracket's reach
                         local reads = {
                             within = tg.within5,
@@ -283,7 +283,7 @@ describe("the Hunter at range, then in melee", function()
                 H.Fire("PLAYER_TARGET_CHANGED")
                 assert(headless.cycle(H, H.ctl.now + 0.2))
                 assert.are.equal("unknown", H.ns.VirtualState.TargetRange().basis)
-                local S = H.Hekili.State
+                local S = H.Encore.State
                 local _, why = S:IsUsable("raptor_strike")
                 assert.are.same(
                     { true, true, true },

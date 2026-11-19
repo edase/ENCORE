@@ -56,7 +56,7 @@ end
 
 -- The kind keys that answer true, per hand: { main_hand = { ... }, off_hand = { ... }, ranged = { ... } }.
 local function kinds(H)
-    local state, out = H.Hekili.State, {}
+    local state, out = H.Encore.State, {}
     for _, hand in pairs(HANDS) do
         local t = {}
         for _, k in ipairs(KINDS) do
@@ -92,7 +92,7 @@ describe("weapon kind conditions #slow", function()
 
     it("nothing worn: every kind and size key is false, an unknown key too", function()
         assert.are.same(only("main_hand", {}), kinds(H))
-        local s = H.Hekili.State
+        local s = H.Encore.State
         assert.is_false(s.main_hand.two_handed)
         assert.is_false(s.off_hand.one_handed)
         assert.is_false(s.main_hand.not_a_kind)
@@ -126,7 +126,7 @@ describe("weapon kind conditions #slow", function()
         for _, c in ipairs(cases) do
             wear(H, 17, c[1], WEAPON, c[2])
             assert.are.same(only("off_hand", c[3]), kinds(H))
-            assert.is_true(H.Hekili.State.off_hand.one_handed)
+            assert.is_true(H.Encore.State.off_hand.one_handed)
         end
     end)
 
@@ -145,7 +145,7 @@ describe("weapon kind conditions #slow", function()
     end)
 
     it("the kind combines with the size: two-handed axe, sword, mace; one-handed axe", function()
-        local s = H.Hekili.State
+        local s = H.Encore.State
         for _, c in ipairs({ { 1, "axe" }, { 8, "sword" }, { 5, "mace" } }) do
             wear(H, 16, "INVTYPE_2HWEAPON", WEAPON, c[1])
             assert.is_true(s.main_hand[c[2]])
@@ -172,8 +172,8 @@ describe("weapon kind conditions #slow", function()
         assert.are.same(only("main_hand", { "dagger" }), kinds(H))
         wear(H, 16, "INVTYPE_2HWEAPON", WEAPON, 1, true)
         assert.are.same(only("main_hand", { "axe" }), kinds(H))
-        assert.is_true(H.Hekili.State.main_hand.two_handed)
-        assert.is_false(H.Hekili.State.main_hand.one_handed)
+        assert.is_true(H.Encore.State.main_hand.two_handed)
+        assert.is_false(H.Encore.State.main_hand.one_handed)
     end)
 
     it("an item unknown to the client answers false, then its kind once a gear event re-reads it", function()
@@ -198,7 +198,7 @@ describe("weapon kind conditions #slow", function()
         wear(H, 16, nil)
         wear(H, 17, nil)
         assert.are.same(only("main_hand", {}), kinds(H))
-        assert.is_false(H.Hekili.State.main_hand.one_handed)
+        assert.is_false(H.Encore.State.main_hand.one_handed)
     end)
 
     it("a priority condition reads the keys through the state", function()
@@ -207,7 +207,7 @@ describe("weapon kind conditions #slow", function()
         -- luacheck: push ignore 113 (the probe reads the state's names)
         local probe = setfenv(function()
             return main_hand.polearm and main_hand.two_handed and ranged.bow and not off_hand.dagger
-        end, H.Hekili.State)
+        end, H.Encore.State)
         -- luacheck: pop
         assert.is_true(probe())
     end)
