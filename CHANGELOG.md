@@ -11,6 +11,10 @@
 
 ### Changed
 
+- Encore ships Paladin and Warrior only, in English: the zip holds four folders (`Encore`, `Encore_Shared`,
+  `Encore_Paladin`, `Encore_Warrior`). Hekili Forever's other class packs are no longer part of the addon, and the
+  Italian and Chinese translations are gone.
+
 ### Fixed
 
 ### Known issues

@@ -11,6 +11,5 @@
 ## X-Encore-ContentAPI: 16
 
 Locales\enUS.lua
-Locales\zhCN.lua
 
 Warrior.lua

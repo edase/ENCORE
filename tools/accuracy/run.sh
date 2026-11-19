@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.." || exit 1
 BUSTED=${BUSTED:-.lua/bin/busted}
 OUT=.accuracy/raw
 ARM=${ACC_LIVE_ARM:-live-auras-none}
-LOOPTAGS=$(echo "${GATE_TAGS:-loop,druid,rogue,paladin,shaman,hunter,mage,priest,warlock}" | sed 's/party,//;s/,party//')
+LOOPTAGS=$(echo "${GATE_TAGS:-loop,paladin}" | sed 's/party,//;s/,party//')
 rm -rf "$OUT" .accuracy/raw-live
 mkdir -p "$OUT" .accuracy/raw-live
 jobs=$(($(nproc) > 3 ? $(nproc) - 2 : 1))

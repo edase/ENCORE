@@ -12,14 +12,16 @@ and estimates the rest.
 
 ## Status
 
-Phase 0: Hekili Forever v0.10.0, renamed. It installs as its own addon, so it can sit beside Hekili Forever. The
-highway and the Paladin and Warrior focus come next.
+Hekili Forever v0.10.0, renamed and cut down to Paladin and Warrior, in English. It installs as its own addon, so it
+can sit beside Hekili Forever. The spell highway comes next.
 
 ## Install
 
 Download the zip from https://github.com/edase/encore/releases (or build it with `make package`) and extract it into
-`_forever_\Interface\AddOns\` in the World of Warcraft folder. Every folder starts with `Encore`. Encore's settings
-are its own (`EncoreDB`); `/encore` (or `/enc`) opens the options.
+`_forever_\Interface\AddOns\` in the World of Warcraft folder: four folders, `Encore`, `Encore_Shared`,
+`Encore_Paladin` and `Encore_Warrior`. (The repository's `src/` also holds Hekili Forever's other class packs, kept
+only as test material: do not copy those.) Encore's settings are its own (`EncoreDB`); `/encore` (or `/enc`) opens
+the options.
 
 ## Reporting a problem
 

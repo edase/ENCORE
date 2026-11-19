@@ -2,7 +2,8 @@
 # Takes zmsl/hekili's latest into Encore. A fresh upstream checkout is renamed with tools/encore/rename.py, committed on
 # the vendor branch upstream-renamed, and merged into the current branch, so git sees only what upstream changed, in
 # Encore's names. Run from a full (not shallow) clone with a clean tree: tools/encore/sync_upstream.sh [upstream ref]
-# Conflicts are expected where Encore cut or reshaped a file: keep Encore's side for a file Encore deleted.
+# What Encore cut (tools/encore/cuts.txt) stays cut: an upstream edit to a cut file or a new file under a cut path is
+# removed from the merge. Any other conflict is left for you to resolve, then `git commit`.
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
@@ -40,4 +41,23 @@ if git -C "$work/vendor" diff --cached --quiet; then
     exit 0
 fi
 git -C "$work/vendor" commit -q -m "upstream: zmsl/hekili $ref at ${up:0:12}, renamed by tools/encore/rename.py"
-git merge --no-ff upstream-renamed -m "Merge zmsl/hekili ${up:0:12} (renamed) into $here"
+msg="Merge zmsl/hekili ${up:0:12} (renamed) into $here"
+git merge --no-ff --no-commit upstream-renamed -m "$msg" || true # conflicts are sorted out below
+
+# Encore's cuts stay cut
+mapfile -t cuts < <(grep -v '^#' tools/encore/cuts.txt | sed '/^[[:space:]]*$/d; s/^/:(glob)/')
+back=()
+while IFS= read -r f; do back+=("$f"); done < <(git ls-files -- "${cuts[@]}" | sort -u)
+if [ ${#back[@]} -gt 0 ]; then
+    git rm -q -f -- "${back[@]}"
+    echo "sync: kept ${#back[@]} cut file(s) cut"
+fi
+
+conflicts=$(git diff --name-only --diff-filter=U)
+if [ -n "$conflicts" ]; then
+    echo "sync: resolve these, then git commit:"
+    echo "$conflicts"
+    exit 1
+fi
+git commit -q -m "$msg"
+echo "sync: merged zmsl/hekili ${up:0:12}"

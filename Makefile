@@ -6,7 +6,7 @@ LUACHECK := $(LUA_ENV)/bin/luacheck
 LUAC := $(LUA_ENV)/bin/luac
 LUA := $(if $(wildcard $(LUA_ENV)/bin/lua),$(LUA_ENV)/bin/lua,lua5.1)
 
-.PHONY: accuracy gate gate-ab gate-body gate-ab-body bootstrap lint fmt fmt-check typecheck test test-serial test-fast test-loop test-party test-druid test-rogue test-paladin test-shaman test-hunter test-mage test-priest test-warlock bench bench-ta spell-data-check cdv-coverage syntax api-check \
+.PHONY: accuracy gate gate-ab gate-body gate-ab-body bootstrap lint fmt fmt-check typecheck test test-serial test-fast test-loop test-party test-paladin bench bench-ta spell-data-check cdv-coverage syntax api-check \
 	packs-check tools-test wiki-build wiki-tables wiki-check check check-full packs package package-check wowsims-cli wowsims-sim-cli wowsims-export wowsims-siml wowsims-learn shared-auras wowsims-packs test-wowsims
 
 bootstrap:
@@ -24,10 +24,10 @@ fmt-check:
 typecheck:
 	lua-language-server --check . --checklevel=Error --logpath $(LUA_ENV)/lsp-log
 
-# The headless loop's 20-fight Arms gate (#loop) and party report (#party), the Druid harness gates at the GCD
-# kinds design's fight counts (#druid), the 20-fight Rogue (#rogue), Paladin (#paladin), Shaman (#shaman), Hunter
-# (#hunter), Mage (#mage), Priest (#priest) and Warlock (#warlock) gates and the benchmark (#bench) run only behind their own targets.
-TEST_EXCLUDE := --exclude-tags=party,loop,druid,rogue,paladin,shaman,hunter,mage,priest,warlock,bench
+# The headless loop's 20-fight Arms gate (#loop) and party report (#party), the
+# 20-fight Paladin gates (#paladin) and the benchmark (#bench) run only behind their own targets. Encore ships Paladin and
+# Warrior only: the other classes' tags went with their packs.
+TEST_EXCLUDE := --exclude-tags=party,loop,paladin,bench
 
 # One busted process per spec file, in parallel (scripts/busted_parallel.sh); `make test-serial` is the one-process run.
 test:
@@ -38,13 +38,13 @@ test-serial:
 
 # The edit loop: skips the harness gate specs tagged #slow (hundreds of simulated fights); `make check` runs them.
 test-fast:
-	$(BUSTED) --exclude-tags=slow,party,loop,druid,rogue,paladin,shaman,hunter,mage,priest,warlock,bench
+	$(BUSTED) --exclude-tags=slow,party,loop,paladin,bench
 
 # The merge gate: check-full (never skips), then every 20-fight loop tag in one scripts/busted_parallel.sh run (one busted process per
 # spec file, nproc - 2 at a time for the whole gate, at least 1). `make test-<tag>` runs one tag the same way, nproc
 # at a time.
 comma := ,
-GATE_TAGS := loop,party,druid,rogue,paladin,shaman,hunter,mage,priest,warlock
+GATE_TAGS := loop,party,paladin
 LOOPS = $(addprefix test-,$(subst $(comma), ,$(GATE_TAGS)))
 GATE_LOCK ?= /tmp/encore-gate.lock
 # One gate at a time per machine (flock): the loops assert a CPU budget per update (process CPU time, os.clock) that
@@ -181,8 +181,8 @@ tools-test:
 # exit code. The begin and write lines hold no $(MAKE), so `make -n` never runs them; make stops at the first failing
 # line, so write (the stamp) runs only after both stages pass. A command-line override other than FULL (a subset or
 # another tool) or -i/-e (errors ignored, environment over the Makefile) never skips and never stamps.
-# FULL=1 also runs the Warlock 20-fight gate (make test-warlock, L633): a lane that edits it sees its red before integration
-# does; `make gate` runs every tag itself, so a plain check-full leaves it out (`make gate FULL=1` runs the Warlock gate twice, plain gate once).
+# FULL=1 also runs the Paladin 20-fight gate (make test-paladin; Encore's stand-in for upstream's Warlock gate, L633); `make gate`
+# runs every tag itself, so a plain check-full leaves it out.
 # shortcut: a failed or killed run leaves its start manifest in /tmp; harmless, write is the only reader.
 STAMP_START := $(shell mktemp -u /tmp/encore-check-start.XXXXXX)
 STAMP_OFF := $(strip $(filter-out FULL=%,$(MAKEOVERRIDES)) $(findstring i,$(firstword -$(MAKEFLAGS))) $(findstring e,$(firstword -$(MAKEFLAGS))))
@@ -192,7 +192,7 @@ check:
 check-full:
 	@$(if $(STAMP_OFF),echo "check: command-line overrides or -i/-e; this run leaves no stamp",scripts/check_stamp.sh begin $(STAMP_START))
 	$(MAKE) -j4 -Otarget lint fmt-check typecheck test
-	$(if $(FULL),$(MAKE) test-warlock)
+	$(if $(FULL),$(MAKE) test-paladin)
 	$(MAKE) syntax api-check packs-check tools-test wiki-check
 	@$(if $(STAMP_OFF),:,scripts/check_stamp.sh write $(STAMP_START))
 

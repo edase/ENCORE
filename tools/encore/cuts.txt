@@ -1,0 +1,40 @@
+# What Encore cut from Hekili Forever, as git glob pathspecs in Encore's names (one per line). sync_upstream.sh
+# removes anything an upstream merge brings back under these paths: an edit to a cut file, or a new file like them.
+#
+# Phase 1 (2026-11-19): Encore ships Paladin and Warrior only, in English. Hekili Forever's other seven class packs stay
+# in src/ as test material (the core's tests use them as subjects); .pkgmeta keeps them out of the zip. What is cut is
+# their own rotation tests and gates, and the shipped addons' translations.
+
+# the shipped addons' translations
+src/Encore/Locales/itIT.lua
+src/Encore/Locales/zhCN.lua
+src/Encore_Shared/Locales/itIT.lua
+src/Encore_Shared/Locales/zhCN.lua
+src/Encore_Paladin/Locales/itIT.lua
+src/Encore_Paladin/Locales/zhCN.lua
+src/Encore_Warrior/Locales/itIT.lua
+src/Encore_Warrior/Locales/zhCN.lua
+
+# the other classes' own rotation tests, replays and 20-fight gates
+tests/Forever/druid_*spec.lua
+tests/Forever/feral_*spec.lua
+tests/Forever/rogue_*spec.lua
+tests/Forever/shaman_*spec.lua
+tests/Forever/hunter_*spec.lua
+tests/Forever/mage_*spec.lua
+tests/Forever/priest_*spec.lua
+tests/Forever/warlock_*spec.lua
+tests/Forever/loop_druid_*spec.lua
+tests/Forever/loop_rogue_*spec.lua
+tests/Forever/loop_shaman_*spec.lua
+tests/Forever/loop_hunter_*spec.lua
+tests/Forever/loop_mage_*spec.lua
+tests/Forever/loop_priest_*spec.lua
+tests/Forever/loop_warlock_*spec.lua
+tests/Forever/wowsims_druid_*spec.lua
+tests/Forever/wowsims_rogue_*spec.lua
+tests/Forever/wowsims_shaman_*spec.lua
+tests/Forever/wowsims_hunter_*spec.lua
+tests/Forever/wowsims_mage_*spec.lua
+tests/Forever/wowsims_priest_*spec.lua
+tests/Forever/wowsims_warlock_*spec.lua

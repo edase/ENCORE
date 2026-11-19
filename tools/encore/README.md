@@ -24,8 +24,10 @@ tools/encore/sync_upstream.sh
 ```
 
 The `upstream-renamed` branch starts at the commit "Encore: rename Hekili Forever to Encore (script output only)": the
-rename of zmsl/hekili `314a87b8` (v0.10.0), Encore's starting point. Conflicts are normal where Encore deleted or
-reshaped a file: keep Encore's side for anything Encore cut.
+rename of zmsl/hekili `314a87b8` (v0.10.0), Encore's starting point. Conflicts can still come where Encore reshaped a
+file; the sync stops and lists them. Whatever Encore cut is listed in `tools/encore/cuts.txt` (git glob paths), and the sync removes it
+again on its own: an upstream edit to a cut file, or a new file beside them, never comes back. Add to that list
+whenever Encore cuts something else.
 
 The rest of `docs/` is Hekili Forever's own documentation, kept as written: where it says `Hekili`, Encore's code says
 `Encore`.

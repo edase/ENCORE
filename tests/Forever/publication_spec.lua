@@ -22,15 +22,8 @@ end
 local TOCS = {
     "src/Encore/Encore.toc",
     "src/Encore_Shared/Encore_Shared.toc",
-    "src/Encore_Druid/Encore_Druid.toc",
     "src/Encore_Warrior/Encore_Warrior.toc",
-    "src/Encore_Rogue/Encore_Rogue.toc",
     "src/Encore_Paladin/Encore_Paladin.toc",
-    "src/Encore_Shaman/Encore_Shaman.toc",
-    "src/Encore_Hunter/Encore_Hunter.toc",
-    "src/Encore_Mage/Encore_Mage.toc",
-    "src/Encore_Priest/Encore_Priest.toc",
-    "src/Encore_Warlock/Encore_Warlock.toc",
 }
 
 local function field(toc, key)
@@ -190,21 +183,14 @@ describe("tocs", function()
 end)
 
 describe("pkgmeta", function()
-    it("moves the ten src/ folders to the zip root and ignores the dev tree", function()
+    it("moves the four src/ folders to the zip root and ignores the dev tree", function()
         local s = read(".pkgmeta")
         assert.truthy(s:find("\npackage%-as: Encore\n") or s:find("^package%-as: Encore\n"))
         for _, a in ipairs({
             "Encore",
             "Encore_Shared",
-            "Encore_Druid",
             "Encore_Warrior",
-            "Encore_Rogue",
             "Encore_Paladin",
-            "Encore_Shaman",
-            "Encore_Hunter",
-            "Encore_Mage",
-            "Encore_Priest",
-            "Encore_Warlock",
         }) do
             assert.truthy(s:find("\n    Encore/src/" .. a .. ": " .. a .. "\n", 1, true), a)
         end

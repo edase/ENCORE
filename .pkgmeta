@@ -2,21 +2,15 @@ package-as: Encore
 
 enable-nolib-creation: no
 
-# The ten addons live in src/; move them to the zip root (src/Encore replaces the package folder itself, so
+# Encore ships four addons (core, Shared, Paladin, Warrior); src/ also holds Hekili Forever's other class packs, kept
+# only as test material and never shipped (ignored below). Move the four to the zip root (src/Encore replaces the package folder itself, so
 # root files such as the licence do not survive: the copy in src/Encore/ is the shipped one, beside the wowsims/forever
 # MIT notice that covers the class packs' translated (wowsims.com) priorities).
 move-folders:
     Encore/src/Encore: Encore
     Encore/src/Encore_Shared: Encore_Shared
-    Encore/src/Encore_Druid: Encore_Druid
     Encore/src/Encore_Warrior: Encore_Warrior
-    Encore/src/Encore_Rogue: Encore_Rogue
     Encore/src/Encore_Paladin: Encore_Paladin
-    Encore/src/Encore_Shaman: Encore_Shaman
-    Encore/src/Encore_Hunter: Encore_Hunter
-    Encore/src/Encore_Mage: Encore_Mage
-    Encore/src/Encore_Priest: Encore_Priest
-    Encore/src/Encore_Warlock: Encore_Warlock
 
 # The packager uploads nothing (release.yml passes -d; publish.yml uploads with the release body as the changelog).
 # manual-changelog stays so the packager does not generate a CHANGELOG.md into the shipped Encore/ folder.
@@ -43,11 +37,11 @@ ignore:
     - Makefile
     - mise.toml
     - src/Encore_Warrior/APLs
-    - src/Encore_Druid/APLs
-    - src/Encore_Rogue/APLs
+    - src/Encore_Druid
+    - src/Encore_Rogue
+    - src/Encore_Shaman
+    - src/Encore_Hunter
+    - src/Encore_Mage
+    - src/Encore_Priest
+    - src/Encore_Warlock
     - src/Encore_Paladin/APLs
-    - src/Encore_Shaman/APLs
-    - src/Encore_Hunter/APLs
-    - src/Encore_Mage/APLs
-    - src/Encore_Priest/APLs
-    - src/Encore_Warlock/APLs
