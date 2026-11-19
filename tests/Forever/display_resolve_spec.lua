@@ -23,6 +23,13 @@ local function boot()
     H.ctl.inRange.target, H.ctl.level.target = true, 60
     H.Fire("PLAYER_TARGET_CHANGED")
     assert(headless.cycle(H, H.ctl.now + 0.2))
+    -- Encore draws the highway by default; these cases are the classic style's (stock's default)
+    for _, c in pairs(H.Encore.DB.profile.displays) do
+        if c.style == "highway" then -- a style a saved profile names stays
+            c.style = "classic"
+        end
+    end
+    H.Encore:BuildUI()
     local conf = H.Encore.DB.profile.displays.Primary.classic
     conf.delays.type, conf.delays.desaturate = "TEXT", true -- the delay text: the string the moving clock changes
     return H, rawget(H.env, "EncoreDisplayPrimary")

@@ -31,3 +31,12 @@ whenever Encore cuts something else.
 
 The rest of `docs/` is Hekili Forever's own documentation, kept as written: where it says `Hekili`, Encore's code says
 `Encore`.
+
+## make_textures.py
+
+Writes the highway's white art (`src/Encore/Textures/Highway*.tga`: the hit ring in three thicknesses, the halo and
+the tracked spell's dot). The style tints each with its colour settings. Deterministic; needs Pillow.
+
+```sh
+python3 tools/encore/make_textures.py
+```

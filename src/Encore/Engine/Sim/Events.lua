@@ -2344,6 +2344,26 @@ local function ReadKeybindings( event )
                     end
                 end
             end
+
+        -- EllesmereUI (Encore): bars 1-8 press Blizzard's slots through Blizzard's binding commands, read below. Bars 9
+        -- and 10 have no Blizzard bar: its own commands EUI_BAR9_BUTTONn and EUI_BAR10_BUTTONn press slots 13-24
+        -- (action page 2) and 109-120 (page 10) (EllesmereUIActionBars/EUI_ActionBars_Secure.lua, Bindings.xml).
+        elseif C_AddOns.IsAddOnLoaded( "EllesmereUIActionBars" ) then
+            table.wipe( slotsUsed )
+
+            for b = 1, 12 do
+                local key = GetBindingKey( "EUI_BAR9_BUTTON" .. b )
+                if key then
+                    StoreKeybindInfo( 2, key, GetActionInfo( 12 + b ) )
+                    slotsUsed[ 12 + b ] = true
+                end
+
+                key = GetBindingKey( "EUI_BAR10_BUTTON" .. b )
+                if key then
+                    StoreKeybindInfo( 10, key, GetActionInfo( 108 + b ) )
+                    slotsUsed[ 108 + b ] = true
+                end
+            end
         end
 
             for i = 1, 12 do
@@ -2383,7 +2403,7 @@ local function ReadKeybindings( event )
             end
 
             for i = 72, 143 do
-                if not slotsUsed[ i ] then
+                if not slotsUsed[ i + 1 ] then -- Encore: the slot stored is i + 1 (stock checked i, one slot early)
                     StoreKeybindInfo( 7 + floor( ( i - 72 ) / 12 ), GetBindingKey( "ACTIONBUTTON" .. 1 + ( i - 72 ) % 12 ), GetActionInfo( i + 1 ) )
                 end
             end

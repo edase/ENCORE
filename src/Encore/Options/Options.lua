@@ -147,7 +147,7 @@ end
 
 local displayTemplate = {
     enabled = true,
-    style = "classic", -- the renderer that draws the display (UI/Styles.lua); GetDefaults adds each style's subtable
+    style = "highway", -- the renderer that draws the display (UI/Styles.lua); GetDefaults adds each style's subtable. Encore: the highway by default
 
     numIcons = 4,
     forecastPeriod = 15,

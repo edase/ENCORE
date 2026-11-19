@@ -8,6 +8,17 @@
   installs as its own addon (folders `Encore` and `Encore_*`, saved settings `EncoreDB`, `/encore` and `/enc`), so it
   can sit beside Hekili Forever; its settings start fresh. The releases from v0.10.0 down are Hekili Forever's own,
   kept as its history.
+- The highway, Encore's own display style and now the default for every display. Up to three round spell icons ride a
+  thin line into a gold hit ring, right to left (Direction flips it), growing as they come; the ring brightens when
+  the first one is due and flashes as a cast goes through it. Each icon keeps its spell from update to update, so the
+  line never jumps backwards. An icon short of its rage or mana rides faded, one out of range is tinted, an off-GCD
+  spell rides a little smaller. Keybinds show on the icons. Its own tabs set the size, far size, length, seconds shown,
+  shape, line, ring, border, glow (None, Pulse, Halo or a LibCustomGlow effect, procs included), countdown text and
+  range tint. The Classic and Timeline styles stay in the Style dropdown.
+- Tracked spell: pick one spell with a cooldown and a half circle of dots behind the ring fills as it recovers, gold
+  once it is ready (seconds beside it optional).
+- Demo: while the options are open out of combat, the highway plays a moving sample so every setting shows at once.
+- EllesmereUI: keybinds on its action bars 9 and 10 (its own binding commands) now show on the icons.
 
 ### Changed
 
@@ -20,6 +31,9 @@
   when that addon is installed.
 
 ### Fixed
+
+- Keybinds on the default UI's paged bars (action pages 7-12) skipped the right slot when another bar addon had
+  claimed the slot before it: the reader checked one slot early.
 
 ### Known issues
 

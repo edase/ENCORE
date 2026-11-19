@@ -100,6 +100,13 @@ local function boot(saved)
     H.ctl.inRange.target, H.ctl.level.target = true, 60
     H.Fire("PLAYER_TARGET_CHANGED")
     assert(headless.cycle(H, H.ctl.now + 0.2))
+    -- Encore draws the highway by default; these cases are the classic style's (stock's default)
+    for _, c in pairs(H.Encore.DB.profile.displays) do
+        if c.style == "highway" then -- a style a saved profile names stays
+            c.style = "classic"
+        end
+    end
+    H.Encore:BuildUI()
     local d = rawget(H.env, "EncoreDisplayPrimary")
     for _, b in ipairs(d.Buttons) do
         instrument(b)
@@ -410,7 +417,7 @@ describe("a display's style", function()
         H.Encore:GetDefaults()
         H.Encore.DB:ResetProfile()
         assert.are.equal(1, H.Encore.DB.profile.displays.Primary.stub.foo)
-        assert.are.equal("classic", H.Encore.DB.profile.displays.Primary.style)
+        assert.are.equal("highway", H.Encore.DB.profile.displays.Primary.style) -- Encore's default style
         -- a style group's path is walked through the keys its config has, so an inline section is presentational
         assert.are.equal(1, H.Encore:GetDisplayOption({ "displays", "Primary", "stub", "sec_now", "foo" }))
         local classic = H.Encore.DB.profile.displays.Primary.classic
@@ -518,8 +525,11 @@ describe("a display's style", function()
             local plugins = H.Encore.Options.args.displays.plugins
             local primary, multi = plugins.Primary.Primary.args, plugins.Multi.Multi.args
             local style = primary.main.args.style
-            assert.are.same({ classic = "Classic", stub = "Stub", timeline = "Timeline" }, style.values())
-            assert.are.same({ "classic", "stub", "timeline" }, style.sorting())
+            assert.are.same(
+                { classic = "Classic", highway = "Highway", stub = "Stub", timeline = "Timeline" },
+                style.values()
+            )
+            assert.are.same({ "classic", "highway", "stub", "timeline" }, style.sorting())
             local function shown(args)
                 return {
                     classic = not args.classic.hidden() and args.classic.args.glow ~= nil,

@@ -76,6 +76,12 @@ local function boot()
     local H = headless.new({ character = ww.character(), pack = ww.PACK })
     fake.new = fakeNew
     assert.are.same({}, H.loadErrors)
+    -- Encore draws the highway by default; these cases are the classic style's (stock's default)
+    for _, c in pairs(H.Encore.DB.profile.displays) do
+        if c.style == "highway" then
+            c.style = "classic"
+        end
+    end
     glyphs(H)
     return H
 end

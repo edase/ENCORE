@@ -12,6 +12,13 @@ local function boot()
     local H = headless.new({ character = ww.character(), pack = ww.PACK })
     assert.are.same({}, H.loadErrors)
     assert(headless.cycle(H, H.ctl.now + 0.2))
+    -- Encore draws the highway by default; these cases are the classic style's (stock's default)
+    for _, c in pairs(H.Encore.DB.profile.displays) do
+        if c.style == "highway" then -- a style a saved profile names stays
+            c.style = "classic"
+        end
+    end
+    H.Encore:BuildUI()
     return H
 end
 
